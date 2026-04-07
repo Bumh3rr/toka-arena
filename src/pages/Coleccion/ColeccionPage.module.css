@@ -1,0 +1,29 @@
+.container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 60px;
+  overflow: hidden;
+}
+
+.background {
+  position: absolute;
+  inset: 0;
+  background-image: url('/assets/backgrounds/bg_colection.png');
+  background-size: cover;
+  background-position: center top;
+  z-index: 0;
+}
+
+
+.title {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-title);
+  font-size: 36px;
+  font-weight: 600;
+  color: #3D2B1F;
+}

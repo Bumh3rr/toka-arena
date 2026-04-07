@@ -14,7 +14,7 @@ html, body, #root {
 }
 
 body {
-  background: #1A1433;
+  background:transparent;
   font-family: 'Nunito', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
