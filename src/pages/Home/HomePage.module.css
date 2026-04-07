@@ -1,0 +1,46 @@
+.container {
+  position: relative;
+  width: 100vw;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 60px 24px;
+  overflow: hidden;
+}
+
+.background {
+  position: absolute;
+  inset: 0;
+  background-image: url('/assets/backgrounds/bg_home.png');
+  background-size: cover;
+  background-position: center top;
+  z-index: 0;
+}
+
+.title {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-title);
+  font-size: 32px;
+  font-weight: 600;
+  color: #ffffff;
+  text-align: center;
+  text-shadow:
+    2px 2px 0px #3D2B1F,
+    -1px -1px 0px #3D2B1F;
+}
+
+.logoutBtn {
+  position: relative;
+  z-index: 1;
+  background: rgba(61, 43, 31, 0.8);
+  color: #FFF8E7;
+  font-family: var(--font-body);
+  font-size: 16px;
+  border: 2px solid #3D2B1F;
+  border-radius: 12px;
+  padding: 12px 32px;
+  cursor: pointer;
+}

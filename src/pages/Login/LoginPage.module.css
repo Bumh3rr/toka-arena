@@ -1,0 +1,61 @@
+.container {
+    position: relative;
+    width: 100vw;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    overflow: hidden;
+}
+
+.background {
+    position: absolute;
+    inset: 0;
+    background-image: url('/assets/backgrounds/bg_login.png');
+    background-size: cover;
+    background-position: center top;
+    z-index: 0;
+}
+
+.logoContainer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    margin-top: 48px;
+}
+
+.logo {
+    width: 150px;
+    object-fit: contain;
+    margin-bottom: 90px;
+}
+
+.logoTitle {
+    width: 350px;
+    object-fit: contain;
+}
+
+.subtitle {
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+    font-size: 28px;
+    color: #ffffff;
+    margin: 0;
+    text-shadow:
+        2px 2px 0px #3D2B1F,
+        -1px -1px 0px #3D2B1F;
+    letter-spacing: 2px;
+}
+
+.buttonContainer {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 0 24px;
+}
