@@ -1,10 +1,11 @@
 import { useEffect, useRef } from 'react'
 
 interface Props {
-  accesorioIndex?: number
+  accesorioIndexCabeza?: number,
+  accesorioIndexCuerpo?: number
 }
 
-export default function TokagotchiCanvas({ accesorioIndex = 0 }: Props) {
+export default function TokagotchiCanvas({ accesorioIndexCabeza = -1, accesorioIndexCuerpo = -1 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
   const gameRef = useRef<any>(null)
   const armatureRef = useRef<any>(null)
@@ -27,28 +28,36 @@ export default function TokagotchiCanvas({ accesorioIndex = 0 }: Props) {
 
       preload() {
         this.load.dragonbone(
-          'Shiba-3',
-          '/assets/tofu/Shiba-3_tex.png',
-          '/assets/tofu/Shiba-3_tex.json',
-          '/assets/tofu/Shiba-3_ske.json'
+          'mochi',
+          '/assets/mochi/mochi_tex.png',
+          '/assets/mochi/mochi_tex.json',
+          '/assets/mochi/mochi_ske.json'
         )
       }
 
       create() {
-        const armature = (this as any).add.armature('Armature', 'Shiba-3')
+        const armature = (this as any).add.armature('Armature', 'mochi')
         armature.x = 300
         armature.y = 350
         armature.scaleX = 0.5
         armature.scaleY = 0.5
-        armature.animation.play('animtion0', 0)
+        armature.animation.play('idle', 0)
 
         // Guardar referencia al armature
         armatureRef.current = armature
         ;(window as any).tokagotchiScene = this
 
-        // Aplicar accesorio inicial
-        const slot = armature.armature.getSlot('accesorios')
-        if (slot) slot.displayIndex = accesorioIndex
+        if (accesorioIndexCabeza !== -1) {
+          // Aplicar accesorio inicial
+          const slot = armature.armature.getSlot('accesorios-cabeza')
+          if (slot) slot.displayIndex = accesorioIndexCabeza
+        }
+
+        if (accesorioIndexCuerpo !== -1) {
+          // Aplicar accesorio inicial
+          const slot = armature.armature.getSlot('accesorios-cuerpo')
+          if (slot) slot.displayIndex = accesorioIndexCuerpo
+        }
       }
     }
 
@@ -79,9 +88,17 @@ export default function TokagotchiCanvas({ accesorioIndex = 0 }: Props) {
   useEffect(() => {
     const armature = armatureRef.current
     if (!armature) return
-    const slot = armature.armature.getSlot('accesorios')
-    if (slot) slot.displayIndex = accesorioIndex
-  }, [accesorioIndex])
+    const slot = armature.armature.getSlot('accesorios-cabeza')
+    if (slot) slot.displayIndex = accesorioIndexCabeza
+  }, [accesorioIndexCabeza])
+
+  // Cambiar accesorio del cuerpo cuando cambia la prop
+  useEffect(() => {
+    const armature = armatureRef.current
+    if (!armature) return
+    const slot = armature.armature.getSlot('accesorios-cuerpo')
+    if (slot) slot.displayIndex = accesorioIndexCuerpo
+  }, [accesorioIndexCuerpo])
 
   return <div ref={containerRef} style={{ width: 600, height: 600 }} />
 }
