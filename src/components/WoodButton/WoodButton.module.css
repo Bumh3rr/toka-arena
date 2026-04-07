@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@600&display=swap');
+
+.button {
+  position: relative;
+  height: 64px;
+  background-image: url('/assets/ui/btn_wood.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0 28px;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+
+  /* Estado normal — ligera elevación */
+  transform: translateY(-3px);
+  filter: brightness(1);
+  transition: transform 0.08s ease, filter 0.08s ease, box-shadow 0.08s ease;
+}
+
+/* Al presionar — se hunde */
+.button.pressed {
+  transform: translateY(0px);
+  filter: brightness(0.88);
+  transition: transform 0.05s ease, filter 0.05s ease;
+}
+
+.button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: translateY(0px);
+}
+
+.label {
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  color: #ffffff;
+  text-shadow:
+    1px 1px 0px #3D2B1F,
+    -1px -1px 0px #3D2B1F,
+    1px -1px 0px #3D2B1F,
+    -1px 1px 0px #3D2B1F;
+  pointer-events: none;
+  user-select: none;
+}

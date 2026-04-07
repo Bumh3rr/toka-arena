@@ -1,0 +1,92 @@
+.wrapper {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.gift {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0px 8px 16px rgba(0,0,0,0.35));
+  transition: transform 0.1s ease;
+  user-select: none;
+}
+
+/* ── FASE IDLE — flotación suave ── */
+.idle .gift {
+  animation: float 2.5s ease-in-out infinite;
+}
+
+.idle:active .gift {
+  transform: scale(0.93);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(-1deg); }
+  50%       { transform: translateY(-12px) rotate(1deg); }
+}
+
+/* ── FASE SHAKING — vibración intensa ── */
+.shaking .gift {
+  animation: shake 0.15s ease-in-out infinite;
+  cursor: default;
+}
+
+@keyframes shake {
+  0%   { transform: rotate(-8deg) scale(1.05); }
+  25%  { transform: rotate(8deg)  scale(1.08); }
+  50%  { transform: rotate(-6deg) scale(1.05); }
+  75%  { transform: rotate(6deg)  scale(1.08); }
+  100% { transform: rotate(-8deg) scale(1.05); }
+}
+
+/* ── FASE EXPLODING — escala y desaparece ── */
+.exploding .gift {
+  animation: explode 0.5s ease-out forwards;
+  cursor: default;
+}
+
+@keyframes explode {
+  0%   { transform: scale(1);   opacity: 1; }
+  50%  { transform: scale(1.5); opacity: 1; }
+  100% { transform: scale(2);   opacity: 0; }
+}
+
+/* ── DESTELLOS ── */
+.spark {
+  position: absolute;
+  font-size: 24px;
+  animation: sparkle 0.4s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+.spark1 { top: -10px;  left: 10px;   animation-delay: 0s;    }
+.spark2 { top: -10px;  right: 10px;  animation-delay: 0.1s;  }
+.spark3 { bottom: 0px; left: 0px;    animation-delay: 0.2s;  }
+.spark4 { bottom: 0px; right: 0px;   animation-delay: 0.15s; }
+
+@keyframes sparkle {
+  0%   { transform: scale(0.8) rotate(-15deg); opacity: 0.6; }
+  100% { transform: scale(1.3) rotate(15deg);  opacity: 1;   }
+}
+
+/* ── FLASH ── */
+.flash {
+  position: absolute;
+  inset: -50%;
+  background: white;
+  border-radius: 50%;
+  animation: flashOut 0.4s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes flashOut {
+  0%   { opacity: 0.9; transform: scale(0.5); }
+  100% { opacity: 0;   transform: scale(2);   }
+}

@@ -1,0 +1,7 @@
+.canvas {
+  background: transparent;
+}
+
+.canvas canvas {
+  background: transparent !important;
+}
