@@ -22,7 +22,7 @@ export default function GiftBox({ fase, onClick }: GiftBoxProps) {
       )}
 
       <img
-        src="/assets/ui/regalo.png"
+        src="/assets/ui/huevo.png"
         alt="Regalo"
         className={styles.gift}
         draggable={false}

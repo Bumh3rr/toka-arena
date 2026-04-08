@@ -4,26 +4,393 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding-top: 60px;
   overflow: hidden;
 }
 
 .background {
   position: absolute;
   inset: 0;
-  background-image: url('/assets/backgrounds/bg_colection.png');
+  background-image: url('/assets/backgrounds/bg_coleccion.png');
   background-size: cover;
   background-position: center top;
   z-index: 0;
 }
 
+/* ── Header ── */
+.header {
+  position: relative;
+  z-index: 2;
+  padding: 16px 20px 0;
+}
 
 .title {
+  font-family: var(--font-title);
+  font-size: 28px;
+  font-weight: 600;
+  color: #ffffff;
+  text-shadow: 2px 2px 0px #3D2B1F, -1px -1px 0px #3D2B1F;
+}
+
+/* ── Pestañas ── */
+.tabs {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px 0;
+}
+
+.tab {
+  flex: 1;
+  padding: 10px;
+  font-family: var(--font-title);
+  font-size: 15px;
+  font-weight: 600;
+  color: #FFF8E7;
+  background: rgba(61, 43, 31, 0.5);
+  border: 2px solid #5C3D1E;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tabActive {
+  background: #F97316;
+  border-color: #3D2B1F;
+  color: #ffffff;
+}
+
+/* ── Scroll ── */
+.scroll {
   position: relative;
   z-index: 1;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 12px 16px 0;
+  scrollbar-width: none;
+}
+
+.scroll::-webkit-scrollbar { display: none; }
+
+.tabContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Resumen ── */
+.resumenRow {
+  display: flex;
+  gap: 10px;
+}
+
+.resumenCard {
+  flex: 1;
+  background: rgba(255, 248, 231, 0.9);
+  border: 2.5px solid #3D2B1F;
+  border-radius: 12px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.resumenLabel {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  color: #8C6B4A;
+}
+
+.resumenValue {
   font-family: var(--font-title);
-  font-size: 36px;
+  font-size: 22px;
   font-weight: 600;
   color: #3D2B1F;
+}
+
+.resumenValueOrange {
+  font-family: var(--font-title);
+  font-size: 22px;
+  font-weight: 600;
+  color: #F97316;
+}
+
+/* ── Grid de Tokas ── */
+.tokaGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.tokaCard {
+  position: relative;
+  background: rgba(255, 248, 231, 0.92);
+  border: 2.5px solid #3D2B1F;
+  border-radius: 16px;
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.tokaCard:active { transform: scale(0.97); }
+
+.tokaCardActivo {
+  border-color: #F97316;
+  border-width: 3px;
+  box-shadow: 0 0 12px rgba(249, 115, 22, 0.4);
+}
+
+.activoBadge {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  background: #F97316;
+  color: #ffffff;
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 0 14px 0 10px;
+}
+
+.rarezaDot {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1.5px solid #3D2B1F;
+}
+
+.tokaCardNombre {
+  font-family: var(--font-title);
+  font-size: 16px;
+  font-weight: 600;
+  color: #3D2B1F;
+}
+
+.tokaCardEspecie {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: #8C6B4A;
+  font-weight: 600;
+}
+
+.statsRow {
+  display: flex;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.statAtk {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 700;
+  background: #FFE0E0;
+  color: #C62828;
+  border: 1.5px solid #C62828;
+  border-radius: 6px;
+  padding: 2px 6px;
+}
+
+.statDef {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 700;
+  background: #E0F0E0;
+  color: #2E7D32;
+  border: 1.5px solid #2E7D32;
+  border-radius: 6px;
+  padding: 2px 6px;
+}
+
+.statHp {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 700;
+  background: #E0EEFF;
+  color: #1565C0;
+  border: 1.5px solid #1565C0;
+  border-radius: 6px;
+  padding: 2px 6px;
+}
+
+/* ── Locked Card ── */
+.lockedCard {
+  background: rgba(140, 107, 74, 0.25);
+  border: 2px dashed #8C6B4A;
+  border-radius: 16px;
+  padding: 20px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.lockedText {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 700;
+  color: #8C6B4A;
+}
+
+.verTiendaBtn {
+  background: #FFF8E7;
+  border: 2px solid #3D2B1F;
+  border-radius: 10px;
+  padding: 4px 14px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 700;
+  color: #3D2B1F;
+  cursor: pointer;
+}
+
+/* ── Preview Accesorios ── */
+.previewCard {
+  background: rgba(255, 248, 231, 0.92);
+  border: 2.5px solid #3D2B1F;
+  border-radius: 16px;
+  padding: 12px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.previewLeft {
+  background: rgba(107, 158, 69, 0.2);
+  border: 2px solid #3D2B1F;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.previewRight {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.previewNombre {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  color: #8C6B4A;
+}
+
+.equipadoSlot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.slotDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1.5px solid #3D2B1F;
+  flex-shrink: 0;
+}
+
+.slotNombre {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 700;
+  color: #3D2B1F;
+}
+
+/* ── Grid Accesorios ── */
+.accesorioGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+
+.accesorioCard {
+  background: rgba(255, 248, 231, 0.92);
+  border: 2.5px solid #3D2B1F;
+  border-radius: 14px;
+  padding: 10px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.1s ease;
+}
+
+.accesorioCard:active { transform: scale(0.95); }
+
+.accesorioEquipado {
+  border-color: #F97316;
+  border-width: 3px;
+  box-shadow: 0 0 10px rgba(249, 115, 22, 0.35);
+}
+
+.equipadoDot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #F97316;
+}
+
+.accesorioLocked {
+  background: rgba(140, 107, 74, 0.2);
+  border: 2px dashed #8C6B4A;
+  opacity: 0.75;
+}
+
+.accesorioImg {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+}
+
+.accesorioNombre {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  color: #3D2B1F;
+  text-align: center;
+}
+
+.accesorioSlotBadge {
+  font-family: var(--font-body);
+  font-size: 9px;
+  font-weight: 700;
+  color: #ffffff;
+  padding: 2px 8px;
+  border-radius: 8px;
+}
+
+.accesorioRareza {
+  font-family: var(--font-body);
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.itemImgWrapper {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+}
+.itemImg {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
 }

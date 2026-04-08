@@ -1,6 +1,11 @@
+// src/components/TokagotchiCanvas/TokagotchiCanvas.tsx
 import { useEffect, useRef } from 'react'
 import type { Tokagotchi, TokagotchiAnimacion } from '../../types/toka'
 import styles from './TofuCanvas.module.css'
+
+// ── SINGLETON: un solo juego Phaser, múltiples escenas ────────────────────
+let globalGame:    any     = null
+let gameContainer: Element | null = null
 
 interface TokagotchiCanvasProps {
   tokagotchi: Tokagotchi
@@ -13,34 +18,32 @@ interface TokagotchiCanvasProps {
 export default function TokagotchiCanvas({
   tokagotchi,
   animacion = 'idle',
-  width = 320,
+  width  = 320,
   height = 320,
-  scale = 0.55
+  scale  = 0.55
 }: TokagotchiCanvasProps) {
   const containerRef = useRef<HTMLDivElement>(null)
-  const gameRef = useRef<any>(null)
-  const armatureRef = useRef<any>(null)
+  const armatureRef  = useRef<any>(null)
 
-  // Inicializar Phaser + DragonBones
   useEffect(() => {
-    if (!containerRef.current || gameRef.current) return
+    if (!containerRef.current) return
 
     const Phaser = (window as any).Phaser
-    const db = (window as any).dragonBones
-
+    const db     = (window as any).dragonBones
     if (!Phaser || !db) {
-      console.error('Phaser o DragonBones no están disponibles')
+      console.error('[TokagotchiCanvas] Phaser o DragonBones no disponibles')
       return
     }
 
     const { assets, accesorios } = tokagotchi
+    let destroyed  = false
+    const sceneKey = `Toka_${tokagotchi.id}_${assets.armatureKey}`
 
+    // ── Definir escena ───────────────────────────────────────────────────
     class TokagotchiScene extends Phaser.Scene {
-      constructor() {
-        super({ key: `TokagotchiScene_${tokagotchi.id}` })
-      }
+      constructor() { super({ key: sceneKey }) }
 
-      preload() {
+      preload(this: any) {
         this.load.dragonbone(
           assets.armatureKey,
           assets.texPng,
@@ -49,78 +52,114 @@ export default function TokagotchiCanvas({
         )
       }
 
-      create() {
+      create(this: any) {
         const { width: w, height: h } = this.scale
+        const tryCreate = () => {
+          if (destroyed) return
+          if (!this.dragonbone?.factory) {
+            this.time.delayedCall(50, tryCreate)
+            return
+          }
+          const armature = this.add.armature('Armature', assets.armatureKey)
+          armature.x      = w / 2
+          armature.y      = h / 2
+          armature.scaleX = scale
+          armature.scaleY = scale
+          armature.animation.play(animacion, 0)
 
-        const armature = (this as any).add.armature('Armature', assets.armatureKey)
-        armature.x = w / 2
-        armature.y = h / 2
-        armature.scaleX = scale
-        armature.scaleY = scale
-
-        // Aplicar animación inicial
-        armature.animation.play(animacion, 0)
-
-        // Aplicar accesorios iniciales
-        if (accesorios.cabeza) {
-          const slotCabeza = armature.armature.getSlot('accesorios_cabeza')
-          if (slotCabeza) slotCabeza.displayIndex = accesorios.cabeza.displayIndex
+          if (accesorios?.cabeza) {
+            const slot = armature.armature.getSlot('accesorios_cabeza')
+            if (slot) slot.displayIndex = accesorios.cabeza.displayIndex
+          }
+          if (accesorios?.cuerpo) {
+            const slot = armature.armature.getSlot('accesorios_cuerpo')
+            if (slot) slot.displayIndex = accesorios.cuerpo.displayIndex
+          }
+          armatureRef.current = armature
         }
-
-        if (accesorios.cuerpo) {
-          const slotCuerpo = armature.armature.getSlot('accesorios_cuerpo')
-          if (slotCuerpo) slotCuerpo.displayIndex = accesorios.cuerpo.displayIndex
-        }
-
-        armatureRef.current = armature
+        tryCreate()
       }
     }
 
-    gameRef.current = new Phaser.Game({
-      type: Phaser.AUTO,
-      width,
-      height,
-      transparent: true,
-      parent: containerRef.current,
-      plugins: {
-        scene: [{
-          key: 'DragonBones',
-          plugin: db.phaser.plugin.DragonBonesScenePlugin,
-          mapping: 'dragonbone'
-        }]
-      },
-      scene: [TokagotchiScene]
-    })
+    const timer = setTimeout(() => {
+      if (destroyed || !containerRef.current) return
+
+      // ── Ya existe un juego global ─────────────────────────────────────
+      if (globalGame && !globalGame.isDestroyed) {
+
+        // Mover el canvas al contenedor actual
+        const canvas = globalGame.canvas
+        if (canvas && containerRef.current) {
+          containerRef.current.appendChild(canvas)
+          gameContainer = containerRef.current
+          globalGame.scale.resize(width, height)
+        }
+
+        // Quitar escena previa del mismo key si existe
+        if (globalGame.scene.getScene(sceneKey)) {
+          globalGame.scene.remove(sceneKey)
+        }
+
+        setTimeout(() => {
+          if (destroyed) return
+          globalGame.scene.add(sceneKey, TokagotchiScene, true)
+        }, 30)
+
+        return
+      }
+
+      // ── Primera vez: crear juego con plugin en la config ──────────────
+      gameContainer = containerRef.current
+      globalGame = new Phaser.Game({
+        type:        Phaser.AUTO,
+        width,
+        height,
+        transparent: true,
+        parent:      gameContainer,
+        plugins: {
+          scene: [{
+            key:     'DragonBones',
+            plugin:  db.phaser.plugin.DragonBonesScenePlugin,
+            mapping: 'dragonbone',
+            start:   true,
+          }]
+        },
+        scene: [TokagotchiScene]
+      })
+    }, 50)
 
     return () => {
-      gameRef.current?.destroy(true)
-      gameRef.current = null
+      destroyed = true
+      clearTimeout(timer)
       armatureRef.current = null
+      // NO destruir el juego global — solo remover la escena
+      try {
+        if (globalGame && !globalGame.isDestroyed) {
+          globalGame.scene.remove(sceneKey)
+        }
+      } catch (e) {}
     }
   }, [tokagotchi.id])
 
-  // Cambiar animación en caliente
+  // ── Animación en caliente ──────────────────────────────────────────────
   useEffect(() => {
-    const armature = armatureRef.current
-    if (!armature) return
-    armature.animation.fadeIn(animacion, 0.2, 0)
+    try { armatureRef.current?.animation?.fadeIn(animacion, 0.2, 0) } catch (e) {}
   }, [animacion])
 
-  // Cambiar accesorio cabeza en caliente
+  // ── Accesorios en caliente ─────────────────────────────────────────────
   useEffect(() => {
-    const armature = armatureRef.current
-    if (!armature) return
-    const slot = armature.armature.getSlot('accesorios_cabeza')
-    if (slot) slot.displayIndex = tokagotchi.accesorios.cabeza?.displayIndex ?? 0
-  }, [tokagotchi.accesorios.cabeza])
+    try {
+      const slot = armatureRef.current?.armature?.getSlot('accesorios_cabeza')
+      if (slot) slot.displayIndex = tokagotchi.accesorios?.cabeza?.displayIndex ?? 0
+    } catch (e) {}
+  }, [tokagotchi.accesorios?.cabeza])
 
-  // Cambiar accesorio cuerpo en caliente
   useEffect(() => {
-    const armature = armatureRef.current
-    if (!armature) return
-    const slot = armature.armature.getSlot('accesorios_cuerpo')
-    if (slot) slot.displayIndex = tokagotchi.accesorios.cuerpo?.displayIndex ?? 0
-  }, [tokagotchi.accesorios.cuerpo])
+    try {
+      const slot = armatureRef.current?.armature?.getSlot('accesorios_cuerpo')
+      if (slot) slot.displayIndex = tokagotchi.accesorios?.cuerpo?.displayIndex ?? 0
+    } catch (e) {}
+  }, [tokagotchi.accesorios?.cuerpo])
 
   return (
     <div

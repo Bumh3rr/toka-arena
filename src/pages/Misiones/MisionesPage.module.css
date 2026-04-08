@@ -4,8 +4,6 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding-top: 60px;
   overflow: hidden;
 }
 
@@ -18,14 +16,191 @@
   z-index: 0;
 }
 
-.title {
+/* ── Header ── */
+.header {
   position: relative;
-  z-index: 1;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px 0;
+}
+
+.title {
   font-family: var(--font-title);
-  font-size: 36px;
+  font-size: 24px;
   font-weight: 600;
   color: #ffffff;
   text-shadow:
     2px 2px 0px #3D2B1F,
     -1px -1px 0px #3D2B1F;
+}
+
+.tfBadge {
+  background: #1A1A1A;
+  border: 2px solid #5C3D1E;
+  border-radius: 20px;
+  padding: 6px 16px;
+}
+
+.tfAmount {
+  font-family: var(--font-title);
+  font-size: 16px;
+  font-weight: 600;
+  color: #F5DFA0;
+}
+
+/* ── Progreso general ── */
+.progressHeader {
+  position: relative;
+  z-index: 2;
+  padding: 12px 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.progressText {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 700;
+  color: #FFF8E7;
+  text-shadow: 1px 1px 0px #3D2B1F;
+}
+
+.progressBar {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(61, 43, 31, 0.4);
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #F97316, #F5DFA0);
+  border-radius: 6px;
+  transition: width 0.5s ease;
+}
+
+/* ── Scroll ── */
+.scroll {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 16px 16px 0;
+  scrollbar-width: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Mision Card ── */
+.misionCard {
+  background-image: url('/assets/ui/btn_wood.png');
+  background-size: 100% 100%;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 72px;
+  transition: opacity 0.3s ease;
+}
+
+.misionCard.completada {
+  opacity: 0.6;
+}
+
+.misionLeft {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.misionNombre {
+  font-family: var(--font-title);
+  font-size: 13px;
+  font-weight: 600;
+  color: #FFF8E7;
+  letter-spacing: 0.5px;
+}
+
+.misionBarWrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.misionBar {
+  flex: 1;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.misionFill {
+  height: 100%;
+  background: linear-gradient(90deg, #F97316, #F5DFA0);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.misionProgreso {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  color: #F5DFA0;
+  min-width: 28px;
+  text-align: right;
+}
+
+.misionRight {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 60px;
+}
+
+.recompensa {
+  font-family: var(--font-title);
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  white-space: nowrap;
+  margin-right: 30px;
+}
+
+.completadaBadge {
+  width: 32px;
+  height: 32px;
+  background: rgba(67, 160, 71, 0.2);
+  border: 2px solid #43A047;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Loading ── */
+.loading {
+  display: flex;
+  justify-content: center;
+  padding-top: 40px;
+}
+
+.loadingText {
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: #FFF8E7;
+  text-shadow: 1px 1px 0px #3D2B1F;
 }

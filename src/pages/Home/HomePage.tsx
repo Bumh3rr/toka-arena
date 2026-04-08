@@ -203,10 +203,10 @@ export default function HomePage() {
 
 function getRarezaColor(rareza: string): string {
   const colores: Record<string, string> = {
-    'Común': '#A0A0A0',
+    'Común': '#ffffff',
     'Raro': '#3D99FF',
     'Épico': '#A335EE',
     'Legendario': '#FF8000'
   }
-  return colores[rareza] ?? '#A0A0A0'
+  return colores[rareza] ?? '#ffffff'
 }

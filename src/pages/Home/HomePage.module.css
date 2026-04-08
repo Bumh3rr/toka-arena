@@ -362,7 +362,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  min-height: 64px;
+  min-height: 75px;
 }
 
 .misionInfo {
@@ -399,6 +399,7 @@
   font-family: var(--font-title);
   font-size: 16px;
   font-weight: 600;
-  color: #F97316;
+  color: #ffffff;
+  margin-right: 40px;
   white-space: nowrap;
 }

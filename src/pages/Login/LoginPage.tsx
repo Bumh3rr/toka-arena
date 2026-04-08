@@ -13,13 +13,19 @@ export default function LoginPage() {
 const { loginWithToka } = useAuth()
 
 const handleLogin = async () => {
-  const success = await loginWithToka()
+
+
+
+  /**
+   const success = await loginWithToka()
   if (success) {
     stop()
     // Redirigir según hasStarter
     // const user = authService.getToken() ? true : false
     navigate('/home') // o '/unboxing' según tu lógica de hasStarter
   }
+   */
+navigate('/unboxing') 
 }
 
   return (
