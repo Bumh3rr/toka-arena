@@ -17,7 +17,6 @@ export default function EggCanvas({ onAnimationComplete }: EggCanvasProps) {
 
     class EggScene extends Phaser.Scene {
       private egg!: any
-      private particles!: any
       private onComplete: () => void
 
       constructor() {

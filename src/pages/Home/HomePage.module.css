@@ -1,12 +1,9 @@
 .container {
-position: relative;
+  position: relative;
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding-top: 60px;
-  overflow: hidden;
   overflow: hidden;
 }
 
@@ -19,28 +16,389 @@ position: relative;
   z-index: 0;
 }
 
-.title {
+/* ── Header ── */
+.header {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px 0;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1.5px solid #3D2B1F;
+  object-fit: cover;
+}
+
+.username {
+  font-family: var(--font-title);
+  font-size: 22px;
+  font-weight: 600;
+  color: #ffffff;
+  text-shadow: 1px 1px 0px #3D2B1F, -1px -1px 0px #3D2B1F;
+}
+
+.tfBadge {
+  background: #1A1A1A;
+  border: 2px solid #5C3D1E;
+  border-radius: 20px;
+  padding: 6px 16px;
+}
+
+.tfAmount {
+  font-family: var(--font-title);
+  font-size: 16px;
+  font-weight: 600;
+  color: #F5DFA0;
+}
+
+/* ── Scroll ── */
+.scroll {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0 16px;
+  scrollbar-width: none;
+}
+
+.scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Toka section ── */
+.tokaSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.nameRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.tokaName {
+  font-family: var(--font-title);
+  font-size: 28px;
+  font-weight: 600;
+  color: #ffffff;
+  text-shadow: 2px 2px 0px #3D2B1F, -1px -1px 0px #3D2B1F;
+}
+
+.editBtn {
+  background: rgba(61, 43, 31, 0.6);
+  border: 1.5px solid #5C3D1E;
+  border-radius: 8px;
+  padding: 4px 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.nameEdit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.nameInput {
+  font-family: var(--font-title);
+  font-size: 22px;
+  font-weight: 600;
+  color: #3D2B1F;
+  background: #FFF8E7;
+  border: 2.5px solid #3D2B1F;
+  border-radius: 12px;
+  padding: 6px 16px;
+  text-align: center;
+  outline: none;
+  width: 200px;
+}
+
+.nameEditBtns {
+  display: flex;
+  gap: 8px;
+}
+
+.btnSave {
+  background: #43A047;
+  color: #ffffff;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 14px;
+  border: 2px solid #3D2B1F;
+  border-radius: 10px;
+  padding: 6px 20px;
+  cursor: pointer;
+}
+
+.btnCancel {
+  background: #9E3D1F;
+  color: #ffffff;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 14px;
+  border: 2px solid #3D2B1F;
+  border-radius: 10px;
+  padding: 6px 20px;
+  cursor: pointer;
+}
+
+/* ── Stats ── */
+.statsRow {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.statCard {
+  position: relative;
+  width: 96px;
+  height: 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+.statBg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+}
+
+.statValue {
   position: relative;
   z-index: 1;
   font-family: var(--font-title);
-  font-size: 32px;
+  font-size: 22px;
   font-weight: 600;
-  color: #ffffff;
-  text-align: center;
-  text-shadow:
-    2px 2px 0px #3D2B1F,
-    -1px -1px 0px #3D2B1F;
 }
 
-.logoutBtn {
+.statLabel {
   position: relative;
   z-index: 1;
-  background: rgba(61, 43, 31, 0.8);
-  color: #FFF8E7;
   font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  color: #FFF8E7;
+}
+
+/* ── Rareza ── */
+.rarezaRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.rarezaBadge {
+  font-family: var(--font-title);
   font-size: 16px;
-  border: 2px solid #3D2B1F;
-  border-radius: 12px;
-  padding: 12px 32px;
+  font-weight: 600;
+  text-shadow: 1px 1px 0px #3D2B1F;
+}
+
+.especie {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: #FFF8E7;
+  font-weight: 600;
+}
+
+/* ── Acciones ── */
+.accionesSection {
+  margin-top: 20px;
+}
+
+.sectionTitle {
+  font-family: var(--font-title);
+  font-size: 22px;
+  font-weight: 600;
+  color: #ffffff;
+  text-shadow: 1px 1px 0px #3D2B1F;
+  margin-bottom: 12px;
+}
+
+.accionesRow {
+  display: flex;
+  justify-content: space-around;
+  gap: 8px;
+}
+
+.accionBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: none;
+  border: none;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: transform 0.1s ease;
+}
+
+.accionBtn:active {
+  transform: scale(0.9);
+}
+
+.accionImg {
+  width: 110px;
+  height: 80px;
+  object-fit: contain;
+  filter: drop-shadow(0px 2px 1px rgba(0, 0, 0, 0.5));
+}
+
+.accionReward {
+  font-family: var(--font-title);
+  font-size: 15px;
+  color: #F5DFA0;
+  font-weight: 600;
+}
+
+/* ── CP Card ── */
+.cpCard {
+  margin-top: 16px;
+  background: rgba(61, 43, 31, 0.75);
+  border: 2px solid #5C3D1E;
+  border-radius: 16px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cpInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cpLabel {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 700;
+  color: #FFF8E7;
+}
+
+.cpValue {
+  font-family: var(--font-title);
+  font-size: 16px;
+  font-weight: 600;
+  color: #F5DFA0;
+}
+
+.cpBar {
+  width: 100%;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.cpFill {
+  height: 100%;
+  background: linear-gradient(90deg, #F97316, #F5DFA0);
+  border-radius: 6px;
+  transition: width 0.4s ease;
+}
+
+.cpHint {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: #A0A0A0;
+}
+
+/* ── Misiones ── */
+.misionesSection {
+  margin-top: 20px;
+}
+
+.misionesHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.verTodasBtn {
+  background: none;
+  border: none;
+  font-family: var(--font-title);
+  font-size: 13px;
+  font-weight: 600;
+  color: #F97316;
+  cursor: pointer;
+  text-shadow: 1px 1px 0px #3D2B1F;
+}
+
+.misionCard {
+  background-image: url('/assets/ui/btn_wood.png');
+  background-size: 100% 100%;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 64px;
+}
+
+.misionInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.misionNombre {
+  font-family: var(--font-title);
+  font-size: 13px;
+  font-weight: 600;
+  color: #FFF8E7;
+  letter-spacing: 0.5px;
+}
+
+.misionBar {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.misionFill {
+  height: 100%;
+  background: linear-gradient(90deg, #43A047, #F5DFA0);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+.misionReward {
+  font-family: var(--font-title);
+  font-size: 16px;
+  font-weight: 600;
+  color: #F97316;
+  white-space: nowrap;
 }
