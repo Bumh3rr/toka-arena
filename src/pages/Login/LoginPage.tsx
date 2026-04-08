@@ -1,16 +1,16 @@
 import WoodButton from '../../components/WoodButton/WoodButton'
 import TokagotchiCanvas from '../../components/TofuCanvas/TofuCanvas'
-import { useLoginMusic } from '../../hooks/useLoginMusic'
+//import { useLoginMusic } from '../../hooks/useLoginMusic'
 import styles from './LoginPage.module.css'
 import { MOCHI_MOCK } from '../../constants/tokagotchis'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../../hooks/useAuth'
+//import { useAuth } from '../../hooks/useAuth'
 // import { authService } from '../../services/authService'
 
 export default function LoginPage() {
-  const { stop } = useLoginMusic()
+  //const { stop } = useLoginMusic()
   const navigate = useNavigate()
-const { loginWithToka } = useAuth()
+//const { loginWithToka } = useAuth()
 
 const handleLogin = async () => {
 
