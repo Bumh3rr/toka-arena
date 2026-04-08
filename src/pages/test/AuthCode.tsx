@@ -1,28 +1,24 @@
+import { useState } from 'react';
+import { tokaAuth } from '../../services/tokaAuth';
+
 export default function AuthCode() {
-  const getAuthCode = (
-    method: 'DigitalIdentity' | 'ContactInformation' | 'AddressInformation' | 'PersonalInformation' | 'KYCStatus',
-    scopes: string[]
-  ): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      window.AlipayJSBridge.call(`getUser${method}AuthCode`, {
-        usage: 'Toka Arena necesita verificar tu identidad',
-        scopes,
-        success: (res) => resolve((res as { authCode: string }).authCode),
-        fail: (err: unknown) => reject(err),
-      });
-    });
-  };
+  const [authCode, setAuthCode] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleGetAuthCode = async () => {
     try {
-      const authCode = await getAuthCode('DigitalIdentity', [
-        'USER_ID',
-        'USER_AVATAR',
-        'USER_NICKNAME',
+      await tokaAuth.waitForBridge();
+
+      const code = await Promise.race([
+        tokaAuth.getDigitalIdentityAuthCode(),
+        new Promise<string>((_, reject) => {
+          setTimeout(() => reject(new Error('Timeout solicitando authCode')), 10000);
+        }),
       ]);
-      console.log('AuthCode obtenido:', authCode);
-      // mostrar en pantalla
-      alert(`AuthCode: ${authCode}`);
+
+      console.log('AuthCode obtenido:', code);
+      setAuthCode(code);
     } catch (err) {
       console.error('Error obteniendo authCode:', err);
     }
