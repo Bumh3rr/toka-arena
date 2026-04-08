@@ -9,7 +9,7 @@ import { useAuth } from '../../hooks/useAuth'
 export default function LoginPage() {
   const { stop } = useLoginMusic()
   const navigate = useNavigate()
-  const { login, loading } = useAuth()
+  const { login } = useAuth()
 
     const handleLogin = async () => {
     const success = await login({
@@ -19,7 +19,7 @@ export default function LoginPage() {
 
     if (success) {
       stop()
-      navigate('/unboxing', { replace: true })
+      navigate('/unboxing')
     }
   }
 

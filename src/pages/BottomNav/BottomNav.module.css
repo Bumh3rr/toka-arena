@@ -1,0 +1,146 @@
+.nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: #2C1A0E;
+  padding: 10px 8px 12px;
+  position: relative;
+}
+
+/* ── Items normales ── */
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 10px;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: transform 0.1s ease;
+  flex: 1;
+}
+
+.item:active {
+  transform: scale(0.9);
+}
+
+.iconWrapper {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.activePill {
+  position: absolute;
+  inset: -4px;
+  background: #F97316;
+  border-radius: 10px;
+  opacity: 0.2;
+  animation: pillIn 0.2s ease-out;
+}
+
+@keyframes pillIn {
+  from { transform: scale(0.5); opacity: 0; }
+  to   { transform: scale(1);   opacity: 0.2; }
+}
+
+.icon {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  z-index: 1;
+}
+
+.label {
+  font-family: 'Nunito', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: #8C6B4A;
+  transition: color 0.15s ease;
+}
+
+.active .label {
+  color: #F97316;
+}
+
+/* ── Espacio reservado para el botón arena ── */
+.arenaPlaceholder {
+  flex: 1;
+  visibility: hidden;
+  height: 40px;
+}
+
+/* ── Botón Arena flotante ── */
+.arenaWrapper {
+  position: absolute;
+  top: -28px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  z-index: 10;
+}
+
+.arenaWrapper:active .arenaBtn {
+  transform: scale(0.92);
+  box-shadow:
+    0 2px 0px #7A2E00,
+    0 4px 12px rgba(249, 115, 22, 0.6);
+}
+
+.arenaBtn {
+  width: 58px;
+  height: 58px;
+  border-radius: 18px;
+  background: linear-gradient(145deg, #F97316, #C2500A);
+  border: 3px solid #3D2B1F;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 4px 0px #7A2E00,
+    0 6px 16px rgba(249, 115, 22, 0.45);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.arenaWrapper.active .arenaBtn {
+  background: linear-gradient(145deg, #FF9A4D, #F97316);
+}
+
+.arenaIcon {
+  width: 28px;
+  height: 28px;
+}
+
+.arenaLabel {
+  font-family: 'Nunito', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: #8C6B4A;
+  transition: color 0.15s ease;
+}
+
+.arenaWrapper.active .arenaLabel {
+  color: #F97316;
+}

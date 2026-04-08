@@ -1,11 +1,8 @@
-import { useRef } from 'react'
 import { Howl } from 'howler'
 
 let shakeSfx: Howl | null = null
-let openSfx: Howl | null = null
 
 export function useGiftSound() {
-  const shakeRef = useRef<Howl | null>(null)
 
   const initSounds = () => {
     if (!shakeSfx) {
