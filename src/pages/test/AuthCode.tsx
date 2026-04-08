@@ -21,7 +21,8 @@ export default function AuthCode() {
         'USER_NICKNAME',
       ]);
       console.log('AuthCode obtenido:', authCode);
-      // Aquí lo mandas al backend: POST /v1/user/authenticate con { authcode }
+      // mostrar en pantalla
+      alert(`AuthCode: ${authCode}`);
     } catch (err) {
       console.error('Error obteniendo authCode:', err);
     }
