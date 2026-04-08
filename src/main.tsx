@@ -1,8 +1,9 @@
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import AuthCode from './pages/test/AuthCode'
-
+//import App from './App'
+import GetAuthCode from './pages/test/GetAuthCode'
 
 createRoot(document.getElementById('root')!).render(
-    <AuthCode />
+    <GetAuthCode />
+    //<App />
 )
