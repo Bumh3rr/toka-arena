@@ -1,0 +1,89 @@
+.banner {
+  width: 100%;
+  border: 2px solid;
+  border-radius: 14px;
+  padding: 12px;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.bannerText {
+  font-family: var(--font-title);
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.recompensaCard {
+  background: rgba(26, 20, 51, 0.8);
+  border: 2px solid rgba(245, 223, 160, 0.4);
+  border-radius: 14px;
+  padding: 12px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.recompensaLabel {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(255, 248, 231, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.recompensaValor {
+  font-family: var(--font-title);
+  font-size: 32px;
+  font-weight: 600;
+}
+
+.resumenGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.resumenItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.resumenLabel {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: #8C6B4A;
+  font-weight: 600;
+}
+
+.resumenValor {
+  font-family: var(--font-title);
+  font-size: 18px;
+  font-weight: 600;
+  color: #3D2B1F;
+}
+
+.apuestaBanner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 128, 0, 0.1);
+  border: 1.5px solid rgba(255, 128, 0, 0.4);
+  border-radius: 12px;
+  padding: 10px 12px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.apuestaText {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 700;
+  color: #FF8000;
+  flex: 1;
+}

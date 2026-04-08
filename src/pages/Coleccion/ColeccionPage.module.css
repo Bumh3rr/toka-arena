@@ -14,6 +14,7 @@
   background-size: cover;
   background-position: center top;
   z-index: 0;
+  opacity: 0.9;
 }
 
 /* ── Header ── */
@@ -28,7 +29,7 @@
   font-size: 28px;
   font-weight: 600;
   color: #ffffff;
-  text-shadow: 2px 2px 0px #3D2B1F, -1px -1px 0px #3D2B1F;
+  text-shadow: 2px 2px 0px #3D2B1F, -1px -1px 0px #3D2B1F, 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 /* ── Pestañas ── */
@@ -47,7 +48,7 @@
   font-size: 15px;
   font-weight: 600;
   color: #FFF8E7;
-  background: rgba(61, 43, 31, 0.5);
+  background: rgba(61, 43, 31);
   border: 2px solid #5C3D1E;
   border-radius: 14px;
   cursor: pointer;
@@ -225,8 +226,8 @@
 
 /* ── Locked Card ── */
 .lockedCard {
-  background: rgba(140, 107, 74, 0.25);
-  border: 2px dashed #8C6B4A;
+  background: rgb(234, 169, 104);
+  border: 2px dashed #ff8000;
   border-radius: 16px;
   padding: 20px 8px;
   display: flex;
@@ -239,7 +240,7 @@
   font-family: var(--font-body);
   font-size: 12px;
   font-weight: 700;
-  color: #8C6B4A;
+  color: #000000;
 }
 
 .verTiendaBtn {
@@ -315,7 +316,7 @@
 }
 
 .accesorioCard {
-  background: rgba(255, 248, 231, 0.92);
+  background: rgba(255, 248, 231, 0.97);
   border: 2.5px solid #3D2B1F;
   border-radius: 14px;
   padding: 10px 6px;
@@ -344,12 +345,6 @@
   height: 8px;
   border-radius: 50%;
   background: #F97316;
-}
-
-.accesorioLocked {
-  background: rgba(140, 107, 74, 0.2);
-  border: 2px dashed #8C6B4A;
-  opacity: 0.75;
 }
 
 .accesorioImg {

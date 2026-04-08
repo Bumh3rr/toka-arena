@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { authService } from '../services/authService'
-import { tokaAuth } from '../services/tokaAuth'
+//import { tokaAuth } from '../services/tokaAuth'
 import type { RegisterRequest, LoginRequest } from '../types/auth'
 
 export function useAuth() {
@@ -12,12 +12,12 @@ export function useAuth() {
   setError(null)
   try {
     // 1. Esperar bridge + obtener authCode
-    await tokaAuth.waitForBridge()
-    const authCode = await tokaAuth.getDigitalIdentityAuthCode()
+    // await tokaAuth.waitForBridge()
+    // const authCode = await tokaAuth.getDigitalIdentityAuthCode()
 
     // 2. Intercambiar por JWT en tu backend
-    const response = await authService.loginWithAuthCode(authCode)
-    authService.saveToken(response.token)
+    // const response = await authService.loginWithAuthCode(authCode)
+    // authService.saveToken(response.token)
     return true
   } catch (err: any) {
     setError(err.response?.data?.message || 'Error al iniciar sesión con Toka')

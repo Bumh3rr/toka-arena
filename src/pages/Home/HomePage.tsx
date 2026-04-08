@@ -105,7 +105,7 @@ export default function HomePage() {
         <div className={styles.statsRow}>
           <div className={styles.statCard}>
             <img src="/assets/ui/stat_card.png" alt="" className={styles.statBg} />
-            <span className={styles.statValue} style={{ color: '#F97316' }}>
+            <span className={styles.statValue} style={{ color: '#7c2d12' }}>
               {tokagotchi.stats.atk}
             </span>
             <span className={styles.statLabel}>Ataque</span>

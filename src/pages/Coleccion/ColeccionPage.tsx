@@ -58,7 +58,6 @@ export default function ColeccionPage() {
             accesorioActivoCabeza={accesorioActivoCabeza}
             accesorioActivoCuerpo={accesorioActivoCuerpo}
             onEquipar={equiparAccesorio}
-            onVerTienda={() => navigate('/tienda')}
           />
         )}
         <div style={{ height: 24 }} />
@@ -171,15 +170,13 @@ function TabAccesorios({
   accesorios,
   accesorioActivoCabeza,
   accesorioActivoCuerpo,
-  onEquipar,
-  onVerTienda
+  onEquipar
 }: {
   tokaConAccesorios: Tokagotchi
   accesorios: Accesorio[]
   accesorioActivoCabeza: Accesorio | null
   accesorioActivoCuerpo: Accesorio | null
   onEquipar: (acc: Accesorio) => void
-  onVerTienda: () => void
 }) {
   return (
     <div className={styles.tabContent}>
@@ -257,10 +254,9 @@ function TabAccesorios({
           ) : (
             <div
               key={acc.id}
-              className={`${styles.accesorioCard} ${styles.accesorioLocked}`}
-              onClick={onVerTienda}
+              className={`${styles.lockedCard}`}
             >
-              <svg viewBox="0 0 24 24" fill="none" width="28" height="28">
+              <svg viewBox="0 0 24 24" fill="none" width="32" height="32">
                 <rect x="3" y="11" width="18" height="11" rx="2"
                   fill="none" stroke="#8C6B4A" strokeWidth="2" />
                 <path d="M7 11V7C7 4.79 8.79 3 11 3H13C15.21 3 17 4.79 17 7V11"

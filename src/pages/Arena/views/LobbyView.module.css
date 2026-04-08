@@ -1,0 +1,135 @@
+.tokaRow {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.tokaInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tokaName {
+  font-family: var(--font-title);
+  font-size: 20px;
+  font-weight: 600;
+  color: #3D2B1F;
+}
+
+.tokaEspecie {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: #8C6B4A;
+  font-weight: 600;
+}
+
+.statsRow {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.statAtk {
+  font-size: 10px; font-weight: 700;
+  background: #FFE0E0; color: #C62828;
+  border: 1.5px solid #C62828;
+  border-radius: 6px; padding: 2px 6px;
+  font-family: var(--font-body);
+}
+
+.statDef {
+  font-size: 10px; font-weight: 700;
+  background: #E0F0E0; color: #2E7D32;
+  border: 1.5px solid #2E7D32;
+  border-radius: 6px; padding: 2px 6px;
+  font-family: var(--font-body);
+}
+
+.statHp {
+  font-size: 10px; font-weight: 700;
+  background: #E0EEFF; color: #1565C0;
+  border: 1.5px solid #1565C0;
+  border-radius: 6px; padding: 2px 6px;
+  font-family: var(--font-body);
+}
+
+.modoCard {
+  background: rgba(255, 248, 231, 0.85);
+  border: 2.5px solid #3D2B1F;
+  border-radius: 14px;
+  padding: 12px 14px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: transform 0.1s ease;
+}
+
+.modoCard:active { transform: scale(0.98); }
+
+.modoActivo {
+  border-color: #F97316;
+  background: rgba(255, 248, 231, 0.98);
+  box-shadow: 0 0 12px rgba(249, 115, 22, 0.3);
+}
+
+.modoApuesta.modoActivo {
+  border-color: #FF8000;
+  box-shadow: 0 0 12px rgba(255, 128, 0, 0.3);
+}
+
+.modoHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modoRadio {
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  border: 2px solid #F97316;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.modoRadioFill {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #F97316;
+}
+
+.modoNombre {
+  font-family: var(--font-title);
+  font-size: 16px;
+  font-weight: 600;
+  color: #3D2B1F;
+  flex: 1;
+}
+
+.modoBadge {
+  background: rgba(255, 128, 0, 0.15);
+  color: #FF8000;
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 6px;
+  border: 1px solid #FF8000;
+}
+
+.modoDesc {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: #8C6B4A;
+  padding-left: 24px;
+}
+
+.modoWarning {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: #C62828;
+  font-weight: 700;
+  padding-left: 24px;
+}
