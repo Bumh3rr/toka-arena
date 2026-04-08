@@ -5,23 +5,22 @@ import styles from './LoginPage.module.css'
 import { MOCHI_MOCK } from '../../constants/tokagotchis'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
+// import { authService } from '../../services/authService'
 
 export default function LoginPage() {
   const { stop } = useLoginMusic()
   const navigate = useNavigate()
-  const { login } = useAuth()
+const { loginWithToka } = useAuth()
 
-    const handleLogin = async () => {
-    const success = await login({
-      username: 'eduardo',
-      password: '123456'
-    })
-
-    if (success) {
-      stop()
-      navigate('/unboxing')
-    }
+const handleLogin = async () => {
+  const success = await loginWithToka()
+  if (success) {
+    stop()
+    // Redirigir según hasStarter
+    // const user = authService.getToken() ? true : false
+    navigate('/home') // o '/unboxing' según tu lógica de hasStarter
   }
+}
 
   return (
     <div className={styles.container}>
