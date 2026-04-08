@@ -1,4 +1,10 @@
+import { useState } from 'react';
+
 export default function AuthCode() {
+  const [authCode, setAuthCode] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
   const getAuthCode = (
     method: 'DigitalIdentity' | 'ContactInformation' | 'AddressInformation' | 'PersonalInformation' | 'KYCStatus',
     scopes: string[]
@@ -14,23 +20,34 @@ export default function AuthCode() {
   };
 
   const handleGetAuthCode = async () => {
+    setIsLoading(true);
+    setError(null);
+    setAuthCode(null);
+
     try {
-      const authCode = await getAuthCode('DigitalIdentity', [
+      const code = await getAuthCode('DigitalIdentity', [
         'USER_ID',
         'USER_AVATAR',
         'USER_NICKNAME',
       ]);
-      console.log('AuthCode obtenido:', authCode);
-      // mostrar en pantalla
-      alert(`AuthCode: ${authCode}`);
+      console.log('AuthCode obtenido:', code);
+      setAuthCode(code);
     } catch (err) {
       console.error('Error obteniendo authCode:', err);
+      setError('No se pudo obtener el código de autenticación. Inténtalo de nuevo.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <button onClick={handleGetAuthCode}>
-      Obtener código de autenticación
-    </button>
+    <div>
+      <button onClick={handleGetAuthCode} disabled={isLoading}>
+        {isLoading ? 'Obteniendo...' : 'Obtener código de autenticación'}
+      </button>
+
+      {authCode && <p>AuthCode: {authCode}</p>}
+      {error && <p>{error}</p>}
+    </div>
   );
 }
