@@ -21,14 +21,14 @@ export default function GetAuthCode() {
 
       // También probar con my directamente
       try {
-        // @ts-ignore
+        // @ts-ignore 
         my.getAuthCode({
           scopes: 'auth_user',
           success: (res: Record<string, unknown>) => {
-            add(`✅ my.getAuthCode success: ${JSON.stringify(res)}`);
+            add(`✅success: ${JSON.stringify(res)}`);
           },
           fail: (err: unknown) => {
-            add(`❌ my.getAuthCode fail: ${JSON.stringify(err)}`);
+            add(`❌fail: ${JSON.stringify(err)}`);
           },
         });
         add('✅ my.getAuthCode enviado...');
