@@ -1,66 +1,52 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function GetAuthCode() {
-  const [authCode, setAuthCode] = useState<string | null>(null);
-  const [log, setLog] = useState<string[]>([]);
-  const gotCode = useRef(false);
+  const [lines, setLines] = useState<string[]>(['Iniciando...']);
 
-  const addLog = (msg: string) => {
-    console.info(msg);
-    setLog(prev => [...prev, msg]);
-  };
+  const add = (msg: string) => setLines(prev => [...prev, msg]);
 
   useEffect(() => {
     const run = () => {
-      addLog(`Bridge listo`);
+      add('✅ Bridge detectado');
 
-      const methods = [
-        { method: 'KYCStatus', scopes: ['USER_KYC_STATUS'] },
-        { method: 'DigitalIdentity', scopes: ['USER_ID', 'USER_AVATAR', 'USER_NICKNAME'] },
-        { method: 'ContactInformation', scopes: ['PLAINTEXT_MOBILE_PHONE'] },
-      ];
-
-      methods.forEach(({ method, scopes }) => {
-        addLog(`Probando: ${method}`);
-        window.AlipayJSBridge.call(`getUser${method}AuthCode`, {
-          usage: 'Toka Arena necesita verificar tu identidad',
-          scopes,
-          success: (res: Record<string, unknown>) => {
-            const code = (res.result ?? res.authCode ?? res.code) as string;
-            addLog(`✅ ${method}: ${code}`);
-            if (!gotCode.current && code) {
-              gotCode.current = true;
-              // Forzar actualización fuera del ciclo de Alipay
-              setTimeout(() => setAuthCode(code), 0);
-            }
-          },
-          fail: (err: unknown) => {
-            addLog(`❌ ${method}: ${JSON.stringify(err)}`);
-          },
-        });
+      window.AlipayJSBridge.call('getUserKYCStatusAuthCode', {
+        usage: 'Toka Arena necesita verificar tu identidad',
+        scopes: ['USER_KYC_STATUS'],
+        success: (res: Record<string, unknown>) => {
+          add('✅ SUCCESS llamado');
+          add(JSON.stringify(res));
+        },
+        fail: (err: unknown) => {
+          add('❌ FAIL llamado');
+          add(JSON.stringify(err));
+        },
       });
+
+      add('✅ Call enviado, esperando respuesta...');
     };
 
     if (window.AlipayJSBridge) {
       run();
     } else {
+      add('⏳ Esperando AlipayJSBridgeReady...');
       document.addEventListener('AlipayJSBridgeReady', run, false);
       return () => document.removeEventListener('AlipayJSBridgeReady', run, false);
     }
   }, []);
 
   return (
-    <div style={{ padding: 16 }}>
-      <h1>Login</h1>
-      {authCode
-        ? <p style={{ color: 'green', fontSize: 20 }}>✅ AuthCode: {authCode}</p>
-        : <p>Obteniendo código...</p>
-      }
-      <div style={{ marginTop: 16 }}>
-        {log.map((l, i) => (
-          <p key={i} style={{ fontSize: 12, color: 'gray', margin: 2 }}>{l}</p>
-        ))}
-      </div>
+    <div style={{ padding: 16, fontFamily: 'monospace' }}>
+      <h2>Debug</h2>
+      {lines.map((l, i) => (
+        <div key={i} style={{
+          fontSize: 14,
+          padding: '4px 0',
+          borderBottom: '1px solid #eee',
+          color: l.startsWith('❌') ? 'red' : l.startsWith('✅') ? 'green' : 'black'
+        }}>
+          {l}
+        </div>
+      ))}
     </div>
   );
 }
