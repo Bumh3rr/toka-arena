@@ -9,26 +9,25 @@ export default function GetAuthCode() {
     const run = () => {
       add('✅ Bridge detectado');
 
-      window.AlipayJSBridge.call('getUserKYCStatusAuthCode', {
-        usage: 'Toka Arena necesita verificar tu identidad',
-        scopes: ['USER_KYC_STATUS'],
+      window.AlipayJSBridge.call('getAuthCode', {
+        scopeNicks: ['auth_user'],
         success: (res: Record<string, unknown>) => {
-          add('✅ SUCCESS llamado');
+          add('✅ SUCCESS');
           add(JSON.stringify(res));
         },
         fail: (err: unknown) => {
-          add('❌ FAIL llamado');
+          add('❌ FAIL');
           add(JSON.stringify(err));
         },
       });
 
-      add('✅ Call enviado, esperando respuesta...');
+      add('✅ Call enviado...');
     };
 
     if (window.AlipayJSBridge) {
       run();
     } else {
-      add('⏳ Esperando AlipayJSBridgeReady...');
+      add('⏳ Esperando bridge...');
       document.addEventListener('AlipayJSBridgeReady', run, false);
       return () => document.removeEventListener('AlipayJSBridgeReady', run, false);
     }
