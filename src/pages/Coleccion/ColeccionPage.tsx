@@ -85,8 +85,8 @@ function TabTokagotchi({
       {/* Info resumen */}
       <div className={styles.resumenRow}>
         <div className={styles.resumenCard}>
-          <span className={styles.resumenLabel}>TOKAS</span>
-          <span className={styles.resumenValue}>{tokas.length}/{MAX_SLOTS}</span>
+          <span className={styles.resumenLabel}>TOKAGOTCHIS</span>
+          <span className={styles.resumenValue}>{tokas.length}</span>
         </div>
         <div className={styles.resumenCard}>
           <span className={styles.resumenLabel}>ACTIVO</span>

@@ -11,7 +11,6 @@ export const TOFU_MOCK: Tokagotchi = {
     def: 30,
     nrg: 100
   },
-  felicidad: 80,
   habilidades: [
     {
       id: 'mordida',
@@ -67,7 +66,6 @@ export const MOCHI_MOCK: Tokagotchi = {
     def: 20,
     nrg: 100
   },
-  felicidad: 80,
   habilidades: [
     {
       id: 'zarpazo',

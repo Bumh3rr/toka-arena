@@ -51,7 +51,6 @@ export interface Tokagotchi {
   especie: Especie
   rareza: Rareza
   stats: TokagotchiStats
-  felicidad: number         // 0-100
   habilidades: Habilidad[]
   accesorios: {
     cabeza: Accesorio | null
@@ -64,22 +63,4 @@ export interface Tokagotchi {
     skeJson: string
     armatureKey: string
   }
-}
-
-// Resultado del claim-starter
-export interface StarterResult {
-  tokagotchi: Tokagotchi
-  rareza: Rareza
-  esNuevo: boolean
-}
-
-// Estado de combate
-export interface CombateEstado {
-  turno: number
-  nrgJugador: number
-  nrgRival: number
-  hpJugador: number
-  hpRival: number
-  fase: 'esperando' | 'seleccion' | 'resolviendo' | 'fin'
-  ganador: 'jugador' | 'rival' | null
 }
