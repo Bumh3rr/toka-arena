@@ -9,32 +9,28 @@ export default function GetAuthCode() {
     const run = () => {
       add('✅ Bridge detectado');
 
-      // Patrón alternativo — llamada directa sin callbacks
-      try {
-        const result = window.AlipayJSBridge.call('getAuthCode', {
-          scopeNicks: ['auth_user'],
-        });
-        add(`result: ${JSON.stringify(result)}`);
-      } catch (e) {
-        add(`❌ Error: ${JSON.stringify(e)}`);
-      }
+      const methods = [
+        { method: 'DigitalIdentity', scopes: ['USER_ID', 'USER_AVATAR', 'USER_NICKNAME'] },
+        { method: 'ContactInformation', scopes: ['PLAINTEXT_MOBILE_PHONE', 'PLAINTEXT_EMAIL_ADDRESS'] },
+        { method: 'AddressInformation', scopes: ['USER_ADDRESS'] },
+        { method: 'PersonalInformation', scopes: ['USER_NAME', 'USER_FIRST_SURNAME'] },
+        { method: 'KYCStatus', scopes: ['USER_KYC_STATUS'] },
+      ];
 
-      // También probar con my directamente
-      try {
-            // @ts-ignore
-            my.getAuthCode({
-            scopes: ['auth_user'],  // array, no string
-            success: (res: Record<string, unknown>) => {
-                add(`✅ success: ${JSON.stringify(res)}`);
-            },
-            fail: (err: unknown) => {
-                add(`❌ fail: ${JSON.stringify(err)}`);
-            },
-            });
-        add('✅ my.getAuthCode enviado...');
-      } catch (e) {
-        add(`❌ my no disponible: ${JSON.stringify(e)}`);
-      }
+      methods.forEach(({ method, scopes }) => {
+        // @ts-ignore
+        my.call(`getUser${method}AuthCode`, {
+          usage: 'Toka Arena necesita verificar tu identidad',
+          scopes,
+          success: (res: Record<string, unknown>) => {
+            add(`✅ ${method}: ${JSON.stringify(res)}`);
+          },
+          fail: (err: unknown) => {
+            add(`❌ ${method}: ${JSON.stringify(err)}`);
+          },
+        });
+        add(`📤 enviado: ${method}`);
+      });
     };
 
     if (window.AlipayJSBridge) {
@@ -51,8 +47,8 @@ export default function GetAuthCode() {
       <h2>Debug</h2>
       {lines.map((l, i) => (
         <div key={i} style={{
-          fontSize: 14,
-          padding: '4px 0',
+          fontSize: 13,
+          padding: '3px 0',
           borderBottom: '1px solid #eee',
           color: l.startsWith('❌') ? 'red' : l.startsWith('✅') ? 'green' : 'black'
         }}>
