@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export default function GetAuthCode() {
   const [authCode, setAuthCode] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const [log, setLog] = useState<string[]>([]);
+  const gotCode = useRef(false);
 
   const addLog = (msg: string) => {
     console.info(msg);
@@ -12,7 +12,7 @@ export default function GetAuthCode() {
 
   useEffect(() => {
     const run = () => {
-      addLog(`window.AlipayJSBridge: ${!!window.AlipayJSBridge}`);
+      addLog(`Bridge listo`);
 
       const methods = [
         { method: 'KYCStatus', scopes: ['USER_KYC_STATUS'] },
@@ -21,17 +21,21 @@ export default function GetAuthCode() {
       ];
 
       methods.forEach(({ method, scopes }) => {
-        addLog(`Probando: getUser${method}AuthCode`);
+        addLog(`Probando: ${method}`);
         window.AlipayJSBridge.call(`getUser${method}AuthCode`, {
           usage: 'Toka Arena necesita verificar tu identidad',
           scopes,
           success: (res: Record<string, unknown>) => {
-            addLog(`✅ ${method} success: ${JSON.stringify(res)}`);
-            setAuthCode(res.result as string);
+            const code = (res.result ?? res.authCode ?? res.code) as string;
+            addLog(`✅ ${method}: ${code}`);
+            if (!gotCode.current && code) {
+              gotCode.current = true;
+              // Forzar actualización fuera del ciclo de Alipay
+              setTimeout(() => setAuthCode(code), 0);
+            }
           },
           fail: (err: unknown) => {
-            addLog(`❌ ${method} fail: ${JSON.stringify(err)}`);
-            setError(`Error al obtener el código de autenticación para ${method}`);
+            addLog(`❌ ${method}: ${JSON.stringify(err)}`);
           },
         });
       });
@@ -40,7 +44,6 @@ export default function GetAuthCode() {
     if (window.AlipayJSBridge) {
       run();
     } else {
-      addLog('Esperando AlipayJSBridgeReady...');
       document.addEventListener('AlipayJSBridgeReady', run, false);
       return () => document.removeEventListener('AlipayJSBridgeReady', run, false);
     }
@@ -49,9 +52,10 @@ export default function GetAuthCode() {
   return (
     <div style={{ padding: 16 }}>
       <h1>Login</h1>
-      {authCode && <p style={{ color: 'green' }}>✅ AuthCode: {authCode}</p>}
-      {error && <p style={{ color: 'red' }}>❌ Error: {error}</p>}
-      {!authCode && !error && <p>Obteniendo código de autenticación...</p>}
+      {authCode
+        ? <p style={{ color: 'green', fontSize: 20 }}>✅ AuthCode: {authCode}</p>
+        : <p>Obteniendo código...</p>
+      }
       <div style={{ marginTop: 16 }}>
         {log.map((l, i) => (
           <p key={i} style={{ fontSize: 12, color: 'gray', margin: 2 }}>{l}</p>
