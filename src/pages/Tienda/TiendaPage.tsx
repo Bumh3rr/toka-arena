@@ -1,42 +1,45 @@
 import { useTienda } from '../../hooks/useTienda'
-import type { ItemTienda, PaqueteWallet } from '../../types/tienda'
+import type{ ItemTienda, PaqueteWallet } from '../../types/tienda'
 import styles from './TiendaPage.module.css'
 
 export default function TiendaPage() {
-  const { tab, setTab, items, paquetes, comprarItem, comprarPaquete } = useTienda()
+  const {
+    tab, setTab, tf, items, paquetes,
+    comprarItem, comprarPaquete,
+    comprando, exitoId
+  } = useTienda()
 
   return (
     <div className={styles.container}>
       <div className={styles.background} />
 
-      {/* Header */}
       <div className={styles.header}>
         <h1 className={styles.title}>Tienda</h1>
         <div className={styles.tfBadge}>
-          <span className={styles.tfAmount}>10 TF</span>
+          <span className={styles.tfAmount}>{tf} TF</span>
         </div>
       </div>
 
-      {/* Pestañas */}
       <div className={styles.tabs}>
         <button
           className={`${styles.tab} ${tab === 'tf' ? styles.tabActive : ''}`}
           onClick={() => setTab('tf')}
-        >
-          TF
-        </button>
+        >TF</button>
         <button
           className={`${styles.tab} ${tab === 'wallet' ? styles.tabActive : ''}`}
           onClick={() => setTab('wallet')}
-        >
-          Wallet
-        </button>
+        >Wallet</button>
       </div>
 
-      {/* Contenido */}
       <div className={styles.scroll}>
         {tab === 'tf' ? (
-          <TabTF items={items} onComprar={comprarItem} />
+          <TabTF
+            items={items}
+            tf={tf}
+            onComprar={comprarItem}
+            comprando={comprando}
+            exitoId={exitoId}
+          />
         ) : (
           <TabWallet paquetes={paquetes} onComprar={comprarPaquete} />
         )}
@@ -49,61 +52,88 @@ export default function TiendaPage() {
 // ── Pestaña TF ──
 function TabTF({
   items,
-  onComprar
+  tf,
+  onComprar,
+  comprando,
+  exitoId
 }: {
   items: ItemTienda[]
+  tf: number
   onComprar: (item: ItemTienda) => void
+  comprando: string | null
+  exitoId: string | null
 }) {
+  if (items.length === 0) {
+    return (
+      <div className={styles.tabContent}>
+        <p className={styles.hint}>Compra accesorios con tus TF ganados</p>
+        <div className={styles.emptyState}>
+          <span className={styles.emptyText}>¡Ya tienes todos los accesorios!</span>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className={styles.tabContent}>
       <p className={styles.hint}>Compra accesorios con tus TF ganados</p>
       <div className={styles.itemGrid}>
-        {items.map((item) => (
-          <div key={item.id} className={styles.itemCard}>
-            {/* Badge rareza */}
-            <span
-              className={styles.rarezaBadge}
-              style={{ color: getRarezaColor(item.rareza) }}
-            >
-              {item.rareza}
-            </span>
+        {items.map((item) => {
+          const sinFondos = tf < item.precio
+          const estaComprando = comprando === item.id
+          const compraExitosa = exitoId === item.id
 
-            {/* Imagen */}
-            <div className={styles.itemImgWrapper}>
-              <img
-                src={item.imagen}
-                alt={item.nombre}
-                className={styles.itemImg}
-              />
+          return (
+            <div
+              key={item.id}
+              className={`${styles.itemCard} ${compraExitosa ? styles.itemExito : ''} ${sinFondos ? styles.itemBloqueado : ''}`}
+            >
+              {/* Badge slot */}
+              <span
+                className={styles.itemSlot}
+                style={{ background: item.slot === 'cabeza' ? '#F97316' : '#43A047' }}
+              >
+                {item.slot === 'cabeza' ? 'Cabeza' : 'Cuerpo'}
+              </span>
+
+              {/* Imagen */}
+              <div className={`${styles.itemImgWrapper} ${compraExitosa ? styles.imgExito : ''}`}>
+                <img src={item.imagen} alt={item.nombre} className={styles.itemImg} />
+              </div>
+
+              {/* Nombre */}
+              <span className={styles.itemNombre}>{item.nombre}</span>
+
+              {/* Botón */}
+              <button
+                className={`${styles.buyBtn} ${sinFondos ? styles.buyBtnDisabled : ''}`}
+                onClick={() => !sinFondos && !estaComprando && onComprar(item)}
+                disabled={sinFondos || estaComprando}
+              >
+                {estaComprando ? (
+                  <span>...</span>
+                ) : compraExitosa ? (
+                  <span>¡Comprado!</span>
+                ) : (
+                  <>
+                    <svg viewBox="0 0 24 24" fill="none" width="14" height="14">
+                      <circle cx="12" cy="12" r="10"
+                        fill="#F5DFA0" stroke="#3D2B1F" strokeWidth="1.5" />
+                      <text x="12" y="16" textAnchor="middle"
+                        fontSize="10" fontWeight="bold" fill="#3D2B1F">TF</text>
+                    </svg>
+                    <span>{item.precio} TF</span>
+                  </>
+                )}
+              </button>
+
+              {/* Mensaje sin fondos */}
+              {sinFondos && (
+                <span className={styles.sinFondos}>TF insuficientes</span>
+              )}
             </div>
-
-            {/* Info */}
-            <span className={styles.itemNombre}>{item.nombre}</span>
-            <span
-              className={styles.itemSlot}
-              style={{ background: item.slot === 'cabeza' ? '#F97316' : '#43A047' }}
-            >
-              {item.slot === 'cabeza' ? 'Cabeza' : 'Cuerpo'}
-            </span>
-
-            {/* Botón comprar */}
-            <button
-              className={styles.buyBtn}
-              onClick={() => onComprar(item)}
-            >
-              <svg viewBox="0 0 24 24" fill="none" width="14" height="14">
-                <circle cx="12" cy="12" r="10"
-                  fill="#F5DFA0" stroke="#3D2B1F" strokeWidth="1.5" />
-                <text x="12" y="16"
-                  textAnchor="middle"
-                  fontSize="10"
-                  fontWeight="bold"
-                  fill="#3D2B1F">TF</text>
-              </svg>
-              <span>{item.precio} TF</span>
-            </button>
-          </div>
-        ))}
+          )
+        })}
       </div>
     </div>
   )

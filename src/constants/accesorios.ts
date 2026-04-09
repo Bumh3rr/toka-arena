@@ -6,7 +6,6 @@ export const ACCESORIOS_MOCK: Accesorio[] = [
     id: 'sombrero',
     nombre: 'Sombrero',
     slot: 'cabeza',
-    rareza: 'Común',
     displayIndex: 3,
     desbloqueado: true,
     imagen: '/assets/accesorios/sombrero.png'
@@ -15,7 +14,6 @@ export const ACCESORIOS_MOCK: Accesorio[] = [
     id: 'corona',
     nombre: 'Corona',
     slot: 'cabeza',
-    rareza: 'Raro',
     displayIndex: 2,
     desbloqueado: true,
     imagen: '/assets/accesorios/corona.png'
@@ -24,7 +22,6 @@ export const ACCESORIOS_MOCK: Accesorio[] = [
     id: 'casco',
     nombre: 'Casco',
     slot: 'cabeza',
-    rareza: 'Legendario',
     displayIndex: 1,
     desbloqueado: false,
     imagen: '/assets/accesorios/casco.png'
@@ -34,7 +31,6 @@ export const ACCESORIOS_MOCK: Accesorio[] = [
     id: 'super_capa',
     nombre: 'Super Capa',
     slot: 'cuerpo',
-    rareza: 'Legendario',
     displayIndex: 1,
     desbloqueado: false,
     imagen: '/assets/accesorios/capa.png'

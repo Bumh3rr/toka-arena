@@ -1,36 +1,26 @@
+import { useNavigate } from 'react-router-dom'
 import WoodButton from '../../components/WoodButton/WoodButton'
 import TokagotchiCanvas from '../../components/TofuCanvas/TofuCanvas'
-//import { useLoginMusic } from '../../hooks/useLoginMusic'
-import styles from './LoginPage.module.css'
+import { useLoginMusic } from '../../hooks/useLoginMusic'
+import { useAuth } from '../../hooks/useAuth'
 import { MOCHI_MOCK } from '../../constants/tokagotchis'
-import { useNavigate } from 'react-router-dom'
-//import { useAuth } from '../../hooks/useAuth'
-// import { authService } from '../../services/authService'
+import styles from './LoginPage.module.css'
 
 export default function LoginPage() {
-  //const { stop } = useLoginMusic()
   const navigate = useNavigate()
-//const { loginWithToka } = useAuth()
+  const { stop } = useLoginMusic()
+  const { loginWithToka, loading, error } = useAuth()
 
-const handleLogin = async () => {
-
-
-
-  /**
-   const success = await loginWithToka()
-  if (success) {
-    stop()
-    // Redirigir según hasStarter
-    // const user = authService.getToken() ? true : false
-    navigate('/home') // o '/unboxing' según tu lógica de hasStarter
+  const handleLogin = async () => {
+    const { success, hasFirstToka } = await loginWithToka()
+    if (success) {
+      stop()
+      navigate(hasFirstToka ? '/home' : '/unboxing', { replace: true })
+    }
   }
-   */
-navigate('/unboxing') 
-}
 
   return (
     <div className={styles.container}>
-        
       <div className={styles.background} />
 
       <div className={styles.logoContainer}>
@@ -49,10 +39,25 @@ navigate('/unboxing')
           height={320}
           scale={0.3}
         />
+
+        {error && (
+          <p style={{
+            color: '#EF5350',
+            fontFamily: 'var(--font-body)',
+            fontSize: 13,
+            textAlign: 'center',
+            textShadow: '1px 1px 0px #3D2B1F',
+            marginBottom: 8
+          }}>
+            {error}
+          </p>
+        )}
+
         <WoodButton
-          label="Entrar con mi cuenta Toka"
+          label={loading ? 'Entrando...' : 'Entrar con mi cuenta Toka'}
           onClick={handleLogin}
           width="300px"
+          disabled={loading}
         />
       </div>
     </div>

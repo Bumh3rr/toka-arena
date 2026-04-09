@@ -83,3 +83,16 @@
   color: #FFF8E7;
   margin-bottom: 22px;
 }
+.itemImgWrapper {
+  width: 150px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+}
+.itemImg {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+}

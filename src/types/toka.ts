@@ -1,3 +1,4 @@
+import type{ Accesorio } from "./accesorios"
 // Rareza
 export type Rareza = 'Común' | 'Raro' | 'Épico' | 'Legendario'
 
@@ -33,15 +34,6 @@ export interface Habilidad {
   multiplicador?: number    // para daño
   descripcion: string
   esSignature: boolean
-}
-
-// Accesorio
-export interface Accesorio {
-  id: string
-  nombre: string
-  slot: 'cabeza' | 'cuerpo'
-  rareza: Rareza
-  displayIndex: number
 }
 
 // Tokagotchi completo

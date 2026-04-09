@@ -1,37 +1,32 @@
 import api from './api'
-import type { RegisterRequest, LoginRequest, AuthResponse } from '../types/auth'
+import type {
+  LoginSuperAppRequest,
+  AuthResponse
+} from '../types/auth'
 
 export const authService = {
-
-    // Agrega esto dentro del objeto authService, después de login:
   loginWithAuthCode: async (authCode: string): Promise<AuthResponse> => {
-    const response = await api.post<AuthResponse>('/auth/login', {
-      authCode  // tu backend recibirá esto en vez de username/password
-    })
-    localStorage.setItem('toka_token', response.data.token)
+    const body: LoginSuperAppRequest = { authcode: authCode }
+    const response = await api.post<AuthResponse>('/auth/login-superapp', body)
     return response.data
   },
 
-  saveUser: (user: { userId: string; nickName: string; avatar: string }): void => {
-    localStorage.setItem('toka_user', JSON.stringify(user))
+  saveSession: (response: AuthResponse): void => {
+    localStorage.setItem('toka_token', response.accessToken)
+    localStorage.setItem('toka_user', JSON.stringify(response.user))
   },
 
-  register: async (data: RegisterRequest): Promise<AuthResponse> => {
-    const response = await api.post<AuthResponse>('/auth/register', data)
-    return response.data
-  },
-
-  login: async (data: LoginRequest): Promise<AuthResponse> => {
-    const response = await api.post<AuthResponse>('/auth/login', data)
-    return response.data
-  },
-
-  saveToken: (token: string): void => {
-    localStorage.setItem('toka_token', token)
+  getUser: () => {
+    const data = localStorage.getItem('toka_user')
+    return data ? JSON.parse(data) : null
   },
 
   getToken: (): string | null => {
     return localStorage.getItem('toka_token')
+  },
+
+  saveToken: (token: string): void => {
+    localStorage.setItem('toka_token', token)
   },
 
   clearSession: (): void => {
@@ -41,5 +36,10 @@ export const authService = {
 
   isAuthenticated: (): boolean => {
     return !!localStorage.getItem('toka_token')
+  },
+
+  hasFirstToka: (): boolean => {
+    const user = authService.getUser()
+    return user?.hasFirstToka ?? false
   }
 }

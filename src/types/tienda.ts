@@ -1,9 +1,8 @@
 export interface ItemTienda {
-  id: string
+  id: string        // id numérico del backend como string
   nombre: string
   slot: 'cabeza' | 'cuerpo'
-  rareza: 'Común' | 'Raro' | 'Legendario'
-  precio: number        // en TF
+  precio: number
   imagen: string
   disponible: boolean
 }
@@ -11,9 +10,9 @@ export interface ItemTienda {
 export interface PaqueteWallet {
   id: string
   tf: number
-  precio: number        // en MXN
+  precio: number
   precioPorTF: number
   destacado: boolean
-  bonus?: string        // texto extra como "Incluye un Tokagotchi Común"
+  bonus?: string
   rarezaBonus?: 'Común' | 'Raro'
 }

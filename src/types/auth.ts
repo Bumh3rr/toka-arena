@@ -1,14 +1,17 @@
-export interface RegisterRequest {
-  username: string
-  email: string
-  password: string
+export interface LoginSuperAppRequest {
+  authcode: string
 }
 
-export interface LoginRequest {
+export interface TokaUser {
+  id: number
   username: string
-  password: string
+  hasFirstToka: boolean
+  tf: number
 }
 
 export interface AuthResponse {
-  token: string
+  success: boolean
+  accessToken: string
+  tokenType: string
+  user: TokaUser
 }

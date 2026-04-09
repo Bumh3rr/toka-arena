@@ -1,52 +1,66 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import TofuCanvas from '../../components/TofuCanvas/TofuCanvas'
-import { MOCHI_MOCK } from '../../constants/tokagotchis'
+import { useHome } from '../../hooks/useHome'
 import styles from './HomePage.module.css'
 
 export default function HomePage() {
   const navigate = useNavigate()
-  const tokagotchi = MOCHI_MOCK
+  const { tokagotchi, username, tf, cp, misiones, loading, renameToka } = useHome()
 
   const [editingName, setEditingName] = useState(false)
-  const [tokaName, setTokaName] = useState(tokagotchi.nombre)
-  const [tempName, setTempName] = useState(tokagotchi.nombre)
+  const [tempName, setTempName] = useState('')
 
-  const handleSaveName = () => {
-    setTokaName(tempName)
-    setEditingName(false)
-    // TODO: llamar API para guardar nombre
+  const handleEditStart = () => {
+    setTempName(tokagotchi?.nombre ?? '')
+    setEditingName(true)
   }
 
-  const handleCancelName = () => {
-    setTempName(tokaName)
+  const handleSaveName = async () => {
+    if (tempName.trim()) await renameToka(tempName.trim())
     setEditingName(false)
   }
+
+  const handleCancelName = () => setEditingName(false)
+
+  if (loading || !tokagotchi) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.background} />
+        <div className={styles.loading}>
+          <span className={styles.loadingText}>Cargando...</span>
+        </div>
+      </div>
+    )
+  }
+
+  // CP para ascender rareza
+  const cpTarget = tokagotchi.rareza === 'Común' ? 100
+    : tokagotchi.rareza === 'Raro' ? 300
+    : tokagotchi.rareza === 'Épico' ? 600 : 999
+  const cpPct = Math.min((cp / cpTarget) * 100, 100)
+
+  // Solo primera misión para el preview
+  const primerasMisiones = misiones.slice(0, 2)
 
   return (
     <div className={styles.container}>
-      {/* Fondo */}
       <div className={styles.background} />
 
-      {/* Header — usuario y TF */}
+      {/* Header */}
       <div className={styles.header}>
         <div className={styles.userInfo}>
-          <img
-            src="/assets/ui/avatar_default.png"
-            alt="Avatar"
-            className={styles.avatar}
-          />
-          <span className={styles.username}>Emma</span>
+          <img src="/assets/ui/avatar_default.png" alt="Avatar" className={styles.avatar} />
+          <span className={styles.username}>{username}</span>
         </div>
         <div className={styles.tfBadge}>
-          <span className={styles.tfAmount}>10 TF</span>
+          <span className={styles.tfAmount}>{tf} TF</span>
         </div>
       </div>
 
-      {/* Contenido scrolleable */}
       <div className={styles.scroll}>
 
-        {/* Tokagotchi animado */}
+        {/* Tokagotchi */}
         <div className={styles.tokaSection}>
           <TofuCanvas
             tokagotchi={tokagotchi}
@@ -56,7 +70,6 @@ export default function HomePage() {
             scale={0.3}
           />
 
-          {/* Nombre editable */}
           {editingName ? (
             <div className={styles.nameEdit}>
               <input
@@ -67,34 +80,19 @@ export default function HomePage() {
                 autoFocus
               />
               <div className={styles.nameEditBtns}>
-                <button className={styles.btnSave} onClick={handleSaveName}>
-                  Guardar
-                </button>
-                <button className={styles.btnCancel} onClick={handleCancelName}>
-                  Cancelar
-                </button>
+                <button className={styles.btnSave} onClick={handleSaveName}>Guardar</button>
+                <button className={styles.btnCancel} onClick={handleCancelName}>Cancelar</button>
               </div>
             </div>
           ) : (
             <div className={styles.nameRow}>
-              <span className={styles.tokaName}>{tokaName}</span>
-              <button
-                className={styles.editBtn}
-                onClick={() => setEditingName(true)}
-              >
+              <span className={styles.tokaName}>{tokagotchi.nombre}</span>
+              <button className={styles.editBtn} onClick={handleEditStart}>
                 <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
-                  <path
-                    d="M11 4H4C3.45 4 3 4.45 3 5V20C3 20.55 3.45 21 4 21H19C19.55 21 20 20.55 20 19V12"
-                    stroke="#FFF8E7"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                  />
-                  <path
-                    d="M18.5 2.5C19.33 1.67 20.67 1.67 21.5 2.5C22.33 3.33 22.33 4.67 21.5 5.5L12 15L8 16L9 12L18.5 2.5Z"
-                    stroke="#FFF8E7"
-                    strokeWidth="2"
-                    strokeLinejoin="round"
-                  />
+                  <path d="M11 4H4C3.45 4 3 4.45 3 5V20C3 20.55 3.45 21 4 21H19C19.55 21 20 20.55 20 19V12"
+                    stroke="#FFF8E7" strokeWidth="2" strokeLinecap="round" />
+                  <path d="M18.5 2.5C19.33 1.67 20.67 1.67 21.5 2.5C22.33 3.33 22.33 4.67 21.5 5.5L12 15L8 16L9 12L18.5 2.5Z"
+                    stroke="#FFF8E7" strokeWidth="2" strokeLinejoin="round" />
                 </svg>
               </button>
             </div>
@@ -105,33 +103,24 @@ export default function HomePage() {
         <div className={styles.statsRow}>
           <div className={styles.statCard}>
             <img src="/assets/ui/stat_card.png" alt="" className={styles.statBg} />
-            <span className={styles.statValue} style={{ color: '#7c2d12' }}>
-              {tokagotchi.stats.atk}
-            </span>
+            <span className={styles.statValue} style={{ color: '#7c2d12' }}>{tokagotchi.stats.atk}</span>
             <span className={styles.statLabel}>Ataque</span>
           </div>
           <div className={styles.statCard}>
             <img src="/assets/ui/stat_card.png" alt="" className={styles.statBg} />
-            <span className={styles.statValue} style={{ color: '#F5DFA0' }}>
-              {tokagotchi.stats.def}
-            </span>
+            <span className={styles.statValue} style={{ color: '#F5DFA0' }}>{tokagotchi.stats.def}</span>
             <span className={styles.statLabel}>Defensa</span>
           </div>
           <div className={styles.statCard}>
             <img src="/assets/ui/stat_card.png" alt="" className={styles.statBg} />
-            <span className={styles.statValue} style={{ color: '#4FC3F7' }}>
-              {tokagotchi.stats.hp}
-            </span>
+            <span className={styles.statValue} style={{ color: '#4FC3F7' }}>{tokagotchi.stats.hp}</span>
             <span className={styles.statLabel}>HP</span>
           </div>
         </div>
 
         {/* Rareza */}
         <div className={styles.rarezaRow}>
-          <span
-            className={styles.rarezaBadge}
-            style={{ color: getRarezaColor(tokagotchi.rareza) }}
-          >
+          <span className={styles.rarezaBadge} style={{ color: getRarezaColor(tokagotchi.rareza) }}>
             ★ {tokagotchi.rareza}
           </span>
           <span className={styles.especie}>
@@ -139,7 +128,7 @@ export default function HomePage() {
           </span>
         </div>
 
-        {/* Acciones de cuidado */}
+        {/* Acciones */}
         <div className={styles.accionesSection}>
           <h2 className={styles.sectionTitle}>Acciones</h2>
           <div className={styles.accionesRow}>
@@ -158,43 +147,39 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* CP total */}
+        {/* CP */}
         <div className={styles.cpCard}>
           <div className={styles.cpInfo}>
             <span className={styles.cpLabel}>Puntos de Crianza</span>
-            <span className={styles.cpValue}>0 CP</span>
+            <span className={styles.cpValue}>{cp} CP</span>
           </div>
           <div className={styles.cpBar}>
-            <div className={styles.cpFill} style={{ width: '0%' }} />
+            <div className={styles.cpFill} style={{ width: `${cpPct}%` }} />
           </div>
-          <span className={styles.cpHint}>Necesitas 100 CP para ascender de rareza</span>
+          <span className={styles.cpHint}>Necesitas {cpTarget} CP para ascender de rareza</span>
         </div>
 
-        {/* Misiones del día */}
+        {/* Misiones preview */}
         <div className={styles.misionesSection}>
           <div className={styles.misionesHeader}>
             <h2 className={styles.sectionTitle}>Misiones del día</h2>
-            <button
-              className={styles.verTodasBtn}
-              onClick={() => navigate('/misiones')}
-            >
+            <button className={styles.verTodasBtn} onClick={() => navigate('/misiones')}>
               VER TODAS
             </button>
           </div>
-
-          {/* Misión preview */}
-          <div className={styles.misionCard}>
-            <div className={styles.misionInfo}>
-              <span className={styles.misionNombre}>GANA UNA BATALLA PVP</span>
-              <div className={styles.misionBar}>
-                <div className={styles.misionFill} style={{ width: '0%' }} />
+          {primerasMisiones.map((m) => (
+            <div key={m.id} className={styles.misionCard}>
+              <div className={styles.misionInfo}>
+                <span className={styles.misionNombre}>{m.description}</span>
+                <div className={styles.misionBar}>
+                  <div className={styles.misionFill} style={{ width: `${m.percentage}%` }} />
+                </div>
               </div>
+              <span className={styles.misionReward}>+{m.rewardTf} TF</span>
             </div>
-            <span className={styles.misionReward}>+10 TF</span>
-          </div>
+          ))}
         </div>
 
-        {/* Spacer para el nav */}
         <div style={{ height: 55 }} />
       </div>
     </div>

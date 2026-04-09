@@ -1,5 +1,4 @@
 import GiftBox from '../../components/GiftBox/GiftBox'
-import TokagotchiCanvas from '../../components/TofuCanvas/TofuCanvas'
 import WoodButton from '../../components/WoodButton/WoodButton'
 import { useUnboxing } from '../../hooks/useUnboxing'
 import styles from './UnboxingPage.module.css'
@@ -41,13 +40,13 @@ export default function UnboxingPage() {
 
             {result && (
               <>
-                <TokagotchiCanvas
-                  tokagotchi={result}
-                  animacion="idle"
-                  width={240}
-                  height={240}
-                  scale={0.3}
-                />
+                <div className={styles.itemImgWrapper}>
+                  <img
+                    src={`/assets/tokagotchis/${result.especie.toLocaleLowerCase()}.png`}
+                    alt={result.id}
+                    className={styles.itemImg}
+                  />
+                </div>
 
                 <p className={styles.tokaName}>{result.nombre}</p>
                 <p className={styles.tokaType}>

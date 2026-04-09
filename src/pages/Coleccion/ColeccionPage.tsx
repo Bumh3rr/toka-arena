@@ -8,15 +8,35 @@ import styles from './ColeccionPage.module.css'
 export default function ColeccionPage() {
   const navigate = useNavigate()
   const {
+    loading,
     tab, setTab,
     tokas, tokaActivo, setTokaActivo,
     accesorios,
     accesorioActivoCabeza,
     accesorioActivoCuerpo,
     equiparAccesorio,
-    tokaConAccesorios
+    tokaConAccesorios,
+    activarToka
   } = useColeccion()
 
+  if (loading) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.background} />
+        <div style={{
+          position: 'relative', zIndex: 1, flex: 1,
+          display: 'flex', alignItems: 'center', justifyContent: 'center'
+        }}>
+          <span style={{
+            fontFamily: 'var(--font-title)', fontSize: 20,
+            color: '#ffffff', textShadow: '1px 1px 0px #3D2B1F'
+          }}>
+            Cargando...
+          </span>
+        </div>
+      </div>
+    )
+  }
   return (
     <div className={styles.container}>
       <div className={styles.background} />
@@ -50,6 +70,7 @@ export default function ColeccionPage() {
             tokaActivo={tokaActivo}
             onSelect={setTokaActivo}
             onVerTienda={() => navigate('/tienda')}
+            activarToka={activarToka}
           />
         ) : (
           <TabAccesorios
@@ -71,12 +92,14 @@ function TabTokagotchi({
   tokas,
   tokaActivo,
   onSelect,
-  onVerTienda
+  onVerTienda,
+  activarToka
 }: {
   tokas: Tokagotchi[]
   tokaActivo: Tokagotchi
   onSelect: (t: Tokagotchi) => void
-  onVerTienda: () => void
+  onVerTienda: () => void,
+  activarToka: (t: Tokagotchi) => void
 }) {
   const MAX_SLOTS = 3
 
@@ -102,6 +125,7 @@ function TabTokagotchi({
             toka={toka}
             activo={toka.id === tokaActivo.id}
             onSelect={() => onSelect(toka)}
+            onActivate={activarToka}
           />
         ))}
 
@@ -128,16 +152,22 @@ function TabTokagotchi({
 function TokaCard({
   toka,
   activo,
-  onSelect
+  onSelect,
+  onActivate
+
 }: {
   toka: Tokagotchi
   activo: boolean
   onSelect: () => void
+  onActivate: (t: Tokagotchi) => void
 }) {
   return (
     <div
       className={`${styles.tokaCard} ${activo ? styles.tokaCardActivo : ''}`}
-      onClick={onSelect}
+      onClick={() => {
+        onSelect();
+        onActivate(toka);
+      }}
     >
       {activo && <span className={styles.activoBadge}>Activo</span>}
       <div
@@ -188,7 +218,7 @@ function TabAccesorios({
             animacion="idle"
             width={80}
             height={80}
-            scale={0.13 }
+            scale={0.13}
           />
         </div>
         <div className={styles.previewRight}>
@@ -244,12 +274,6 @@ function TabAccesorios({
               >
                 {acc.slot === 'cabeza' ? 'Cabeza' : 'Cuerpo'}
               </span>
-              <span
-                className={styles.accesorioRareza}
-                style={{ color: getRarezaColor(acc.rareza) }}
-              >
-                {acc.rareza}
-              </span>
             </div>
           ) : (
             <div
@@ -275,6 +299,8 @@ function TabAccesorios({
       </div>
     </div>
   )
+
+
 }
 
 function getRarezaColor(rareza: string): string {
