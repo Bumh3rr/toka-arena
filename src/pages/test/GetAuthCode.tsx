@@ -21,16 +21,16 @@ export default function GetAuthCode() {
 
       // También probar con my directamente
       try {
-        // @ts-ignore 
-        my.getAuthCode({
-          scopes: 'auth_user',
-          success: (res: Record<string, unknown>) => {
-            add(`✅success: ${JSON.stringify(res)}`);
-          },
-          fail: (err: unknown) => {
-            add(`❌fail: ${JSON.stringify(err)}`);
-          },
-        });
+            // @ts-ignore
+            my.getAuthCode({
+            scopes: ['auth_user'],  // array, no string
+            success: (res: Record<string, unknown>) => {
+                add(`✅ success: ${JSON.stringify(res)}`);
+            },
+            fail: (err: unknown) => {
+                add(`❌ fail: ${JSON.stringify(err)}`);
+            },
+            });
         add('✅ my.getAuthCode enviado...');
       } catch (e) {
         add(`❌ my no disponible: ${JSON.stringify(e)}`);
