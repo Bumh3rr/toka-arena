@@ -6,13 +6,17 @@ import { useAuth } from '../../hooks/useAuth'
 import { MOCHI_MOCK } from '../../constants/tokagotchis'
 import styles from './LoginPage.module.css'
 
-export default function LoginPage() {
+type LoginPageProps = {
+  authCode: string | null
+}
+
+export default function LoginPage({ authCode }: LoginPageProps) {
   const navigate = useNavigate()
   const { stop } = useLoginMusic()
   const { loginWithToka, loading, error } = useAuth()
-
+  
   const handleLogin = async () => {
-    const { success, hasFirstToka } = await loginWithToka()
+    const { success, hasFirstToka } = await loginWithToka({ authCode })
     if (success) {
       stop()
       navigate(hasFirstToka ? '/home' : '/unboxing', { replace: true })

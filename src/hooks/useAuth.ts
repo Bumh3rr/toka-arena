@@ -1,17 +1,20 @@
 import { useState } from 'react'
 import { authService } from '../services/authService'
-import { getAuthCodeFromURL } from '../services/tokaAuth'
+
+type AuthCodeProps = {
+  authCode: string | null
+}
 
 export function useAuth() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const loginWithToka = async (): Promise<{ success: boolean; hasFirstToka: boolean }> => {
+  const loginWithToka = async ({ authCode }: AuthCodeProps): Promise<{ success: boolean; hasFirstToka: boolean }> => {
     setLoading(true)
     setError(null)
     try {
       // 1. Obtener authCode de la URL (inyectado por Toka Super App)
-      const authCode = getAuthCodeFromURL()
+      //const authCode = getAuthCodeFromURL()
       if (!authCode) throw new Error('No se encontró el authCode en la URL')
 
       // 2. Intercambiar authCode por JWT en el backend
