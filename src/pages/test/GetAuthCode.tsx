@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { getAuthCodeFromURL } from '../../services/tokaAuth';
 
 export default function GetAuthCode() {
