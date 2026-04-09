@@ -15,10 +15,10 @@ export function useAuth() {
     try {
       // 1. Obtener authCode de la URL (inyectado por Toka Super App)
       //const authCode = getAuthCodeFromURL()
-      if (!authCode) throw new Error('No se encontró el authCode en la URL')
+      authCode = 'DEBUG' // TODO: Eliminar esta línea y usar el authCode real inyectado por la Super App. Se deja hardcodeado para facilitar pruebas sin necesidad de la Super App. --- IGNORE ---
 
       // 2. Intercambiar authCode por JWT en el backend
-      const response = await authService.loginWithAuthCode('DEBUG')
+      const response = await authService.loginWithAuthCode(authCode)
 
       if (!response.success) throw new Error('Login fallido')
 
