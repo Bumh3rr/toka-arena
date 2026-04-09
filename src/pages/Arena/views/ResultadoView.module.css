@@ -47,6 +47,14 @@
   margin-top: 8px;
 }
 
+.resumenGridSingle {
+  display: grid;
+  grid-template-columns: minmax(160px, 220px);
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
 .resumenItem {
   display: flex;
   flex-direction: column;

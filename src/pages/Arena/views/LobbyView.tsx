@@ -1,9 +1,16 @@
+import { useEffect } from 'react'
 import TokagotchiCanvas from '../../../components/TofuCanvas/TofuCanvas'
 import styles from './Arena.module.css'
 import lobbyStyles from './LobbyView.module.css'
 
 export default function LobbyView({ batalla }: { batalla: any }) {
   const { tokagotchi, modo, setModo, setFase } = batalla
+
+  useEffect(() => {
+    if (modo !== 'normal') {
+      setModo('normal')
+    }
+  }, [modo, setModo])
 
   return (
     <div className={styles.view}>
@@ -17,7 +24,7 @@ export default function LobbyView({ batalla }: { batalla: any }) {
             animacion="idle"
             width={120}
             height={120}
-            scale={0.28}
+            scale={0.18}
           />
           <div className={lobbyStyles.tokaInfo}>
             <span className={lobbyStyles.tokaName}>{tokagotchi.nombre}</span>
@@ -52,29 +59,24 @@ export default function LobbyView({ batalla }: { batalla: any }) {
       </div>
 
       <div
-        className={`${lobbyStyles.modoCard} ${lobbyStyles.modoApuesta} ${modo === 'apuesta' ? lobbyStyles.modoActivo : ''}`}
-        onClick={() => setModo('apuesta')}
+        className={`${lobbyStyles.modoCard} ${lobbyStyles.modoApuesta} ${lobbyStyles.modoDisabled}`}
         style={{ marginTop: 8 }}
+        aria-disabled="true"
       >
         <div className={lobbyStyles.modoHeader}>
           <div className={lobbyStyles.modoRadio} style={{ borderColor: '#FF8000' }}>
-            {modo === 'apuesta' && (
-              <div className={lobbyStyles.modoRadioFill} style={{ background: '#FF8000' }} />
-            )}
           </div>
           <span className={lobbyStyles.modoNombre} style={{ color: '#FF8000' }}>
             Modo Hardcore
           </span>
-          <span className={lobbyStyles.modoBadge}>RIESGO</span>
+          <span className={lobbyStyles.modoBadge}>NO DISPONIBLE</span>
         </div>
         <span className={lobbyStyles.modoDesc}>
           Riesgo total · El perdedor transfiere su Tokagotchi permanentemente
         </span>
-        {modo === 'apuesta' && (
-          <span className={lobbyStyles.modoWarning}>
-            Tu Toka puede ser perdido permanentemente
-          </span>
-        )}
+        <span className={lobbyStyles.modoWarning}>
+          Temporalmente deshabilitado
+        </span>
       </div>
 
       <div style={{ flex: 1 }} />

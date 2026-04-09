@@ -2,11 +2,15 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import TofuCanvas from '../../components/TofuCanvas/TofuCanvas'
 import { useHome } from '../../hooks/useHome'
+import type { TokagotchiAnimacion } from '../../types/toka'
 import styles from './HomePage.module.css'
 
 export default function HomePage() {
   const navigate = useNavigate()
-  const { tokagotchi, username, tf, cp, misiones, loading, renameToka } = useHome()
+  const {
+    tokagotchi, username, tf, misiones, loading,
+    renameToka, ejecutarAccion, accionando, accionExito, errorAccion
+  } = useHome()
 
   const [editingName, setEditingName] = useState(false)
   const [tempName, setTempName] = useState('')
@@ -34,14 +38,10 @@ export default function HomePage() {
     )
   }
 
-  // CP para ascender rareza
-  const cpTarget = tokagotchi.rareza === 'Común' ? 100
-    : tokagotchi.rareza === 'Raro' ? 300
-    : tokagotchi.rareza === 'Épico' ? 600 : 999
-  const cpPct = Math.min((cp / cpTarget) * 100, 100)
 
   // Solo primera misión para el preview
   const primerasMisiones = misiones.slice(0, 2)
+  const animacionToka = getAnimacionHome(accionando ?? accionExito)
 
   return (
     <div className={styles.container}>
@@ -64,7 +64,7 @@ export default function HomePage() {
         <div className={styles.tokaSection}>
           <TofuCanvas
             tokagotchi={tokagotchi}
-            animacion="idle"
+            animacion={animacionToka}
             width={200}
             height={200}
             scale={0.3}
@@ -132,31 +132,46 @@ export default function HomePage() {
         <div className={styles.accionesSection}>
           <h2 className={styles.sectionTitle}>Acciones</h2>
           <div className={styles.accionesRow}>
-            <button className={styles.accionBtn}>
-              <img src="/assets/ui/btn_alimentar.png" alt="Alimentar" className={styles.accionImg} />
-              <span className={styles.accionReward}>+5 CP</span>
-            </button>
-            <button className={styles.accionBtn}>
-              <img src="/assets/ui/btn_jugar.png" alt="Jugar" className={styles.accionImg} />
-              <span className={styles.accionReward}>+8 CP</span>
-            </button>
-            <button className={styles.accionBtn}>
-              <img src="/assets/ui/btn_bañar.png" alt="Bañar" className={styles.accionImg} />
-              <span className={styles.accionReward}>+4 CP</span>
-            </button>
-          </div>
-        </div>
 
-        {/* CP */}
-        <div className={styles.cpCard}>
-          <div className={styles.cpInfo}>
-            <span className={styles.cpLabel}>Puntos de Crianza</span>
-            <span className={styles.cpValue}>{cp} CP</span>
+            <button
+              className={`${styles.accionBtn} ${accionExito === 'feed' ? styles.accionExito : ''} ${accionando === 'feed' ? styles.accionando : ''}`}
+              onClick={() => ejecutarAccion('feed')}
+              disabled={!!accionando}
+            >
+              <img src="/assets/ui/btn_alimentar.png" alt="Alimentar" className={styles.accionImg} />
+              <span className={styles.accionReward}>
+                {accionExito === 'feed' ? '¡+5 CP!' : '+5 CP'}
+              </span>
+            </button>
+
+            <button
+              className={`${styles.accionBtn} ${accionExito === 'play' ? styles.accionExito : ''} ${accionando === 'play' ? styles.accionando : ''}`}
+              onClick={() => ejecutarAccion('play')}
+              disabled={!!accionando}
+            >
+              <img src="/assets/ui/btn_jugar.png" alt="Jugar" className={styles.accionImg} />
+              <span className={styles.accionReward}>
+                {accionExito === 'play' ? '¡+8 CP!' : '+8 CP'}
+              </span>
+            </button>
+
+            <button
+              className={`${styles.accionBtn} ${accionExito === 'bathe' ? styles.accionExito : ''} ${accionando === 'bathe' ? styles.accionando : ''}`}
+              onClick={() => ejecutarAccion('bathe')}
+              disabled={!!accionando}
+            >
+              <img src="/assets/ui/btn_bañar.png" alt="Bañar" className={styles.accionImg} />
+              <span className={styles.accionReward}>
+                {accionExito === 'bathe' ? '¡+4 CP!' : '+4 CP'}
+              </span>
+            </button>
+
           </div>
-          <div className={styles.cpBar}>
-            <div className={styles.cpFill} style={{ width: `${cpPct}%` }} />
-          </div>
-          <span className={styles.cpHint}>Necesitas {cpTarget} CP para ascender de rareza</span>
+
+          {/* Error de cooldown */}
+          {errorAccion && (
+            <p className={styles.errorAccion}>{errorAccion}</p>
+          )}
         </div>
 
         {/* Misiones preview */}
@@ -184,6 +199,13 @@ export default function HomePage() {
       </div>
     </div>
   )
+}
+
+function getAnimacionHome(accion: 'feed' | 'play' | 'bathe' | null): TokagotchiAnimacion {
+  if (accion === 'feed') return 'feed'
+  if (accion === 'play') return 'play'
+  if (accion === 'bathe') return 'bath'
+  return 'idle'
 }
 
 function getRarezaColor(rareza: string): string {

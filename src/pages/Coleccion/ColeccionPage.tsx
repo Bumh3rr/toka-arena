@@ -14,6 +14,7 @@ export default function ColeccionPage() {
     accesorios,
     accesorioActivoCabeza,
     accesorioActivoCuerpo,
+    equipError,
     equiparAccesorio,
     tokaConAccesorios,
     activarToka
@@ -78,6 +79,7 @@ export default function ColeccionPage() {
             accesorios={accesorios}
             accesorioActivoCabeza={accesorioActivoCabeza}
             accesorioActivoCuerpo={accesorioActivoCuerpo}
+            equipError={equipError}
             onEquipar={equiparAccesorio}
           />
         )}
@@ -200,16 +202,33 @@ function TabAccesorios({
   accesorios,
   accesorioActivoCabeza,
   accesorioActivoCuerpo,
+  equipError,
   onEquipar
 }: {
   tokaConAccesorios: Tokagotchi
   accesorios: Accesorio[]
   accesorioActivoCabeza: Accesorio | null
   accesorioActivoCuerpo: Accesorio | null
+  equipError: string | null
   onEquipar: (acc: Accesorio) => void
 }) {
   return (
     <div className={styles.tabContent}>
+      {equipError && (
+        <div style={{
+          marginBottom: 8,
+          border: '2px solid #C62828',
+          borderRadius: 10,
+          background: 'rgba(198, 40, 40, 0.12)',
+          color: '#C62828',
+          fontWeight: 700,
+          fontSize: 12,
+          padding: '8px 10px'
+        }}>
+          {equipError}
+        </div>
+      )}
+
       {/* Preview toka con accesorios */}
       <div className={styles.previewCard}>
         <div className={styles.previewLeft}>

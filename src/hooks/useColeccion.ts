@@ -18,7 +18,6 @@ export function useColeccion() {
   const [loading, setLoading] = useState(true)
 
 
-  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -45,17 +44,25 @@ export function useColeccion() {
         }))
 
         setAccesorios(accesoriosMapped)
+        setAccesorioActivoCabeza(null)
+        setAccesorioActivoCuerpo(null)
 
         // Aplicar accesorios equipados del toka activo
-        if (me.tokagotchiActivo.equippedHead) {
+        const equippedHeadId = resolveAccessoryId(me.tokagotchiActivo?.equippedHead)
+        const equippedBodyId = resolveAccessoryId(me.tokagotchiActivo?.equippedBody)
+
+        if (equippedHeadId || me.tokagotchiActivo?.equippedHead) {
+          const equippedHeadName = resolveAccessoryName(me.tokagotchiActivo?.equippedHead)
           const cabeza = accesoriosMapped.find(
-            a => a.id === String(me.tokagotchiActivo.equippedHead)
+            a => a.id === equippedHeadId || (equippedHeadName ? a.nombre === equippedHeadName : false)
           )
           if (cabeza) setAccesorioActivoCabeza(cabeza)
         }
-        if (me.tokagotchiActivo.equippedBody) {
+
+        if (equippedBodyId || me.tokagotchiActivo?.equippedBody) {
+          const equippedBodyName = resolveAccessoryName(me.tokagotchiActivo?.equippedBody)
           const cuerpo = accesoriosMapped.find(
-            a => a.id === String(me.tokagotchiActivo.equippedBody)
+            a => a.id === equippedBodyId || (equippedBodyName ? a.nombre === equippedBodyName : false)
           )
           if (cuerpo) setAccesorioActivoCuerpo(cuerpo)
         }
@@ -143,4 +150,48 @@ function getImagenByName(name: string): string {
     'Super Capa': '/assets/accesorios/capa.png'
   }
   return map[name] ?? '/assets/accesorios/sombrero.png'
+}
+
+function resolveAccessoryId(accessoryRef: unknown): string | null {
+  if (accessoryRef === null || accessoryRef === undefined) {
+    return null
+  }
+
+  if (typeof accessoryRef === 'string' || typeof accessoryRef === 'number') {
+    return String(accessoryRef)
+  }
+
+  if (typeof accessoryRef === 'object') {
+    const maybeObject = accessoryRef as Record<string, unknown>
+    const possibleIds = [
+      maybeObject.id,
+      maybeObject.accessoryId,
+      maybeObject._id
+    ]
+
+    for (const candidate of possibleIds) {
+      if (typeof candidate === 'string' || typeof candidate === 'number') {
+        return String(candidate)
+      }
+    }
+  }
+
+  return null
+}
+
+function resolveAccessoryName(accessoryRef: unknown): string | null {
+  if (!accessoryRef || typeof accessoryRef !== 'object') {
+    return null
+  }
+
+  const maybeObject = accessoryRef as Record<string, unknown>
+  const possibleNames = [maybeObject.name, maybeObject.nombre]
+
+  for (const candidate of possibleNames) {
+    if (typeof candidate === 'string' && candidate.trim()) {
+      return candidate
+    }
+  }
+
+  return null
 }

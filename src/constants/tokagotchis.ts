@@ -48,10 +48,10 @@ export const TOFU_MOCK: Tokagotchi = {
     cuerpo: null
   },
   assets: {
-    armatureKey: 'Shiba-3',
-    texPng: '/assets/tofu/Shiba-3_tex.png',
-    texJson: '/assets/tofu/Shiba-3_tex.json',
-    skeJson: '/assets/tofu/Shiba-3_ske.json'
+    armatureKey: 'tofu',
+    texPng: '/assets/tofu/tofu_tex.png',
+    texJson: '/assets/tofu/tofu_tex.json',
+    skeJson: '/assets/tofu/tofu_ske.json'
   }
 }
 
@@ -107,5 +107,60 @@ export const MOCHI_MOCK: Tokagotchi = {
     texPng: '/assets/mochi/mochi_tex.png',
     texJson: '/assets/mochi/mochi_tex.json',
     skeJson: '/assets/mochi/mochi_ske.json'
+  }
+}
+
+export const HANA_MOCK: Tokagotchi = {
+  id: 'hana_001',
+  nombre: 'Hana',
+  especie: 'hana',
+  rareza: 'Raro',
+  stats: {
+    hp: 95,
+    atk: 14,
+    def: 24,
+    nrg: 100
+  },
+  habilidades: [
+    {
+      id: 'florazo',
+      nombre: 'Florazo',
+      costoNRG: 15,
+      multiplicador: 1,
+      descripcion: 'Daño 1.0x Atk',
+      esSignature: false
+    },
+    {
+      id: 'fotosintesis',
+      nombre: 'Fotosíntesis',
+      costoNRG: 20,
+      descripcion: 'Recupera vitalidad y gana ritmo',
+      esSignature: false
+    },
+    {
+      id: 'espinas',
+      nombre: 'Espinas',
+      costoNRG: 25,
+      descripcion: 'Aumenta defensa por 2 turnos',
+      esSignature: false
+    },
+    {
+      id: 'tormenta_petalos',
+      nombre: 'Tormenta de Pétalos',
+      costoNRG: 45,
+      multiplicador: 1.35,
+      descripcion: 'Daño 1.35x Atk',
+      esSignature: true
+    }
+  ],
+  accesorios: {
+    cabeza: null,
+    cuerpo: null
+  },
+  assets: {
+    armatureKey: 'hana',
+    texPng: '/assets/hana/hana_tex.png',
+    texJson: '/assets/hana/hana_tex.json',
+    skeJson: '/assets/hana/hana_ske.json'
   }
 }

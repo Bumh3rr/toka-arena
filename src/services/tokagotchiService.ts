@@ -46,7 +46,7 @@ function mapRareza(rarity: string): 'Común' | 'Raro' | 'Épico' | 'Legendario' 
 function getAssetsByEspecie(especie: string) {
   const assets: Record<string, any> = {
     tofu: {
-      armatureKey: 'Shiba-3',
+      armatureKey: 'tofu',
       texPng: '/assets/tofu/tofu_tex.png',
       texJson: '/assets/tofu/tofu_tex.json',
       skeJson: '/assets/tofu/tofu_ske.json'

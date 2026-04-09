@@ -4,7 +4,17 @@ import batallaStyles from './BatallaView.module.css'
 import { TOFU_MOCK } from '../../../constants/tokagotchis'
 
 export default function BatallaView({ batalla }: { batalla: any }) {
-  const { tokagotchi, rival, estadoBatalla, usarHabilidad } = batalla
+  const {
+    tokagotchi,
+    rival,
+    estadoBatalla,
+    usarHabilidad,
+    usarConsumible,
+    pasarTurnoJugador,
+    consumibles,
+    animacionJugador,
+    animacionRival
+  } = batalla
   const estado = estadoBatalla
 
   const hpPctJugador = (estado.hpJugador / estado.hpMaxJugador) * 100
@@ -40,7 +50,7 @@ export default function BatallaView({ batalla }: { batalla: any }) {
         </div>
         <TokagotchiCanvas
           tokagotchi={rival ?? TOFU_MOCK}
-          animacion="idle"
+          animacion={animacionRival}
           width={110}
           height={110}
           scale={0.25}
@@ -58,7 +68,7 @@ export default function BatallaView({ batalla }: { batalla: any }) {
       <div className={batallaStyles.jugadorSection}>
         <TokagotchiCanvas
           tokagotchi={tokagotchi}
-          animacion="idle"
+          animacion={animacionJugador}
           width={110}
           height={110}
           scale={0.25}
@@ -101,6 +111,34 @@ export default function BatallaView({ batalla }: { batalla: any }) {
               </button>
             )
           })}
+        </div>
+
+        <button
+          className={batallaStyles.pasarTurnoBtn}
+          onClick={pasarTurnoJugador}
+          disabled={!estado.esMiTurno}
+        >
+          Pasar turno
+        </button>
+
+        <span className={batallaStyles.secLabel} style={{ marginTop: 6 }}>Consumibles</span>
+        <div className={batallaStyles.consumiblesGrid}>
+          {consumibles
+            .filter((item: any) => item.cantidad > 0)
+            .map((item: any) => (
+              <button
+                key={item.id}
+                className={`${batallaStyles.consumibleBtn} ${!estado.esMiTurno ? batallaStyles.habDisabled : ''}`}
+                onClick={() => estado.esMiTurno && usarConsumible(item.id)}
+                disabled={!estado.esMiTurno}
+              >
+                <span className={batallaStyles.consumibleNombre}>{item.nombre}</span>
+                <span className={batallaStyles.consumibleCantidad}>x{item.cantidad}</span>
+              </button>
+            ))}
+          {consumibles.every((item: any) => item.cantidad === 0) && (
+            <span className={batallaStyles.consumibleEmpty}>No tienes consumibles seleccionados</span>
+          )}
         </div>
       </div>
     </div>

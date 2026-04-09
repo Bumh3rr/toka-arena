@@ -10,7 +10,6 @@ const api = axios.create({
 
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('toka_token')
-  console.log('Token enviado:', token) // ← temporal
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
   }

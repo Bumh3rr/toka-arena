@@ -12,7 +12,7 @@ export default function ArenaPage() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.background} />
+      <div className={`${styles.background} ${batalla.fase === 'batalla' ? styles.backgroundPvp : ''}`} />
       {batalla.fase === 'lobby' && <LobbyView batalla={batalla} />}
       {batalla.fase === 'preparacion' && <PreparacionView batalla={batalla} />}
       {batalla.fase === 'espera' && <EsperaView batalla={batalla} />}

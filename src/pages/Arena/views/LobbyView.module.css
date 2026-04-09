@@ -80,6 +80,16 @@
   box-shadow: 0 0 12px rgba(255, 128, 0, 0.3);
 }
 
+.modoDisabled {
+  opacity: 0.55;
+  filter: grayscale(0.2);
+  cursor: not-allowed;
+}
+
+.modoDisabled:active {
+  transform: none;
+}
+
 .modoHeader {
   display: flex;
   align-items: center;

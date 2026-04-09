@@ -15,3 +15,8 @@
   background-position: center top;
   z-index: 0;
 }
+
+.backgroundPvp {
+  background-image: url('/assets/backgrounds/batalla_pvp.png');
+  background-position: center center;
+}

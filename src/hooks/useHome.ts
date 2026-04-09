@@ -1,6 +1,7 @@
-    import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import type { Tokagotchi } from '../types/toka'
 import { userService } from '../services/userService'
+import { careService } from '../services/careService'
 import { mapResponseToTokagotchi } from '../services/tokagotchiService'
 
 export function useHome() {
@@ -10,6 +11,9 @@ export function useHome() {
   const [cp, setCp] = useState(0)
   const [misiones, setMisiones] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const [accionando, setAccionando] = useState<'feed' | 'play' | 'bathe' | null>(null)
+  const [accionExito, setAccionExito] = useState<'feed' | 'play' | 'bathe' | null>(null)
+  const [errorAccion, setErrorAccion] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,7 +22,6 @@ export function useHome() {
           userService.getMe(),
           userService.getMisiones()
         ])
-
         setUsername(me.username)
         setTf(me.tf)
         setTokagotchi(mapResponseToTokagotchi(me.tokagotchiActivo))
@@ -30,9 +33,34 @@ export function useHome() {
         setLoading(false)
       }
     }
-
     fetchData()
   }, [])
+
+  const ejecutarAccion = async (accion: 'feed' | 'play' | 'bathe') => {
+    if (!tokagotchi || accionando) return
+    setAccionando(accion)
+    setErrorAccion(null)
+
+    try {
+      if (accion === 'feed') await careService.feed(tokagotchi.id)
+      else if (accion === 'play') await careService.play(tokagotchi.id)
+      else await careService.bathe(tokagotchi.id)
+
+      // CP que da cada acción
+      const cpGanado = accion === 'feed' ? 5 : accion === 'play' ? 8 : 4
+      setCp(prev => prev + cpGanado)
+
+      // Animación de éxito
+      setAccionExito(accion)
+      setTimeout(() => setAccionExito(null), 1200)
+    } catch (err: any) {
+      const msg = err.response?.data?.message || 'Acción en cooldown'
+      setErrorAccion(msg)
+      setTimeout(() => setErrorAccion(null), 2000)
+    } finally {
+      setAccionando(null)
+    }
+  }
 
   const renameToka = async (newName: string) => {
     if (!tokagotchi) return
@@ -44,5 +72,8 @@ export function useHome() {
     }
   }
 
-  return { tokagotchi, username, tf, cp, misiones, loading, renameToka }
+  return {
+    tokagotchi, username, tf, cp, misiones, loading,
+    renameToka, ejecutarAccion, accionando, accionExito, errorAccion
+  }
 }

@@ -1,7 +1,30 @@
+.canvasWrapper {
+  position: relative;
+}
+
 .canvas {
+  position: relative;
+  z-index: 2;
   background: transparent;
 }
 
 .canvas canvas {
   background: transparent !important;
+}
+
+.staticFallback {
+  position: absolute;
+  inset: 0;
+  width: 86%;
+  height: 86%;
+  object-fit: contain;
+  margin: auto;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.staticFallbackHidden {
+  opacity: 0;
 }
