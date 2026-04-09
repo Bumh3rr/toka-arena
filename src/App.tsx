@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { useState } from 'react'
 import { authService } from './services/authService'
 import AppLayout from './components/AppLayout/AppLayout'
 import LoginPage from './pages/Login/LoginPage'
@@ -17,10 +18,7 @@ function PrivateRoute({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  const authCode = getAuthCodeFromURL();
-  if (authCode && !authService.isAuthenticated()) {
-    return <Navigate to="/login" replace />
-  }
+  const [authCode] = useState<string | null>(() => getAuthCodeFromURL())
 
   return (
     <BrowserRouter>
