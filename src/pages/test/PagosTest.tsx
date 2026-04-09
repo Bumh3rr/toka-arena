@@ -40,7 +40,7 @@ export default function TestPage() {
       const res = await axios.post(
         `${BASE_URL}/v1/payment/create`,
         {
-          userId: localStorage.getItem('toka_user_id') || '0000000000000000',
+          userId: '1010000010995664',
           orderTitle: title,
           orderAmount: { value: amount, currency: 'MXN' },
         },
