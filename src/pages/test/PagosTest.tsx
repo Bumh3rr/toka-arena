@@ -26,6 +26,7 @@ export default function TestPage() {
   });
 
   const token = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMDEwMDAwMDEwOTk1NjY0IiwianRpIjoiNjdjNWNiMGQtYTNmMi00MjM0LWIwOTQtOWE4MmIyZGE5YjgxIiwiZXhwIjoxNzc1NzI2MzU3fQ.er9FIqVgL7SiemWghAFlQOI_xxiGRxzoRa74uvXn3tEX9kPHZNNeCmeX7Kb5bOS25w03eK1I6_sHUzKyN3bYkuIUVXoP9imOf6JGAVFkNH4BKGSSk8qK1ny7JYF_hIqAUfB3NFUA1foO2QOAjNO3nDt97fMuRBjfstJpxru_Azkki77Ou8kWFWYlLGwSbJ4GI10BHJaG-Aw9h30wUfWlRSzQBFb6eAy1845GSJ4r9YiVTBcdQktPLLJch1vt56j0RL8MYWI8zUj-CGr77GXIrqX-XpZrQVNKdK9eMejNeM7rIHHkGcqTZcseyDy9GXUeQc-s9Q1e6WryQn2SkwtX6g';
+  const url = 'https://app.sit.nonprod.paypay.mx/miniProgrammePayment?bizId=202604091001100100011026603629213&timestamp=1775724802061&appId=3500020265523984&sign=cUp4D%2F5rHTxc8dBmuvHCLyTClx4FYyj%2Fqr60Wy5Tb5uhnRh5a8mtlx6VNw0mizVLp0VjEsal%2FgGffo%2BJz2ISQA%3D%3D';
 
   // 1. Crear orden de pago
   const createPayment = async () => {
@@ -39,7 +40,7 @@ export default function TestPage() {
     try {
       const res = await axios.post(
         `${BASE_URL}/v1/payment/create`,
-        {
+        {   
           userId: '1010000010995664',
           orderTitle: title,
           orderAmount: { value: amount, currency: 'MXN' },
@@ -103,6 +104,14 @@ export default function TestPage() {
       window.open(paymentUrl, '_blank');
     }
   };
+
+  const openUrl = (url: string) => {
+    if (window.my) {
+      window.my.postMessage({ type: 'OPEN_URL', url });
+    } else {
+      window.open(url, '_blank');
+    }
+  }
 
   // 3. Consultar estado del pago manualmente
   const checkPayment = async () => {
@@ -256,7 +265,7 @@ export default function TestPage() {
       {/* Botones */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
         <button
-          onClick={createPayment}
+          onClick={() => openUrl('https://app.sit.nonprod.paypay.mx/miniProgrammePayment?bizId=202604091001100100011026603629213&timestamp=1775724802061&appId=3500020265523984&sign=cUp4D%2F5rHTxc8dBmuvHCLyTClx4FYyj%2Fqr60Wy5Tb5uhnRh5a8mtlx6VNw0mizVLp0VjEsal%2FgGffo%2BJz2ISQA%3D%3D')}
           disabled={payment.status === 'creating' || payment.status === 'paying'}
           style={{
             background: '#F97316',
