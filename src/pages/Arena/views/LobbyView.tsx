@@ -4,7 +4,6 @@ import lobbyStyles from './LobbyView.module.css'
 
 export default function LobbyView({ batalla }: { batalla: any }) {
   const { tokagotchi, modo, setModo, setFase } = batalla
-  const hpPct = (tokagotchi.stats.hp / tokagotchi.stats.hp) * 100
 
   return (
     <div className={styles.view}>
@@ -29,12 +28,6 @@ export default function LobbyView({ batalla }: { batalla: any }) {
               <span className={lobbyStyles.statAtk}>ATK {tokagotchi.stats.atk}</span>
               <span className={lobbyStyles.statDef}>DEF {tokagotchi.stats.def}</span>
               <span className={lobbyStyles.statHp}>HP {tokagotchi.stats.hp}</span>
-            </div>
-            <div style={{ marginTop: 6 }}>
-              <div className={styles.sectionLabel}>HP actual</div>
-              <div className={styles.hpBar}>
-                <div className={styles.hpFill} style={{ width: `${hpPct}%` }} />
-              </div>
             </div>
           </div>
         </div>
@@ -70,7 +63,7 @@ export default function LobbyView({ batalla }: { batalla: any }) {
             )}
           </div>
           <span className={lobbyStyles.modoNombre} style={{ color: '#FF8000' }}>
-            Modo Apuesta
+            Modo Hardcore
           </span>
           <span className={lobbyStyles.modoBadge}>RIESGO</span>
         </div>
