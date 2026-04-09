@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { useState } from 'react'
 import { authService } from './services/authService'
 import AppLayout from './components/AppLayout/AppLayout'
 import LoginPage from './pages/Login/LoginPage'
@@ -9,7 +8,6 @@ import MisionesPage from './pages/Misiones/MisionesPage'
 import ArenaPage from './pages/Arena/ArenaPage'
 import ColeccionPage from './pages/Coleccion/ColeccionPage'
 import TiendaPage from './pages/Tienda/TiendaPage'
-import { getAuthCodeFromURL } from './services/tokaAuth'
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
   return authService.isAuthenticated()
@@ -18,13 +16,12 @@ function PrivateRoute({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  const [authCode] = useState<string | null>(() => getAuthCodeFromURL())
 
   return (
     <BrowserRouter>
       <Routes>
         {/* Rutas públicas — sin nav */}
-        <Route path="/login" element={<LoginPage authCode={authCode} />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/unboxing" element={
           <PrivateRoute>
             <UnboxingPage />

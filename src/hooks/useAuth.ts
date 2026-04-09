@@ -1,19 +1,15 @@
 import { useState } from 'react'
 import { authService } from '../services/authService'
 
-type AuthCodeProps = {
-  authCode: string | null
-}
 
 export function useAuth() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const loginWithToka = async ({ authCode }: AuthCodeProps): Promise<{ success: boolean; hasFirstToka: boolean }> => {
+  const loginWithToka = async (): Promise<{ success: boolean; hasFirstToka: boolean }> => {
     setLoading(true)
     setError(null)
     try {
-      authCode  = ''
       // 1. Obtener authCode de la URL (inyectado por Toka Super App)
       //const authCode = getAuthCodeFromURL()
      // authCode = 'DEBUG' // TODO: Eliminar esta línea y usar el authCode real inyectado por la Super App. Se deja hardcodeado para facilitar pruebas sin necesidad de la Super App. --- IGNORE ---
