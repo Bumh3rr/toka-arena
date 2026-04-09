@@ -9,19 +9,32 @@ export default function GetAuthCode() {
     const run = () => {
       add('✅ Bridge detectado');
 
-      window.AlipayJSBridge.call('getAuthCode', {
-        scopeNicks: ['auth_user'],
-        success: (res: Record<string, unknown>) => {
-          add('✅ SUCCESS');
-          add(JSON.stringify(res));
-        },
-        fail: (err: unknown) => {
-          add('❌ FAIL');
-          add(JSON.stringify(err));
-        },
-      });
+      // Patrón alternativo — llamada directa sin callbacks
+      try {
+        const result = window.AlipayJSBridge.call('getAuthCode', {
+          scopeNicks: ['auth_user'],
+        });
+        add(`result: ${JSON.stringify(result)}`);
+      } catch (e) {
+        add(`❌ Error: ${JSON.stringify(e)}`);
+      }
 
-      add('✅ Call enviado...');
+      // También probar con my directamente
+      try {
+        // @ts-ignore
+        my.getAuthCode({
+          scopes: 'auth_user',
+          success: (res: Record<string, unknown>) => {
+            add(`✅ my.getAuthCode success: ${JSON.stringify(res)}`);
+          },
+          fail: (err: unknown) => {
+            add(`❌ my.getAuthCode fail: ${JSON.stringify(err)}`);
+          },
+        });
+        add('✅ my.getAuthCode enviado...');
+      } catch (e) {
+        add(`❌ my no disponible: ${JSON.stringify(e)}`);
+      }
     };
 
     if (window.AlipayJSBridge) {
