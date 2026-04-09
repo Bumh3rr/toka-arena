@@ -18,8 +18,7 @@ export default function GetAuthCode() {
       ];
 
       methods.forEach(({ method, scopes }) => {
-        // @ts-ignore
-        my.call(`getUser${method}AuthCode`, {
+        window.AlipayJSBridge.call(`getUser${method}AuthCode`, {
           usage: 'Toka Arena necesita verificar tu identidad',
           scopes,
           success: (res: Record<string, unknown>) => {
