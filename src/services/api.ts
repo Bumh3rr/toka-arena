@@ -1,10 +1,10 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: 'https://9c4c-201-149-79-122.ngrok-free.app',
   headers: {
     'Content-Type': 'application/json',
-    'X-App-Id': import.meta.env.VITE_APP_ID
+    'X-App-Id': '3500020265523984'
   }
 })
 
