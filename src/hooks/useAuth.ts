@@ -18,7 +18,7 @@ export function useAuth() {
       if (!authCode) throw new Error('No se encontró el authCode en la URL')
 
       // 2. Intercambiar authCode por JWT en el backend
-      const response = await authService.loginWithAuthCode(authCode)
+      const response = await authService.loginWithAuthCode('DEBUG')
 
       if (!response.success) throw new Error('Login fallido')
 
