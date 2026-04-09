@@ -22,7 +22,7 @@ export function useAuth() {
       // 3. Guardar sesión completa
       authService.saveSession({
         success: true,
-        accessToken: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0IiwiaWF0IjoxNzc1NzYyNjQ0LCJleHAiOjE3NzU4NDkwNDR9.AoZZ-mRxlf7S1efTc6N0qxC2W4acrc-lCPYtlWG5XMYyVO4SwLwYtD5vQDpYYsyXfy7nh6RxSokliGaHZgghoQ',
+        accessToken: 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI0IiwiaWF0IjoxNzc1NzYyODA2LCJleHAiOjE3NzU4NDkyMDZ9.ptNEWElQvNCatldHITTBrkeQ7bDvv4OD00BNoW7m1jgq8a-1HomTU8zVqZKkfhoFS9DE4UX1MMQWIlh7dN20kg',
         tokenType: 'Bearer',
         user: {
           id: 1,
