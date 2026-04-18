@@ -1,104 +1,51 @@
 import { useEffect, useRef } from 'react'
+import { TokagotchiGame } from '../game/TokagotchiGame'
+import type { TokagotchiConfig } from '../game/types'
 
-interface Props {
-  accesorioIndexCabeza?: number,
+interface TokagotchiCanvasProps {
+  width?: number
+  height?: number
+  accesorioIndexCabeza?: number
   accesorioIndexCuerpo?: number
+  animacionActual?: string
+  tokaActual?: string
+  reverse?: boolean
 }
 
-export default function TokagotchiCanvas({ accesorioIndexCabeza = -1, accesorioIndexCuerpo = -1 }: Props) {
+export default function TokagotchiCanvas({
+  width = 350,
+  height = 310,
+  accesorioIndexCabeza = -1,
+  accesorioIndexCuerpo = -1,
+  animacionActual = 'idle',
+  tokaActual = 'tofu',
+  reverse = false
+}: TokagotchiCanvasProps) {
   const containerRef = useRef<HTMLDivElement>(null)
-  const gameRef = useRef<any>(null)
-  const armatureRef = useRef<any>(null)
+  const gameRef = useRef<TokagotchiGame | null>(null)
 
+  // Inicializar y destruir
   useEffect(() => {
     if (!containerRef.current || gameRef.current) return
+    if (!(window as any).Phaser || !(window as any).dragonBones) return
 
-    const Phaser = (window as any).Phaser
-    const db = (window as any).dragonBones
-
-    if (!Phaser || !db) {
-      console.error('Phaser o DragonBones no están disponibles')
-      return
+    const cfg: TokagotchiConfig = {
+      width, height, tokaActual, animacionActual,
+      accesorioIndexCabeza, accesorioIndexCuerpo, reverse
     }
 
-    class TokagotchiScene extends Phaser.Scene {
-      constructor() {
-        super({ key: 'TokagotchiScene' })
-      }
-
-      preload() {
-        this.load.dragonbone(
-          'mochi',
-          '/assets/mochi/mochi_tex.png',
-          '/assets/mochi/mochi_tex.json',
-          '/assets/mochi/mochi_ske.json'
-        )
-      }
-
-      create() {
-        const armature = (this as any).add.armature('Armature', 'mochi')
-        armature.x = 300
-        armature.y = 350
-        armature.scaleX = 0.5
-        armature.scaleY = 0.5
-        armature.animation.play('idle', 0)
-
-        // Guardar referencia al armature
-        armatureRef.current = armature
-        ;(window as any).tokagotchiScene = this
-
-        if (accesorioIndexCabeza !== -1) {
-          // Aplicar accesorio inicial
-          const slot = armature.armature.getSlot('accesorios-cabeza')
-          if (slot) slot.displayIndex = accesorioIndexCabeza
-        }
-
-        if (accesorioIndexCuerpo !== -1) {
-          // Aplicar accesorio inicial
-          const slot = armature.armature.getSlot('accesorios-cuerpo')
-          if (slot) slot.displayIndex = accesorioIndexCuerpo
-        }
-      }
-    }
-
-    gameRef.current = new Phaser.Game({
-      type: Phaser.AUTO,
-      width: 600,
-      height: 600,
-      transparent: true,
-      parent: containerRef.current,
-      plugins: {
-        scene: [{
-          key: 'DragonBones',
-          plugin: db.phaser.plugin.DragonBonesScenePlugin,
-          mapping: 'dragonbone'
-        }]
-      },
-      scene: [TokagotchiScene]
-    })
+    gameRef.current = new TokagotchiGame(containerRef.current, cfg)
 
     return () => {
-      gameRef.current?.destroy(true)
+      gameRef.current?.destroy()
       gameRef.current = null
-      armatureRef.current = null
     }
   }, [])
 
-  // Cambiar accesorio cuando cambia la prop
-  useEffect(() => {
-    const armature = armatureRef.current
-    if (!armature) return
-    const slot = armature.armature.getSlot('accesorios-cabeza')
-    if (slot) slot.displayIndex = accesorioIndexCabeza
-  }, [accesorioIndexCabeza])
+  useEffect(() => { gameRef.current?.setAnimation(animacionActual) }, [animacionActual])
+  useEffect(() => { gameRef.current?.setAccesorioCabeza(accesorioIndexCabeza) }, [accesorioIndexCabeza])
+  useEffect(() => { gameRef.current?.setAccesorioCuerpo(accesorioIndexCuerpo) }, [accesorioIndexCuerpo])
+  useEffect(() => { gameRef.current?.resize(width, height, reverse) }, [width, height, reverse])
 
-  // Cambiar accesorio del cuerpo cuando cambia la prop
-  useEffect(() => {
-    const armature = armatureRef.current
-    if (!armature) return
-    const slot = armature.armature.getSlot('accesorios-cuerpo')
-    if (slot) slot.displayIndex = accesorioIndexCuerpo
-  }, [accesorioIndexCuerpo])
-
-  return <div ref={containerRef} style={{ width: 600, height: 600 }} />
+  return <div ref={containerRef} style={{ width, height }} />
 }

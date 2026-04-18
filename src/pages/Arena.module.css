@@ -1,0 +1,123 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.arena {
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    background-color: #b4b4b4;
+    display: flex;
+    gap: 16px;
+    flex-flow: column wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.containerBattle {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    aspect-ratio: 3 / 2;
+    margin: 0 auto;
+    border: 2px solid #8d8d8d;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/Users/bumh3r/Documents/GitHub/toka-arena/src/assets/back/ecenario_pvp.png');
+    background-size: cover;
+    background-position: center top;
+}
+
+.containerVida_1, .containerVida_2 {
+    position: absolute;
+    z-index: 0;
+}
+
+.containerVida_1{
+    top: 60px;
+    left: 16px;
+}
+.containerVida_2{
+    top: 60px;
+    right: 16px;
+}
+
+.containerLabels {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+    gap: 8px;
+}
+
+.username, .vida {
+    font-size: 14px;
+    color: white;
+    text-shadow: 1px 1px 2px black;
+}
+
+.vidaBar {
+    width: 100%;
+    height: 7px;
+    background-color: #555;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.vidaBar_2 {
+    width: 100%;
+    height: 7px;
+    background-color: #555;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.vidaFill {
+    height: 100%;
+    background-color: #beff31;
+    border-radius: 8px;
+}
+
+.vidaFill_2 {
+    height: 100%;
+    background-color: #ff3131;
+    border-radius: 8px;
+}
+
+.battleCanvas {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.controles {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 16px;
+}
+
+.boton{
+    padding: 8px 16px;
+    background-color: #8d8d8d;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.boton:active {
+    background-color: #6b6b6b;
+}
