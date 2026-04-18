@@ -26,7 +26,9 @@ export default function Arena() {
   const [tokaIzquierda, setTokaIzquierda] = useState(tokagotchiIzquierda)
   const [tokaDerecha, setTokaDerecha] = useState(tokagotchiDerecha)
 
-  const ancho = window.innerWidth
+  let ancho = window.innerWidth
+  if (ancho > 800) ancho = 412
+
   return (
     <div className={styles.arena}>
 
