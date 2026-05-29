@@ -1,4 +1,4 @@
-import TokagotchiCanvas from '../../../components/TofuCanvas/TofuCanvas'
+import TokagotchiCanvas from '../../../components/Tokagotchi/TokagotchiCanvas'
 import styles from './Arena.module.css'
 import resultStyles from './ResultadoView.module.css'
 
@@ -19,11 +19,12 @@ export default function DerrotaView({ batalla }: { batalla: any }) {
       </div>
 
       <TokagotchiCanvas
-        tokagotchi={tokagotchi}
-        animacion="ko"
-        width={200}
-        height={200}
-        scale={0.35}
+        accesorioIndexCabeza={tokagotchi.accesorios.cabeza?.displayIndex ?? -1}
+        accesorioIndexCuerpo={tokagotchi.accesorios.cuerpo?.displayIndex ?? -1}
+        animacionActual={'daño'}
+        tokaActual={tokagotchi.especie}
+        width={160}
+        height={150}
       />
 
       {esApuesta && (

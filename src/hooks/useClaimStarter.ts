@@ -11,6 +11,8 @@ export function useClaimStarter() {
     setError(null)
     try {
       const tokagotchi = await tokagotchiService.claimStarter()
+      console.log(tokagotchi);
+      
       return tokagotchi
     } catch (err: any) {
       setError(err.response?.data?.message || 'Error al reclamar tu Tokagotchi')

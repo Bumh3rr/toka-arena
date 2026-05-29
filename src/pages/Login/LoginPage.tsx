@@ -1,18 +1,15 @@
 import { useNavigate } from 'react-router-dom'
 import WoodButton from '../../components/WoodButton/WoodButton'
-import TokagotchiCanvas from '../../components/TofuCanvas/TofuCanvas'
+import TokagotchiCanvas from '../../components/Tokagotchi/TokagotchiCanvas'
 import { useLoginMusic } from '../../hooks/useLoginMusic'
 import { useAuth } from '../../hooks/useAuth'
-import { MOCHI_MOCK } from '../../constants/tokagotchis'
 import styles from './LoginPage.module.css'
-
-
 
 export default function LoginPage() {
   const navigate = useNavigate()
   const { stop } = useLoginMusic()
   const { loginWithToka, loading, error } = useAuth()
-  
+
   const handleLogin = async () => {
     const { success, hasFirstToka } = await loginWithToka()
     if (success) {
@@ -34,13 +31,13 @@ export default function LoginPage() {
       </div>
 
       <div className={styles.buttonContainer}>
+
         <TokagotchiCanvas
-          tokagotchi={MOCHI_MOCK}
-          animacion="idle"
-          width={320}
-          height={320}
-          scale={0.3}
-        />
+          accesorioIndexCabeza={1}
+          accesorioIndexCuerpo={1}
+          animacionActual={'idle'}
+          tokaActual={'tofu'}
+          reverse={false} />
 
         {error && (
           <p style={{

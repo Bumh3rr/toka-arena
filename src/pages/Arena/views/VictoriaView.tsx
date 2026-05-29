@@ -1,4 +1,4 @@
-import TokagotchiCanvas from '../../../components/TofuCanvas/TofuCanvas'
+import TokagotchiCanvas from '../../../components/Tokagotchi/TokagotchiCanvas'
 import styles from './Arena.module.css'
 import resultStyles from './ResultadoView.module.css'
 
@@ -17,11 +17,12 @@ export default function VictoriaView({ batalla }: { batalla: any }) {
       </div>
 
       <TokagotchiCanvas
-        tokagotchi={tokagotchi}
-        animacion="win"
-        width={200}
-        height={200}
-        scale={0.4}
+        accesorioIndexCabeza={tokagotchi.accesorios.cabeza?.displayIndex ?? -1}
+        accesorioIndexCuerpo={tokagotchi.accesorios.cuerpo?.displayIndex ?? -1}
+        animacionActual={'jugar'}
+        tokaActual={tokagotchi.especie}
+        width={130}
+        height={120}
       />
 
       <div className={resultStyles.recompensaCard}>

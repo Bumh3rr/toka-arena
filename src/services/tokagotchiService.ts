@@ -6,6 +6,8 @@ import type{ Accesorio } from '../types/accesorios'
 export function mapResponseToTokagotchi(data: any): Tokagotchi {
   const especie = data.species.toLowerCase() as 'tofu' | 'mochi' | 'hana'
 
+  console.log(data);
+  
   return {
     id: String(data.id),
     nombre: data.name,
@@ -26,11 +28,31 @@ export function mapResponseToTokagotchi(data: any): Tokagotchi {
       esSignature: ab.signature
     })),
     accesorios: {
-      cabeza: data.equippedHead ?? null,
-      cuerpo: data.equippedBody ?? null
+      cabeza: data?.equippedHead === null ? null : {
+        id: data?.equippedHead ?? '',
+        nombre: data?.equippedHead?.name ?? '',
+        slot: 'cabeza',
+        displayIndex: data?.equippedHead?.name ? getDisplayIndex(data.equippedHead.name) : 0,
+        desbloqueado: true,
+        imagen: ''
+      },
+      cuerpo: data?.equippedBody === null ? null : {
+        id: data?.equippedBody ?? '',
+        nombre: data?.equippedBody?.name ?? '',
+        slot: 'cuerpo',
+        displayIndex: data?.equippedBody?.name ? getDisplayIndex(data.equippedBody.name) : 0,
+        desbloqueado: true,
+        imagen: ''
+      }
     },
     assets: getAssetsByEspecie(especie)
   }
+}
+function getDisplayIndex(name: string): number {
+  const map: Record<string, number> = {
+    'Sombrero': 2, 'Corona': 1, 'Casco': 0, 'Super Capa': 0
+  }
+  return map[name] ?? 0
 }
 
 function mapRareza(rarity: string): 'Común' | 'Raro' | 'Épico' | 'Legendario' {

@@ -137,7 +137,7 @@ function getSlotByName(name: string): 'cabeza' | 'cuerpo' {
 
 function getDisplayIndex(name: string): number {
   const map: Record<string, number> = {
-    'Sombrero': 3, 'Corona': 2, 'Casco': 1, 'Super Capa': 1
+    'Sombrero': 2, 'Corona': 1, 'Casco': 0, 'Super Capa': 0
   }
   return map[name] ?? 0
 }

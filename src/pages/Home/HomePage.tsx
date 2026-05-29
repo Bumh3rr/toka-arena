@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import TofuCanvas from '../../components/TofuCanvas/TofuCanvas'
+import TokagotchiCanvas from '../../components/Tokagotchi/TokagotchiCanvas'
 import { useHome } from '../../hooks/useHome'
-import type { TokagotchiAnimacion } from '../../types/toka'
 import styles from './HomePage.module.css'
 
 export default function HomePage() {
@@ -38,10 +37,8 @@ export default function HomePage() {
     )
   }
 
-
   // Solo primera misión para el preview
   const primerasMisiones = misiones.slice(0, 2)
-  const animacionToka = getAnimacionHome(accionando ?? accionExito)
 
   return (
     <div className={styles.container}>
@@ -62,12 +59,13 @@ export default function HomePage() {
 
         {/* Tokagotchi */}
         <div className={styles.tokaSection}>
-          <TofuCanvas
-            tokagotchi={tokagotchi}
-            animacion={animacionToka}
-            width={200}
-            height={200}
-            scale={0.3}
+          <TokagotchiCanvas
+            accesorioIndexCabeza={tokagotchi.accesorios.cabeza?.displayIndex ?? -1}
+            accesorioIndexCuerpo={tokagotchi.accesorios.cuerpo?.displayIndex ?? -1}
+            animacionActual={'idle'}
+            tokaActual={tokagotchi.especie}
+            width={230}
+            height={240}
           />
 
           {editingName ? (
@@ -199,13 +197,6 @@ export default function HomePage() {
       </div>
     </div>
   )
-}
-
-function getAnimacionHome(accion: 'feed' | 'play' | 'bathe' | null): TokagotchiAnimacion {
-  if (accion === 'feed') return 'feed'
-  if (accion === 'play') return 'play'
-  if (accion === 'bathe') return 'bath'
-  return 'idle'
 }
 
 function getRarezaColor(rareza: string): string {

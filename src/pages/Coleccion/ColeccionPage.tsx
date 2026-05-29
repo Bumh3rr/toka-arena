@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import TokagotchiCanvas from '../../components/TofuCanvas/TofuCanvas'
+import TokagotchiCanvas from '../../components/Tokagotchi/TokagotchiCanvas'
 import { useColeccion } from '../../hooks/useColeccion'
 import type { Tokagotchi } from '../../types/toka'
 import type { Accesorio } from '../../types/accesorios'
@@ -211,16 +211,16 @@ function TabAccesorios({
   return (
     <div className={styles.tabContent}>
 
-
       {/* Preview toka con accesorios */}
       <div className={styles.previewCard}>
         <div className={styles.previewLeft}>
           <TokagotchiCanvas
-            tokagotchi={tokaConAccesorios}
-            animacion="idle"
-            width={80}
-            height={80}
-            scale={0.13}
+            accesorioIndexCabeza={tokaConAccesorios.accesorios.cabeza?.displayIndex ?? -1}
+            accesorioIndexCuerpo={tokaConAccesorios.accesorios.cuerpo?.displayIndex ?? -1}
+            animacionActual={'idle'}
+            tokaActual={tokaConAccesorios.especie}
+            width={130}
+            height={120}
           />
         </div>
         <div className={styles.previewRight}>
@@ -301,8 +301,6 @@ function TabAccesorios({
       </div>
     </div>
   )
-
-
 }
 
 function getRarezaColor(rareza: string): string {

@@ -62,11 +62,15 @@
 }
 
 .hint {
+  position: relative;
+  z-index: 1;
   font-family: var(--font-title);
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 700;
+  text-align: center;
   color: #ffffff;
   text-shadow: 1px 1px 0px #3D2B1F;
+  margin-top: 30px;
 }
 
 .tokaName {
@@ -83,6 +87,7 @@
   color: #FFF8E7;
   margin-bottom: 22px;
 }
+
 .itemImgWrapper {
   width: 150px;
   height: 150px;
@@ -91,6 +96,7 @@
   justify-content: center;
   border-radius: 12px;
 }
+
 .itemImg {
   width: 150px;
   height: 150px;

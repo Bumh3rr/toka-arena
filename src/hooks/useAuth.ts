@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { authService } from '../services/authService'
 
-
 export function useAuth() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -26,9 +25,11 @@ export function useAuth() {
       // 3. Guardar sesión completa
       authService.saveSession(response)
 
+      const user = response.user;
+
       return {
         success: true,
-        hasFirstToka: false
+        hasFirstToka: user.hasFirstToka
       }
     } catch (err: any) {
       const msg = err.response?.data?.message || err.message || 'Error al iniciar sesion con Toka'

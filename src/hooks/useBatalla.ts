@@ -8,12 +8,12 @@ import type{
 } from '../types/batalla'
 import { CONSUMIBLES_TIENDA } from '../constants/consumibles'
 import type{ Tokagotchi, TokagotchiAnimacion } from '../types/toka'
-import { TOFU_MOCK, MOCHI_MOCK, HANA_MOCK } from '../constants/tokagotchis'
+import { MOCHI_MOCK, HANA_MOCK } from '../constants/tokagotchis'
 import { userService } from '../services/userService'
 import { mapResponseToTokagotchi } from '../services/tokagotchiService'
 
 export function useBatalla() {
-  const [tokagotchi, setTokagotchi] = useState<Tokagotchi>(TOFU_MOCK)
+  const [tokagotchi, setTokagotchi] = useState<Tokagotchi>(HANA_MOCK)
   const rivalesDisponibles = [MOCHI_MOCK, HANA_MOCK]
 
   const [fase, setFase] = useState<FaseBatalla>('lobby')
