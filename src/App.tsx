@@ -4,10 +4,7 @@ import type { AuthCodeMethod, AuthCodeScopeMap } from './types/toka'
 
 const METHODS: { method: AuthCodeMethod; scopes: AuthCodeScopeMap[AuthCodeMethod][] }[] = [
   { method: 'DigitalIdentity',     scopes: ['USER_ID', 'USER_AVATAR', 'USER_NICKNAME'] },
-  { method: 'ContactInformation',  scopes: ['PLAINTEXT_MOBILE_PHONE', 'PLAINTEXT_EMAIL_ADDRESS'] },
-  { method: 'AddressInformation',  scopes: ['USER_ADDRESS'] },
   { method: 'PersonalInformation', scopes: ['USER_NAME', 'USER_FIRST_SURNAME', 'USER_SECOND_SURNAME', 'USER_GENDER', 'USER_BIRTHDAY', 'USER_STATE_OF_BIRTH', 'USER_NATIONALITY'] },
-  { method: 'KYCStatus',           scopes: ['USER_KYC_STATUS'] },
 ]
 
 export default function App() {
