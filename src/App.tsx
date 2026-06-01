@@ -10,11 +10,12 @@ export default function App() {
       .then(setAuthCode)
       .catch((err) => setError(String(err)))
   }, [])
-
+  
   if (error) {
     return (
       <div>
-        <p>Error: {error}</p>
+        <p>Error:</p>
+        <code style={{ wordBreak: 'break-all' }}>{error}</code>
         <button onClick={() => window.location.reload()}>Reintentar</button>
       </div>
     )

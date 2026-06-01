@@ -25,11 +25,12 @@ export async function getAuthCode(): Promise<string> {
         scopes: ['USER_ID', 'USER_AVATAR', 'USER_NICKNAME'],
       },
       (res: Record<string, unknown>) => {
+        console.log('[Bridge raw response]', JSON.stringify(res)) // ← ver estructura real
         const result = res?.result as { authCode?: string } | undefined
         if (result?.authCode) {
           resolve(result.authCode)
         } else {
-          reject(res?.error ?? 'No se obtuvo authCode')
+          reject(JSON.stringify(res)) // ← mostrar respuesta completa en lugar del mensaje genérico
         }
       }
     )
