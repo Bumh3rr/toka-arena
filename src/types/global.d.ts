@@ -1,10 +1,12 @@
+import type { BridgeAuthCodeResponse } from './toka'
+
 export {}
 
 interface AlipayJSBridge {
   call(
     method: string,
     params: Record<string, unknown>,
-    callback?: (res: Record<string, unknown>) => void
+    callback?: (res: Partial<BridgeAuthCodeResponse>) => void
   ): void
 }
 

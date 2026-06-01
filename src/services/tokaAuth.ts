@@ -1,3 +1,5 @@
+import type { AuthCodeMethod, AuthCodeScopeMap, BridgeAuthCodeResponse } from '../types/toka'
+
 const IS_LOCALHOST = window.location.hostname === 'localhost'
 
 function waitForBridge(): Promise<void> {
@@ -10,26 +12,29 @@ function waitForBridge(): Promise<void> {
   })
 }
 
-export async function getAuthCode(): Promise<string> {
+export async function getAuthCode<M extends AuthCodeMethod>(
+  method: M,
+  scopes: AuthCodeScopeMap[M][]
+): Promise<string> {
   if (IS_LOCALHOST) {
-    return 'mock_auth_code_dev'
+    console.log(`[TokaAuth] Localhost — mock authCode para ${method}`)
+    return `mock_${method}_dev`
   }
 
   await waitForBridge()
 
   return new Promise((resolve, reject) => {
     window.AlipayJSBridge.call(
-      'getUserDigitalIdentityAuthCode',
+      `getUser${method}AuthCode`,
       {
         usage: 'Autenticación en Toka Arena',
-        scopes: ['USER_ID', 'USER_AVATAR', 'USER_NICKNAME'],
+        scopes,
       },
-      (res: Record<string, unknown>) => {
-        const code = res?.result as string | undefined
-        if (code) {
-          resolve(code)
+      (res: Partial<BridgeAuthCodeResponse>) => {
+        if (res.resultCode === 10000 && res.result) {
+          resolve(res.result)
         } else {
-          reject(JSON.stringify(res))
+          reject(new Error(`[${res.resultCode}] ${res.resultMsg ?? 'Error desconocido'}`))
         }
       }
     )
