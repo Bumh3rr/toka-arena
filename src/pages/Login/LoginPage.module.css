@@ -25,27 +25,9 @@
     margin-top: 48px;
 }
 
-.logo {
-    width: 150px;
-    object-fit: contain;
-    margin-bottom: 90px;
-}
-
 .logoTitle {
     width: 350px;
     object-fit: contain;
-}
-
-.subtitle {
-    font-family: 'Fredoka', sans-serif;
-    font-weight: 600;
-    font-size: 28px;
-    color: #ffffff;
-    margin: 0;
-    text-shadow:
-        2px 2px 0px #3D2B1F,
-        -1px -1px 0px #3D2B1F;
-    letter-spacing: 2px;
 }
 
 .buttonContainer {
@@ -58,4 +40,13 @@
     justify-content: center;
     width: 100%;
     padding: 0 24px;
+}
+
+.errorMessage {
+    font-family: var(--font-body);
+    font-weight: bold;
+    font-size: 19px;
+    text-align: center;
+    color: #cd1e1b;
+    text-shadow: 1px 1px 0px #2b2019;
 }

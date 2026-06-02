@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { authService } from '../services/authService'
+import { getAuthCode } from '../services/tokaAuth'
 
 export function useAuth() {
   const [loading, setLoading] = useState(false)
@@ -9,30 +10,23 @@ export function useAuth() {
     setLoading(true)
     setError(null)
     try {
-      // 1) Intentar authCode inyectado en query string.
-      // 2) Si corre dentro de Toka, solicitar authCode al bridge.
-      // 3) En desarrollo local, permitir fallback por variable de entorno.
-        const authCode = 'DEBUG'
+      // Solicitar authCode a Toka
+      const authCode = await getAuthCode('DigitalIdentity', ['USER_ID', 'USER_AVATAR', 'USER_NICKNAME'])
+      if (!authCode) throw new Error('Error de Autenticación')
 
-      if (!authCode) {
-        throw new Error('No se pudo obtener authCode para iniciar sesion')
-      }
-
+      // Enviar authCode al backend para login
       const response = await authService.loginWithAuthCode(authCode)
-
       if (!response.success) throw new Error('Login fallido')
 
-      // 3. Guardar sesión completa
+      // Guardar sesión
       authService.saveSession(response)
-
-      const user = response.user;
 
       return {
         success: true,
-        hasFirstToka: user.hasFirstToka
+        hasFirstToka: response?.user?.hasFirstToka ?? false
       }
     } catch (err: any) {
-      const msg = err.response?.data?.message || err.message || 'Error al iniciar sesion con Toka'
+      const msg = err.message || 'Error al iniciar sesion con Toka'
       setError(msg)
       return { success: false, hasFirstToka: false }
     } finally {

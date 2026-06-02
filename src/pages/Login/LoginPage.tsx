@@ -22,6 +22,7 @@ export default function LoginPage() {
     <div className={styles.container}>
       <div className={styles.background} />
 
+      {/* Logo */}
       <div className={styles.logoContainer}>
         <img
           src="/assets/logo/logo.png"
@@ -30,35 +31,32 @@ export default function LoginPage() {
         />
       </div>
 
+      {/* Tokagotchi & Boton de login */}
       <div className={styles.buttonContainer}>
-
+      
+      {/* Animacion de Tokagotchi */}
+      <div className={styles.tokagotchiContainer}>
+        {/* Tokagotchi */}
         <TokagotchiCanvas
-          accesorioIndexCabeza={1}
+          accesorioIndexCabeza={0}
           accesorioIndexCuerpo={1}
           animacionActual={'idle'}
           tokaActual={'tofu'}
           reverse={false} />
+      </div>
 
-        {error && (
-          <p style={{
-            color: '#EF5350',
-            fontFamily: 'var(--font-body)',
-            fontSize: 13,
-            textAlign: 'center',
-            textShadow: '1px 1px 0px #3D2B1F',
-            marginBottom: 8
-          }}>
-            {error}
-          </p>
-        )}
-
+        {/* Botton */}
         <WoodButton
           label={loading ? 'Entrando...' : 'Entrar con mi cuenta Toka'}
           onClick={handleLogin}
           width="300px"
           disabled={loading}
         />
+
+        {/* Mensaje de error */}
+        {error && <div className={styles.errorMessage}>{error}</div>}
       </div>
+
     </div>
   )
 }

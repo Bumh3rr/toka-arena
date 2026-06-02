@@ -1,20 +1,17 @@
-// src/types/global.d.ts
-interface AlipayJSBridgeCallOptions {
-  usage?: string;
-  scopes?: string[];
-  success?: (res: Record<string, unknown>) => void;
-  fail?: (err: unknown) => void;
+import type { BridgeAuthCodeResponse } from './toka'
+
+export {}
+
+interface AlipayJSBridge {
+  call(
+    method: string,
+    params: Record<string, unknown>,
+    callback?: (res: Partial<BridgeAuthCodeResponse>) => void
+  ): void
 }
 
 declare global {
   interface Window {
-    AlipayJSBridge: {
-      call: (method: string, options: AlipayJSBridgeCallOptions) => void;
-    };
-    my: {
-      postMessage: (data: Record<string, unknown>) => void;
-    };
+    AlipayJSBridge: AlipayJSBridge
   }
 }
-
-export {};

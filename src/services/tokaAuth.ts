@@ -1,30 +1,40 @@
-export function getAuthCodeFromURL(): string | null {
-  const params = new URLSearchParams(window.location.search);
-  return params.get('authCode');
+import type { AuthCodeMethod, AuthCodeScopeMap, BridgeAuthCodeResponse } from '../types/toka'
+const IS_DEV = import.meta.env.DEV
+function waitForBridge(): Promise<void> {
+  return new Promise((resolve) => {
+    if (window.AlipayJSBridge) {
+      resolve()
+    } else {
+      document.addEventListener('AlipayJSBridgeReady', () => resolve(), { once: true })
+    }
+  })
 }
 
-function getAuthCode(
-  method: 'DigitalIdentity' | 'ContactInformation' | 'AddressInformation' | 'PersonalInformation' | 'KYCStatus',
-  scopes: string[]
+export async function getAuthCode<M extends AuthCodeMethod>(
+  method: M,
+  scopes: AuthCodeScopeMap[M][]
 ): Promise<string> {
+  if (IS_DEV) {
+    console.log(`[DEBUG] Simulando obtención de authCode para método ${method} con scopes: ${scopes.join(', ')}`)
+    return `DEBUG`
+  }
+
+  await waitForBridge()
+
   return new Promise((resolve, reject) => {
-    window.AlipayJSBridge.call(`getUser${method}AuthCode`, {
-      usage: 'Toka Arena necesita verificar tu identidad',
-      scopes,
-      success: (res: Record<string, unknown>) => resolve(res.result as string),
-      fail: (err: unknown) => reject(err),
-    });
-  });
-}
-
-export const tokaAuth = {
-  getDigitalIdentityAuthCode: () =>
-    getAuthCode('DigitalIdentity', ['USER_ID', 'USER_AVATAR', 'USER_NICKNAME']),
-
-  getKYCStatusAuthCode: () =>
-    getAuthCode('KYCStatus', ['USER_KYC_STATUS']),
-};
-
-export function isInsideToka(): boolean {
-  return !!window.AlipayJSBridge;
+    window.AlipayJSBridge.call(
+      `getUser${method}AuthCode`,
+      {
+        usage: 'Autenticación en Toka Arena',
+        scopes,
+      },
+      (res: Partial<BridgeAuthCodeResponse>) => {
+        if (res.resultCode === 10000 && res.result) {
+          resolve(res.result)
+        } else {
+          reject(new Error(`[${res.resultCode}] ${res.resultMsg ?? 'Error desconocido al autenticarse con Toka'}`))
+        }
+      }
+    )
+  })
 }
