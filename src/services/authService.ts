@@ -13,16 +13,11 @@ export const authService = {
 
   saveSession: (response: AuthResponse): void => {
     localStorage.setItem('toka_token', response.accessToken)
-    localStorage.setItem('toka_user', JSON.stringify(response.user))
   },
 
   getUser: () => {
     const data = localStorage.getItem('toka_user')
     return data ? JSON.parse(data) : null
-  },
-
-  getToken: (): string | null => {
-    return localStorage.getItem('toka_token')
   },
 
   saveToken: (token: string): void => {
@@ -31,15 +26,9 @@ export const authService = {
 
   clearSession: (): void => {
     localStorage.removeItem('toka_token')
-    localStorage.removeItem('toka_user')
   },
 
   isAuthenticated: (): boolean => {
     return !!localStorage.getItem('toka_token')
   },
-
-  hasFirstToka: (): boolean => {
-    const user = authService.getUser()
-    return user?.hasFirstToka ?? false
-  }
 }
