@@ -1,6 +1,20 @@
 /* src/index.css */
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Nunito:wght@400;600;700&display=swap');
 
+/* Variables globales del sistema de diseño */
+:root {
+  --color-bg: #6B9E45;
+  --color-card: #FFF8E7;
+  --color-nav: #F5DFA0;
+  --color-cta: #F97316;
+  --color-outline: #3D2B1F;
+  --color-action: #43A047;
+  --color-arena: #1A1433;
+
+  --font-title: 'Fredoka', sans-serif;
+  --font-body: 'Nunito', sans-serif;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -15,7 +29,7 @@ html, body, #root {
 
 body {
   background:transparent;
-  font-family: 'Nunito', sans-serif;
+  font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
@@ -26,18 +40,4 @@ body {
   /* Optimización táctil */
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
-}
-
-/* Variables globales del sistema de diseño */
-:root {
-  --color-bg: #6B9E45;
-  --color-card: #FFF8E7;
-  --color-nav: #F5DFA0;
-  --color-cta: #F97316;
-  --color-outline: #3D2B1F;
-  --color-action: #43A047;
-  --color-arena: #1A1433;
-
-  --font-title: 'Fredoka', sans-serif;
-  --font-body: 'Nunito', sans-serif;
 }
