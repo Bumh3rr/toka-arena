@@ -1,0 +1,55 @@
+/* 
+CoinPillCard.module.css
+Estilos para el componente CoinPillCard, que muestra la cantidad de TF del usuario
+en un formato de píldora con un ícono de moneda.
+*/
+.coinPill {
+    font-family: var(--font-title), system-ui, sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: linear-gradient(180deg, #FFE7A6, var(--gold));
+    border: var(--ol) solid var(--ink);
+    border-radius: var(--r-pill);
+    padding: 5px 13px 5px 7px;
+    box-shadow: inset 0 2px 0 rgba(255, 255, 255, .6), 0 3px 0 var(--gold-edge);
+    font-weight: bold;
+    font-size: 16px;
+    color: var(--ink);
+}
+
+/* Estilos para el ícono de moneda dentro de la píldora */
+.coinPill img {
+    width: 26px;
+    height: 26px;
+    display: block;
+    filter: drop-shadow(0 1px 0 rgba(74, 40, 0, .25));
+}
+
+/* Estilos para el texto "TF" dentro de la píldora */
+.coinPill .tf {
+    font-size: 12px;
+    font-weight: 600;
+    opacity: .7;
+    margin-left: 1px;
+}
+
+/* Animación de rebote para el ícono de moneda */
+@keyframes bump {
+    0% {
+        transform: scale(1);
+    }
+
+    40% {
+        transform: scale(1.22);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Animación de rebote para el ícono de moneda */
+.coinPill .bump {
+    animation: bump .4s ease;
+}
