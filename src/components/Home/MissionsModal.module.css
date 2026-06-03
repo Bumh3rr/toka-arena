@@ -1,0 +1,113 @@
+/* src/components/Home/MissionsModal.module.css */
+.list { display: flex; flex-direction: column; gap: 9px; }
+
+.mission {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--cream);
+  border: var(--ol) solid var(--ink);
+  border-radius: var(--r);
+  padding: 9px 10px;
+  box-shadow: inset 0 2px 0 #fff, 0 3px 0 var(--edge-cream);
+}
+
+.done { background: var(--green-soft); }
+
+.mBody { flex: 1; min-width: 0; }
+.mTitle { font-size: 13.5px; font-weight: 600; line-height: 1; }
+
+.mTrack {
+  margin-top: 6px;
+  height: 9px;
+  border-radius: var(--r-pill);
+  background: #EAD9BB;
+  border: 2px solid var(--ink);
+  overflow: hidden;
+  box-shadow: inset 0 1px 1px rgba(74, 40, 0, .2);
+}
+
+.mFill {
+  height: 100%;
+  border-radius: var(--r-pill);
+  background: linear-gradient(180deg, #8FD96A, var(--green));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5);
+  transition: width .5s ease;
+}
+
+.mProg { font-size: 9.5px; font-weight: 600; color: var(--ink-2); margin-top: 3px; }
+
+.mReward { flex: none; }
+
+.rewardPill {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-family: var(--font-title), system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gold-edge);
+  background: var(--gold-soft);
+  border: 2px solid rgba(74, 40, 0, .25);
+  border-radius: var(--r-pill);
+  padding: 4px 9px;
+}
+
+.claimBtn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-title), system-ui, sans-serif;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #fff;
+  padding: 8px 11px;
+  border: 2.5px solid var(--ink);
+  border-radius: 13px;
+  background: linear-gradient(180deg, #FFD15A, var(--gold));
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, .6), 0 4px 0 var(--gold-edge);
+  text-shadow: 0 1px 0 rgba(74, 40, 0, .3);
+  cursor: pointer;
+  animation: throb 1.1s ease-in-out infinite;
+}
+
+.claimBtn:active {
+  transform: translateY(4px);
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, .6);
+  animation: none;
+}
+
+.claimed {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--green-edge);
+}
+
+.claimed svg { width: 16px; height: 16px; }
+
+.sub {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  padding: 8px 2px 0;
+}
+
+.empty {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  text-align: center;
+  padding: 14px 8px;
+  border: 2px dashed rgba(74, 40, 0, .2);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, .4);
+}
+
+@keyframes throb {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.025); }
+}
