@@ -13,6 +13,7 @@ import CollectionModal from '../../components/Home/CollectionModal'
 import TofuCanvas from '../../components/TofuCanvas/TofuCanvas'
 import { IcCrown, IcSwap, IcPencil } from '../../components/Icons/Icons'
 import { rarityData } from '../../types/tokagotchi'
+import type { MisionResponse } from '../../services/userService'
 import styles from './HomePageNew.module.css'
 import { SCENE_MAX } from '../../components/CareSheet/CareSheet'
 
@@ -31,7 +32,7 @@ export default function HomePageNew() {
 
   const containerRef = useRef<HTMLDivElement>(null as unknown as HTMLDivElement)
 
-  const missionAlert = misiones.filter((m: any) => m.percentage >= 100 && !m.completed).length
+  const missionAlert = misiones.filter((m: MisionResponse) => m.percentage >= 100 && !m.completed).length
 
   // TODO: replace with real claim endpoint when available
   const handleClaim = (id: number) => {

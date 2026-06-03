@@ -43,7 +43,7 @@ export default function CollectionModal({ roster, activeId, onActivate, onClose 
   }, {})
 
   const rarOrder = (r: Tokagotchi) => rarityData(r.rareza).order
-  let list = Object.values(groups)
+  const list = Object.values(groups)
   list.forEach(g => { g.items.sort((a, b) => rarOrder(b) - rarOrder(a)) })
 
   if (sort === 'rareza') {

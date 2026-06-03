@@ -5,6 +5,7 @@ import { userService } from '../services/userService'
 import { careService } from '../services/careService'
 import { mapResponseToTokagotchi } from '../services/tokagotchiService'
 import { CUIDADO_CONFIG, type AccionCuidado } from '../constants/cuidado'
+import type { MisionResponse } from '../services/userService'
 
 export type Floaters = Partial<Record<AccionCuidado, number>>
 export type Cooldowns = Record<AccionCuidado, number>
@@ -15,7 +16,7 @@ export function useHome() {
   const [username, setUsername] = useState('')
   const [tf, setTf] = useState(0)
   const [cp, setCp] = useState(0)
-  const [misiones, setMisiones] = useState<any[]>([])
+  const [misiones, setMisiones] = useState<MisionResponse[]>([])
   const [loading, setLoading] = useState(true)
   const [accionando, setAccionando] = useState<AccionCuidado | null>(null)
   const [errorAccion, setErrorAccion] = useState<string | null>(null)
@@ -94,8 +95,8 @@ export function useHome() {
       }), 1000)
 
       showToast(`+${cfg.cp} CP por ${cfg.label.toLowerCase()}`)
-    } catch (err: any) {
-      const msg = err.response?.data?.message ?? 'Acción en cooldown'
+    } catch (err: unknown) {
+      const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message ?? 'Acción en cooldown'
       setErrorAccion(msg)
       setTimeout(() => setErrorAccion(null), 2000)
     } finally {
