@@ -91,7 +91,7 @@ export function IcMissions() {
 
 export function IcPencil() {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="#4A2800" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg viewBox="0 0 24 24" fill="none" stroke={INK} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M4 20l1-4L15.5 5.5a2.1 2.1 0 0 1 3 3L8 19l-4 1z" />
       <path d="M13.5 7.5l3 3" />
     </svg>
