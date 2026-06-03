@@ -8,7 +8,7 @@ export default function HomePage() {
   const navigate = useNavigate()
   const {
     tokagotchi, username, tf, misiones, loading,
-    renameToka, ejecutarAccion, accionando, accionExito, errorAccion
+    renameToka, ejecutarAccion, accionando, errorAccion
   } = useHome()
 
   const [editingName, setEditingName] = useState(false)
@@ -132,36 +132,30 @@ export default function HomePage() {
           <div className={styles.accionesRow}>
 
             <button
-              className={`${styles.accionBtn} ${accionExito === 'feed' ? styles.accionExito : ''} ${accionando === 'feed' ? styles.accionando : ''}`}
+              className={`${styles.accionBtn} ${accionando === 'feed' ? styles.accionando : ''}`}
               onClick={() => ejecutarAccion('feed')}
               disabled={!!accionando}
             >
               <img src="/assets/ui/btn_alimentar.png" alt="Alimentar" className={styles.accionImg} />
-              <span className={styles.accionReward}>
-                {accionExito === 'feed' ? '¡+5 CP!' : '+5 CP'}
-              </span>
+              <span className={styles.accionReward}>+5 CP</span>
             </button>
 
             <button
-              className={`${styles.accionBtn} ${accionExito === 'play' ? styles.accionExito : ''} ${accionando === 'play' ? styles.accionando : ''}`}
+              className={`${styles.accionBtn} ${accionando === 'play' ? styles.accionando : ''}`}
               onClick={() => ejecutarAccion('play')}
               disabled={!!accionando}
             >
               <img src="/assets/ui/btn_jugar.png" alt="Jugar" className={styles.accionImg} />
-              <span className={styles.accionReward}>
-                {accionExito === 'play' ? '¡+8 CP!' : '+8 CP'}
-              </span>
+              <span className={styles.accionReward}>+8 CP</span>
             </button>
 
             <button
-              className={`${styles.accionBtn} ${accionExito === 'bathe' ? styles.accionExito : ''} ${accionando === 'bathe' ? styles.accionando : ''}`}
+              className={`${styles.accionBtn} ${accionando === 'bathe' ? styles.accionando : ''}`}
               onClick={() => ejecutarAccion('bathe')}
               disabled={!!accionando}
             >
               <img src="/assets/ui/btn_bañar.png" alt="Bañar" className={styles.accionImg} />
-              <span className={styles.accionReward}>
-                {accionExito === 'bathe' ? '¡+4 CP!' : '+4 CP'}
-              </span>
+              <span className={styles.accionReward}>+4 CP</span>
             </button>
 
           </div>
