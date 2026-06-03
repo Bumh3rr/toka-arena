@@ -15,10 +15,11 @@ export async function getAuthCode<M extends AuthCodeMethod>(
   scopes: AuthCodeScopeMap[M][]
 ): Promise<string> {
   if (IS_DEV) {
-    console.log(`[DEBUG] Simulando obtención de authCode para método ${method} con scopes: ${scopes.join(', ')}`)
-    return `DEBUG`
+    console.log(`Simulando obtención de authCode`)
+    return 'DEBUG'
   }
 
+  console.log(`[INFO] Solicitando authCode`)
   await waitForBridge()
 
   return new Promise((resolve, reject) => {
