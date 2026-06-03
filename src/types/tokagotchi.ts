@@ -1,3 +1,5 @@
+import type { Rareza } from './toka'
+
 export const RAR = {
   COMMON: {
     label: "Común",
@@ -24,3 +26,11 @@ export const RAR = {
     order: 3,
   },
 };
+
+export function rarityData(rareza: Rareza) {
+  const key = rareza === 'Común' ? 'COMMON'
+    : rareza === 'Raro' ? 'RARE'
+    : rareza === 'Épico' ? 'EPIC'
+    : 'LEGENDARY'
+  return RAR[key as keyof typeof RAR]
+}
