@@ -18,7 +18,7 @@ import { SCENE_MAX } from '../../components/CareSheet/CareSheet'
 
 export default function HomePageNew() {
   const {
-    tokagotchi, username, tf, cp, misiones, loading,
+    tokagotchi, allTokas, username, tf, cp, misiones, loading,
     renameToka, ejecutarAccion, cooldowns, floaters, toast
   } = useHome()
 
@@ -161,9 +161,11 @@ export default function HomePageNew() {
       )}
       {collectionOpen && (
         <CollectionModal
-          roster={tokagotchi ? [tokagotchi] : []}
+          roster={allTokas.length > 0 ? allTokas : (tokagotchi ? [tokagotchi] : [])}
           activeId={tokagotchi?.id ?? ''}
-          onActivate={() => setCollectionOpen(false)}
+          onActivate={() => {
+            setCollectionOpen(false)
+          }}
           onClose={() => setCollectionOpen(false)}
         />
       )}
