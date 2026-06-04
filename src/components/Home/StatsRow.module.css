@@ -1,4 +1,3 @@
-/* src/components/Home/StatsRow.module.css */
 .stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

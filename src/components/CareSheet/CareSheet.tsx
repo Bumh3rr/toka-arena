@@ -70,3 +70,12 @@ export default function CareSheet({
     </div>
   )
 }
+
+export function HeaderTitleLine({ title }: { title: string }) {
+  return (
+    <div className={styles.secHeader}>
+      <span className={styles.secTitle}>{title}</span>
+      <span className={styles.secLine} />
+    </div>
+  )
+}

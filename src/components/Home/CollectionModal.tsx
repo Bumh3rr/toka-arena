@@ -93,7 +93,7 @@ export default function CollectionModal({ roster, activeId, onActivate, onClose 
             <div className={styles.deckHead} onClick={() => setOpen(o => ({ ...o, [g.nombre]: !o[g.nombre] }))}>
               <div className={styles.deckStack}>
                 {g.items.slice(0, 3).map((it, i) => (
-                  <div key={it.id} style={{ position: 'absolute', top: 0, left: i * 15, zIndex: 3 - i }}>
+                  <div key={it.id} style={{ position: 'absolute', top: 0, left: i * 10, zIndex: 3 - i }}>
                     <TokaAvatar tokagotchi={it} size={46} />
                   </div>
                 ))}
@@ -104,36 +104,34 @@ export default function CollectionModal({ roster, activeId, onActivate, onClose 
               </div>
               <div className={styles.deckChev}><IcChevronDown /></div>
             </div>
-            {isOpen && (
-              <div className={styles.deckItems}>
-                {g.items.map(it => {
-                  const rar = RAR[it.rareza]
-                  const isActive = it.id === activeId
-                  return (
-                    <div key={it.id} className={styles.colItem}>
-                      <TokaAvatar tokagotchi={it} size={44} isActive={isActive} />
-                      <div className={styles.ciInfo}>
-                        <div className={styles.ciNick}>
-                          {it.nombre}
-                          <span className={styles.rarTag} style={{ background: rar.ring }}>{rar.label}</span>
-                        </div>
-                        <div className={styles.ciAcc}>{it.accesorios.cabeza?.nombre ?? 'Sin accesorio'}</div>
+            <div className={styles.deckItems}>
+              {g.items.map(it => {
+                const rar = RAR[it.rareza]
+                const isActive = it.id === activeId
+                return (
+                  <div key={it.id} className={styles.colItem}>
+                    <TokaAvatar tokagotchi={it} size={44} isActive={isActive} />
+                    <div className={styles.ciInfo}>
+                      <div className={styles.ciNick}>
+                        {it.nombre}
+                        <span className={styles.rarTag} style={{ background: rar.ring }}>{rar.label}</span>
                       </div>
-                      {isActive ? (
-                        <span className={`${styles.activar} ${styles.activarActive}`}>
-                          <IcCheck /> Activo
-                        </span>
-                      ) : (
-                        <button className={styles.activar} onClick={() => handleActivate(it.id)}
-                          disabled={activating === it.id}>
-                          {activating === it.id ? '...' : 'Activar'}
-                        </button>
-                      )}
+                      <div className={styles.ciAcc}>{it.accesorios.cabeza?.nombre ?? 'Sin accesorio'}</div>
                     </div>
-                  )
-                })}
-              </div>
-            )}
+                    {isActive ? (
+                      <span className={`${styles.activar} ${styles.activarActive}`}>
+                        <IcCheck /> Activo
+                      </span>
+                    ) : (
+                      <button className={styles.activar} onClick={() => handleActivate(it.id)}
+                        disabled={activating === it.id}>
+                        {activating === it.id ? '...' : 'Activar'}
+                      </button>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
           </div>
         )
       })}

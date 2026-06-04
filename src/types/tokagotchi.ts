@@ -1,4 +1,62 @@
-import type { Rareza } from './toka'
+import type { Accesorio } from "./accesorios";
+
+// Rarezas disponibles
+export type Rareza = "COMMON" | "RARE" | "EPIC" | "LEGENDARY";
+
+// Especies disponibles
+export type Especie = "tofu" | "mochi" | "hana";
+
+// Stats del Tokagotchi
+export interface TokagotchiStats {
+  hp: number;
+  atk: number;
+  def: number;
+  nrg: number;
+}
+
+// Habilidad
+export interface Habilidad {
+  id: string;
+  nombre: string;
+  costoNRG: number;
+  multiplicador?: number;
+  descripcion: string;
+  esSignature: boolean;
+}
+
+// Tokagotchi principal
+export interface Tokagotchi {
+  id: string;
+  nombre: string;
+  especie: Especie;
+  rareza: Rareza;
+  stats: TokagotchiStats;
+  habilidades: Habilidad[];
+  accesorios: {
+    cabeza: Accesorio | null;
+    cuerpo: Accesorio | null;
+  };
+  // Assets DragonBones
+  assets: {
+    texPng: string;
+    texJson: string;
+    skeJson: string;
+    armatureKey: string;
+  };
+}
+
+// Animaciones disponibles
+export type TokagotchiAnimacion =
+  | "idle"
+  | "feed"
+  | "play"
+  | "heal"
+  | "bath"
+  | "attack"
+  | "hurt"
+  | "ko"
+  | "win"
+  | "battle_idle";
 
 export const RAR = {
   COMMON: {
@@ -26,11 +84,3 @@ export const RAR = {
     order: 3,
   },
 };
-
-export function rarityData(rareza: Rareza) {
-  const key = rareza === 'Común' ? 'COMMON'
-    : rareza === 'Raro' ? 'RARE'
-    : rareza === 'Épico' ? 'EPIC'
-    : 'LEGENDARY'
-  return RAR[key as keyof typeof RAR]
-}

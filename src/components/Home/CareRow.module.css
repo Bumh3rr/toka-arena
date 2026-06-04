@@ -1,26 +1,4 @@
 /* src/components/Home/CareRow.module.css */
-.secHeader {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  padding: 2px 4px 0;
-  margin-bottom: 12px;
-}
-
-.secTitle {
-  font-family: var(--font-title), system-ui, sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--ink);
-}
-
-.secLine {
-  flex: 1;
-  height: 2.5px;
-  background: rgba(74, 40, 0, .1);
-  border-radius: 2px;
-}
-
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

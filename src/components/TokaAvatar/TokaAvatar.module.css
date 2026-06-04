@@ -14,7 +14,6 @@
   overflow: hidden;
   background: radial-gradient(circle at 50% 38%, #FFF8EC, #FBE7C6);
   border: 3px solid;
-  box-shadow: 0 0 0 2.5px var(--ink), 0 3px 0 rgba(74, 40, 0, .16);
 }
 
 .active .av {
@@ -24,9 +23,8 @@
 .av img {
   width: 128%;
   height: 128%;
-  object-fit: cover;
-  object-position: center 30%;
-  margin: -12% 0 0 -14%;
+  object-fit: contain;
+  margin: -15% 0 0;
 }
 
 .accBadge {

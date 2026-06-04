@@ -1,6 +1,6 @@
 // src/hooks/useHome.ts
 import { useState, useEffect, useRef, useCallback } from 'react'
-import type { Tokagotchi } from '../types/toka'
+import type { Tokagotchi } from '../types/tokagotchi'
 import { userService } from '../services/userService'
 import { careService } from '../services/careService'
 import { mapResponseToTokagotchi } from '../services/tokagotchiService'

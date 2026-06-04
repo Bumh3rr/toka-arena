@@ -7,7 +7,8 @@ import type{
   ResultadoBatalla
 } from '../types/batalla'
 import { CONSUMIBLES_TIENDA } from '../constants/consumibles'
-import type{ Tokagotchi, TokagotchiAnimacion } from '../types/toka'
+import type{ Tokagotchi } from '../types/toka'
+import type{ TokagotchiAnimacion } from '../types/tokagotchi'
 import { MOCHI_MOCK, HANA_MOCK } from '../constants/tokagotchis'
 import { userService } from '../services/userService'
 import { mapResponseToTokagotchi } from '../services/tokagotchiService'

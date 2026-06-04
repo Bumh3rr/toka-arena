@@ -28,7 +28,6 @@ export default function RenameModal({ currentName, onSave, onClose }: RenameModa
         className={styles.input}
         value={value}
         maxLength={14}
-        autoFocus
         onChange={e => setValue(e.target.value)}
         onKeyDown={e => e.key === 'Enter' && handleSave()}
       />

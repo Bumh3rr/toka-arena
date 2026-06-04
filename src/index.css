@@ -13,6 +13,47 @@
 
   --font-title: 'Fredoka', sans-serif;
   --font-body: 'Nunito', sans-serif;
+
+  /* Colores de tinta para texto y detalles */
+  --ink:        #4A2800;
+  --ink-2:      #7A5226;
+  --ink-3:      #A8854E;
+
+  /* Tamaños de borde */
+  --r-sm: 12px;
+  --r: 18px;
+  --r-lg: 24px;
+  --r-pill: 999px;
+
+  --ol: 3px; /* outline estándar */
+  --ol-thick: 3px; /* outline grueso para énfasis */
+  
+  /* warm paper + cards */
+  --bg-top: #FFE9C7;
+  --bg-bot: #FFD9A8;
+  --cream: #FFFBF1;
+  --cream-2: #FFF3DC;
+  --peach: #FCE2B6;
+  --edge-cream: #ECCF9E;/* Color crema para bordes */
+
+  /* friendly accents — shared chroma, varied hue */
+  --blue: #46A8DC;
+  --blue-edge: #2E83B3;
+  --blue-soft: #DCF0FA;
+  --green: #6FC04A;
+  --green-edge: #4E9A30;
+  --green-soft: #E7F6DB;
+  --gold: #F7B92C;
+  --gold-edge: #D9952A;
+  --gold-soft: #FFF0CB;
+  --purple: #9D74D6;
+  --purple-edge: #7B51B6;
+  --purple-soft: #EFE6FB;
+  --legend: #F6A937;
+  --legend-edge: #D9852A;
+  --legend-glow: rgba(246, 169, 55, .55);
+  
+  font-synthesis: none;
 }
 
 * {
@@ -21,14 +62,16 @@
   box-sizing: border-box;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   width: 100%;
   height: 100%;
   overflow: hidden;
 }
 
 body {
-  background:transparent;
+  background: transparent;
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

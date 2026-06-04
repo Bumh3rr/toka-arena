@@ -1,4 +1,4 @@
-import TokagotchiCanvas from '../../../components/TofuCanvas/TofuCanvas'
+import TokagotchiCanvas from '../../../components/Tokagotchi/TokagotchiCanvas'
 import styles from './Arena.module.css'
 import esperaStyles from './EsperaView.module.css'
 
@@ -15,6 +15,7 @@ export default function EsperaView({ batalla }: { batalla: any }) {
       {/* VS */}
       <div className={esperaStyles.vsContainer}>
         <div className={esperaStyles.tokaSlot}>
+          {/** 
           <TokagotchiCanvas
             tokagotchi={tokagotchi}
             animacion="idle"
@@ -22,6 +23,7 @@ export default function EsperaView({ batalla }: { batalla: any }) {
             height={130}
             scale={0.28}
           />
+            */}
           <span className={esperaStyles.tokaLabel}>{tokagotchi.nombre}</span>
           <span className={esperaStyles.tokaSubLabel}>Tú</span>
         </div>
@@ -31,6 +33,7 @@ export default function EsperaView({ batalla }: { batalla: any }) {
         <div className={esperaStyles.tokaSlot}>
           {encontrado && rival ? (
             <>
+              {/** 
               <TokagotchiCanvas
                 tokagotchi={rival}
                 animacion="idle"
@@ -38,6 +41,7 @@ export default function EsperaView({ batalla }: { batalla: any }) {
                 height={130}
                 scale={0.28}
               />
+              */}
               <span className={esperaStyles.tokaLabel}>{rival.nombre}</span>
               <span className={esperaStyles.tokaSubLabel}>Rival</span>
             </>

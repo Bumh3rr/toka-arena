@@ -1,5 +1,5 @@
 import api from './api'
-import type { Tokagotchi } from '../types/toka'
+import type { Tokagotchi } from '../types/tokagotchi'
 import { mapResponseToTokagotchi } from './tokagotchiService'
 
 export interface UserMeResponse {

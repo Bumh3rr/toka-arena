@@ -1,18 +1,17 @@
 import api from './api'
-import type { Tokagotchi } from '../types/toka'
+import type { Tokagotchi } from '../types/tokagotchi'
 import type{ Accesorio } from '../types/accesorios'
 
 // Convierte el response del backend a nuestro tipo interno
 export function mapResponseToTokagotchi(data: any): Tokagotchi {
-  const especie = data.species.toLowerCase() as 'tofu' | 'mochi' | 'hana'
-
   console.log(data);
+  const especie = data.species.toLowerCase() as 'tofu' | 'mochi' | 'hana'
   
   return {
     id: String(data.id),
     nombre: data.name,
     especie,
-    rareza: mapRareza(data.rarity),
+    rareza: data.rarity,
     stats: {
       hp: data.hp,
       atk: data.atk,
@@ -53,16 +52,6 @@ function getDisplayIndex(name: string): number {
     'Sombrero': 2, 'Corona': 1, 'Casco': 0, 'Super Capa': 0
   }
   return map[name] ?? 0
-}
-
-function mapRareza(rarity: string): 'Común' | 'Raro' | 'Épico' | 'Legendario' {
-  const map: Record<string, 'Común' | 'Raro' | 'Épico' | 'Legendario'> = {
-    'COMMON': 'Común',
-    'RARE': 'Raro',
-    'EPIC': 'Épico',
-    'LEGENDARY': 'Legendario'
-  }
-  return map[rarity] ?? 'Común'
 }
 
 function getAssetsByEspecie(especie: string) {

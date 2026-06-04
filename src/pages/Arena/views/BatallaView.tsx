@@ -1,4 +1,4 @@
-import TokagotchiCanvas from '../../../components/TofuCanvas/TofuCanvas'
+import TokagotchiCanvas from '../../../components/Tokagotchi/TokagotchiCanvas'
 import styles from './Arena.module.css'
 import batallaStyles from './BatallaView.module.css'
 import { TOFU_MOCK } from '../../../constants/tokagotchis'
@@ -48,6 +48,7 @@ export default function BatallaView({ batalla }: { batalla: any }) {
             {estado.hpRival} / {estado.hpMaxRival} HP
           </span>
         </div>
+        {/** 
         <TokagotchiCanvas
           tokagotchi={rival ?? TOFU_MOCK}
           animacion={animacionRival}
@@ -55,6 +56,7 @@ export default function BatallaView({ batalla }: { batalla: any }) {
           height={110}
           scale={0.25}
         />
+        */}
       </div>
 
       {/* Log */}
@@ -66,6 +68,7 @@ export default function BatallaView({ batalla }: { batalla: any }) {
 
       {/* Jugador */}
       <div className={batallaStyles.jugadorSection}>
+        {/** 
         <TokagotchiCanvas
           tokagotchi={tokagotchi}
           animacion={animacionJugador}
@@ -73,6 +76,7 @@ export default function BatallaView({ batalla }: { batalla: any }) {
           height={110}
           scale={0.25}
         />
+        */}
         <div className={batallaStyles.jugadorInfo}>
           <span className={batallaStyles.rivalNombre}>{tokagotchi.nombre}</span>
           <div className={styles.hpBar}>

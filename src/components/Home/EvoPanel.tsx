@@ -74,11 +74,7 @@ export default function EvoPanel({ rareza, cp, tf }: EvoPanelProps) {
           </div>
           <div className={styles.cpbar}>
             <div className={styles.fill} style={{ width: `${pct}%` }} />
-            {pct > 0 && (
-              <span className={styles.pctLabel} style={{ left: `clamp(8px, calc(${pct}% - 4px), calc(100% - 36px))` }}>
-                {pct}%
-              </span>
-            )}
+            <span className={styles.pctLabel}>{pct}%</span>
           </div>
         </div>
 

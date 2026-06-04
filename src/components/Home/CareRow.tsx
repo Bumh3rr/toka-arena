@@ -3,6 +3,7 @@ import { IcClock } from '../Icons/Icons'
 import { CUIDADO_CONFIG, type AccionCuidado } from '../../constants/cuidado'
 import type { Cooldowns, Floaters } from '../../hooks/useHome'
 import styles from './CareRow.module.css'
+import { HeaderTitleLine } from '../CareSheet/CareSheet'
 
 const fmt = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`
 
@@ -60,10 +61,7 @@ interface CareRowProps {
 export default function CareRow({ cooldowns, floaters, onUse }: CareRowProps) {
   return (
     <div>
-      <div className={styles.secHeader}>
-        <span className={styles.secTitle}>Cuidado</span>
-        <span className={styles.secLine} />
-      </div>
+      <HeaderTitleLine title="Cuidado" />
       <div className={styles.grid}>
         {CUIDADO_CONFIG.map(cfg => (
           <CareBtn
