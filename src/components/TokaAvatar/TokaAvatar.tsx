@@ -1,6 +1,6 @@
 // src/components/TokaAvatar/TokaAvatar.tsx
-import type { Tokagotchi } from '../../types/toka'
-import { rarityData } from '../../types/tokagotchi'
+import type { Tokagotchi } from '../../types/tokagotchi'
+import { RAR } from '../../types/tokagotchi'
 import styles from './TokaAvatar.module.css'
 
 interface TokaAvatarProps {
@@ -10,9 +10,8 @@ interface TokaAvatarProps {
 }
 
 export default function TokaAvatar({ tokagotchi, size = 54, isActive = false }: TokaAvatarProps) {
-  const rar = rarityData(tokagotchi.rareza)
   const imgSrc = `/assets/tokagotchis/${tokagotchi.especie}.png`
-
+  const rar = RAR[tokagotchi.rareza]
   return (
     <div
       className={`${styles.wrap} ${isActive ? styles.active : ''}`}

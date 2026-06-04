@@ -3,8 +3,8 @@ import { useState } from 'react'
 import BottomSheet from '../BottomSheet/BottomSheet'
 import TokaAvatar from '../TokaAvatar/TokaAvatar'
 import { IcCheck, IcChevronDown } from '../Icons/Icons'
-import { rarityData } from '../../types/tokagotchi'
-import type { Tokagotchi } from '../../types/toka'
+import type { Tokagotchi } from '../../types/tokagotchi'
+import { RAR } from '../../types/tokagotchi'
 import { tokagotchiService } from '../../services/tokagotchiService'
 import styles from './CollectionModal.module.css'
 
@@ -42,7 +42,7 @@ export default function CollectionModal({ roster, activeId, onActivate, onClose 
     return acc
   }, {})
 
-  const rarOrder = (r: Tokagotchi) => rarityData(r.rareza).order
+  const rarOrder = (r: Tokagotchi) => RAR[r.rareza].order
   const list = Object.values(groups)
   list.forEach(g => { g.items.sort((a, b) => rarOrder(b) - rarOrder(a)) })
 
@@ -59,7 +59,7 @@ export default function CollectionModal({ roster, activeId, onActivate, onClose 
       <div className={styles.sub}>Acceso rápido</div>
       <div className={styles.quickStrip}>
         {quick.map(t => {
-          const rar = rarityData(t.rareza)
+          const rar = RAR[t.rareza]
           const isActive = t.id === activeId
           return (
             <button key={t.id} className={`${styles.qChip} ${isActive ? styles.qActive : ''}`}
@@ -107,7 +107,7 @@ export default function CollectionModal({ roster, activeId, onActivate, onClose 
             {isOpen && (
               <div className={styles.deckItems}>
                 {g.items.map(it => {
-                  const rar = rarityData(it.rareza)
+                  const rar = RAR[it.rareza]
                   const isActive = it.id === activeId
                   return (
                     <div key={it.id} className={styles.colItem}>
