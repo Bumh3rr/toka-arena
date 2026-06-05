@@ -1,5 +1,7 @@
 import type { AuthCodeMethod, AuthCodeScopeMap, BridgeAuthCodeResponse } from '../types/toka'
-const IS_DEV = import.meta.env.DEV
+//const IS_DEV = import.meta.env.DEV
+const IS_DEV = true
+
 function waitForBridge(): Promise<void> {
   return new Promise((resolve) => {
     if (window.AlipayJSBridge) {
