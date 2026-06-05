@@ -1,0 +1,37 @@
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width:  var(--ib-size);
+  height: var(--ib-size);
+  border-radius: var(--ib-br);
+  border: 2.5px solid var(--ink);
+  background: linear-gradient(180deg, var(--ib-bg-from), var(--ib-bg));
+  color: var(--ib-text);
+  text-shadow: var(--ib-ts, none);
+  box-shadow: inset 0 1.5px 0 var(--ib-shine), 0 3px 0 var(--ib-edge);
+  cursor: pointer;
+  transition: transform .08s ease, box-shadow .08s ease;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: inset 0 1.5px 0 var(--ib-shine);
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: .55;
+}
+
+.btn svg,
+.btn > * {
+  width:  var(--ib-icon-size);
+  height: var(--ib-icon-size);
+  display: block;
+  flex: none;
+}

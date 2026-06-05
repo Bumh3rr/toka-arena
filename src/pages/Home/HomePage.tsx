@@ -10,13 +10,13 @@ import RenameModal from '../../components/Home/RenameModal'
 import MissionsModal from '../../components/Home/MissionsModal'
 import CollectionModal from '../../components/Home/CollectionModal'
 import TokagotchiCanvas from '../../components/Tokagotchi/TokagotchiCanvas'
-import { IcSwap, IcPencil } from '../../components/Icons/Icons'
+import { IcSwap, IcPencil, IcPerson } from '../../components/Icons/Icons'
 import type { MisionResponse } from '../../services/userService'
 import styles from './HomePage.module.css'
 import { SCENE_MAX } from '../../components/CareSheet/CareSheet'
 import RarityCard from '../../components/RarityCard/RarityCard'
 import BackgroundCanvas from '../../components/Background/BackgroundCanvas'
-import { CardButton } from '../../components/Card/Card'
+import { Button, Label, IconButton } from '../../components/UIKit'
 
 export default function HomePage() {
     const {
@@ -45,19 +45,18 @@ export default function HomePage() {
         >
             {/* Background */}
             <div className={styles.bg}>
-                <BackgroundCanvas paused={sheetExpanded} hourOverride={22} />
+                <BackgroundCanvas paused={sheetExpanded} />
             </div>
 
             {/* TopBar */}
             <div className={styles.topbar}>
                 <div className={styles.user}>
-                    <div className={styles.avatar}>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="#4A2800" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <circle cx="12" cy="8.6" r="3.8" fill="#FFF1D4" />
-                            <path d="M4.8 20c.6-3.8 3.6-5.6 7.2-5.6s6.6 1.8 7.2 5.6" fill="#FFF1D4" />
-                        </svg>
-                    </div>
-                    <span className={styles.name}>{loading ? '...' : username}</span>
+                    <IconButton variant="legend" size={50} shape="round">
+                        <IcPerson />
+                    </IconButton>
+                    <Label key={'Especie-Tokagotchi'} variant={'warm'} look="soft" size="sm">
+                        {loading ? '...' : username}
+                    </Label>
                 </div>
                 <CoinPillCard tf={tf} />
             </div>
@@ -96,25 +95,22 @@ export default function HomePage() {
                 <div className={`${styles.identity} ${sheetExpanded ? styles.identitySticky : ''}`}>
                     <div style={{ flex: 1, minWidth: 0 }}>
                         <div className={styles.nmRow}>
-                            <div className={styles.nm}>{tokagotchi?.nombre ?? '...'}</div>
-                            <button className={styles.pencil} onClick={() => setRenameOpen(true)} aria-label="Renombrar">
-                                <IcPencil />
-                            </button>
-                            <button className={styles.swapPill} onClick={() => setCollectionOpen(true)}>
-                                <IcSwap />Cambiar
-                            </button>
+                            <div className={styles.nmWrapper}>
+                                <div className={styles.nm}>{tokagotchi?.nombre ?? '...'}</div>
+                                <button className={styles.pencil} onClick={() => setRenameOpen(true)} aria-label="Renombrar">
+                                    <IcPencil />
+                                </button>
+                            </div>
+                            <Button variant="warm" size="md" icon={<IcSwap />} onClick={() => setCollectionOpen(true)} aria-label="Cambiar Tokagotchi">
+                                Cambiar
+                            </Button>
                         </div>
                         <div className={styles.sub}>
                             <RarityCard rarity={tokagotchi?.rareza} />
                             <div>|</div>
-                            <div>{tokagotchi?.especie ?? ''}</div>
-                            <CardButton onClick={() => {}}>
-                                ksks
-                            </CardButton>
-
+                            <Label key={'Especie-Tokagotchi'} variant={'warm'} look="soft" size="sm">{tokagotchi?.especie ?? ''}</Label>
                         </div>
                     </div>
-
                 </div>
 
                 {/* Stats */}

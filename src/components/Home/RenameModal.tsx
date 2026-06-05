@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import BottomSheet from '../BottomSheet/BottomSheet'
 import styles from './RenameModal.module.css'
+import { Button } from '../UIKit'
 
 interface RenameModalProps {
   currentName: string
@@ -31,10 +32,10 @@ export default function RenameModal({ currentName, onSave, onClose }: RenameModa
         onKeyDown={e => e.key === 'Enter' && handleSave()}
       />
       <div className={styles.actions}>
-        <button className={styles.cancel} onClick={onClose}>Cancelar</button>
-        <button className={styles.save} onClick={handleSave} disabled={saving}>
+        <Button variant="cream" size="md" onClick={onClose}>Cancelar</Button>
+        <Button variant="gold" size="md" onClick={handleSave} disabled={saving}>
           {saving ? 'Guardando...' : 'Guardar'}
-        </button>
+        </Button> 
       </div>
     </BottomSheet>
   )

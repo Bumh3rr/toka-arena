@@ -8,6 +8,7 @@ import ArenaPage from './pages/Arena/ArenaPage'
 import ColeccionPage from './pages/Coleccion/ColeccionPage'
 import TiendaPage from './pages/Tienda/TiendaPage'
 import HomePage from './pages/Home/HomePage'
+import UIKitPage from './pages/UIKit/UIKitPage'
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
   return authService.isAuthenticated()
@@ -39,6 +40,7 @@ export default function App() {
           <Route path="/arena" element={<ArenaPage />} />
           <Route path="/coleccion" element={<ColeccionPage />} />
           <Route path="/tienda" element={<TiendaPage />} />
+          <Route path="/ui-kit" element={<UIKitPage />} />
         </Route>
 
         <Route path="/" element={

@@ -1,35 +1,31 @@
-// src/components/Home/StatsRow.tsx
 import { IcBolt, IcShield, IcHeart } from '../Icons/Icons'
 import type { TokagotchiStats } from '../../types/tokagotchi'
 import styles from './StatsRow.module.css'
 import { HeaderTitleLine } from '../CareSheet/CareSheet'
+import { Card } from '../UIKit'
 
 export default function StatsRow({ stats }: { stats: TokagotchiStats }) {
+
+  const LIST_STATS = [
+    { key: 'atk', label: 'Ataque', value: stats.atk, icon: <IcBolt /> },
+    { key: 'def', label: 'Defensa', value: stats.def, icon: <IcShield /> },
+    { key: 'hp', label: 'HP', value: stats.hp, icon: <IcHeart /> },
+  ]
+
   return (
     <div>
       <HeaderTitleLine title="Estadísticas" />
       <div className={styles.stats}>
-        <div className={`${styles.stat} ${styles.atk}`}>
-          <div className={styles.ic}><IcBolt /></div>
-          <div className={styles.txt}>
-            <span className={styles.lab}>Ataque</span>
-            <span className={styles.val}>{stats.atk}</span>
-          </div>
-        </div>
-        <div className={`${styles.stat} ${styles.def}`}>
-          <div className={styles.ic}><IcShield /></div>
-          <div className={styles.txt}>
-            <span className={styles.lab}>Defensa</span>
-            <span className={styles.val}>{stats.def}</span>
-          </div>
-        </div>
-        <div className={`${styles.stat} ${styles.hp}`}>
-          <div className={styles.ic}><IcHeart /></div>
-          <div className={styles.txt}>
-            <span className={styles.lab}>HP</span>
-            <span className={styles.val}>{stats.hp}</span>
-          </div>
-        </div>
+
+        {LIST_STATS.map((s) => (
+          <Card key={s.key} variant="cream" shadow='md' radius='lg' className={`${styles.stat} ${styles[s.key]}`}>
+            <div className={styles.ic}>{s.icon}</div>
+            <div className={styles.txt}>
+              <span className={styles.lab}>{s.label}</span>
+              <span className={styles.val}>{s.value}</span>
+            </div>
+          </Card>
+        ))}
       </div>
     </div>
   )

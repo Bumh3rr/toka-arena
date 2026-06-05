@@ -20,34 +20,13 @@
   display: flex;
   gap: 10px;
   margin-top: 14px;
+  margin-bottom: 4px;
+
 }
 
 .actions button {
   flex: 1;
-  font-family: var(--font-title), system-ui, sans-serif;
   font-size: 15px;
-  font-weight: 700;
   padding: 12px;
-  border: 2.5px solid var(--ink);
-  border-radius: 14px;
   cursor: pointer;
-  margin-bottom: 4px;
 }
-
-.cancel {
-  background: var(--cream-2);
-  color: var(--ink-2);
-  box-shadow: inset 0 1.5px 0 #fff, 0 4px 0 var(--edge-cream);
-}
-
-.cancel:active { transform: translateY(4px); box-shadow: inset 0 1.5px 0 #fff; }
-
-.save {
-  color: #fff;
-  background: linear-gradient(180deg, #FFD15A, var(--gold));
-  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, .6), 0 4px 0 var(--gold-edge);
-  text-shadow: 0 1px 0 rgba(74, 40, 0, .3);
-}
-
-.save:active { transform: translateY(4px); box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, .6); }
-.save:disabled { opacity: .6; cursor: not-allowed; }

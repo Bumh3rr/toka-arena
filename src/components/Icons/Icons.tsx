@@ -98,6 +98,16 @@ export function IcPencil() {
   )
 }
 
+export function IcPerson() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke={INK} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="8.6" r="3.8" fill="#FFF1D4" />
+      <path d="M4.8 20c.6-3.8 3.6-5.6 7.2-5.6s6.6 1.8 7.2 5.6" fill="#FFF1D4" />
+    </svg>
+  )
+}
+
+
 export function IcSwap() {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round">
