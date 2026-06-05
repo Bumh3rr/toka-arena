@@ -41,7 +41,7 @@ export default function LoginPage() {
           accesorioIndexCabeza={0}
           accesorioIndexCuerpo={1}
           animacionActual={'idle'}
-          tokaActual={'tofu'}
+          especie='TOFU'
           reverse={false} />
       </div>
 

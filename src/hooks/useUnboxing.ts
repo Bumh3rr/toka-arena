@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { Tokagotchi } from '../types/toka'
+import type { Tokagotchi } from '../types/tokagotchi'
 import { useGiftSound } from './useGiftSound'
 import { useRevealSound } from './useRevealSound'
 import { useClaimStarter } from './useClaimStarter'

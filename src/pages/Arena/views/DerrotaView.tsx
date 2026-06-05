@@ -22,7 +22,7 @@ export default function DerrotaView({ batalla }: { batalla: any }) {
         accesorioIndexCabeza={tokagotchi.accesorios.cabeza?.displayIndex ?? -1}
         accesorioIndexCuerpo={tokagotchi.accesorios.cuerpo?.displayIndex ?? -1}
         animacionActual={'daño'}
-        tokaActual={tokagotchi.especie}
+        especie={tokagotchi.especie}
         width={160}
         height={150}
       />

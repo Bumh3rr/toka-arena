@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import TokagotchiCanvas from '../../components/Tokagotchi/TokagotchiCanvas'
 import { useColeccion } from '../../hooks/useColeccion'
-import type { Tokagotchi } from '../../types/toka'
+import type { Tokagotchi } from '../../types/tokagotchi'
 import type { Accesorio } from '../../types/accesorios'
 import styles from './ColeccionPage.module.css'
 
@@ -218,7 +218,7 @@ function TabAccesorios({
             accesorioIndexCabeza={tokaConAccesorios.accesorios.cabeza?.displayIndex ?? -1}
             accesorioIndexCuerpo={tokaConAccesorios.accesorios.cuerpo?.displayIndex ?? -1}
             animacionActual={'idle'}
-            tokaActual={tokaConAccesorios.especie}
+            especie={tokaConAccesorios.especie}
             width={130}
             height={120}
           />

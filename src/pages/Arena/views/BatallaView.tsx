@@ -12,8 +12,6 @@ export default function BatallaView({ batalla }: { batalla: any }) {
     usarConsumible,
     pasarTurnoJugador,
     consumibles,
-    animacionJugador,
-    animacionRival
   } = batalla
   const estado = estadoBatalla
 
@@ -48,15 +46,11 @@ export default function BatallaView({ batalla }: { batalla: any }) {
             {estado.hpRival} / {estado.hpMaxRival} HP
           </span>
         </div>
-        {/** 
         <TokagotchiCanvas
-          tokagotchi={rival ?? TOFU_MOCK}
-          animacion={animacionRival}
+          especie={rival?.especie ?? TOFU_MOCK.especie}
           width={110}
           height={110}
-          scale={0.25}
         />
-        */}
       </div>
 
       {/* Log */}
@@ -68,15 +62,11 @@ export default function BatallaView({ batalla }: { batalla: any }) {
 
       {/* Jugador */}
       <div className={batallaStyles.jugadorSection}>
-        {/** 
         <TokagotchiCanvas
-          tokagotchi={tokagotchi}
-          animacion={animacionJugador}
+          especie={tokagotchi.especie}
           width={110}
           height={110}
-          scale={0.25}
         />
-        */}
         <div className={batallaStyles.jugadorInfo}>
           <span className={batallaStyles.rivalNombre}>{tokagotchi.nombre}</span>
           <div className={styles.hpBar}>

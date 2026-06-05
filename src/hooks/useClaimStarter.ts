@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { Tokagotchi } from '../types/toka'
+import type { Tokagotchi } from '../types/tokagotchi'
 import { tokagotchiService } from '../services/tokagotchiService'
 
 export function useClaimStarter() {

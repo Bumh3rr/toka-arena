@@ -1,10 +1,10 @@
-import type { Tokagotchi } from '../types/toka'
+import type { Tokagotchi } from '../types/tokagotchi'
 
 export const TOFU_MOCK: Tokagotchi = {
   id: 'tofu_001',
   nombre: 'Tofu',
-  especie: 'tofu',
-  rareza: 'Común',
+  especie: 'TOFU',
+  rareza: 'COMMON',
   stats: {
     hp: 100,
     atk: 12,
@@ -58,8 +58,8 @@ export const TOFU_MOCK: Tokagotchi = {
 export const MOCHI_MOCK: Tokagotchi = {
   id: 'mochi_001',
   nombre: 'Mochi',
-  especie: 'mochi',
-  rareza: 'Común',
+  especie: 'MOCHI',
+  rareza: 'COMMON',
   stats: {
     hp: 90,
     atk: 16,
@@ -113,8 +113,8 @@ export const MOCHI_MOCK: Tokagotchi = {
 export const HANA_MOCK: Tokagotchi = {
   id: 'hana_001',
   nombre: 'Hana',
-  especie: 'hana',
-  rareza: 'Raro',
+  especie: 'HANA',
+  rareza: 'RARE',
   stats: {
     hp: 95,
     atk: 14,

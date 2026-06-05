@@ -15,15 +15,12 @@ export default function EsperaView({ batalla }: { batalla: any }) {
       {/* VS */}
       <div className={esperaStyles.vsContainer}>
         <div className={esperaStyles.tokaSlot}>
-          {/** 
           <TokagotchiCanvas
-            tokagotchi={tokagotchi}
-            animacion="idle"
+            especie={tokagotchi.especie}
+            animacionActual="idle"
             width={130}
             height={130}
-            scale={0.28}
           />
-            */}
           <span className={esperaStyles.tokaLabel}>{tokagotchi.nombre}</span>
           <span className={esperaStyles.tokaSubLabel}>Tú</span>
         </div>

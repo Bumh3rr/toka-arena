@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import type { Tokagotchi } from '../types/toka'
+import type { Tokagotchi } from '../types/tokagotchi'
 import type { Accesorio } from '../types/accesorios'
 import { userService } from '../services/userService'
 import { mapResponseToTokagotchi } from '../services/tokagotchiService'

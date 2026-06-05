@@ -23,7 +23,7 @@ export default function LobbyView({ batalla }: { batalla: any }) {
             accesorioIndexCabeza={tokagotchi.accesorios.cabeza?.displayIndex ?? -1}
             accesorioIndexCuerpo={tokagotchi.accesorios.cuerpo?.displayIndex ?? -1}
             animacionActual={'idle'}
-            tokaActual={tokagotchi.especie}
+            especie={tokagotchi.especie}
             width={130}
             height={120}
           />
