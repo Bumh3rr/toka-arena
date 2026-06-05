@@ -25,8 +25,10 @@
   --r-lg: 24px;
   --r-pill: 999px;
 
+
   --ol: 3px; /* outline estándar */
   --ol-thick: 3px; /* outline grueso para énfasis */
+  --ol-thin: 2.5px; /* outline delgado para énfasis */
   
   /* warm paper + cards */
   --bg-top: #FFE9C7;

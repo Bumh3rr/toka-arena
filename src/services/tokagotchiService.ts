@@ -1,16 +1,17 @@
 import api from './api'
-import type { Tokagotchi } from '../types/tokagotchi'
+import type { Especie, Tokagotchi, AssetsTokagotchi } from '../types/tokagotchi'
 import type{ Accesorio } from '../types/accesorios'
+
 
 // Convierte el response del backend a nuestro tipo interno
 export function mapResponseToTokagotchi(data: any): Tokagotchi {
+  console.log('Especie original del backend:');
   console.log(data);
-  const especie = data.species.toLowerCase() as 'tofu' | 'mochi' | 'hana'
   
   return {
     id: String(data.id),
     nombre: data.name,
-    especie,
+    especie: data.species,
     rareza: data.rarity,
     stats: {
       hp: data.hp,
@@ -44,9 +45,10 @@ export function mapResponseToTokagotchi(data: any): Tokagotchi {
         imagen: ''
       }
     },
-    assets: getAssetsByEspecie(especie)
+    assets: getAssetsByEspecie(data.species)
   }
 }
+
 function getDisplayIndex(name: string): number {
   const map: Record<string, number> = {
     'Sombrero': 2, 'Corona': 1, 'Casco': 0, 'Super Capa': 0
@@ -54,28 +56,28 @@ function getDisplayIndex(name: string): number {
   return map[name] ?? 0
 }
 
-function getAssetsByEspecie(especie: string) {
-  const assets: Record<string, any> = {
-    tofu: {
+export function getAssetsByEspecie(especie: Especie): AssetsTokagotchi {
+  const assets: Record<Especie, AssetsTokagotchi> = {
+    TOFU: {
       armatureKey: 'tofu',
       texPng: '/assets/tofu/tofu_tex.png',
       texJson: '/assets/tofu/tofu_tex.json',
       skeJson: '/assets/tofu/tofu_ske.json'
     },
-    mochi: {
+    MOCHI: {
       armatureKey: 'mochi',
       texPng: '/assets/mochi/mochi_tex.png',
       texJson: '/assets/mochi/mochi_tex.json',
       skeJson: '/assets/mochi/mochi_ske.json'
     },
-    hana: {
+    HANA: {
       armatureKey: 'hana',
       texPng: '/assets/hana/hana_tex.png',
       texJson: '/assets/hana/hana_tex.json',
       skeJson: '/assets/hana/hana_ske.json'
     }
   }
-  return assets[especie] ?? assets.tofu
+  return assets[especie] ?? assets.TOFU
 }
 
 export function mapAccesorio(acc: any): Accesorio {

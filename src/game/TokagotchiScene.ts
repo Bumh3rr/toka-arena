@@ -31,17 +31,17 @@
         super({ key: 'TokagotchiScene' })
       }
       preload() {
-        const { tokaActual } = cfg
+        const { assets } = cfg
         ;(this.load as any).dragonbone(
-          tokaActual,
-          `/assets/${tokaActual}/${tokaActual}_tex.png`,
-          `/assets/${tokaActual}/${tokaActual}_tex.json`,
-          `/assets/${tokaActual}/${tokaActual}_ske.json`
+          assets.armatureKey,
+          assets.texPng,
+          assets.texJson,
+          assets.skeJson
         )
       }
 
       create() {
-        armature = (this as any).add.armature('Armature', cfg.tokaActual)
+        armature = (this as any).add.armature('Armature', cfg.assets.armatureKey)
         applyLayout()
         armature.animation.play(cfg.animacionActual, 0)
         setSlot('accesorios_cabeza', cfg.accesorioIndexCabeza)

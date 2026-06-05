@@ -42,6 +42,7 @@ export function useHome() {
         }
         setAllTokas((me.tokagotchis ?? []).map(mapResponseToTokagotchi))
         setMisiones(misionesData.missions)
+        console.log('Datos cargados:', { me, misionesData })
       } catch (err) {
         console.error('Error cargando home:', err)
       } finally {

@@ -5,454 +5,229 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  color: var(--ink);
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-weight: 500;
 }
 
-.background {
+/* ---- Background ---- */
+.bg {
   position: absolute;
-  inset: 0;
-  background-image: url('/assets/backgrounds/bg_home.png');
-  background-size: cover;
-  background-position: center top;
+  top: 0;
+  left: 0;
+  right: 0;
+  /* Solo la franja visible: TopBar + escena colapsada. Debajo va la card. */
+  /* ~330 = alto del TopBar (~62) + SCENE_MAX (268). Ajústalo si cambian. */
+  height: 330px;
   z-index: 0;
+  overflow: hidden;
 }
 
-/* ── Header ── */
-.header {
+/* ---- Top bar ---- */
+.topbar {
   position: relative;
-  z-index: 2;
+  z-index: 3;
+  flex: none;
+  padding: 12px 14px 8px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 20px 0;
-}
-
-.userInfo {
-  display: flex;
-  align-items: center;
   gap: 10px;
 }
 
+.user {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
 .avatar {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: 1.5px solid #3D2B1F;
-  object-fit: cover;
+  width: 42px;
+  height: 42px;
+  border-radius: var(--r-pill);
+  border: var(--ol) solid var(--ink);
+  flex: none;
+  background: radial-gradient(circle at 35% 30%, #FFE6B8, #F4B65E);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, .55), 0 3px 0 var(--edge-cream);
+  overflow: hidden;
 }
 
-.username {
-  font-family: var(--font-title);
-  font-size: 22px;
+.avatar svg {
+  width: 30px;
+  height: 30px;
+}
+
+
+
+.name {
+  font-family: var(--font-title), system-ui, sans-serif;
+  font-size: 15.5px;
   font-weight: 600;
-  color: #ffffff;
-  text-shadow: 1px 1px 0px #3D2B1F, -1px -1px 0px #3D2B1F;
+  color: var(--ink);
+  margin-top: 2px;
 }
 
-.tfBadge {
-  background: #1A1A1A;
-  border: 2px solid #5C3D1E;
-  border-radius: 20px;
-  padding: 6px 16px;
-}
-
-.tfAmount {
-  font-family: var(--font-title);
-  font-size: 16px;
-  font-weight: 600;
-  color: #F5DFA0;
-}
-
-/* ── Scroll ── */
-.scroll {
+/* ---- Scene ---- */
+.scene {
   position: relative;
   z-index: 1;
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 0 16px;
-  scrollbar-width: none;
+  flex: none;
+  height: var(--scene-h, 228px);
+  overflow: hidden;
+  transition: height .42s cubic-bezier(.32, 1.26, .42, 1);
 }
 
-.scroll::-webkit-scrollbar {
-  display: none;
+.dragging .scene {
+  transition: none;
 }
 
-/* ── Toka section ── */
-.tokaSection {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 8px;
-}
-
-.nameRow {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 4px;
-}
-
-.tokaName {
-  font-family: var(--font-title);
-  font-size: 28px;
-  font-weight: 600;
-  color: #ffffff;
-  text-shadow: 2px 2px 0px #3D2B1F, -1px -1px 0px #3D2B1F;
-}
-
-.editBtn {
-  background: rgba(61, 43, 31, 0.6);
-  border: 1.5px solid #5C3D1E;
-  border-radius: 8px;
-  padding: 4px 6px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-}
-
-.nameEdit {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  margin-top: 4px;
-}
-
-.nameInput {
-  font-family: var(--font-title);
-  font-size: 22px;
-  font-weight: 600;
-  color: #3D2B1F;
-  background: #FFF8E7;
-  border: 2.5px solid #3D2B1F;
-  border-radius: 12px;
-  padding: 6px 16px;
-  text-align: center;
-  outline: none;
-  width: 200px;
-}
-
-.nameEditBtns {
-  display: flex;
-  gap: 8px;
-}
-
-.btnSave {
-  background: #43A047;
-  color: #ffffff;
-  font-family: var(--font-body);
-  font-weight: 700;
-  font-size: 14px;
-  border: 2px solid #3D2B1F;
-  border-radius: 10px;
-  padding: 6px 20px;
-  cursor: pointer;
-}
-
-.btnCancel {
-  background: #9E3D1F;
-  color: #ffffff;
-  font-family: var(--font-body);
-  font-weight: 700;
-  font-size: 14px;
-  border: 2px solid #3D2B1F;
-  border-radius: 10px;
-  padding: 6px 20px;
-  cursor: pointer;
-}
-
-/* ── Stats ── */
-.statsRow {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 12px;
-}
-
-.statCard {
-  position: relative;
-  width: 96px;
-  height: 64px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-}
-
-.statBg {
+.heroChar {
   position: absolute;
-  inset: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 206px;
+  z-index: 3;
+}
+
+.fallbackImg {
   width: 100%;
-  height: 100%;
-  object-fit: fill;
+  display: block;
+  filter: drop-shadow(0 7px 7px rgba(74, 40, 0, .22));
 }
 
-.statValue {
-  position: relative;
-  z-index: 1;
-  font-family: var(--font-title);
-  font-size: 22px;
-  font-weight: 600;
+
+/* ---- Identity inside sheet ---- */
+.identity {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0 4px;
 }
 
-.statLabel {
-  position: relative;
-  z-index: 1;
-  font-family: var(--font-body);
-  font-size: 11px;
-  font-weight: 700;
-  color: #FFF8E7;
+.identitySticky {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  align-items: center;
+  margin: 0 -14px;
+  padding: 2px 14px 9px;
+  background: linear-gradient(180deg, var(--cream) 0%, var(--cream) 72%, rgba(255, 251, 241, 0) 100%);
 }
 
-/* ── Rareza ── */
-.rarezaRow {
+.nmRow {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 10px;
-}
-
-.rarezaBadge {
-  font-family: var(--font-title);
-  font-size: 16px;
-  font-weight: 600;
-  text-shadow: 1px 1px 0px #3D2B1F;
-}
-
-.especie {
-  font-family: var(--font-body);
-  font-size: 14px;
-  color: #FFF8E7;
-  font-weight: 600;
-}
-
-/* ── Acciones ── */
-.accionesSection {
-  margin-top: 20px;
-}
-
-.sectionTitle {
-  font-family: var(--font-title);
-  font-size: 22px;
-  font-weight: 600;
-  color: #ffffff;
-  text-shadow: 1px 1px 0px #3D2B1F;
-  margin-bottom: 12px;
-}
-
-.accionesRow {
-  display: flex;
-  justify-content: space-around;
   gap: 8px;
 }
 
-.accionBtn {
+.nm {
+  font-family: var(--font-title), system-ui, sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  line-height: .95;
+  letter-spacing: -.5px;
+}
+
+.identitySticky .nm {
+  font-size: 26px;
+}
+
+.sub {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--ink-2);
+  margin-top: 4px;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  background: none;
-  border: none;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-  transition: transform 0.1s ease;
-}
-
-.accionBtn:active {
-  transform: scale(0.9);
-}
-
-.accionImg {
-  width: 110px;
-  height: 80px;
-  object-fit: contain;
-  filter: drop-shadow(0px 2px 1px rgba(0, 0, 0, 0.5));
-}
-
-.accionReward {
-  font-family: var(--font-title);
-  font-size: 15px;
-  color: #F5DFA0;
-  font-weight: 600;
-}
-
-/* ── CP Card ── */
-.cpCard {
-  margin-top: 16px;
-  background: rgba(61, 43, 31, 0.75);
-  border: 2px solid #5C3D1E;
-  border-radius: 16px;
-  padding: 14px 16px;
-  display: flex;
-  flex-direction: column;
   gap: 8px;
 }
 
-.cpInfo {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.cpLabel {
-  font-family: var(--font-body);
-  font-size: 14px;
-  font-weight: 700;
-  color: #FFF8E7;
-}
-
-.cpValue {
-  font-family: var(--font-title);
-  font-size: 16px;
-  font-weight: 600;
-  color: #F5DFA0;
-}
-
-.cpBar {
-  width: 100%;
-  height: 10px;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 6px;
-  overflow: hidden;
-}
-
-.cpFill {
-  height: 100%;
-  background: linear-gradient(90deg, #F97316, #F5DFA0);
-  border-radius: 6px;
-  transition: width 0.4s ease;
-}
-
-.cpHint {
-  font-family: var(--font-body);
-  font-size: 11px;
-  color: #A0A0A0;
-}
-
-/* ── Misiones ── */
-.misionesSection {
-  margin-top: 20px;
-}
-
-.misionesHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.verTodasBtn {
-  background: none;
-  border: none;
-  font-family: var(--font-title);
-  font-size: 13px;
-  font-weight: 600;
-  color: #F97316;
-  cursor: pointer;
-  text-shadow: 1px 1px 0px #3D2B1F;
-}
-
-.misionCard {
-  background-image: url('/assets/ui/btn_wood.png');
-  background-size: 100% 100%;
-  padding: 12px 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  min-height: 75px;
-  margin-top: 12px;
-}
-
-.misionInfo {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.misionNombre {
-  font-family: var(--font-title);
-  font-size: 13px;
-  font-weight: 600;
-  color: #FFF8E7;
-  letter-spacing: 0.5px;
-}
-
-.misionBar {
-  width: 100%;
-  height: 8px;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.misionFill {
-  height: 100%;
-  background: linear-gradient(90deg, #43A047, #F5DFA0);
-  border-radius: 4px;
-  transition: width 0.4s ease;
-}
-
-.misionReward {
-  font-family: var(--font-title);
-  font-size: 16px;
-  font-weight: 600;
-  color: #ffffff;
-  margin-right: 40px;
-  white-space: nowrap;
-}
-
-.loading {
-  position: relative;
-  z-index: 1;
-  flex: 1;
+.pencil {
+  width: 26px;
+  height: 26px;
+  flex: none;
+  border-radius: 9px;
+  border: 2.5px solid var(--ink);
+  background: var(--cream);
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  box-shadow: inset 0 1.5px 0 #fff, 0 2px 0 var(--edge-cream);
+  transition: transform .1s ease;
 }
 
-.loadingText {
-  font-family: var(--font-title);
-  font-size: 20px;
-  color: #ffffff;
-  text-shadow: 1px 1px 0px #3D2B1F;
+.pencil:active {
+  transform: translateY(2px);
+  box-shadow: inset 0 1.5px 0 #fff;
 }
 
-.accionExito .accionImg {
-  animation: accionBounce 0.4s ease;
+.pencil svg {
+  width: 15px;
+  height: 15px;
 }
 
-@keyframes accionBounce {
-  0%   { transform: translateY(0) scale(1); }
-  40%  { transform: translateY(-10px) scale(1.1); }
-  100% { transform: translateY(0) scale(1); }
-}
-
-.accionExito .accionReward {
-  color: #43A047;
+.swapPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: auto;
+  font-family: var(--font-title), system-ui, sans-serif;
+  font-size: 12.5px;
   font-weight: 700;
-  animation: fadeInUp 0.3s ease;
+  color: var(--ink);
+  padding: 6px 12px 6px 10px;
+  border: 2.5px solid var(--ink);
+  border-radius: var(--r-pill);
+  background: linear-gradient(180deg, #FFF7E6, #FFE6BD);
+  cursor: pointer;
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, .7), 0 3px 0 var(--gold-edge);
 }
 
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(4px); }
-  to   { opacity: 1; transform: translateY(0); }
+.swapPill svg {
+  width: 16px;
+  height: 16px;
 }
 
-.accionando {
-  opacity: 0.6;
+.swapPill:active {
+  transform: translateY(3px);
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, .7);
 }
 
-.errorAccion {
-  font-family: var(--font-body);
-  font-size: 12px;
-  color: #EF5350;
-  font-weight: 700;
+/* ---- Toast ---- */
+.toast {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  z-index: 30;
+  max-width: 84%;
   text-align: center;
-  text-shadow: 1px 1px 0px #3D2B1F;
-  margin-top: 6px;
-  animation: fadeInUp 0.2s ease;
+  background: linear-gradient(180deg, #FFFCF4, #FFF1D6);
+  border: var(--ol) solid var(--ink);
+  border-radius: var(--r-pill);
+  padding: 11px 20px;
+  font-family: var(--font-title), system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  box-shadow: 0 6px 0 var(--gold-edge), 0 10px 24px rgba(74, 40, 0, .25);
+  animation: toastIn .35s cubic-bezier(.34, 1.5, .5, 1);
+  pointer-events: none;
+}
+
+/* ---- Animations ---- */
+@keyframes toastIn {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 16px) scale(.85);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
 }

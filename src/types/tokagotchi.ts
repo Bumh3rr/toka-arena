@@ -4,7 +4,7 @@ import type { Accesorio } from "./accesorios";
 export type Rareza = "COMMON" | "RARE" | "EPIC" | "LEGENDARY";
 
 // Especies disponibles
-export type Especie = "tofu" | "mochi" | "hana";
+export type Especie = "TOFU" | "MOCHI" | "HANA";
 
 // Stats del Tokagotchi
 export interface TokagotchiStats {
@@ -24,6 +24,14 @@ export interface Habilidad {
   esSignature: boolean;
 }
 
+// Assets necesarios para renderizar el Tokagotchi
+export interface AssetsTokagotchi {
+  texPng: string;
+  texJson: string;
+  skeJson: string;
+  armatureKey: string;
+}
+
 // Tokagotchi principal
 export interface Tokagotchi {
   id: string;
@@ -36,13 +44,7 @@ export interface Tokagotchi {
     cabeza: Accesorio | null;
     cuerpo: Accesorio | null;
   };
-  // Assets DragonBones
-  assets: {
-    texPng: string;
-    texJson: string;
-    skeJson: string;
-    armatureKey: string;
-  };
+  assets: AssetsTokagotchi;
 }
 
 // Animaciones disponibles

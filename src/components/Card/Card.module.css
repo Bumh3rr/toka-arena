@@ -1,0 +1,40 @@
+.card {
+    display: flex;
+    align-items: center;
+    border-width: var(--ol);
+}
+
+.cardButton {
+    display: inline-flex;
+    align-items: center;
+    margin-left: auto;
+    border-width: var(--ol-thin);
+}
+
+.default {
+    background: linear-gradient(180deg, #FFF7E6, #FFE6BD);
+    box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, .7), 0 3px 0 var(--gold-edge);
+}
+
+.golden {
+    background: linear-gradient(180deg, #FFD15A, var(--gold));
+    box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, .6), 0 4px 0 var(--gold-edge);
+    text-shadow: 0 1px 0 rgba(74, 40, 0, .3);
+}
+
+.card,
+.cardButton {
+    font-family: var(--font-title), system-ui, sans-serif;
+    color: var(--ink);
+    border-radius: var(--r-pill);
+    border-style: solid;
+    border-color: var(--ink);
+    padding: 6px 12px 6px 10px;
+    gap: 7px;
+    font-weight: bold;
+}
+
+.cardButton:active {
+    transform: translateY(3px);
+    box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, .7);
+}

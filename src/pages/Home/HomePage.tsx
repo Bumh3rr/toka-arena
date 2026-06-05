@@ -1,204 +1,164 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import TokagotchiCanvas from '../../components/Tokagotchi/TokagotchiCanvas'
+import { useState, useRef, type CSSProperties } from 'react'
 import { useHome } from '../../hooks/useHome'
+import { CoinPillCard } from '../../components/Card/CoinPillCard'
+import MissionFab from '../../components/MissionFab/MissionFab'
+import CareSheet from '../../components/CareSheet/CareSheet'
+import StatsRow from '../../components/Home/StatsRow'
+import EvoPanel from '../../components/Home/EvoPanel'
+import CareRow from '../../components/Home/CareRow'
+import RenameModal from '../../components/Home/RenameModal'
+import MissionsModal from '../../components/Home/MissionsModal'
+import CollectionModal from '../../components/Home/CollectionModal'
+import TokagotchiCanvas from '../../components/Tokagotchi/TokagotchiCanvas'
+import { IcSwap, IcPencil } from '../../components/Icons/Icons'
+import type { MisionResponse } from '../../services/userService'
 import styles from './HomePage.module.css'
+import { SCENE_MAX } from '../../components/CareSheet/CareSheet'
+import RarityCard from '../../components/RarityCard/RarityCard'
+import BackgroundCanvas from '../../components/Background/BackgroundCanvas'
+import { CardButton } from '../../components/Card/Card'
 
 export default function HomePage() {
-  const navigate = useNavigate()
-  const {
-    tokagotchi, username, tf, misiones, loading,
-    renameToka, ejecutarAccion, accionando, errorAccion
-  } = useHome()
+    const {
+        tokagotchi, allTokas, username, tf, cp, misiones, loading,
+        renameToka, ejecutarAccion, cooldowns, floaters, toast
+    } = useHome()
 
-  const [editingName, setEditingName] = useState(false)
-  const [tempName, setTempName] = useState('')
+    const [sheetExpanded, setSheetExpanded] = useState(false)
+    const [dragging, setDragging] = useState(false)
+    const [renameOpen, setRenameOpen] = useState(false)
+    const [missionsOpen, setMissionsOpen] = useState(false)
+    const [collectionOpen, setCollectionOpen] = useState(false)
 
-  const handleEditStart = () => {
-    setTempName(tokagotchi?.nombre ?? '')
-    setEditingName(true)
-  }
+    const containerRef = useRef<HTMLDivElement>(null as unknown as HTMLDivElement)
+    const missionAlert = misiones.filter((m: MisionResponse) => m.percentage >= 100 && !m.completed).length
 
-  const handleSaveName = async () => {
-    if (tempName.trim()) await renameToka(tempName.trim())
-    setEditingName(false)
-  }
+    const handleClaim = (id: number) => {
+        console.log('Reclamar misión', id)
+    }
 
-  const handleCancelName = () => setEditingName(false)
-
-  if (loading || !tokagotchi) {
     return (
-      <div className={styles.container}>
-        <div className={styles.background} />
-        <div className={styles.loading}>
-          <span className={styles.loadingText}>Cargando...</span>
-        </div>
-      </div>
-    )
-  }
-
-  // Solo primera misión para el preview
-  const primerasMisiones = misiones.slice(0, 2)
-
-  return (
-    <div className={styles.container}>
-      <div className={styles.background} />
-
-      {/* Header */}
-      <div className={styles.header}>
-        <div className={styles.userInfo}>
-          <img src="/assets/ui/avatar_default.png" alt="Avatar" className={styles.avatar} />
-          <span className={styles.username}>{username}</span>
-        </div>
-        <div className={styles.tfBadge}>
-          <span className={styles.tfAmount}>{tf} TF</span>
-        </div>
-      </div>
-
-      <div className={styles.scroll}>
-
-        {/* Tokagotchi */}
-        <div className={styles.tokaSection}>
-          <TokagotchiCanvas
-            accesorioIndexCabeza={tokagotchi.accesorios.cabeza?.displayIndex ?? -1}
-            accesorioIndexCuerpo={tokagotchi.accesorios.cuerpo?.displayIndex ?? -1}
-            animacionActual={'idle'}
-            tokaActual={tokagotchi.especie}
-            width={230}
-            height={240}
-          />
-
-          {editingName ? (
-            <div className={styles.nameEdit}>
-              <input
-                className={styles.nameInput}
-                value={tempName}
-                onChange={(e) => setTempName(e.target.value)}
-                maxLength={12}
-                autoFocus
-              />
-              <div className={styles.nameEditBtns}>
-                <button className={styles.btnSave} onClick={handleSaveName}>Guardar</button>
-                <button className={styles.btnCancel} onClick={handleCancelName}>Cancelar</button>
-              </div>
+        <div
+            ref={containerRef}
+            className={`${styles.container} ${dragging ? styles.dragging : ''}`}
+            style={{ '--scene-h': `${SCENE_MAX}px` } as CSSProperties}
+        >
+            {/* Background */}
+            <div className={styles.bg}>
+                <BackgroundCanvas paused={sheetExpanded} hourOverride={22} />
             </div>
-          ) : (
-            <div className={styles.nameRow}>
-              <span className={styles.tokaName}>{tokagotchi.nombre}</span>
-              <button className={styles.editBtn} onClick={handleEditStart}>
-                <svg viewBox="0 0 24 24" fill="none" width="16" height="16">
-                  <path d="M11 4H4C3.45 4 3 4.45 3 5V20C3 20.55 3.45 21 4 21H19C19.55 21 20 20.55 20 19V12"
-                    stroke="#FFF8E7" strokeWidth="2" strokeLinecap="round" />
-                  <path d="M18.5 2.5C19.33 1.67 20.67 1.67 21.5 2.5C22.33 3.33 22.33 4.67 21.5 5.5L12 15L8 16L9 12L18.5 2.5Z"
-                    stroke="#FFF8E7" strokeWidth="2" strokeLinejoin="round" />
-                </svg>
-              </button>
-            </div>
-          )}
-        </div>
 
-        {/* Stats */}
-        <div className={styles.statsRow}>
-          <div className={styles.statCard}>
-            <img src="/assets/ui/stat_card.png" alt="" className={styles.statBg} />
-            <span className={styles.statValue} style={{ color: '#7c2d12' }}>{tokagotchi.stats.atk}</span>
-            <span className={styles.statLabel}>Ataque</span>
-          </div>
-          <div className={styles.statCard}>
-            <img src="/assets/ui/stat_card.png" alt="" className={styles.statBg} />
-            <span className={styles.statValue} style={{ color: '#F5DFA0' }}>{tokagotchi.stats.def}</span>
-            <span className={styles.statLabel}>Defensa</span>
-          </div>
-          <div className={styles.statCard}>
-            <img src="/assets/ui/stat_card.png" alt="" className={styles.statBg} />
-            <span className={styles.statValue} style={{ color: '#4FC3F7' }}>{tokagotchi.stats.hp}</span>
-            <span className={styles.statLabel}>HP</span>
-          </div>
-        </div>
-
-        {/* Rareza */}
-        <div className={styles.rarezaRow}>
-          <span className={styles.rarezaBadge} style={{ color: getRarezaColor(tokagotchi.rareza) }}>
-            ★ {tokagotchi.rareza}
-          </span>
-          <span className={styles.especie}>
-            {tokagotchi.especie.charAt(0).toUpperCase() + tokagotchi.especie.slice(1)}
-          </span>
-        </div>
-
-        {/* Acciones */}
-        <div className={styles.accionesSection}>
-          <h2 className={styles.sectionTitle}>Acciones</h2>
-          <div className={styles.accionesRow}>
-
-            <button
-              className={`${styles.accionBtn} ${accionando === 'feed' ? styles.accionando : ''}`}
-              onClick={() => ejecutarAccion('feed')}
-              disabled={!!accionando}
-            >
-              <img src="/assets/ui/btn_alimentar.png" alt="Alimentar" className={styles.accionImg} />
-              <span className={styles.accionReward}>+5 CP</span>
-            </button>
-
-            <button
-              className={`${styles.accionBtn} ${accionando === 'play' ? styles.accionando : ''}`}
-              onClick={() => ejecutarAccion('play')}
-              disabled={!!accionando}
-            >
-              <img src="/assets/ui/btn_jugar.png" alt="Jugar" className={styles.accionImg} />
-              <span className={styles.accionReward}>+8 CP</span>
-            </button>
-
-            <button
-              className={`${styles.accionBtn} ${accionando === 'bathe' ? styles.accionando : ''}`}
-              onClick={() => ejecutarAccion('bathe')}
-              disabled={!!accionando}
-            >
-              <img src="/assets/ui/btn_bañar.png" alt="Bañar" className={styles.accionImg} />
-              <span className={styles.accionReward}>+4 CP</span>
-            </button>
-
-          </div>
-
-          {/* Error de cooldown */}
-          {errorAccion && (
-            <p className={styles.errorAccion}>{errorAccion}</p>
-          )}
-        </div>
-
-        {/* Misiones preview */}
-        <div className={styles.misionesSection}>
-          <div className={styles.misionesHeader}>
-            <h2 className={styles.sectionTitle}>Misiones del día</h2>
-            <button className={styles.verTodasBtn} onClick={() => navigate('/misiones')}>
-              VER TODAS
-            </button>
-          </div>
-          {primerasMisiones.map((m) => (
-            <div key={m.id} className={styles.misionCard}>
-              <div className={styles.misionInfo}>
-                <span className={styles.misionNombre}>{m.description}</span>
-                <div className={styles.misionBar}>
-                  <div className={styles.misionFill} style={{ width: `${m.percentage}%` }} />
+            {/* TopBar */}
+            <div className={styles.topbar}>
+                <div className={styles.user}>
+                    <div className={styles.avatar}>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#4A2800" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <circle cx="12" cy="8.6" r="3.8" fill="#FFF1D4" />
+                            <path d="M4.8 20c.6-3.8 3.6-5.6 7.2-5.6s6.6 1.8 7.2 5.6" fill="#FFF1D4" />
+                        </svg>
+                    </div>
+                    <span className={styles.name}>{loading ? '...' : username}</span>
                 </div>
-              </div>
-              <span className={styles.misionReward}>+{m.rewardTf} TF</span>
+                <CoinPillCard tf={tf} />
             </div>
-          ))}
+
+            {/* Scene — height driven by --scene-h */}
+            <div className={styles.scene}>
+                <div className={styles.heroChar}>
+                    {tokagotchi?.assets && (
+                        <TokagotchiCanvas
+                            accesorioIndexCabeza={1}
+                            accesorioIndexCuerpo={1}
+                            animacionActual={'idle'}
+                            assets={tokagotchi.assets}
+                            width={230}
+                            height={240}
+                        />
+                    )}
+                </div>
+            </div>
+
+            {/* Missions FAB */}
+            <MissionFab
+                onOpen={() => setMissionsOpen(true)}
+                badge={missionAlert}
+                lifted={sheetExpanded}
+            />
+
+            {/* Care Sheet */}
+            <CareSheet
+                expanded={sheetExpanded}
+                setExpanded={setSheetExpanded}
+                containerRef={containerRef}
+                onDraggingChange={setDragging}
+            >
+                {/* Identity */}
+                <div className={`${styles.identity} ${sheetExpanded ? styles.identitySticky : ''}`}>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                        <div className={styles.nmRow}>
+                            <div className={styles.nm}>{tokagotchi?.nombre ?? '...'}</div>
+                            <button className={styles.pencil} onClick={() => setRenameOpen(true)} aria-label="Renombrar">
+                                <IcPencil />
+                            </button>
+                            <button className={styles.swapPill} onClick={() => setCollectionOpen(true)}>
+                                <IcSwap />Cambiar
+                            </button>
+                        </div>
+                        <div className={styles.sub}>
+                            <RarityCard rarity={tokagotchi?.rareza} />
+                            <div>|</div>
+                            <div>{tokagotchi?.especie ?? ''}</div>
+                            <CardButton onClick={() => {}}>
+                                ksks
+                            </CardButton>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                {/* Stats */}
+                {tokagotchi && <StatsRow stats={tokagotchi.stats} />}
+
+                {/* Care actions */}
+                <CareRow cooldowns={cooldowns} floaters={floaters} onUse={ejecutarAccion} />
+
+                {/* Evolution */}
+                {tokagotchi && (
+                    <EvoPanel rareza={tokagotchi.rareza} cp={cp} tf={tf} />
+                )}
+
+                <div style={{ height: 16 }} />
+            </CareSheet>
+
+            {/* Toast */}
+            {toast && <div className={styles.toast}>{toast}</div>}
+
+            {/* Modals */}
+            {renameOpen && tokagotchi && (
+                <RenameModal
+                    currentName={tokagotchi.nombre}
+                    onSave={renameToka}
+                    onClose={() => setRenameOpen(false)}
+                />
+            )}
+            {missionsOpen && (
+                <MissionsModal
+                    missions={misiones}
+                    onClaim={handleClaim}
+                    onClose={() => setMissionsOpen(false)}
+                />
+            )}
+            {collectionOpen && (
+                <CollectionModal
+                    roster={allTokas.length > 0 ? allTokas : (tokagotchi ? [tokagotchi] : [])}
+                    activeId={tokagotchi?.id ?? ''}
+                    onActivate={() => {
+                        setCollectionOpen(false)
+                    }}
+                    onClose={() => setCollectionOpen(false)}
+                />
+            )}
         </div>
-
-        <div style={{ height: 55 }} />
-      </div>
-    </div>
-  )
-}
-
-function getRarezaColor(rareza: string): string {
-  const colores: Record<string, string> = {
-    'Común': '#ffffff',
-    'Raro': '#3D99FF',
-    'Épico': '#A335EE',
-    'Legendario': '#FF8000'
-  }
-  return colores[rareza] ?? '#ffffff'
+    )
 }

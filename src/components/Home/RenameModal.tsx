@@ -1,4 +1,3 @@
-// src/components/Home/RenameModal.tsx
 import { useState } from 'react'
 import BottomSheet from '../BottomSheet/BottomSheet'
 import styles from './RenameModal.module.css'

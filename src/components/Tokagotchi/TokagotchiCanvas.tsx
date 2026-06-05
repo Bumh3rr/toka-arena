@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react'
 import { TokagotchiGame } from '../../game/TokagotchiGame'
 import type { TokagotchiConfig } from '../../game/types'
+import type { Especie, AssetsTokagotchi } from '../../types/tokagotchi'
+import { getAssetsByEspecie } from '../../services/tokagotchiService'
 
 interface TokagotchiCanvasProps {
   width?: number
@@ -8,7 +10,8 @@ interface TokagotchiCanvasProps {
   accesorioIndexCabeza?: number
   accesorioIndexCuerpo?: number
   animacionActual?: string
-  tokaActual?: string
+  especie?: Especie
+  assets?: AssetsTokagotchi
   reverse?: boolean
 }
 
@@ -18,11 +21,17 @@ export default function TokagotchiCanvas({
   accesorioIndexCabeza = -1,
   accesorioIndexCuerpo = -1,
   animacionActual = 'idle',
-  tokaActual = 'tofu',
+  especie = 'TOFU',
+  assets,
   reverse = false
 }: TokagotchiCanvasProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const gameRef = useRef<TokagotchiGame | null>(null)
+
+  if (!assets) {
+    console.info('Assets: ', assets)
+    assets = getAssetsByEspecie(especie)
+  }
 
   // Inicializar y destruir
   useEffect(() => {
@@ -30,7 +39,7 @@ export default function TokagotchiCanvas({
     if (!(window as any).Phaser || !(window as any).dragonBones) return
 
     const cfg: TokagotchiConfig = {
-      width, height, tokaActual, animacionActual,
+      width, height, assets, animacionActual,
       accesorioIndexCabeza, accesorioIndexCuerpo, reverse
     }
 

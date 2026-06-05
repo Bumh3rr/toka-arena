@@ -1,0 +1,12 @@
+.imgCoin {
+    width: 26px;
+    height: 26px;
+    display: block;
+}
+
+.tf {
+    font-size: 12px;
+    font-weight: 600;
+    opacity: .7;
+    margin-left: 1px;
+}

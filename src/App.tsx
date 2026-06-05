@@ -3,12 +3,11 @@ import { authService } from './services/authService'
 import AppLayout from './components/AppLayout/AppLayout'
 import LoginPage from './pages/Login/LoginPage'
 import UnboxingPage from './pages/Unboxing/UnboxingPage'
-//import HomePage from './pages/Home/HomePage'
 import MisionesPage from './pages/Misiones/MisionesPage'
 import ArenaPage from './pages/Arena/ArenaPage'
 import ColeccionPage from './pages/Coleccion/ColeccionPage'
 import TiendaPage from './pages/Tienda/TiendaPage'
-import HomePage from './pages/Home_new/HomePageNew'
+import HomePage from './pages/Home/HomePage'
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
   return authService.isAuthenticated()
