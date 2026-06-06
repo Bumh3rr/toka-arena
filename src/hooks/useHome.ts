@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import type { Tokagotchi, AnimacionTokagotchi } from "../types/tokagotchi";
 import { userService } from "../services/userService";
-import { careService } from "../services/careService";
+//import { careService } from "../services/careService";
 import { mapResponseToTokagotchi } from "../services/tokagotchiService";
 import { CUIDADO_CONFIG, type AccionCuidado } from "../constants/cuidado";
 import type { MisionResponse } from "../services/userService";
