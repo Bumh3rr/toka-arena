@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { Button, Card, Label, IconButton, Toggle } from '../../components/UIKit'
-import type { ColorVariant } from '../../components/UIKit'
+import { Button, Card, Label, IconButton, Toggle, Toast } from '../../components/UIKit'
+import type { ColorVariant, ToastVariant, ToastPosition, ToastAlign } from '../../components/UIKit'
 import { IcCrown, IcLock, IcPencil, IcHeart, IcBolt, IcShield } from '../../components/Icons/Icons'
+import { useToast } from '../../hooks/useToast'
 import styles from './UIKitPage.module.css'
 
 const VARIANTS: ColorVariant[] = ['legend', 'gold', 'warm', 'green', 'blue', 'purple', 'cream', 'danger']
@@ -49,6 +50,51 @@ function ToggleShowcase() {
         <Toggle checked={false} onChange={() => {}} disabled ariaLabel="off disabled" />
         <Toggle checked={true}  onChange={() => {}} disabled ariaLabel="on disabled" />
       </Row>
+    </Section>
+  )
+}
+
+const TOAST_VARIANTS: { variant: ToastVariant; label: string; msg: string }[] = [
+  { variant: 'info',      label: 'Info',      msg: '+15 CP por alimentar' },
+  { variant: 'warn',      label: 'Warn',      msg: 'Acción en cooldown (30s)' },
+  { variant: 'danger',    label: 'Danger',    msg: 'Sin fichas suficientes' },
+  { variant: 'celebrity', label: 'Celebrity', msg: '¡Tokagotchi evolucionó!' },
+]
+
+function ToastShowcase() {
+  const { toast, show } = useToast()
+
+  return (
+    <Section title="Toast — notificaciones">
+      <Row label="variantes">
+        {TOAST_VARIANTS.map(({ variant, label, msg }) => (
+          <Button key={variant} variant={variant === 'info' ? 'cream' : variant === 'warn' ? 'gold' : variant === 'danger' ? 'danger' : 'legend'} size="sm"
+            onClick={() => show(msg, { variant })}>
+            {label}
+          </Button>
+        ))}
+      </Row>
+      <Row label="posición">
+        {(['bottom', 'top'] as ToastPosition[]).map(pos => (
+          <Button key={pos} variant="blue" size="sm"
+            onClick={() => show(`Toast ${pos}-center`, { variant: 'info', position: pos, align: 'center' })}>
+            {pos}
+          </Button>
+        ))}
+      </Row>
+      <Row label="alineación (bottom)">
+        {(['start', 'center', 'end'] as ToastAlign[]).map(al => (
+          <Button key={al} variant="warm" size="sm"
+            onClick={() => show(`Alineado: ${al}`, { variant: 'info', align: al })}>
+            {al}
+          </Button>
+        ))}
+      </Row>
+      <Row label="duración">
+        <Button variant="purple" size="sm" onClick={() => show('Rápido (1s)', { variant: 'warn', duration: 1000 })}>1 s</Button>
+        <Button variant="purple" size="sm" onClick={() => show('Largo (4s) — para eventos importantes', { variant: 'celebrity', duration: 4000 })}>4 s</Button>
+      </Row>
+      {toast && <Toast {...toast} />}
     </Section>
   )
 }
@@ -205,6 +251,9 @@ export default function UIKitPage() {
 
         {/* ── TOGGLE ── */}
         <ToggleShowcase />
+
+        {/* ── TOAST ── */}
+        <ToastShowcase />
 
         {/* ── COMBINACIONES ── */}
         <Section title="Combinaciones">

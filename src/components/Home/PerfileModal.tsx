@@ -4,8 +4,8 @@ import { IcCheck, IcCopy, IcPencil, IcPerson, IcMusic, IcHelp, IcDoc, IcInfo, Ic
 import styles from './PerfileModal.module.css'
 import { IconButton, Button, Toggle, Label } from '../UIKit'
 import DevPanel from './DevPanel'
-
-const IS_DEV = import.meta.env.DEV
+import { IS_DEV_MODE } from '../../types/debug_dev'
+import { musicManager } from '../../hooks/music/musicManager'
 
 interface PerfileModalProps {
     onClose: () => void
@@ -13,7 +13,13 @@ interface PerfileModalProps {
 
 export default function PerfileModal({ onClose }: PerfileModalProps) {
     const [copied, setCopied] = useState(false)
-    const [musicOn, setMusicOn] = useState(true)
+    // Inicializa desde el manager para reflejar la preferencia guardada
+    const [musicOn, setMusicOn] = useState(() => !musicManager.muted)
+
+    const handleMusicToggle = (v: boolean) => {
+        setMusicOn(v)
+        musicManager.setMuted(!v)
+    }
 
     const handleCopy = () => {
         navigator.clipboard.writeText('TKA-123456789')
@@ -26,8 +32,8 @@ export default function PerfileModal({ onClose }: PerfileModalProps) {
             <div className={styles.container}>
                 <ProfileScene apodo="JohnDoe" id="TKA-123456789" onRename={() => { }} onCopy={handleCopy} copied={copied} />
             </div>
-            <Settings music={musicOn} sfx={false} version={'1.0.0'} onMusic={setMusicOn} onSfx={() => { }} />
-            {IS_DEV && <DevPanel />}
+            <Settings music={musicOn} sfx={false} version={'1.0.0'} onMusic={handleMusicToggle} onSfx={() => { }} />
+            {IS_DEV_MODE && <DevPanel />}
         </BottomSheet>
     )
 }

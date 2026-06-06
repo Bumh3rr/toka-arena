@@ -142,37 +142,3 @@
   height: 15px;
 }
 
-/* ---- Toast ---- */
-.toast {
-  position: absolute;
-  left: 50%;
-  bottom: 18px;
-  transform: translateX(-50%);
-  z-index: 30;
-  max-width: 84%;
-  text-align: center;
-  background: linear-gradient(180deg, #FFFCF4, #FFF1D6);
-  border: var(--ol) solid var(--ink);
-  border-radius: var(--r-pill);
-  padding: 11px 20px;
-  font-family: var(--font-title), system-ui, sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--ink);
-  box-shadow: 0 6px 0 var(--gold-edge), 0 10px 24px rgba(74, 40, 0, .25);
-  animation: toastIn .35s cubic-bezier(.34, 1.5, .5, 1);
-  pointer-events: none;
-}
-
-/* ---- Animations ---- */
-@keyframes toastIn {
-  0% {
-    opacity: 0;
-    transform: translate(-50%, 16px) scale(.85);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translate(-50%, 0) scale(1);
-  }
-}

@@ -17,7 +17,6 @@ function PrivateRoute({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-
   return (
     <BrowserRouter>
       <Routes>
@@ -37,10 +36,10 @@ export default function App() {
         }>
           <Route path="/home" element={<HomePage />} />
           <Route path="/misiones" element={<MisionesPage />} />
-          <Route path="/arena" element={<ArenaPage />} />
           <Route path="/coleccion" element={<ColeccionPage />} />
           <Route path="/tienda" element={<TiendaPage />} />
           <Route path="/ui-kit" element={<UIKitPage />} />
+          <Route path="/arena" element={<ArenaPage />} />
         </Route>
 
         <Route path="/" element={

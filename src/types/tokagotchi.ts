@@ -6,6 +6,9 @@ export type Rareza = "COMMON" | "RARE" | "EPIC" | "LEGENDARY";
 // Especies disponibles
 export type Especie = "TOFU" | "MOCHI" | "HANA";
 
+// Animaciones disponibles para el Tokagotchi
+export type AnimacionTokagotchi = | "idle" | "ataque" | "comer" | "bañar" | "curacion" | "daño" | "jugar";
+
 // Stats del Tokagotchi
 export interface TokagotchiStats {
   hp: number;

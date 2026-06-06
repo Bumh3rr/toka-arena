@@ -2,22 +2,24 @@ import React, { useState } from 'react'
 import { IcTerminal, IcChevR } from '../Icons/Icons'
 import type { Especie, Rareza } from '../../types/tokagotchi'
 import styles from './DevPanel.module.css'
+import { authService } from '../../services/authService'
+import { useNavigate } from 'react-router-dom'
 
 // ── Constantes ────────────────────────────────────────────────────────────────
 const ESPECIES: Especie[] = ['TOFU', 'MOCHI', 'HANA']
 const RAREZAS: { value: Rareza; label: string }[] = [
-    { value: 'COMMON',    label: 'C' },
-    { value: 'RARE',      label: 'R' },
-    { value: 'EPIC',      label: 'É' },
+    { value: 'COMMON', label: 'C' },
+    { value: 'RARE', label: 'R' },
+    { value: 'EPIC', label: 'É' },
     { value: 'LEGENDARY', label: 'L' },
 ]
 type Ambiente = 'auto' | 'amanecer' | 'dia' | 'atardecer' | 'noche'
 const opcionesAmbiente: { value: Ambiente; label: string }[] = [
-    { value: 'auto',       label: 'Automatico' },
-    { value: 'amanecer',       label: 'Amanecer' },
-    { value: 'dia',       label: 'Día' },
+    { value: 'auto', label: 'Automatico' },
+    { value: 'amanecer', label: 'Amanecer' },
+    { value: 'dia', label: 'Día' },
     { value: 'atardecer', label: 'Atardecer' },
-    { value: 'noche',     label: 'Noche' },
+    { value: 'noche', label: 'Noche' },
 ]
 
 // ── Sub-componentes internos ──────────────────────────────────────────────────
@@ -51,13 +53,20 @@ function DvSeg<T extends string>({ value, options, onChange }: { value: T; optio
 
 // ── DevPanel ──────────────────────────────────────────────────────────────────
 export default function DevPanel() {
-    const [open,        setOpen]        = useState(false)
-    const [ambiente,    setAmbiente]    = useState<Ambiente>('auto')
-    const [tf,          setTf]          = useState(1500)
-    const [cp,          setCp]          = useState(0)
-    const [rarity,      setRarity]      = useState<Rareza>('COMMON')
+    const [open, setOpen] = useState(false)
+    const [ambiente, setAmbiente] = useState<Ambiente>('auto')
+    const [tf, setTf] = useState(1500)
+    const [cp, setCp] = useState(0)
+    const [rarity, setRarity] = useState<Rareza>('COMMON')
     const [giveSpecies, setGiveSpecies] = useState<Especie>('TOFU')
-    const [giveRarity,  setGiveRarity]  = useState<Rareza>('COMMON')
+    const [giveRarity, setGiveRarity] = useState<Rareza>('COMMON')
+    const navigate = useNavigate()
+    const { clearSession } = authService
+
+    const handleLogout = () => {
+        clearSession()
+        navigate('/login')
+    }
 
     return (
         <div className={styles.wrap}>
@@ -94,8 +103,8 @@ export default function DevPanel() {
                             <DvSeg value={rarity} onChange={setRarity} options={RAREZAS} />
                         </DvField>
                         <DvField label="Evolución">
-                            <DvBtn tone="go" onClick={() => {}}>Forzar ascensión</DvBtn>
-                            <DvBtn onClick={() => {}}>Reset cooldowns</DvBtn>
+                            <DvBtn tone="go" onClick={() => { }}>Forzar ascensión</DvBtn>
+                            <DvBtn onClick={() => { }}>Reset cooldowns</DvBtn>
                         </DvField>
 
                         <div className={styles.dvSec}>Otorgar Tokagotchi</div>
@@ -107,12 +116,17 @@ export default function DevPanel() {
                             <DvSeg value={giveRarity} onChange={setGiveRarity} options={RAREZAS} />
                         </DvField>
                         <DvField label="">
-                            <DvBtn tone="go" onClick={() => {}}>+ Otorgar</DvBtn>
+                            <DvBtn tone="go" onClick={() => { }}>+ Otorgar</DvBtn>
                         </DvField>
 
                         <div className={styles.dvSec}>Peligro</div>
                         <DvField label="">
                             <DvBtn tone="danger" onClick={() => { setTf(0); setCp(0) }}>Resetear progreso</DvBtn>
+                        </DvField>
+
+                        <div className={styles.dvSec}>Logout</div>
+                        <DvField label="">
+                            <DvBtn tone="danger" onClick={() => { handleLogout() }}>Cerrar sesión</DvBtn>
                         </DvField>
                     </div>
                 )}

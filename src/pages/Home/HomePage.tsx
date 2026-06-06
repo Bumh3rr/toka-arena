@@ -16,13 +16,13 @@ import styles from './HomePage.module.css'
 import { SCENE_MAX } from '../../components/CareSheet/CareSheet'
 import RarityCard from '../../components/RarityCard/RarityCard'
 import BackgroundCanvas from '../../components/Background/BackgroundCanvas'
-import { Button, Label, IconButton } from '../../components/UIKit'
+import { Button, Label, IconButton, Toast } from '../../components/UIKit'
 import PerfileModal from '../../components/Home/PerfileModal'
 
 export default function HomePage() {
     const {
         tokagotchi, allTokas, username, tf, cp, misiones, loading,
-        renameToka, ejecutarAccion, cooldowns, floaters, toast
+        renameToka, ejecutarAccion, cooldowns, floaters, toast, animation
     } = useHome()
 
     const [sheetExpanded, setSheetExpanded] = useState(false)
@@ -31,7 +31,6 @@ export default function HomePage() {
     const [renameOpen, setRenameOpen] = useState(false)
     const [missionsOpen, setMissionsOpen] = useState(false)
     const [collectionOpen, setCollectionOpen] = useState(false)
-
     const containerRef = useRef<HTMLDivElement>(null as unknown as HTMLDivElement)
     const missionAlert = misiones.filter((m: MisionResponse) => m.percentage >= 100 && !m.completed).length
 
@@ -69,7 +68,7 @@ export default function HomePage() {
                     <TokagotchiCanvas
                         accesorioIndexCabeza={1}
                         accesorioIndexCuerpo={1}
-                        animacionActual={'idle'}
+                        animacionActual={animation}
                         assets={tokagotchi.assets}
                         width={230}
                         height={230}
@@ -128,7 +127,7 @@ export default function HomePage() {
             </CareSheet>
 
             {/* Toast */}
-            {toast && <div className={styles.toast}>{toast}</div>}
+            {toast && <Toast {...toast} />}
 
             {/* Modals */}
             {renameOpen && tokagotchi && (

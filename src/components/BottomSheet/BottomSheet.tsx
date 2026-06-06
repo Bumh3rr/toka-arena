@@ -1,4 +1,3 @@
-// src/components/BottomSheet/BottomSheet.tsx
 import { IcX } from '../Icons/Icons'
 import styles from './BottomSheet.module.css'
 

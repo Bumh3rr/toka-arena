@@ -12,7 +12,7 @@ interface MisionData {
 
 interface MissionsModalProps {
   missions: MisionData[]
-  onClaim: (id: number) => void  // TODO: wire to real claim endpoint when available
+  onClaim: (id: number) => void
   onClose: () => void
 }
 

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { TokagotchiGame } from '../../game/TokagotchiGame'
 import type { TokagotchiConfig } from '../../game/types'
-import type { Especie, AssetsTokagotchi } from '../../types/tokagotchi'
+import type { Especie, AssetsTokagotchi, AnimacionTokagotchi } from '../../types/tokagotchi'
 import { getAssetsByEspecie } from '../../services/tokagotchiService'
 
 interface TokagotchiCanvasProps {
@@ -9,7 +9,7 @@ interface TokagotchiCanvasProps {
   height?: number
   accesorioIndexCabeza?: number
   accesorioIndexCuerpo?: number
-  animacionActual?: string
+  animacionActual?: AnimacionTokagotchi
   especie?: Especie
   assets?: AssetsTokagotchi
   reverse?: boolean

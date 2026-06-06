@@ -1,4 +1,3 @@
-// src/components/CareSheet/CareSheet.tsx
 import { useState, useRef, useLayoutEffect } from 'react'
 import styles from './CareSheet.module.css'
 

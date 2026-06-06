@@ -1,4 +1,3 @@
-// src/components/Home/CollectionModal.tsx
 import { useState } from 'react'
 import BottomSheet from '../BottomSheet/BottomSheet'
 import TokaAvatar from '../TokaAvatar/TokaAvatar'
