@@ -50,18 +50,13 @@
   height: var(--scene-h, 228px);
   overflow: hidden;
   transition: height .42s cubic-bezier(.32, 1.26, .42, 1);
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
 }
 
 .dragging .scene {
   transition: none;
-}
-
-.heroChar {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 206px;
-  z-index: 3;
 }
 
 .fallbackImg {
@@ -89,7 +84,8 @@
   background: linear-gradient(180deg, var(--cream) 0%, var(--cream) 72%, rgba(255, 251, 241, 0) 100%);
 }
 
-.nmRow, .nmWrapper{
+.nmRow,
+.nmWrapper {
   display: flex;
   align-items: center;
   gap: 8px;

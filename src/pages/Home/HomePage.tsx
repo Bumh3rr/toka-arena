@@ -65,18 +65,16 @@ export default function HomePage() {
 
             {/* Scene — height driven by --scene-h */}
             <div className={styles.scene}>
-                <div className={styles.heroChar}>
-                    {tokagotchi?.assets && (
-                        <TokagotchiCanvas
-                            accesorioIndexCabeza={1}
-                            accesorioIndexCuerpo={1}
-                            animacionActual={'idle'}
-                            assets={tokagotchi.assets}
-                            width={230}
-                            height={240}
-                        />
-                    )}
-                </div>
+                {tokagotchi?.assets && (
+                    <TokagotchiCanvas
+                        accesorioIndexCabeza={1}
+                        accesorioIndexCuerpo={1}
+                        animacionActual={'idle'}
+                        assets={tokagotchi.assets}
+                        width={230}
+                        height={230}
+                    />
+                )}
             </div>
 
             {/* Missions FAB */}
@@ -142,7 +140,7 @@ export default function HomePage() {
             )}
             {perfileOpen && (
                 <PerfileModal
-                onClose={() => setPerfileOpen(false)}
+                    onClose={() => setPerfileOpen(false)}
                 />
             )}
             {missionsOpen && (
