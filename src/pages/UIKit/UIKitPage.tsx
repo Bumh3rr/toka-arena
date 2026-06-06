@@ -1,4 +1,5 @@
-import { Button, Card, Label, IconButton } from '../../components/UIKit'
+import { useState } from 'react'
+import { Button, Card, Label, IconButton, Toggle } from '../../components/UIKit'
 import type { ColorVariant } from '../../components/UIKit'
 import { IcCrown, IcLock, IcPencil, IcHeart, IcBolt, IcShield } from '../../components/Icons/Icons'
 import styles from './UIKitPage.module.css'
@@ -23,6 +24,32 @@ function Row({ label, children }: { label?: string; children: React.ReactNode })
       {label && <span className={styles.rowLabel}>{label}</span>}
       <div className={styles.rowItems}>{children}</div>
     </div>
+  )
+}
+
+function ToggleShowcase() {
+  const [states, setStates] = useState<Record<string, boolean>>({})
+  const toggle = (key: string) => setStates(s => ({ ...s, [key]: !s[key] }))
+  return (
+    <Section title="Toggle — variantes">
+      <Row label="colores (ON state)">
+        {VARIANTS.map(v => (
+          <div key={v} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+            <Toggle checked={!!states[v]} onChange={() => toggle(v)} variant={v} ariaLabel={v} />
+            <span style={{ fontSize: 9, fontWeight: 700, color: 'var(--ink-3)', textTransform: 'uppercase', letterSpacing: .4 }}>{v}</span>
+          </div>
+        ))}
+      </Row>
+      <Row label="tamaños">
+        <Toggle checked={!!states['sz-sm']} onChange={() => toggle('sz-sm')} size="sm" ariaLabel="sm" />
+        <Toggle checked={!!states['sz-md']} onChange={() => toggle('sz-md')} size="md" ariaLabel="md" />
+        <Toggle checked={!!states['sz-lg']} onChange={() => toggle('sz-lg')} size="lg" ariaLabel="lg" />
+      </Row>
+      <Row label="disabled">
+        <Toggle checked={false} onChange={() => {}} disabled ariaLabel="off disabled" />
+        <Toggle checked={true}  onChange={() => {}} disabled ariaLabel="on disabled" />
+      </Row>
+    </Section>
   )
 }
 
@@ -175,6 +202,9 @@ export default function UIKitPage() {
             <IconButton variant="green"  size={36} shape="md"    disabled><IcBolt /></IconButton>
           </Row>
         </Section>
+
+        {/* ── TOGGLE ── */}
+        <ToggleShowcase />
 
         {/* ── COMBINACIONES ── */}
         <Section title="Combinaciones">

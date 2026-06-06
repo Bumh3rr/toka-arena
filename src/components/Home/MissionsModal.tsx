@@ -1,4 +1,3 @@
-// src/components/Home/MissionsModal.tsx
 import BottomSheet from '../BottomSheet/BottomSheet'
 import { IcCheck } from '../Icons/Icons'
 import styles from './MissionsModal.module.css'

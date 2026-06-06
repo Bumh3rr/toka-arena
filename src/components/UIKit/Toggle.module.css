@@ -1,0 +1,59 @@
+/* ── Tamaños ─────────────────────────────────────────────────────
+   --tog-on: left del knob en ON = w - knob - border*2 - pad
+   ──────────────────────────────────────────────────────────────── */
+.sm { --tog-w: 36px; --tog-h: 21px; --tog-knob: 15px; --tog-pad: 1.5px; --tog-on: 17px; }
+.md { --tog-w: 48px; --tog-h: 28px; --tog-knob: 21px; --tog-pad: 1.5px; --tog-on: 23px; }
+.lg { --tog-w: 58px; --tog-h: 34px; --tog-knob: 26px; --tog-pad: 1.5px; --tog-on: 28px; }
+
+/* ── Track ───────────────────────────────────────────────────────
+   Borde ink como el resto de componentes del juego.
+   Sin sombras inset — fills planos, mismo lenguaje que Card/Button.
+   ──────────────────────────────────────────────────────────────── */
+.toggle {
+  width:  var(--tog-w);
+  height: var(--tog-h);
+  border-radius: var(--r-pill);
+  border: 2.5px solid var(--ink);
+  background: #D0BFA0;
+  position: relative;
+  padding: 0;
+  flex: none;
+  cursor: pointer;
+  transition: background .18s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.toggle:active:not(.disabled) {
+  filter: brightness(.93);
+}
+
+.on {
+  background: linear-gradient(180deg, var(--tog-on-from), var(--tog-on-to));
+}
+
+/* ── Knob ────────────────────────────────────────────────────────
+   Borde ink + sombra abajo — igual que los botones del juego.
+   ──────────────────────────────────────────────────────────────── */
+.knob {
+  position: absolute;
+  top: var(--tog-pad);
+  left: var(--tog-pad);
+  width:  var(--tog-knob);
+  height: var(--tog-knob);
+  border-radius: 50%;
+  background: #FFFCF4;
+  border: 2px solid var(--ink);
+  box-shadow: 0 2px 0 rgba(74, 40, 0, .22);
+  transition: left .2s cubic-bezier(.34, 1.5, .5, 1);
+  pointer-events: none;
+}
+
+.on .knob {
+  left: var(--tog-on);
+}
+
+/* ── Disabled ────────────────────────────────────────────────────── */
+.disabled {
+  opacity: .4;
+  cursor: not-allowed;
+}

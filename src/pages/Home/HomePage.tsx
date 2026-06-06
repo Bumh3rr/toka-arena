@@ -17,6 +17,7 @@ import { SCENE_MAX } from '../../components/CareSheet/CareSheet'
 import RarityCard from '../../components/RarityCard/RarityCard'
 import BackgroundCanvas from '../../components/Background/BackgroundCanvas'
 import { Button, Label, IconButton } from '../../components/UIKit'
+import PerfileModal from '../../components/Home/PerfileModal'
 
 export default function HomePage() {
     const {
@@ -26,6 +27,7 @@ export default function HomePage() {
 
     const [sheetExpanded, setSheetExpanded] = useState(false)
     const [dragging, setDragging] = useState(false)
+    const [perfileOpen, setPerfileOpen] = useState(false)
     const [renameOpen, setRenameOpen] = useState(false)
     const [missionsOpen, setMissionsOpen] = useState(false)
     const [collectionOpen, setCollectionOpen] = useState(false)
@@ -51,7 +53,7 @@ export default function HomePage() {
             {/* TopBar */}
             <div className={styles.topbar}>
                 <div className={styles.user}>
-                    <IconButton variant="legend" size={50} shape="round">
+                    <IconButton variant="legend" size={50} shape="round" onClick={() => setPerfileOpen(true)} aria-label="Perfil">
                         <IcPerson />
                     </IconButton>
                     <Label key={'Especie-Tokagotchi'} variant={'warm'} look="soft" size="sm">
@@ -136,6 +138,11 @@ export default function HomePage() {
                     currentName={tokagotchi.nombre}
                     onSave={renameToka}
                     onClose={() => setRenameOpen(false)}
+                />
+            )}
+            {perfileOpen && (
+                <PerfileModal
+                onClose={() => setPerfileOpen(false)}
                 />
             )}
             {missionsOpen && (
