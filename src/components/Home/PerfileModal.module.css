@@ -188,14 +188,10 @@
     height: 18px;
 }
 
-.setVer {
-    font-family: var(--font-title);
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--ink-2);
-    background: var(--cream-2);
-    border: 2px solid rgba(74, 40, 0, .2);
-    border-radius: var(--r-pill);
-    padding: 2px 10px;
+/* ── Settings wrapper ── */
+.settings {
+    padding: 0 14px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
-
