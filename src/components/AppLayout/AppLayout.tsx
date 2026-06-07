@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom'
-import BottomNav from '../../pages/BottomNav/BottomNav'
+import BottomNav from '../BottomNav/BottomNav'
 import { useAppMusic } from '../../hooks/music/useAppMusic'
 import styles from './AppLayout.module.css'
 

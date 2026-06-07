@@ -1,0 +1,100 @@
+.nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  border-top: var(--ol) solid var(--ink);
+  background: linear-gradient(180deg, #FFF7E6, #FFEFD2);
+  padding: 18px 8px 20px;
+  position: relative;
+}
+
+/* ── Items normales ── */
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 10px;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: transform 0.1s ease;
+  flex: 1;
+}
+
+.item:active {
+  transform: scale(0.9);
+  color: var(--ink);
+}
+
+.iconWrapper {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.activePill {
+  position: absolute;
+  inset: -4px;
+  background: var(--color-cta);
+  border-radius: 10px;
+  opacity: 0.2;
+  animation: pillIn 0.2s ease-out;
+}
+
+@keyframes pillIn {
+  from {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 0.2;
+  }
+}
+
+.icon {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  z-index: 1;
+}
+
+/* ── Espacio reservado para el botón flotante ── */
+.flotantePlaceholder {
+  flex: 1;
+  visibility: hidden;
+  height: 40px;
+}
+
+/* ── Botón flotante ── */
+.flotanteWrapper {
+  position: absolute;
+  top: -28px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  z-index: 10;
+}
+
