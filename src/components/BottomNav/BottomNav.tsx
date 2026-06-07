@@ -61,7 +61,7 @@ export default function BottomNav() {
               accesorioIndexCabeza={1}
               accesorioIndexCuerpo={1}
               animacionActual="idle"
-              especie="TOFU"
+              especie="HANA"
               width={63}
               height={59}
             />
