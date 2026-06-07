@@ -8,19 +8,17 @@ const RIGHT_ITEMS = [
   {
     label: 'Arena',
     path: '/arena',
-    icon: (active: boolean) => (
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-        <g fill={active ? '#F97316' : 'none'} stroke={active ? '#F97316' : '#8C6B4A'} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
+    icon: <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+        <g fill="none" stroke="#8C6B4A" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
           <path d="M2 19.2L3.8 21m.9-7.2l.9 3.6m0 0l3.6.9m-3.6-.9l-2.7 2.7M16.4 3.9l-9 9l.45 2.25l2.25.45l9-9L20 3z" />
           <path d="M22 19.2L20.2 21m-.9-7.2l-.9 3.6m0 0l2.7 2.7m-2.7-2.7l-1.8.45l-1.8.45M9.3 11L4.9 6.6L4 3l3.6.9L12 8.3m.1 5.5l1.8 1.8l2.25-.45l.45-2.25l-1.8-1.8" />
         </g>
       </svg>
-    )
   },
   {
     label: 'Pase',
     path: '/ui-kit',
-    icon: (active: boolean) => (<IcPase />)
+    icon: <IcPase />
   }
 ]
 
@@ -28,12 +26,12 @@ const LEFT_ITEMS = [
   {
     label: 'Tienda',
     path: '/tienda',
-    icon: (active: boolean) => (<IcShop />)
+    icon: <IcShop />
   },
   {
     label: 'Colección',
     path: '/coleccion',
-    icon: (active: boolean) => (<IcGrid />)
+    icon: <IcGrid />
   }
 ]
 
@@ -55,7 +53,7 @@ export default function BottomNav() {
             >
               <div className={styles.iconWrapper}>
                 {active && <div className={styles.activePill} />}
-                <div className={styles.icon}>{item.icon(active)}</div>
+                <div className={styles.icon}>{item.icon}</div>
               </div>
             </button>
           )
@@ -92,7 +90,7 @@ export default function BottomNav() {
             >
               <div className={styles.iconWrapper}>
                 {active && <div className={styles.activePill} />}
-                <div className={styles.icon}>{item.icon(active)}</div>
+                <div className={styles.icon}>{item.icon}</div>
               </div>
             </button>
           )
