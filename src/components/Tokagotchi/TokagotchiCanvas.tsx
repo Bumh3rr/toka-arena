@@ -56,5 +56,5 @@ export default function TokagotchiCanvas({
   useEffect(() => { gameRef.current?.setAccesorioCuerpo(accesorioIndexCuerpo) }, [accesorioIndexCuerpo])
   useEffect(() => { gameRef.current?.resize(width, height, reverse) }, [width, height, reverse])
 
-  return <div ref={containerRef} style={{ width, height }} />
+  return <div ref={containerRef} style={{ width, height}} />
 }

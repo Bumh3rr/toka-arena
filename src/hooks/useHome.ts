@@ -12,7 +12,7 @@ export type Cooldowns = Record<AccionCuidado, number>;
 
 export function useHome() {
   const [tokagotchi, setTokagotchi] = useState<Tokagotchi | null>(null);
-  const [animation, setAnimation] = useState<AnimacionTokagotchi>('idle');
+  const [animation, setAnimation] = useState<AnimacionTokagotchi>("idle");
   const [allTokas, setAllTokas] = useState<Tokagotchi[]>([]);
   const [username, setUsername] = useState("");
   const [tf, setTf] = useState(0);
@@ -20,11 +20,7 @@ export function useHome() {
   const [misiones, setMisiones] = useState<MisionResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [accionando, setAccionando] = useState<AccionCuidado | null>(null);
-  const [cooldowns, setCooldowns] = useState<Cooldowns>({
-    feed: 0,
-    play: 0,
-    bathe: 0,
-  });
+  const [cooldowns, setCooldowns] = useState<Cooldowns>({ feed: 0, play: 0, bathe: 0,});
   const [floaters, setFloaters] = useState<Floaters>({});
   const { show, toast } = useToast();
 
@@ -91,8 +87,8 @@ export function useHome() {
 
       // Animacion del Tokagotchi
       setAnimation(cfg.animation);
-      setTimeout(() => setAnimation('idle'), 3000);
-    
+      setTimeout(() => setAnimation("idle"), 3000);
+
       // trigger floater animation
       const fid = Date.now();
       setFloaters((f) => ({ ...f, [accion]: fid }));
@@ -106,9 +102,13 @@ export function useHome() {
         1000,
       );
 
-      show(`+${cfg.cp} CP por ${cfg.label.toLowerCase()}`,{variant:"celebrity"});
+      show(`+${cfg.cp} CP por ${cfg.label.toLowerCase()}`, {
+        variant: "celebrity",
+      });
     } catch (err: unknown) {
-      const msg =(err as { response?: { data?: { message?: string } } })?.response?.data?.message ?? "Accion fallida";
+      const msg =
+        (err as { response?: { data?: { message?: string } } })?.response?.data
+          ?.message ?? "Accion fallida";
       show(msg, { variant: "danger" });
     } finally {
       setAccionando(null);
@@ -143,6 +143,6 @@ export function useHome() {
     cooldowns,
     floaters,
     toast,
-    animation
+    animation,
   };
 }

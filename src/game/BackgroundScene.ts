@@ -142,8 +142,8 @@ export function createBackgroundScene(cfg: BackgroundConfig = {}): IBackgroundSc
   // ─────────────────────────────────────────────────────────
   const phaseForHour = (h: number): Phase =>
     (h >= 5 && h < 8) ? 'amanecer' :
-    (h >= 8 && h < 18) ? 'dia' :
-    (h >= 18 && h < 21) ? 'atardecer' : 'noche'
+    (h >= 8 && h < 17) ? 'dia' :
+    (h >= 17 && h < 21) ? 'atardecer' : 'noche'
 
   /** Devuelve la fase correspondiente a la hora actual (o al override de DEV). */
   const currentPhase = (): Phase => phaseForHour(cfg.hourOverride ?? new Date().getHours())
@@ -332,9 +332,9 @@ export function createBackgroundScene(cfg: BackgroundConfig = {}): IBackgroundSc
     update(_t: number, delta: number) {
       if (paused || !clouds) return
       // Mueve la nube a velocidad constante independiente del framerate (delta-time).
-      // KNOB: factor 0.15 = velocidad en px/frame a 60fps (sube para nube más rápida)
+      // KNOB: factor 0.03 = velocidad en px/frame a 60fps (sube para nube más rápida)
       const k = delta / 16.67
-      clouds.x += 0.15 * k
+      clouds.x += 0.03 * k
       // Al salir completamente por la derecha, reaparece por la izquierda.
       const halfW = clouds.displayWidth / 2
       if (clouds.x - halfW > this.scale.width) clouds.x = -halfW

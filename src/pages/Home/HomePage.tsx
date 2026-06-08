@@ -1,4 +1,4 @@
-import { useState, useRef, type CSSProperties } from 'react'
+import { useState, useRef, useEffect, type CSSProperties } from 'react'
 import { useHome } from '../../hooks/useHome'
 import { CoinPillCard } from '../../components/Card/CoinPillCard'
 import MissionFab from '../../components/MissionFab/MissionFab'
@@ -18,8 +18,10 @@ import RarityCard from '../../components/RarityCard/RarityCard'
 import BackgroundCanvas from '../../components/Background/BackgroundCanvas'
 import { Button, Label, IconButton, Toast } from '../../components/UIKit'
 import PerfileModal from '../../components/Home/PerfileModal'
+import { useNavBar } from '../../hooks/useNavBar'
 
 export default function HomePage() {
+    const { hideBar, showBar } = useNavBar();
     const {
         tokagotchi, allTokas, username, tf, cp, misiones, loading,
         renameToka, ejecutarAccion, cooldowns, floaters, toast, animation
@@ -34,6 +36,14 @@ export default function HomePage() {
     const containerRef = useRef<HTMLDivElement>(null as unknown as HTMLDivElement)
     const missionAlert = misiones.filter((m: MisionResponse) => m.percentage >= 100 && !m.completed).length
 
+     useEffect(() => {
+        if (sheetExpanded) {
+            hideBar();
+        } else {
+            showBar();
+        }
+    }, [sheetExpanded])
+ 
     const handleClaim = (id: number) => {
         console.log('Reclamar misión', id)
     }
@@ -91,7 +101,7 @@ export default function HomePage() {
                 onDraggingChange={setDragging}
             >
                 {/* Identity */}
-                <div className={`${styles.identity} ${sheetExpanded ? styles.identitySticky : ''}`}>
+                <div className={`${styles.identity}`}>
                     <div style={{ flex: 1, minWidth: 0 }}>
                         <div className={styles.nmRow}>
                             <div className={styles.nmWrapper}>

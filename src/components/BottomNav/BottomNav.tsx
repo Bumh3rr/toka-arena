@@ -1,8 +1,10 @@
+import { useEffect, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import styles from './BottomNav.module.css'
 import { IconButton } from '../UIKit'
 import TokagotchiCanvas from '../Tokagotchi/TokagotchiCanvas'
 import { IcGrid, IcPase, IcShop, IcArena } from '../Icons/Icons'
+import { useNavBar } from '../../hooks/useNavBar'
 
 const LEFT_ITEMS = [
   { label: 'Tienda',    path: '/tienda',    icon: <IcShop /> },
@@ -33,12 +35,32 @@ function NavBtn({ item, active }: { item: NavItem; active: boolean }) {
 }
 
 export default function BottomNav() {
-  const navigate      = useNavigate()
-  const { pathname }  = useLocation()
-  const isHome        = pathname === '/home' || pathname === '/'
+  const navigate     = useNavigate()
+  const { pathname } = useLocation()
+  const { hidden }   = useNavBar()
+  const isHome       = pathname === '/home' || pathname === '/'
+  const navRef       = useRef<HTMLElement>(null)
+
+  // Publica --nav-height en :root para que AppLayout.main pueda usar el valor real.
+  // ResizeObserver se adapta automáticamente a cambios de tamaño (safe-area, zoom, etc.)
+  useEffect(() => {
+    const el = navRef.current
+    if (!el) return
+    const observer = new ResizeObserver(([entry]) => {
+      const h = entry.borderBoxSize[0]?.blockSize ?? entry.contentRect.height
+      document.documentElement.style.setProperty('--nav-height', `${h}px`)
+    })
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
 
   return (
-    <nav className={styles.nav} aria-label="Navegación principal">
+    <nav
+      ref={navRef}
+      className={`${styles.nav} ${hidden ? styles.navHidden : ''}`}
+      aria-label="Navegación principal"
+      aria-hidden={hidden}
+    >
       <div className={styles.container}>
 
         {LEFT_ITEMS.map(item => (

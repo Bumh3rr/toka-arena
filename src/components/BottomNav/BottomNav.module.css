@@ -6,6 +6,15 @@
   left: 0;
   right: 0;
   z-index: 100;
+  /* Misma curva y duración que AppLayout.main para que suban/bajen sincronizados */
+  transition: transform .35s cubic-bezier(.4, 0, .2, 1);
+  will-change: transform;
+}
+
+/* El nav se desliza hacia abajo fuera de pantalla */
+.navHidden {
+  transform: translateY(130%); /* 130% cubre también el box-shadow */
+  pointer-events: none;
 }
 
 .container {
@@ -19,7 +28,6 @@
   position: relative;
 
   border-top: var(--ol) solid var(--ink);
-  border-radius: 24px 24px 0 0;
   background: linear-gradient(180deg, var(--nav-top), #FFEED0);
   box-shadow: 0 -6px 20px rgba(74, 40, 0, .12);
   padding: 20px 8px calc(env(safe-area-inset-bottom, 0px) + 20px);
@@ -92,19 +100,6 @@
 @keyframes pillIn {
   from { transform: scale(.5); opacity: 0; }
   to   { transform: scale(1);  opacity: 1; }
-}
-
-/* ── Label ───────────────────────────────────────────────────────────────── */
-.label {
-  font-family: var(--font-title), system-ui, sans-serif;
-  font-size: 10.5px;
-  font-weight: 600;
-  line-height: 1;
-  letter-spacing: .2px;
-}
-
-.active .label {
-  font-weight: 700;
 }
 
 /* ── Slot central ────────────────────────────────────────────────────────── */

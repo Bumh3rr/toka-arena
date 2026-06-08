@@ -74,16 +74,6 @@
   padding: 0 4px;
 }
 
-.identitySticky {
-  position: sticky;
-  top: 0;
-  z-index: 4;
-  align-items: center;
-  margin: 0 -14px;
-  padding: 2px 14px 9px;
-  background: linear-gradient(180deg, var(--cream) 0%, var(--cream) 72%, rgba(255, 251, 241, 0) 100%);
-}
-
 .nmRow,
 .nmWrapper {
   display: flex;
