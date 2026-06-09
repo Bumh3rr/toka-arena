@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import styles from './BottomNav.module.css'
-import { IconButton, Button } from '../UIKit'
+import { IconButton } from '../UIKit'
 import TokagotchiCanvas from '../Canvas/TokagotchiCanvas'
 import { IcGrid, IcPase, IcShop, IcArena } from '../Utils/Icons/Icons'
 import { useNavBar } from '../../hooks/useNavBar'
