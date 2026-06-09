@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import WoodButton from '../../components/WoodButton/WoodButton'
-import TokagotchiCanvas from '../../components/Tokagotchi/TokagotchiCanvas'
+import TokagotchiCanvas from '../../components/Canvas/TokagotchiCanvas'
 import { useAuth } from '../../hooks/useAuth'
 import styles from './LoginPage.module.css'
 

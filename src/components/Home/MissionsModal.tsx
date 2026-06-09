@@ -1,5 +1,5 @@
 import BottomSheet from '../BottomSheet/BottomSheet'
-import { IcCheck } from '../Icons/Icons'
+import { IcCheck } from '../Utils/Icons/Icons'
 import styles from './MissionsModal.module.css'
 
 interface MisionData {

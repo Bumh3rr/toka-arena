@@ -1,7 +1,11 @@
+import type { MisionResponse } from '../../services/userService'
 import { useState, useRef, useEffect, type CSSProperties } from 'react'
 import { useHome } from '../../hooks/useHome'
-import { CoinPillCard } from '../../components/Card/CoinPillCard'
-import MissionFab from '../../components/MissionFab/MissionFab'
+import { useNavBar } from '../../hooks/useNavBar'
+import { CoinPillCard } from '../../components/Utils/CoinPillCard/CoinPillCard'
+import { SCENE_MAX } from '../../components/CareSheet/CareSheet'
+import { IcSwap, IcPencil, IcPerson } from '../../components/Utils/Icons/Icons'
+import { Button, Label, IconButton, Toast } from '../../components/UIKit'
 import CareSheet from '../../components/CareSheet/CareSheet'
 import StatsRow from '../../components/Home/StatsRow'
 import EvoPanel from '../../components/Home/EvoPanel'
@@ -9,16 +13,12 @@ import CareRow from '../../components/Home/CareRow'
 import RenameModal from '../../components/Home/RenameModal'
 import MissionsModal from '../../components/Home/MissionsModal'
 import CollectionModal from '../../components/Home/CollectionModal'
-import TokagotchiCanvas from '../../components/Tokagotchi/TokagotchiCanvas'
-import { IcSwap, IcPencil, IcPerson } from '../../components/Icons/Icons'
-import type { MisionResponse } from '../../services/userService'
+import TokagotchiCanvas from '../../components/Canvas/TokagotchiCanvas'
 import styles from './HomePage.module.css'
-import { SCENE_MAX } from '../../components/CareSheet/CareSheet'
-import RarityCard from '../../components/RarityCard/RarityCard'
-import BackgroundCanvas from '../../components/Background/BackgroundCanvas'
-import { Button, Label, IconButton, Toast } from '../../components/UIKit'
+import RarityCard from '../../components/Utils/RarityCard/RarityCard'
+import BackgroundCanvas from '../../components/Canvas/BackgroundCanvas'
 import PerfileModal from '../../components/Home/PerfileModal'
-import { useNavBar } from '../../hooks/useNavBar'
+import MissionFab from '../../components/Utils/MissionFab/MissionFab'
 
 export default function HomePage() {
     const { hideBar, showBar } = useNavBar();
@@ -82,6 +82,7 @@ export default function HomePage() {
                         assets={tokagotchi.assets}
                         width={230}
                         height={230}
+                        paused={sheetExpanded}
                     />
                 )}
             </div>

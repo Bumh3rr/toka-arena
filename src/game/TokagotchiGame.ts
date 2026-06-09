@@ -4,11 +4,23 @@ import {
 } from "./TokagotchiScene";
 import type { TokagotchiConfig } from "./types";
 
+/**
+ * Wrapper delgado sobre `Phaser.Game` que gestiona el ciclo de vida del juego
+ * y expone únicamente los métodos necesarios para controlar el personaje desde React.
+ *
+ * - Registra y limpia el plugin DragonBones del cache global de Phaser para evitar
+ *   el error `"Plugin key 'DragonBones' already in use"` en HMR / remonte del componente.
+ * - Aplica el DPR del dispositivo internamente — el caller trabaja siempre en píxeles CSS.
+ */
 export class TokagotchiGame {
   private game: any;
   private scene: ITokagotchiScene;
   private dpr: number;
 
+  /**
+   * @param parent - Elemento HTML donde Phaser insertará el `<canvas>`.
+   * @param cfg    - Configuración inicial del personaje (tamaño en px CSS, assets, animación…).
+   */
   constructor(parent: HTMLElement, cfg: TokagotchiConfig) {
     const Phaser = (window as any).Phaser;
     const db = (window as any).dragonBones;
@@ -45,16 +57,25 @@ export class TokagotchiGame {
     });
   }
 
+  /** Cambia la animación activa sin recrear Phaser. */
   setAnimation(name: string) {
     this.scene.setAnimation(name);
   }
+
+  /** Cambia el accesorio de cabeza por índice de slot. `-1` oculta el slot. */
   setAccesorioCabeza(index: number) {
     this.scene.setAccesorioCabeza(index);
   }
+
+  /** Cambia el accesorio de cuerpo por índice de slot. `-1` oculta el slot. */
   setAccesorioCuerpo(index: number) {
     this.scene.setAccesorioCuerpo(index);
   }
 
+  /**
+   * Redimensiona el canvas y reposiciona el armature.
+   * Recibe dimensiones en px CSS; el DPR se aplica internamente.
+   */
   resize(width: number, height: number, reverse: boolean) {
     const w = width * this.dpr;
     const h = height * this.dpr;
@@ -62,6 +83,18 @@ export class TokagotchiGame {
     this.scene.updateLayout(w, h, reverse);
   }
 
+  /**
+   * Pausa o reanuda la animación DragonBones (`timeScale = 0 / 1`).
+   * Seguro ante llamadas previas al boot de Phaser — delega el flag a la escena.
+   */
+  setPaused(paused: boolean) {
+    this.scene.setPaused(paused);
+  }
+
+  /**
+   * Destruye la instancia de Phaser y limpia el plugin del cache global.
+   * Debe llamarse en el cleanup del `useEffect` de montaje.
+   */
   destroy() {
     this.game?.destroy(true);
     (window as any).Phaser?.Plugins?.PluginCache?.remove?.("DragonBones");

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Button, Card, Label, IconButton, Toggle, Toast } from '../../components/UIKit'
 import type { ColorVariant, ToastVariant, ToastPosition, ToastAlign } from '../../components/UIKit'
-import { IcCrown, IcLock, IcPencil, IcHeart, IcBolt, IcShield } from '../../components/Icons/Icons'
+import { IcCrown, IcLock, IcPencil, IcHeart, IcBolt, IcShield } from '../../components/Utils/Icons/Icons'
 import { useToast } from '../../hooks/useToast'
 import styles from './UIKitPage.module.css'
 

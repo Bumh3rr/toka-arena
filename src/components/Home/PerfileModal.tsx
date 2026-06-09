@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import BottomSheet from '../BottomSheet/BottomSheet'
-import { IcCheck, IcCopy, IcPencil, IcPerson, IcMusic, IcHelp, IcDoc, IcInfo, IcSpeaker, IcChevR } from '../Icons/Icons'
+import { IcCheck, IcCopy, IcPencil, IcPerson, IcMusic, IcHelp, IcDoc, IcInfo, IcSpeaker, IcChevR } from '../Utils/Icons/Icons'
 import styles from './PerfileModal.module.css'
 import { IconButton, Button, Toggle, Label } from '../UIKit'
 import DevPanel from './DevPanel'

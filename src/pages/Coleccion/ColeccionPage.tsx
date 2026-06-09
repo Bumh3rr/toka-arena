@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import TokagotchiCanvas from '../../components/Tokagotchi/TokagotchiCanvas'
+import TokagotchiCanvas from '../../components/Canvas/TokagotchiCanvas'
 import { useColeccion } from '../../hooks/useColeccion'
 import type { Tokagotchi } from '../../types/tokagotchi'
 import type { Accesorio } from '../../types/accesorios'

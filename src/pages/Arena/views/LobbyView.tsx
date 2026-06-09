@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import TokagotchiCanvas from '../../../components/Tokagotchi/TokagotchiCanvas'
+import TokagotchiCanvas from '../../../components/Canvas/TokagotchiCanvas'
 import styles from './Arena.module.css'
 import lobbyStyles from './LobbyView.module.css'
 

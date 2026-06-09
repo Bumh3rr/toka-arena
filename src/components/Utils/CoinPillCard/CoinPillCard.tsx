@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Button } from "../UIKit"
+import { Button } from "../../UIKit"
 import styles from './CoinPillCard.module.css'
 
 interface CoinPillCardProps {

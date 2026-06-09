@@ -1,4 +1,4 @@
-import { IcBolt, IcShield, IcHeart } from '../Icons/Icons'
+import { IcBolt, IcShield, IcHeart } from '../Utils/Icons/Icons'
 import type { TokagotchiStats } from '../../types/tokagotchi'
 import styles from './StatsRow.module.css'
 import { HeaderTitleLine } from '../CareSheet/CareSheet'

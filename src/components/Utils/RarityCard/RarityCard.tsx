@@ -1,6 +1,6 @@
 import styles from './RarityCard.module.css'
-import { RAR } from '../../types/tokagotchi'
-import { type Rareza } from '../../types/tokagotchi'
+import { RAR } from '../../../types/tokagotchi'
+import { type Rareza } from '../../../types/tokagotchi'
 
 interface Props {
     rarity?: Rareza;

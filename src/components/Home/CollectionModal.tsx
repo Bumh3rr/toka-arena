@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import BottomSheet from '../BottomSheet/BottomSheet'
 import TokaAvatar from '../TokaAvatar/TokaAvatar'
-import { IcCheck, IcChevronDown } from '../Icons/Icons'
+import { IcCheck, IcChevronDown } from '../Utils/Icons/Icons'
 import type { Tokagotchi } from '../../types/tokagotchi'
 import { RAR } from '../../types/tokagotchi'
 import { tokagotchiService } from '../../services/tokagotchiService'

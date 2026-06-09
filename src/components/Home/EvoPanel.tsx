@@ -1,6 +1,6 @@
 // src/components/Home/EvoPanel.tsx
 import { useState } from 'react'
-import { IcCrown, IcLock } from '../Icons/Icons'
+import { IcCrown, IcLock } from '../Utils/Icons/Icons'
 import type { Rareza } from '../../types/tokagotchi'
 import { EVOLUCION } from '../../constants/evolucion'
 import styles from './EvoPanel.module.css'

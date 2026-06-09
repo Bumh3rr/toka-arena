@@ -1,4 +1,3 @@
-// src/components/MissionFab/MissionFab.tsx
 import { IcMissions } from '../Icons/Icons'
 import styles from './MissionFab.module.css'
 

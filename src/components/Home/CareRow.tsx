@@ -1,5 +1,4 @@
-// src/components/Home/CareRow.tsx
-import { IcClock } from '../Icons/Icons'
+import { IcClock } from '../Utils/Icons/Icons'
 import { CUIDADO_CONFIG, type AccionCuidado } from '../../constants/cuidado'
 import type { Cooldowns, Floaters } from '../../hooks/useHome'
 import styles from './CareRow.module.css'

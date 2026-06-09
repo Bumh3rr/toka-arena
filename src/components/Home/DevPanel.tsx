@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { IcTerminal, IcChevR } from '../Icons/Icons'
+import { IcTerminal, IcChevR } from '../Utils/Icons/Icons'
 import type { Especie, Rareza } from '../../types/tokagotchi'
 import styles from './DevPanel.module.css'
 import { authService } from '../../services/authService'

@@ -1,4 +1,5 @@
-import { IcX } from '../Icons/Icons'
+import { IconButton } from '../UIKit'
+import { IcX } from '../Utils/Icons/Icons'
 import styles from './BottomSheet.module.css'
 
 interface BottomSheetProps {
@@ -19,9 +20,9 @@ export default function BottomSheet({ title, sub, onClose, children }: BottomShe
             {title}
             {sub && <small className={styles.sub}>{sub}</small>}
           </span>
-          <button className={styles.closeBtn} onClick={onClose} aria-label="Cerrar">
+          <IconButton size={35} variant='warm' onClick={onClose} aria-label="Cerrar">
             <IcX />
-          </button>
+          </IconButton>
         </div>
         <div className={styles.body}>{children}</div>
       </div>
