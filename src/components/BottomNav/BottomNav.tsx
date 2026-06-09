@@ -40,11 +40,10 @@ export default function BottomNav() {
   const { hidden } = useNavBar()
   const isHome = pathname === '/home' || pathname === '/'
   const navRef = useRef<HTMLElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
 
-  // Publica --nav-height en :root para que AppLayout.main pueda usar el valor real.
-  // ResizeObserver se adapta automáticamente a cambios de tamaño (safe-area, zoom, etc.)
   useEffect(() => {
-    const el = navRef.current
+    const el = containerRef.current
     if (!el) return
     const observer = new ResizeObserver(([entry]) => {
       const h = entry.borderBoxSize[0]?.blockSize ?? entry.contentRect.height
@@ -61,7 +60,7 @@ export default function BottomNav() {
       aria-label="Navegación principal"
       aria-hidden={hidden}
     >
-      <div className={styles.container}>
+      <div ref={containerRef} className={styles.container}>
 
         {LEFT_ITEMS.map(item => (
           <NavBtn key={item.path} item={item} active={pathname === item.path} />

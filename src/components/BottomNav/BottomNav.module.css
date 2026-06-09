@@ -9,6 +9,7 @@
   /* Misma curva y duración que AppLayout.main para que suban/bajen sincronizados */
   transition: transform .35s cubic-bezier(.4, 0, .2, 1);
   will-change: transform;
+  padding-top: 36px; /* Importante para el click en IOS */
 }
 
 /* El nav se desliza hacia abajo fuera de pantalla */
