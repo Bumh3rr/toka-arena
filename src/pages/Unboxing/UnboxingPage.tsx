@@ -42,15 +42,15 @@ export default function UnboxingPage() {
               <>
                 <div className={styles.itemImgWrapper}>
                   <img
-                    src={`/assets/tokagotchis/${result.especie.toLocaleLowerCase()}.png`}
+                    src={`/assets/tokagotchis/${result.species.toLocaleLowerCase()}.png`}
                     alt={result.id}
                     className={styles.itemImg}
                   />
                 </div>
 
-                <p className={styles.tokaName}>{result.nombre}</p>
+                <p className={styles.tokaName}>{result.name}</p>
                 <p className={styles.tokaType}>
-                  {result.especie.charAt(0).toUpperCase() + result.especie.slice(1)} · {result.rareza}
+                  {result.species.charAt(0).toUpperCase() + result.species.slice(1)} · {result.rarity}
                 </p>
               </>
             )}

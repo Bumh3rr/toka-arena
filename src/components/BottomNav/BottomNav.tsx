@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import styles from './BottomNav.module.css'
 import { IconButton } from '../UIKit'
 import TokagotchiCanvas from '../Canvas/TokagotchiCanvas'
-import { IcGrid, IcPase, IcShop, IcArena } from '../Utils/Icons/Icons'
+import { IcGrid, IcPase, IcShop, IcArena, IcPaw } from '../Utils/Icons/Icons'
 import { useNavBar } from '../../hooks/useNavBar'
 
 const LEFT_ITEMS = [
@@ -73,21 +73,13 @@ export default function BottomNav() {
         <div className={styles.flotanteWrapper}>
           <IconButton
             onClick={() => navigate('/home')}
-            variant={isHome ? 'legend' : 'warm'}
-            size={70}
+            variant={isHome ? 'legend' : 'gold'}
+            size={66}
             shape="round"
             ariaLabel="Inicio"
             className={styles.toka}
           >
-            <TokagotchiCanvas
-              accesorioIndexCabeza={1}
-              accesorioIndexCuerpo={1}
-              animacionActual="idle"
-              especie="HANA"
-              width={63}
-              height={59}
-              paused={isHome}
-            />
+            <IcPaw/>
           </IconButton>
         </div>
 

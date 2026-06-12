@@ -150,6 +150,10 @@ export function IcStar() {
   )
 }
 
+export function IcChevUp() {
+  return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"><path d="M6 14.5l6-6 6 6" /></svg>;
+}
+
 export function IcTrophy() { return <svg viewBox="0 0 24 24" fill="none" stroke="#4A2800" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 4h10v4a5 5 0 0 1-10 0V4z" /><path d="M7 6H4.5v1.5A3 3 0 0 0 7 10.5M17 6h2.5v1.5A3 3 0 0 1 17 10.5M9.5 14.5h5M8.5 19.5h7M12 14.5v5" /></svg>; }
 export function IcSkull() { return <svg viewBox="0 0 24 24" fill="none" stroke="#4A2800" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3a8 8 0 0 0-5 14.2V20a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-2.8A8 8 0 0 0 12 3z" /><circle cx="9" cy="12" r="1.6" fill="#4A2800" /><circle cx="15" cy="12" r="1.6" fill="#4A2800" /><path d="M11 17h2" /></svg>; }
 export function IcDice() { return <svg viewBox="0 0 24 24" fill="none" stroke="#4A2800" strokeWidth="2" strokeLinejoin="round"><rect x="4" y="4" width="16" height="16" rx="4" /><circle cx="9" cy="9" r="1.3" fill="#4A2800" /><circle cx="15" cy="15" r="1.3" fill="#4A2800" /><circle cx="15" cy="9" r="1.3" fill="#4A2800" /><circle cx="9" cy="15" r="1.3" fill="#4A2800" /></svg>; }
@@ -170,3 +174,4 @@ export function IcHome() { return (<svg viewBox="0 0 24 24" fill="none" stroke="
 export function IcGrid() { return (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round"><rect x="3.6" y="3.6" width="7" height="7" rx="2" /><rect x="13.4" y="3.6" width="7" height="7" rx="2" /><rect x="3.6" y="13.4" width="7" height="7" rx="2" /><rect x="13.4" y="13.4" width="7" height="7" rx="2" /></svg>); }
 export function IcShop() { return (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round"><path d="M5.2 8h13.6l-1 11.2a1.5 1.5 0 0 1-1.5 1.4H7.7a1.5 1.5 0 0 1-1.5-1.4L5.2 8z" /><path d="M8.6 8V6.4a3.4 3.4 0 0 1 6.8 0V8" /></svg>); }
 export function IcArena() { return ( <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 19.2L3.8 21m.9-7.2l.9 3.6m0 0l3.6.9m-3.6-.9l-2.7 2.7M16.4 3.9l-9 9l.45 2.25l2.25.45l9-9L20 3z" /><path d="M22 19.2L20.2 21m-.9-7.2l-.9 3.6m0 0l2.7 2.7m-2.7-2.7l-1.8.45l-1.8.45M9.3 11L4.9 6.6L4 3l3.6.9L12 8.3m.1 5.5l1.8 1.8l2.25-.45l.45-2.25l-1.8-1.8" /></svg>); }
+export function IcPaw() { return (<svg viewBox="0 0 24 24" fill="#fff" stroke="none"> <ellipse cx="6.6" cy="9" rx="2" ry="2.6"/><ellipse cx="11.4" cy="6.9" rx="2.1" ry="2.9"/> <ellipse cx="16.4" cy="8.2" rx="2" ry="2.6"/> <path d="M11.5 11.4c-3 0-5.1 2.1-5.1 4.4 0 2 1.7 2.9 3 2.9 1.1 0 1.5-.4 2.1-.4s1 .4 2.1.4c1.3 0 3-.9 3-2.9 0-2.3-2.1-4.4-5.1-4.4z"/></svg>); }

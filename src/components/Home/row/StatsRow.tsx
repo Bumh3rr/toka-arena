@@ -1,10 +1,10 @@
-import { IcBolt, IcShield, IcHeart } from '../Utils/Icons/Icons'
-import type { TokagotchiStats } from '../../types/tokagotchi'
-import styles from './StatsRow.module.css'
-import { HeaderTitleLine } from '../CareSheet/CareSheet'
-import { Card } from '../UIKit'
+import { IcBolt, IcShield, IcHeart } from '../../Utils/Icons/Icons'
+import type { Stats } from '../../../types/tokagotchi'
+import styles from './styles/StatsRow.module.css'
+import { HeaderTitleLine } from '../../CareSheet/CareSheet'
+import { Card } from '../../UIKit'
 
-export default function StatsRow({ stats }: { stats: TokagotchiStats }) {
+export default function StatsRow({ stats }: { stats: Stats }) {
 
   const LIST_STATS = [
     { key: 'atk', label: 'Ataque', value: stats.atk, icon: <IcBolt /> },

@@ -1,13 +1,13 @@
 // src/components/Home/EvoPanel.tsx
 import { useState } from 'react'
-import { IcCrown, IcLock } from '../Utils/Icons/Icons'
-import type { Rareza } from '../../types/tokagotchi'
-import { EVOLUCION } from '../../constants/evolucion'
-import styles from './EvoPanel.module.css'
-import { HeaderTitleLine } from '../CareSheet/CareSheet'
+import { IcCrown, IcLock } from '../../Utils/Icons/Icons'
+import type { Rarity } from '../../../types/tokagotchi'
+import { EVOLUCION } from '../../../constants/evolucion'
+import styles from './styles/EvoPanel.module.css'
+import { HeaderTitleLine } from '../../CareSheet/CareSheet'
 
 interface EvoPanelProps {
-  rareza: Rareza
+  rareza: Rarity
   cp: number
   tf: number
 }

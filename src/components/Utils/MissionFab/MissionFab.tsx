@@ -1,3 +1,4 @@
+import { IconButton } from '../../UIKit'
 import { IcMissions } from '../Icons/Icons'
 import styles from './MissionFab.module.css'
 
@@ -7,18 +8,25 @@ interface MissionFabProps {
   lifted?: boolean
 }
 
-export default function MissionFab({ onOpen, badge = 0, lifted = false }: MissionFabProps) {
+export default function MissionFab({ onOpen, badge = 0}: MissionFabProps) {
+  const hasBadge = badge > 0
+
   return (
-    <button
-      className={`${styles.fab} ${lifted ? styles.lifted : ''}`}
-      onClick={onOpen}
-      aria-label="Misiones del día"
-    >
-      <span className={styles.disc}>
+    <div className={`${styles.fab}`}>
+      <IconButton
+        onClick={onOpen}
+        size={50}
+        variant="warm"
+        ariaLabel={hasBadge ? `Misiones del día, ${badge} nuevas` : 'Misiones del día'}
+      >
         <IcMissions />
-        {badge > 0 && <span className={styles.notif}>{badge}</span>}
-      </span>
+        {hasBadge && (
+          <span className={styles.notif} aria-hidden="true">
+            {badge > 99 ? '99+' : badge}
+          </span>
+        )}
+      </IconButton>
       <span className={styles.cap}>Misiones</span>
-    </button>
+    </div>
   )
 }

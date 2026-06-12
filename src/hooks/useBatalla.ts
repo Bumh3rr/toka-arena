@@ -213,7 +213,7 @@ export function useBatalla() {
   }
 
   const jugadorTieneAcciones = (state: EstadoBatalla) => {
-    const hayHabilidad = tokagotchi.habilidades.some((hab) => hab.costoNRG <= state.nrgJugador)
+    const hayHabilidad = tokagotchi.abilities.some((hab) => hab.energyCost <= state.nrgJugador)
     const hayConsumibles = consumiblesRef.current.some((item) => item.cantidad > 0)
     return hayHabilidad || hayConsumibles
   }
@@ -265,7 +265,7 @@ export function useBatalla() {
 
     const rivalActual = rivalActualRef.current
 
-    const habilidadesDisponibles = rival.habilidades.filter((hab) => hab.costoNRG <= rivalNrgRef.current)
+    const habilidadesDisponibles = rival.abilities.filter((hab) => hab.energyCost <= rivalNrgRef.current)
     const habilidadElegida = habilidadesDisponibles.length > 0
       ? habilidadesDisponibles[randomInt(0, habilidadesDisponibles.length - 1)]
       : null
@@ -279,9 +279,9 @@ export function useBatalla() {
       nextState.hpJugador = hpJugadorNuevo
       triggerAnimacionRival('attack')
       triggerAnimacionJugador('hurt')
-      newLog = pushLog(newLog, `${rivalActual.nombre} ataca y te hace ${danio} de daño.`)
+      newLog = pushLog(newLog, `${rivalActual.name} ataca y te hace ${danio} de daño.`)
     } else {
-      rivalNrgRef.current = Math.max(0, rivalNrgRef.current - habilidadElegida.costoNRG)
+      rivalNrgRef.current = Math.max(0, rivalNrgRef.current - habilidadElegida.energyCost)
 
       switch (habilidadElegida.id) {
         case 'zarpazo': {
@@ -292,20 +292,20 @@ export function useBatalla() {
           triggerAnimacionJugador('hurt')
           newLog = pushLog(
             newLog,
-            `${rivalActual.nombre} usa ${habilidadElegida.nombre} y causa ${danio} de daño${ignoraDef ? ' (ignoró defensa)' : ''}.`
+            `${rivalActual.name} usa ${habilidadElegida.name} y causa ${danio} de daño${ignoraDef ? ' (ignoró defensa)' : ''}.`
           )
           break
         }
         case 'agilidad': {
           rivalEvasionReadyRef.current = true
           triggerAnimacionRival('play')
-          newLog = pushLog(newLog, `${rivalActual.nombre} usa ${habilidadElegida.nombre}. Preparó evasión para tu próximo ataque.`)
+          newLog = pushLog(newLog, `${rivalActual.name} usa ${habilidadElegida.name}. Preparó evasión para tu próximo ataque.`)
           break
         }
         case 'bufido': {
           playerDefDebuffTurnsRef.current = 2
           triggerAnimacionRival('play')
-          newLog = pushLog(newLog, `${rivalActual.nombre} usa ${habilidadElegida.nombre}. Tu defensa bajó por 2 turnos.`)
+          newLog = pushLog(newLog, `${rivalActual.name} usa ${habilidadElegida.name}. Tu defensa bajó por 2 turnos.`)
           break
         }
         case 'frenesi': {
@@ -315,16 +315,16 @@ export function useBatalla() {
           nextState.hpJugador = clampHp(nextState.hpJugador - total, nextState.hpMaxJugador)
           triggerAnimacionRival('attack')
           triggerAnimacionJugador('hurt')
-          newLog = pushLog(newLog, `${rivalActual.nombre} entra en ${habilidadElegida.nombre} y conecta ${total} de daño total.`)
+          newLog = pushLog(newLog, `${rivalActual.name} entra en ${habilidadElegida.name} y conecta ${total} de daño total.`)
           break
         }
         default: {
-          const multiplicador = habilidadElegida.multiplicador ?? 1
+          const multiplicador = habilidadElegida.multiplier ?? 1
           const danio = calcularDanioRival(multiplicador)
           nextState.hpJugador = clampHp(nextState.hpJugador - danio, nextState.hpMaxJugador)
           triggerAnimacionRival('attack')
           triggerAnimacionJugador('hurt')
-          newLog = pushLog(newLog, `${rivalActual.nombre} usa ${habilidadElegida.nombre} y te hace ${danio} de daño.`)
+          newLog = pushLog(newLog, `${rivalActual.name} usa ${habilidadElegida.name} y te hace ${danio} de daño.`)
           break
         }
       }
@@ -367,7 +367,7 @@ export function useBatalla() {
       escudoActivo: false,
       ganador: null,
       log: [
-        `¡${tokagotchi.nombre} vs ${rivalEncontrado.nombre}!`,
+        `¡${tokagotchi.name} vs ${rivalEncontrado.name}!`,
         'Empiezas tú. Elige habilidad o consumible.'
       ]
     }
@@ -428,7 +428,7 @@ export function useBatalla() {
         ...estadoRef.current,
         hpRival: rivalEncontrado.stats.hp,
         hpMaxRival: rivalEncontrado.stats.hp,
-        log: pushLog(estadoRef.current.log, `Rival encontrado: ${rivalEncontrado.nombre}.`) 
+        log: pushLog(estadoRef.current.log, `Rival encontrado: ${rivalEncontrado.name}.`) 
       }
       commitEstado(foundState)
 
@@ -442,12 +442,12 @@ export function useBatalla() {
     const currentState = estadoRef.current
     if (!currentState.esMiTurno || currentState.ganador) return
 
-    const habilidad = tokagotchi.habilidades.find((hab) => hab.id === habilidadId)
-    if (!habilidad || currentState.nrgJugador < habilidad.costoNRG) return
+    const habilidad = tokagotchi.abilities.find((hab) => hab.id === habilidadId)
+    if (!habilidad || currentState.nrgJugador < habilidad.energyCost) return
 
     let nextState: EstadoBatalla = {
       ...currentState,
-      nrgJugador: Math.max(0, currentState.nrgJugador - habilidad.costoNRG)
+      nrgJugador: Math.max(0, currentState.nrgJugador - habilidad.energyCost)
     }
 
     let nextLog = nextState.log
@@ -457,14 +457,14 @@ export function useBatalla() {
       case 'ladrido': {
         playerAtkBuffTurnsRef.current = 2
         triggerAnimacionJugador('play')
-        nextLog = pushLog(nextLog, `${tokagotchi.nombre} usa ${habilidad.nombre}. Ataque mejorado por 2 turnos.`)
+        nextLog = pushLog(nextLog, `${tokagotchi.name} usa ${habilidad.name}. Ataque mejorado por 2 turnos.`)
         break
       }
       case 'guardia': {
         shieldTurnsRef.current = Math.max(shieldTurnsRef.current, 2)
         nextState.escudoActivo = true
         triggerAnimacionJugador('bath')
-        nextLog = pushLog(nextLog, `${tokagotchi.nombre} usa ${habilidad.nombre}. Escudo activo por 2 turnos.`)
+        nextLog = pushLog(nextLog, `${tokagotchi.name} usa ${habilidad.name}. Escudo activo por 2 turnos.`)
         break
       }
       case 'lealtad': {
@@ -472,22 +472,22 @@ export function useBatalla() {
           rivalEvasionReadyRef.current = false
           triggerAnimacionJugador('attack')
           triggerAnimacionRival('play')
-          nextLog = pushLog(nextLog, `${rivalActualRef.current.nombre} esquivó tu ${habilidad.nombre}.`)
+          nextLog = pushLog(nextLog, `${rivalActualRef.current.name} esquivó tu ${habilidad.name}.`)
           break
         }
 
-        danioInfligido = calcularDanioJugador(habilidad.multiplicador ?? 1.4)
+        danioInfligido = calcularDanioJugador(habilidad.multiplier ?? 1.4)
         nextState.hpRival = clampHp(nextState.hpRival - danioInfligido, nextState.hpMaxRival)
         danoTotalRef.current += danioInfligido
         triggerAnimacionJugador('attack')
         triggerAnimacionRival('hurt')
-        nextLog = pushLog(nextLog, `${tokagotchi.nombre} usa ${habilidad.nombre} y causa ${danioInfligido} de daño.`)
+        nextLog = pushLog(nextLog, `${tokagotchi.name} usa ${habilidad.name} y causa ${danioInfligido} de daño.`)
 
         if (nextState.hpJugador <= nextState.hpMaxJugador * 0.3) {
           const curacion = Math.max(1, Math.round(danioInfligido * 0.2))
           nextState.hpJugador = clampHp(nextState.hpJugador + curacion, nextState.hpMaxJugador)
           triggerAnimacionJugador('heal')
-          nextLog = pushLog(nextLog, `${tokagotchi.nombre} recupera ${curacion} HP por lealtad.`)
+          nextLog = pushLog(nextLog, `${tokagotchi.name} recupera ${curacion} HP por lealtad.`)
         }
 
         rivalEvasionReadyRef.current = false
@@ -498,16 +498,16 @@ export function useBatalla() {
           rivalEvasionReadyRef.current = false
           triggerAnimacionJugador('attack')
           triggerAnimacionRival('play')
-          nextLog = pushLog(nextLog, `${rivalActualRef.current.nombre} esquivó tu ${habilidad.nombre}.`)
+          nextLog = pushLog(nextLog, `${rivalActualRef.current.name} esquivó tu ${habilidad.name}.`)
           break
         }
 
-        danioInfligido = calcularDanioJugador(habilidad.multiplicador ?? 1)
+        danioInfligido = calcularDanioJugador(habilidad.multiplier ?? 1)
         nextState.hpRival = clampHp(nextState.hpRival - danioInfligido, nextState.hpMaxRival)
         danoTotalRef.current += danioInfligido
         triggerAnimacionJugador('attack')
         triggerAnimacionRival('hurt')
-        nextLog = pushLog(nextLog, `${tokagotchi.nombre} usa ${habilidad.nombre} y hace ${danioInfligido} de daño.`)
+        nextLog = pushLog(nextLog, `${tokagotchi.name} usa ${habilidad.name} y hace ${danioInfligido} de daño.`)
         rivalEvasionReadyRef.current = false
         break
       }

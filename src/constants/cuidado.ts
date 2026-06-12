@@ -1,4 +1,4 @@
-import type { AnimacionTokagotchi } from "../types/tokagotchi";
+import type { AnimationTokagotchi } from "../types/tokagotchi";
 
 export type AccionCuidado = "feed" | "play" | "bathe";
 export interface ConfigCuidado {
@@ -7,7 +7,7 @@ export interface ConfigCuidado {
   cp: number;
   cooldownSeg: number;
   img: string;
-  animation: AnimacionTokagotchi;
+  animation: AnimationTokagotchi;
 }
 
 export const CUIDADO_CONFIG: ConfigCuidado[] = [

@@ -113,7 +113,7 @@ function TabTokagotchi({
         </div>
         <div className={styles.resumenCard}>
           <span className={styles.resumenLabel}>ACTIVO</span>
-          <span className={styles.resumenValueOrange}>{tokaActivo.nombre}</span>
+          <span className={styles.resumenValueOrange}>{tokaActivo.name}</span>
         </div>
       </div>
 
@@ -172,18 +172,18 @@ function TokaCard({
       {activo && <span className={styles.activoBadge}>Activo</span>}
       <div
         className={styles.rarezaDot}
-        style={{ background: getRarezaColor(toka.rareza) }}
+        style={{ background: getRarezaColor(toka.rarity) }}
       />
       <div className={styles.itemImgWrapper}>
         <img
-          src={`/assets/tokagotchis/${toka.especie}.png`}
+          src={`/assets/tokagotchis/${toka.species}.png`}
           alt={toka.id}
           className={styles.itemImg}
         />
       </div>
-      <span className={styles.tokaCardNombre}>{toka.nombre}</span>
+      <span className={styles.tokaCardNombre}>{toka.name}</span>
       <span className={styles.tokaCardEspecie}>
-        {toka.especie.charAt(0).toUpperCase() + toka.especie.slice(1)}
+        {toka.species.charAt(0).toUpperCase() + toka.species.slice(1)}
       </span>
       <div className={styles.statsRow}>
         <span className={styles.statAtk}>ATK {toka.stats.atk}</span>
@@ -215,17 +215,17 @@ function TabAccesorios({
       <div className={styles.previewCard}>
         <div className={styles.previewLeft}>
           <TokagotchiCanvas
-            accesorioIndexCabeza={tokaConAccesorios.accesorios.cabeza?.displayIndex ?? -1}
-            accesorioIndexCuerpo={tokaConAccesorios.accesorios.cuerpo?.displayIndex ?? -1}
+            accesorioIndexCabeza={tokaConAccesorios.equippedAccessory.equippedHead?.displayIndex ?? -1}
+            accesorioIndexCuerpo={tokaConAccesorios.equippedAccessory.equippedBody?.displayIndex ?? -1}
             animacionActual={'idle'}
-            especie={tokaConAccesorios.especie}
+            especie={tokaConAccesorios.species}
             width={130}
             height={120}
           />
         </div>
         <div className={styles.previewRight}>
           <span className={styles.previewNombre}>
-            {tokaConAccesorios.nombre.toUpperCase()} EQUIPADO
+            {tokaConAccesorios.name.toUpperCase()} EQUIPADO
           </span>
           <div className={styles.equipadoSlot}>
             <div

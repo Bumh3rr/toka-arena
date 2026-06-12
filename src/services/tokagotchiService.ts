@@ -1,10 +1,13 @@
 import api from "./api";
 import type {
-  Especie,
+  Species,
   Tokagotchi,
-  AssetsTokagotchi,
+  Assets,
+  EquippedAccessory,
+  Rarity,
 } from "../types/tokagotchi";
-import type { Accesorio } from "../types/accesorios";
+
+import type { Evolution, EvolutionRule } from "../types/evolution";
 
 // Convierte el response del backend a nuestro tipo interno
 export function mapResponseToTokagotchi(data: any): Tokagotchi {
@@ -12,54 +15,41 @@ export function mapResponseToTokagotchi(data: any): Tokagotchi {
   console.log(data);
 
   return {
-    id: String(data.id),
-    nombre: data.name,
-    especie: data.species,
-    rareza: data.rarity,
+    id: data.id,
+    name: data.name,
+    species: data.species,
+    rarity: data.rarity,
+    cp: data.cp,
     stats: {
       hp: data.hp,
       atk: data.atk,
       def: data.def,
-      nrg: 100,
     },
-    habilidades: data.abilities.map((ab: any) => ({
-      id: String(ab.id),
-      nombre: ab.name,
-      costoNRG: ab.energyCost,
-      multiplicador: ab.multiplier,
-      descripcion: ab.description,
-      esSignature: ab.signature,
+    abilities: data.abilities.map((ability: any) => ({
+      id: ability.id,
+      nombre: ability.name,
+      energyCost: ability.energyCost,
+      multiplier: ability.multiplier,
+      description: ability.description,
     })),
-    accesorios: {
-      cabeza:
-        data?.equippedHead === null
-          ? null
-          : {
-              id: data?.equippedHead ?? "",
-              nombre: data?.equippedHead?.name ?? "",
-              slot: "cabeza",
-              displayIndex: data?.equippedHead?.name
-                ? getDisplayIndex(data.equippedHead.name)
-                : 0,
-              desbloqueado: true,
-              imagen: "",
-            },
-      cuerpo:
-        data?.equippedBody === null
-          ? null
-          : {
-              id: data?.equippedBody ?? "",
-              nombre: data?.equippedBody?.name ?? "",
-              slot: "cuerpo",
-              displayIndex: data?.equippedBody?.name
-                ? getDisplayIndex(data.equippedBody.name)
-                : 0,
-              desbloqueado: true,
-              imagen: "",
-            },
+    equippedAccessory: {
+      equippedHead: mapResponseEquippedAccesory(data.equippedHead),
+      equippedBody: mapResponseEquippedAccesory(data.equippedBody),
     },
-    assets: getAssetsByEspecie(data.species),
+    assets: getAssetsBySpecies(data.species),
+    evolution: getEvolutionByRarity(data.rarity),
   };
+}
+
+function mapResponseEquippedAccesory(equipped: any): EquippedAccessory | null {
+  if (equipped === null) return null;
+  const data = {
+    id: equipped.id,
+    name: equipped.name,
+    displayIndex: getDisplayIndex(equipped.name),
+    typeAccessory: equipped.type,
+  };
+  return data as EquippedAccessory;
 }
 
 function getDisplayIndex(name: string): number {
@@ -72,8 +62,8 @@ function getDisplayIndex(name: string): number {
   return map[name] ?? 0;
 }
 
-export function getAssetsByEspecie(especie: Especie): AssetsTokagotchi {
-  const assets: Record<Especie, AssetsTokagotchi> = {
+export function getAssetsBySpecies(especie: Species): Assets {
+  const assets: Record<Species, Assets> = {
     TOFU: {
       armatureKey: "tofu",
       texPng: "/assets/tofu/tofu_tex.png",
@@ -96,8 +86,8 @@ export function getAssetsByEspecie(especie: Especie): AssetsTokagotchi {
   return assets[especie] ?? assets.TOFU;
 }
 
-export function getImagenSrcByEspecie(especie: Especie): string {
-  const map: Record<Especie, string> = {
+export function getImagenSrcByEspecie(especie: Species): string {
+  const map: Record<Species, string> = {
     TOFU: "/assets/tokagotchis/tofu.png",
     MOCHI: "/assets/tokagotchis/mochi.png",
     HANA: "/assets/tokagotchis/hana.png",
@@ -105,35 +95,40 @@ export function getImagenSrcByEspecie(especie: Especie): string {
   return map[especie] ?? map.TOFU;
 }
 
-export function mapAccesorio(acc: any): Accesorio {
-  const slotMap: Record<string, "cabeza" | "cuerpo"> = {
-    HEAD: "cabeza",
-    BODY: "cuerpo",
+// Simular que me lo da el backend (Se eliminará)
+function getEvolutionByRarity(rareza: Rarity): Evolution | null {
+  
+  const reglas: Record<Rarity, EvolutionRule | null> = {
+    COMMON: {
+      nextRarity: "RARE",
+      cpRequired: 100,
+      costTF: 10,
+      successChance: 40,
+      failCooldownHours: 12,
+    },
+    RARE: {
+      nextRarity: "EPIC",
+      cpRequired: 300,
+      costTF: 25,
+      successChance: 30,
+      failCooldownHours: 24,
+    },
+    EPIC: {
+      nextRarity: "LEGENDARY",
+      cpRequired: 600,
+      costTF: 50,
+      successChance: 20,
+      failCooldownHours: 48,
+    },
+    LEGENDARY: null,
   };
 
-  const displayIndexMap: Record<string, number> = {
-    Sombrero: 2,
-    Corona: 1,
-    Casco: 0,
-    "Super Capa": 0,
-  };
-
-  const imagenMap: Record<string, string> = {
-    Sombrero: "/assets/accesorios/sombrero.png",
-    Corona: "/assets/accesorios/corona.png",
-    Casco: "/assets/accesorios/casco.png",
-    "Super Capa": "/assets/accesorios/capa.png",
-  };
-
-  return {
-    id: String(acc.id),
-    nombre: acc.name,
-    slot: slotMap[acc.type] ?? "cabeza",
-    displayIndex: displayIndexMap[acc.name] ?? 0,
-    desbloqueado:
-      acc.equipped !== undefined ? true : (acc.desbloqueado ?? true),
-    imagen: imagenMap[acc.name] ?? "/assets/accesorios/sombrero.png",
-  };
+  const response: Evolution = {
+    rule: reglas[rareza],
+    cooldown: null
+  } as Evolution;
+  
+  return response;
 }
 
 export const tokagotchiService = {
@@ -141,7 +136,7 @@ export const tokagotchiService = {
     const response = await api.post("/tokagotchi/claim-starter");
     return mapResponseToTokagotchi(response.data);
   },
-  activar: async (id: string): Promise<void> => {
+  activar: async (id: number): Promise<void> => {
     await api.post(`/tokagotchi/${id}/activate`);
   },
 };

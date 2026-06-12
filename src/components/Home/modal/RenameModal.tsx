@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import BottomSheet from '../BottomSheet/BottomSheet'
-import styles from './RenameModal.module.css'
-import { Button } from '../UIKit'
+import BottomSheet from '../../BottomSheet/BottomSheet'
+import styles from './styles/RenameModal.module.css'
+import { Button } from '../../UIKit'
 
 interface RenameModalProps {
   currentName: string

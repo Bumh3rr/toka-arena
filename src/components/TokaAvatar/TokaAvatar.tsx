@@ -10,8 +10,8 @@ interface TokaAvatarProps {
 }
 
 export default function TokaAvatar({ tokagotchi, size = 54, isActive = false }: TokaAvatarProps) {
-  const imgSrc = getImagenSrcByEspecie(tokagotchi.especie)
-  const rar = RAR[tokagotchi.rareza]
+  const imgSrc = getImagenSrcByEspecie(tokagotchi.species)
+  const rar = RAR[tokagotchi.rarity]
   return (
     <div
       className={`${styles.wrap} ${isActive ? styles.active : ''}`}
@@ -23,7 +23,7 @@ export default function TokaAvatar({ tokagotchi, size = 54, isActive = false }: 
       } as React.CSSProperties}
     >
       <div className={styles.av} style={{ width: size, height: size, borderColor: rar.ring }}>
-        <img src={imgSrc} alt={tokagotchi.nombre} />
+        <img src={imgSrc} alt={tokagotchi.name} />
       </div>
     </div>
   )

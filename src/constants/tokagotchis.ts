@@ -2,50 +2,50 @@ import type { Tokagotchi } from '../types/tokagotchi'
 
 export const TOFU_MOCK: Tokagotchi = {
   id: 'tofu_001',
-  nombre: 'Tofu',
-  especie: 'TOFU',
-  rareza: 'COMMON',
+  name: 'Tofu',
+  species: 'TOFU',
+  rarity: 'COMMON',
   stats: {
     hp: 100,
     atk: 12,
     def: 30,
     nrg: 100
   },
-  habilidades: [
+  abilities: [
     {
       id: 'mordida',
-      nombre: 'Mordida',
-      costoNRG: 15,
-      multiplicador: 1.0,
-      descripcion: 'Daño 1.0x Atk',
-      esSignature: false
+      name: 'Mordida',
+      energyCost: 15,
+      multiplier: 1.0,
+      description: 'Daño 1.0x Atk',
+      isSignature: false
     },
     {
       id: 'ladrido',
-      nombre: 'Ladrido',
-      costoNRG: 20,
-      descripcion: '+15% Ataque por 2 turnos',
-      esSignature: false
+      name: 'Ladrido',
+      energyCost: 20,
+      description: '+15% Ataque por 2 turnos',
+      isSignature: false
     },
     {
       id: 'guardia',
-      nombre: 'Guardia',
-      costoNRG: 25,
-      descripcion: '-30% daño recibido el próximo turno',
-      esSignature: false
+      name: 'Guardia',
+      energyCost: 25,
+      description: '-30% daño recibido el próximo turno',
+      isSignature: false
     },
     {
       id: 'lealtad',
-      nombre: 'Lealtad',
-      costoNRG: 45,
-      multiplicador: 1.4,
-      descripcion: 'Daño 1.4x Atk. Si HP < 30%, cura 20% del daño causado',
-      esSignature: true
+      name: 'Lealtad',
+      energyCost: 45,
+      multiplier: 1.4,
+      description: 'Daño 1.4x Atk. Si HP < 30%, cura 20% del daño causado',
+      isSignature: true
     }
   ],
-  accesorios: {
-    cabeza: null,
-    cuerpo: null
+  equippedAccessory: {
+    equippedHead: null,
+    equippedBody: null
   },
   assets: {
     armatureKey: 'tofu',
@@ -57,50 +57,50 @@ export const TOFU_MOCK: Tokagotchi = {
 
 export const MOCHI_MOCK: Tokagotchi = {
   id: 'mochi_001',
-  nombre: 'Mochi',
-  especie: 'MOCHI',
-  rareza: 'COMMON',
+  name: 'Mochi',
+  species: 'MOCHI',
+  rarity: 'COMMON',
   stats: {
     hp: 90,
     atk: 16,
     def: 20,
     nrg: 100
   },
-  habilidades: [
+  abilities: [
     {
       id: 'zarpazo',
-      nombre: 'Zarpazo',
-      costoNRG: 15,
-      multiplicador: 0.9,
-      descripcion: 'Daño 0.9x Atk. 20% prob. de ignorar defensa',
-      esSignature: false
+      name: 'Zarpazo',
+      energyCost: 15,
+      multiplier: 0.9,
+      description: 'Daño 0.9x Atk. 20% prob. de ignorar defensa',
+      isSignature: false
     },
     {
       id: 'agilidad',
-      nombre: 'Agilidad',
-      costoNRG: 25,
-      descripcion: '25% prob. de esquivar el siguiente ataque',
-      esSignature: false
+      name: 'Agilidad',
+      energyCost: 25,
+      description: '25% prob. de esquivar el siguiente ataque',
+      isSignature: false
     },
     {
       id: 'bufido',
-      nombre: 'Bufido',
-      costoNRG: 20,
-      descripcion: 'Reduce Defensa del rival un 20%',
-      esSignature: false
+      name: 'Bufido',
+      energyCost: 20,
+      description: 'Reduce Defensa del rival un 20%',
+      isSignature: false
     },
     {
       id: 'frenesi',
-      nombre: 'Frenesí',
-      costoNRG: 45,
-      multiplicador: 0.7,
-      descripcion: '2 golpes de 0.7x Atk. En Legendario, 30% prob. de crítico (x1.5)',
-      esSignature: true
+      name: 'Frenesí',
+      energyCost: 45,
+      multiplier: 0.7,
+      description: '2 golpes de 0.7x Atk. En Legendario, 30% prob. de crítico (x1.5)',
+      isSignature: true
     }
   ],
-  accesorios: {
-    cabeza: null,
-    cuerpo: null
+  equippedAccessory: {
+    equippedHead: null,
+    equippedBody: null
   },
   assets: {
     armatureKey: 'mochi',
@@ -112,50 +112,50 @@ export const MOCHI_MOCK: Tokagotchi = {
 
 export const HANA_MOCK: Tokagotchi = {
   id: 'hana_001',
-  nombre: 'Hana',
-  especie: 'HANA',
-  rareza: 'RARE',
+  name: 'Hana',
+  species: 'HANA',
+  rarity: 'RARE',
   stats: {
     hp: 95,
     atk: 14,
     def: 24,
     nrg: 100
   },
-  habilidades: [
+  abilities: [
     {
       id: 'florazo',
-      nombre: 'Florazo',
-      costoNRG: 15,
-      multiplicador: 1,
-      descripcion: 'Daño 1.0x Atk',
-      esSignature: false
+      name: 'Florazo',
+      energyCost: 15,
+      multiplier: 1,
+      description: 'Daño 1.0x Atk',
+      isSignature: false
     },
     {
       id: 'fotosintesis',
-      nombre: 'Fotosíntesis',
-      costoNRG: 20,
-      descripcion: 'Recupera vitalidad y gana ritmo',
-      esSignature: false
+      name: 'Fotosíntesis',
+      energyCost: 20,
+      description: 'Recupera vitalidad y gana ritmo',
+      isSignature: false
     },
     {
       id: 'espinas',
-      nombre: 'Espinas',
-      costoNRG: 25,
-      descripcion: 'Aumenta defensa por 2 turnos',
-      esSignature: false
+      name: 'Espinas',
+      energyCost: 25,
+      description: 'Aumenta defensa por 2 turnos',
+      isSignature: false
     },
     {
       id: 'tormenta_petalos',
-      nombre: 'Tormenta de Pétalos',
-      costoNRG: 45,
-      multiplicador: 1.35,
-      descripcion: 'Daño 1.35x Atk',
-      esSignature: true
+      name: 'Tormenta de Pétalos',
+      energyCost: 45,
+      multiplier: 1.35,
+      description: 'Daño 1.35x Atk',
+      isSignature: true
     }
   ],
-  accesorios: {
-    cabeza: null,
-    cuerpo: null
+  equippedAccessory: {
+    equippedHead: null,
+    equippedBody: null
   },
   assets: {
     armatureKey: 'hana',

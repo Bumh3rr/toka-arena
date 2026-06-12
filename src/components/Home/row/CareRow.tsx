@@ -1,8 +1,8 @@
-import { IcClock } from '../Utils/Icons/Icons'
-import { CUIDADO_CONFIG, type AccionCuidado } from '../../constants/cuidado'
-import type { Cooldowns, Floaters } from '../../hooks/useHome'
-import styles from './CareRow.module.css'
-import { HeaderTitleLine } from '../CareSheet/CareSheet'
+import { IcClock } from '../../Utils/Icons/Icons'
+import { CUIDADO_CONFIG, type AccionCuidado } from '../../../constants/cuidado'
+import type { Cooldowns, Floaters } from '../../../hooks/useHome'
+import styles from './styles/CareRow.module.css'
+import { HeaderTitleLine } from '../../CareSheet/CareSheet'
 
 const fmt = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`
 
@@ -35,11 +35,7 @@ function CareBtn({ accion, cooldown, floater, onUse }: CareBtnProps) {
         <img
           src={cfg.img}
           alt={cfg.label}
-          onError={(e) => {
-            (e.target as HTMLImageElement).style.display = 'none'
-          }}
         />
-        <div className={styles.fallbackLabel}>{cfg.label}</div>
         {cool && (
           <div className={styles.veil}>
             <span className={styles.clock}><IcClock /></span>
@@ -55,12 +51,13 @@ interface CareRowProps {
   cooldowns: Cooldowns
   floaters: Floaters
   onUse: (a: AccionCuidado) => void
+  showHeader?: boolean
 }
 
-export default function CareRow({ cooldowns, floaters, onUse }: CareRowProps) {
+export default function CareRow({ cooldowns, floaters, onUse, showHeader = true }: CareRowProps) {
   return (
     <div>
-      <HeaderTitleLine title="Cuidado" />
+      {showHeader && <HeaderTitleLine title="Cuidado" />}
       <div className={styles.grid}>
         {CUIDADO_CONFIG.map(cfg => (
           <CareBtn

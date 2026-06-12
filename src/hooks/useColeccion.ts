@@ -107,9 +107,9 @@ export function useColeccion() {
   const tokaConAccesorios: Tokagotchi = tokaActivo
     ? {
         ...tokaActivo,
-        accesorios: {
-          cabeza: accesorioActivoCabeza,
-          cuerpo: accesorioActivoCuerpo
+        equippedAccessory: {
+          equippedHead: accesorioActivoCabeza,
+          equippedBody: accesorioActivoCuerpo
         }
       }
     : { ...({} as Tokagotchi) }

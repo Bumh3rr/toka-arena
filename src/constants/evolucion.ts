@@ -1,30 +1,22 @@
-import type { Rareza } from '../types/tokagotchi'
+import type { Rarity,ReglaEvolucion } from '../types/tokagotchi'
 
-export interface ReglaEvolucion {
-  siguiente: string
-  cpMeta: number
-  costoTF: number
-  probabilidadPct: number
-  cooldownHoras: number
-}
-
-export const EVOLUCION: Partial<Record<Rareza, ReglaEvolucion>> = {
+export const EVOLUCION: Partial<Record<Rarity, ReglaEvolucion>> = {
   COMMON: {
-    siguiente: "Raro",
+    siguiente: "RARE",
     cpMeta: 100,
     costoTF: 10,
     probabilidadPct: 40,
     cooldownHoras: 12,
   },
   RARE: {
-    siguiente: "Épico",
+    siguiente: "EPIC",
     cpMeta: 300,
     costoTF: 25,
     probabilidadPct: 30,
     cooldownHoras: 24,
   },
   EPIC: {
-    siguiente: "Legendario",
+    siguiente: "LEGENDARY",
     cpMeta: 600,
     costoTF: 50,
     probabilidadPct: 20,

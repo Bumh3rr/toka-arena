@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import BottomSheet from '../BottomSheet/BottomSheet'
-import { IcCheck, IcCopy, IcPencil, IcPerson, IcMusic, IcHelp, IcDoc, IcInfo, IcSpeaker, IcChevR } from '../Utils/Icons/Icons'
-import styles from './PerfileModal.module.css'
-import { IconButton, Button, Toggle, Label } from '../UIKit'
-import DevPanel from './DevPanel'
-import { IS_DEV_MODE } from '../../types/debug_dev'
-import { musicManager } from '../../hooks/music/musicManager'
+import BottomSheet from '../../BottomSheet/BottomSheet'
+import { IcCheck, IcCopy, IcPencil, IcPerson, IcMusic, IcHelp, IcDoc, IcInfo, IcSpeaker, IcChevR } from '../../Utils/Icons/Icons'
+import styles from './styles/PerfileModal.module.css'
+import { IconButton, Button, Toggle, Label } from '../../UIKit'
+import DevPanel from '../panel/DevPanel'
+import { IS_DEV_MODE } from '../../../types/debug_dev'
+import { musicManager } from '../../../hooks/music/musicManager'
 
 interface PerfileModalProps {
     onClose: () => void

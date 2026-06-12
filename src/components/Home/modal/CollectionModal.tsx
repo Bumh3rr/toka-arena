@@ -1,16 +1,16 @@
 import { useState } from 'react'
-import BottomSheet from '../BottomSheet/BottomSheet'
-import TokaAvatar from '../TokaAvatar/TokaAvatar'
-import { IcCheck, IcChevronDown } from '../Utils/Icons/Icons'
-import type { Tokagotchi } from '../../types/tokagotchi'
-import { RAR } from '../../types/tokagotchi'
-import { tokagotchiService } from '../../services/tokagotchiService'
-import styles from './CollectionModal.module.css'
+import BottomSheet from '../../BottomSheet/BottomSheet'
+import TokaAvatar from '../../TokaAvatar/TokaAvatar'
+import { IcCheck, IcChevronDown } from '../../Utils/Icons/Icons'
+import type { Tokagotchi } from '../../../types/tokagotchi'
+import { RAR } from '../../../types/tokagotchi'
+import { tokagotchiService } from '../../../services/tokagotchiService'
+import styles from './styles/CollectionModal.module.css'
 
 interface CollectionModalProps {
   roster: Tokagotchi[]
-  activeId: string
-  onActivate: (id: string) => void
+  activeId: number
+  onActivate: (id: number) => void
   onClose: () => void
 }
 
@@ -19,9 +19,9 @@ type SortKey = 'especie' | 'rareza' | 'favoritos'
 export default function CollectionModal({ roster, activeId, onActivate, onClose }: CollectionModalProps) {
   const [sort, setSort] = useState<SortKey>('especie')
   const [open, setOpen] = useState<Record<string, boolean>>({})
-  const [activating, setActivating] = useState<string | null>(null)
+  const [activating, setActivating] = useState<number | null>(null)
 
-  const handleActivate = async (id: string) => {
+  const handleActivate = async (id: number) => {
     if (id === activeId) return
     setActivating(id)
     try {
@@ -35,13 +35,13 @@ export default function CollectionModal({ roster, activeId, onActivate, onClose 
   }
 
   const groups = roster.reduce<Record<string, { nombre: string; especie: string; items: Tokagotchi[] }>>((acc, t) => {
-    const key = t.nombre
-    if (!acc[key]) acc[key] = { nombre: t.nombre, especie: t.especie, items: [] }
+    const key = t.name
+    if (!acc[key]) acc[key] = { nombre: t.name, especie: t.species, items: [] }
     acc[key].items.push(t)
     return acc
   }, {})
 
-  const rarOrder = (r: Tokagotchi) => RAR[r.rareza].order
+  const rarOrder = (r: Tokagotchi) => RAR[r.rarity].order
   const list = Object.values(groups)
   list.forEach(g => { g.items.sort((a, b) => rarOrder(b) - rarOrder(a)) })
 
@@ -58,7 +58,7 @@ export default function CollectionModal({ roster, activeId, onActivate, onClose 
       <div className={styles.sub}>Acceso rápido</div>
       <div className={styles.quickStrip}>
         {quick.map(t => {
-          const rar = RAR[t.rareza]
+          const rar = RAR[t.rarity]
           const isActive = t.id === activeId
           return (
             <button key={t.id} className={`${styles.qChip} ${isActive ? styles.qActive : ''}`}
@@ -67,7 +67,7 @@ export default function CollectionModal({ roster, activeId, onActivate, onClose 
                 <TokaAvatar tokagotchi={t} size={54} isActive={isActive} />
                 {isActive && <span className={styles.qCheck}><IcCheck /></span>}
               </div>
-              <span className={styles.qNick}>{t.nombre}</span>
+              <span className={styles.qNick}>{t.name}</span>
               <span className={styles.qRar} style={{ color: rar.ring }}>{rar.label}</span>
             </button>
           )
@@ -105,17 +105,17 @@ export default function CollectionModal({ roster, activeId, onActivate, onClose 
             </div>
             <div className={styles.deckItems}>
               {g.items.map(it => {
-                const rar = RAR[it.rareza]
+                const rar = RAR[it.rarity]
                 const isActive = it.id === activeId
                 return (
                   <div key={it.id} className={styles.colItem}>
                     <TokaAvatar tokagotchi={it} size={44} isActive={isActive} />
                     <div className={styles.ciInfo}>
                       <div className={styles.ciNick}>
-                        {it.nombre}
+                        {it.name}
                         <span className={styles.rarTag} style={{ background: rar.ring }}>{rar.label}</span>
                       </div>
-                      <div className={styles.ciAcc}>{it.accesorios.cabeza?.nombre ?? 'Sin accesorio'}</div>
+                      <div className={styles.ciAcc}>{it.equippedAccessory.equippedHead?.name ?? 'Sin accesorio'}</div>
                     </div>
                     {isActive ? (
                       <span className={`${styles.activar} ${styles.activarActive}`}>

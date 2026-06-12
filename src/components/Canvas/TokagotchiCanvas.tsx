@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react'
 import { TokagotchiGame } from '../../game/TokagotchiGame'
 import type { TokagotchiConfig } from '../../game/types'
-import type { Especie, AssetsTokagotchi, AnimacionTokagotchi } from '../../types/tokagotchi'
-import { getAssetsByEspecie } from '../../services/tokagotchiService'
+import type { Species, Assets, AnimationTokagotchi } from '../../types/tokagotchi'
+import { getAssetsBySpecies } from '../../services/tokagotchiService'
 
 /**
  * Props de {@link TokagotchiCanvas}.
@@ -18,17 +18,17 @@ interface TokagotchiCanvasProps {
   /** Índice del accesorio de cuerpo en el slot DragonBones. `-1` = sin accesorio. */
   accesorioIndexCuerpo?: number
   /** Animación activa. Cambia en tiempo real sin reiniciar Phaser. */
-  animacionActual?: AnimacionTokagotchi
+  animacionActual?: AnimationTokagotchi
   /**
    * Especie del Tokagotchi usada para resolver los assets cuando no se pasa `assets`.
    * Si se proporciona `assets`, este prop se ignora.
    */
-  especie?: Especie
+  especie?: Species
   /**
    * Assets precargados del Tokagotchi. Tiene prioridad sobre `especie`.
    * Pasar este prop evita la llamada a `getAssetsByEspecie` en cada render.
    */
-  assets?: AssetsTokagotchi
+  assets?: Assets
   /** Espeja el personaje horizontalmente. Útil para el rival en la pantalla de arena. */
   reverse?: boolean
   /**
@@ -73,7 +73,7 @@ export default function TokagotchiCanvas({
   const pausedRef = useRef(paused)
 
   if (!assets) {
-    assets = getAssetsByEspecie(especie)
+    assets = getAssetsBySpecies(especie)
   }
 
   // ── Crear / destruir (una sola vez al montar/desmontar) ───────────────────

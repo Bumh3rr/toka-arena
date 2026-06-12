@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import type { Tokagotchi, AnimacionTokagotchi } from "../types/tokagotchi";
+import type { Tokagotchi, AnimationTokagotchi } from "../types/tokagotchi";
 import { userService } from "../services/userService";
 //import { careService } from "../services/careService";
 import { mapResponseToTokagotchi } from "../services/tokagotchiService";
@@ -12,7 +12,7 @@ export type Cooldowns = Record<AccionCuidado, number>;
 
 export function useHome() {
   const [tokagotchi, setTokagotchi] = useState<Tokagotchi | null>(null);
-  const [animation, setAnimation] = useState<AnimacionTokagotchi>("idle");
+  const [animation, setAnimation] = useState<AnimationTokagotchi>("idle");
   const [allTokas, setAllTokas] = useState<Tokagotchi[]>([]);
   const [username, setUsername] = useState("");
   const [tf, setTf] = useState(0);

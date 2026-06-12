@@ -47,7 +47,7 @@ export default function BatallaView({ batalla }: { batalla: any }) {
           </span>
         </div>
         <TokagotchiCanvas
-          especie={rival?.especie ?? TOFU_MOCK.especie}
+          especie={rival?.especie ?? TOFU_MOCK.species}
           width={110}
           height={110}
         />

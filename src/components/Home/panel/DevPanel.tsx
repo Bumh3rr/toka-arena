@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
-import { IcTerminal, IcChevR } from '../Utils/Icons/Icons'
-import type { Especie, Rareza } from '../../types/tokagotchi'
-import styles from './DevPanel.module.css'
-import { authService } from '../../services/authService'
+import { IcTerminal, IcChevR } from '../../Utils/Icons/Icons'
+import type { Species, Rarity } from '../../../types/tokagotchi'
+import styles from './styles/DevPanel.module.css'
+import { authService } from '../../../services/authService'
 import { useNavigate } from 'react-router-dom'
 
 // ── Constantes ────────────────────────────────────────────────────────────────
-const ESPECIES: Especie[] = ['TOFU', 'MOCHI', 'HANA']
-const RAREZAS: { value: Rareza; label: string }[] = [
+const ESPECIES: Species[] = ['TOFU', 'MOCHI', 'HANA']
+const RAREZAS: { value: Rarity; label: string }[] = [
     { value: 'COMMON', label: 'C' },
     { value: 'RARE', label: 'R' },
     { value: 'EPIC', label: 'É' },
@@ -57,9 +57,9 @@ export default function DevPanel() {
     const [ambiente, setAmbiente] = useState<Ambiente>('auto')
     const [tf, setTf] = useState(1500)
     const [cp, setCp] = useState(0)
-    const [rarity, setRarity] = useState<Rareza>('COMMON')
-    const [giveSpecies, setGiveSpecies] = useState<Especie>('TOFU')
-    const [giveRarity, setGiveRarity] = useState<Rareza>('COMMON')
+    const [rarity, setRarity] = useState<Rarity>('COMMON')
+    const [giveSpecies, setGiveSpecies] = useState<Species>('TOFU')
+    const [giveRarity, setGiveRarity] = useState<Rarity>('COMMON')
     const navigate = useNavigate()
     const { clearSession } = authService
 

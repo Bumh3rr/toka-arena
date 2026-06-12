@@ -2,7 +2,7 @@ import { useState, useRef, useLayoutEffect } from 'react'
 import styles from './CareSheet.module.css'
 
 export const SCENE_MAX = 230
-export const SCENE_MIN = 8
+export const SCENE_MIN = 50
 
 interface CareSheetProps {
   expanded: boolean

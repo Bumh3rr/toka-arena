@@ -1,9 +1,9 @@
- import type { AssetsTokagotchi } from '../types/tokagotchi'
+ import type { Assets } from '../types/tokagotchi'
  
  export interface TokagotchiConfig {
     width: number
     height: number
-    assets: AssetsTokagotchi
+    assets: Assets
     animacionActual: string
     accesorioIndexCabeza: number
     accesorioIndexCuerpo: number

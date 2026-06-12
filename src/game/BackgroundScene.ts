@@ -104,7 +104,7 @@ export function createBackgroundScene(cfg: BackgroundConfig = {}): IBackgroundSc
   // offsetY: ajuste vertical fino para alinear el horizonte (imagen).
   // ─────────────────────────────────────────────────────────
   const LAYER_DEFS = [
-    { key: 'bg_fg',  path: '/assets/scene/op.png',  color: 0x4E7A30, yFactor: 0.82, offsetY: -16 },
+    { key: 'bg_fg',  path: '/assets/scene/op.png',  color: 0x4E7A30, yFactor: 0.82, offsetY: 0 },
   ]
 
   let sky: any = null
@@ -196,10 +196,10 @@ export function createBackgroundScene(cfg: BackgroundConfig = {}): IBackgroundSc
       }
 
       // ── Sol y luna ────────────────────────────────────────
-      // KNOB: posición X/Y relativa al canvas (ajusta los factores 0.78, 0.22, etc.)
+      // KNOB: posición X/Y relativa al canvas (ajusta los factores 0.78, 0.12, etc.)
       // Si no hay asset se dibuja un círculo de color como fallback.
-      sun  = has('bg_sun')  ? this.add.image(W * 0.78, H * 0.22, 'bg_sun').setDepth(0.4)  : this.add.circle(W * 0.78, H * 0.22, 26, 0xFFD25A).setDepth(0.4)
-      moon = has('bg_moon') ? this.add.image(W * 0.22, H * 0.20, 'bg_moon').setDepth(0.4) : this.add.circle(W * 0.22, H * 0.20, 22, 0xEAF0FF).setDepth(0.4)
+      sun  = has('bg_sun')  ? this.add.image(W * 0.78, H * 0.12, 'bg_sun').setDepth(0.4)  : this.add.circle(W * 0.78, H * 0.12, 26, 0xFFD25A).setDepth(0.4)
+      moon = has('bg_moon') ? this.add.image(W * 0.22, H * 0.12, 'bg_moon').setDepth(0.4) : this.add.circle(W * 0.22, H * 0.12, 22, 0xEAF0FF).setDepth(0.4)
 
       // ── Nube ──────────────────────────────────────────────
       // Una sola imagen (no tileSprite) que cruza lento. La posición X se actualiza

@@ -1,34 +1,50 @@
-import type { Accesorio } from "./accesorios";
+import type { Evolution } from "./evolution";
 
 // Rarezas disponibles
-export type Rareza = "COMMON" | "RARE" | "EPIC" | "LEGENDARY";
+export type Rarity = "COMMON" | "RARE" | "EPIC" | "LEGENDARY";
 
 // Especies disponibles
-export type Especie = "TOFU" | "MOCHI" | "HANA";
+export type Species = "TOFU" | "MOCHI" | "HANA";
+
+// Tipos de Accesorioos
+export type TypeAccessory = "HEAD" | "BODY";
 
 // Animaciones disponibles para el Tokagotchi
-export type AnimacionTokagotchi = | "idle" | "ataque" | "comer" | "bañar" | "curacion" | "daño" | "jugar";
+export type AnimationTokagotchi =
+  | "idle"
+  | "ataque"
+  | "comer"
+  | "bañar"
+  | "curacion"
+  | "daño"
+  | "jugar";
+
+export interface EquippedAccessory {
+  id: number;
+  name: string;
+  typeAccessory: TypeAccessory;
+  displayIndex: number;
+}
 
 // Stats del Tokagotchi
-export interface TokagotchiStats {
+export interface Stats {
   hp: number;
   atk: number;
   def: number;
-  nrg: number;
 }
 
 // Habilidad
-export interface Habilidad {
-  id: string;
-  nombre: string;
-  costoNRG: number;
-  multiplicador?: number;
-  descripcion: string;
-  esSignature: boolean;
+export interface Ability {
+  id: number;
+  name: string;
+  energyCost: number;
+  multiplier?: number;
+  description: string;
+  isSignature: boolean;
 }
 
 // Assets necesarios para renderizar el Tokagotchi
-export interface AssetsTokagotchi {
+export interface Assets {
   texPng: string;
   texJson: string;
   skeJson: string;
@@ -37,17 +53,19 @@ export interface AssetsTokagotchi {
 
 // Tokagotchi principal
 export interface Tokagotchi {
-  id: string;
-  nombre: string;
-  especie: Especie;
-  rareza: Rareza;
-  stats: TokagotchiStats;
-  habilidades: Habilidad[];
-  accesorios: {
-    cabeza: Accesorio | null;
-    cuerpo: Accesorio | null;
+  id: number;
+  name: string;
+  species: Species;
+  rarity: Rarity;
+  stats: Stats;
+  abilities: Ability[];
+  equippedAccessory: {
+    equippedHead: EquippedAccessory | null;
+    equippedBody: EquippedAccessory | null;
   };
-  assets: AssetsTokagotchi;
+  cp: number;
+  assets: Assets;
+  evolution: Evolution | null;
 }
 
 // Animaciones disponibles
