@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import WoodButton from '@/shared/ui/WoodButton/WoodButton'
-import TokagotchiCanvas from '@/shared/canvas/TokagotchiCanvas'
+//import TokagotchiCanvas from '@/shared/canvas/TokagotchiCanvas'
 import { useAuth } from '../hooks/useAuth'
 import styles from './LoginPage.module.css'
 
@@ -33,13 +33,14 @@ export default function LoginPage() {
 
         {/* Animacion de Tokagotchi */}
         <div className={styles.tokagotchiContainer}>
-          {/* Tokagotchi */}
+          {/* Tokagotchi 
           <TokagotchiCanvas
             accesorioIndexCabeza={0}
             accesorioIndexCuerpo={1}
             animacionActual={'idle'}
             especie='HANA'
             reverse={false} />
+            */}
         </div>
 
         {/* Botton */}

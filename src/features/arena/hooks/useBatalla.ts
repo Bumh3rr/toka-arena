@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+/* import { useEffect, useRef, useState } from 'react'
 import type{
   ModoBatalla,
   FaseBatalla,
@@ -636,4 +636,4 @@ export function useBatalla() {
     animacionJugador,
     animacionRival
   }
-}
+} */

@@ -1,13 +1,10 @@
 import type { Evolution } from "./evolution";
+import type { EquippedAccessory } from "./accessory";
 
 // Rarezas disponibles
 export type Rarity = "COMMON" | "RARE" | "EPIC" | "LEGENDARY";
-
 // Especies disponibles
 export type Species = "TOFU" | "MOCHI" | "HANA";
-
-// Tipos de Accesorioos
-export type TypeAccessory = "HEAD" | "BODY";
 
 // Animaciones disponibles para el Tokagotchi
 export type AnimationTokagotchi =
@@ -18,13 +15,6 @@ export type AnimationTokagotchi =
   | "curacion"
   | "daño"
   | "jugar";
-
-export interface EquippedAccessory {
-  id: number;
-  name: string;
-  typeAccessory: TypeAccessory;
-  displayIndex: number;
-}
 
 // Stats del Tokagotchi
 export interface Stats {
@@ -51,59 +41,23 @@ export interface Assets {
   armatureKey: string;
 }
 
+export interface CareTimestamps {
+  feed: number | null;
+  play: number | null;
+  bathe: number | null;
+}
+
 // Tokagotchi principal
-export interface Tokagotchi {
+export interface TokagotchiActive {
   id: number;
   name: string;
   species: Species;
   rarity: Rarity;
   stats: Stats;
   abilities: Ability[];
-  equippedAccessory: {
-    equippedHead: EquippedAccessory | null;
-    equippedBody: EquippedAccessory | null;
-  };
+  equipped: EquippedAccessory[];
   cp: number;
   assets: Assets;
   evolution: Evolution | null;
+  care: CareTimestamps;
 }
-
-// Animaciones disponibles
-export type TokagotchiAnimacion =
-  | "idle"
-  | "feed"
-  | "play"
-  | "heal"
-  | "bath"
-  | "attack"
-  | "hurt"
-  | "ko"
-  | "win"
-  | "battle_idle";
-
-export const RAR = {
-  COMMON: {
-    label: "Común",
-    ring: "#A0A0A0",
-    soft: "rgba(160,160,160,.30)",
-    order: 0,
-  },
-  RARE: {
-    label: "Raro",
-    ring: "#3D99FF",
-    soft: "rgba(61,153,255,.30)",
-    order: 1,
-  },
-  EPIC: {
-    label: "Épico",
-    ring: "#A335EE",
-    soft: "rgba(163,53,238,.30)",
-    order: 2,
-  },
-  LEGENDARY: {
-    label: "Legendario",
-    ring: "#FF8000",
-    soft: "rgba(255,128,0,.32)",
-    order: 3,
-  },
-};

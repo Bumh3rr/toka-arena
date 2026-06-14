@@ -1,9 +1,9 @@
-import TokagotchiCanvas from '@/shared/canvas/TokagotchiCanvas'
+//import TokagotchiCanvas from '@/shared/canvas/TokagotchiCanvas'
 import styles from './Arena.module.css'
 import resultStyles from './ResultadoView.module.css'
 
 export default function VictoriaView({ batalla }: { batalla: any }) {
-  const { tokagotchi, estadoBatalla, modo, volverLobby, resultado } = batalla
+  const { estadoBatalla, modo, volverLobby, resultado } = batalla
 
   return (
     <div className={styles.view} style={{ alignItems: 'center' }}>
@@ -16,6 +16,7 @@ export default function VictoriaView({ batalla }: { batalla: any }) {
         </span>
       </div>
 
+      {/**
       <TokagotchiCanvas
         accesorioIndexCabeza={tokagotchi.accesorios.cabeza?.displayIndex ?? -1}
         accesorioIndexCuerpo={tokagotchi.accesorios.cuerpo?.displayIndex ?? -1}
@@ -24,6 +25,7 @@ export default function VictoriaView({ batalla }: { batalla: any }) {
         width={130}
         height={120}
       />
+       */}
 
       <div className={resultStyles.recompensaCard}>
         <span className={resultStyles.recompensaLabel}>Recompensa</span>

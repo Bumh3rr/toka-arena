@@ -1,12 +1,12 @@
 import { useState } from 'react'
-import type { Tokagotchi } from '@/shared/types/tokagotchi'
 import { tokagotchiService } from '@/shared/services/tokagotchiService'
+import type { TokagotchiActive } from '@/shared/types/tokagotchi'
 
 export function useClaimStarter() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const claimStarter = async (): Promise<Tokagotchi | null> => {
+  const claimStarter = async (): Promise<TokagotchiActive | null> => {
     setLoading(true)
     setError(null)
     try {

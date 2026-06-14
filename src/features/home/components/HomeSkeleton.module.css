@@ -1,0 +1,135 @@
+.container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: linear-gradient(#BFE3FF, #EAF6FF);
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+.bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  height: 90vh;
+  background: linear-gradient(#BFE3FF, #EAF6FF);
+}
+
+/* ── Bloque base con shimmer ────────────────────────────────────────────────
+   Mismo material que las cards crema del proyecto (borde edge-cream + radio). */
+.sk {
+  position: relative;
+  overflow: hidden;
+  background: var(--cream-2);
+  border: 2px solid var(--edge-cream);
+  border-radius: var(--r-lg);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, .5);
+}
+
+.sk::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .65), transparent);
+  animation: skShimmer 1.3s ease-in-out infinite;
+}
+
+/* ── TopBar ─────────────────────────────────────────────────────────────── */
+.topbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  padding: 12px 14px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.name {
+  width: 92px;
+  height: 26px;
+  border-radius: var(--r-pill);
+}
+
+.coin {
+  width: 84px;
+  height: 38px;
+  border-radius: var(--r-pill);
+}
+
+/* ── Pase de batalla (pestaña que asoma a la derecha) ───────────────────── */
+.pass {
+  position: absolute;
+  right: -4px;
+  top: 90px;
+  width: 64px;
+  height: 92px;
+  border-radius: var(--r-lg) 0 0 var(--r-lg);
+}
+
+/* ── Tokagotchi ─────────────────────────────────────────────────────────── */
+.toka {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 150px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+}
+
+/* ── Controles flotantes ────────────────────────────────────────────────── */
+.controls {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--nav-height, 64px) + 8px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  padding: 0 16px;
+}
+
+.pill {
+  width: min(80vw, 240px);
+  height: 64px;
+}
+
+.care {
+  display: flex;
+  gap: 16px;
+}
+
+.careBtn {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--r-lg);
+}
+
+@keyframes skShimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sk::after {
+    animation: none;
+  }
+}

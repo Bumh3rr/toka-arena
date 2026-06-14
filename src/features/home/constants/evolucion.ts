@@ -1,25 +1,30 @@
-import type { Rarity,ReglaEvolucion } from '@/shared/types/tokagotchi'
+import type { Rarity } from "@/shared/types/tokagotchi";
+import type { Evolution } from "@/shared/types/evolution";
 
-export const EVOLUCION: Partial<Record<Rarity, ReglaEvolucion>> = {
+
+export const EVOLUCION: Partial<Record<Rarity, Evolution>> = {
   COMMON: {
-    siguiente: "RARE",
-    cpMeta: 100,
-    costoTF: 10,
-    probabilidadPct: 40,
-    cooldownHoras: 12,
+    nextRarity: "RARE",
+    cpRequired: 100,
+    costTF: 10,
+    successChance: 40,
+    failCooldownHours: 12,
+    availableAt: null
   },
   RARE: {
-    siguiente: "EPIC",
-    cpMeta: 300,
-    costoTF: 25,
-    probabilidadPct: 30,
-    cooldownHoras: 24,
+    nextRarity: "EPIC",
+    cpRequired: 300,
+    costTF: 25,
+    successChance: 30,
+    failCooldownHours: 24,
+    availableAt: null
   },
   EPIC: {
-    siguiente: "LEGENDARY",
-    cpMeta: 600,
-    costoTF: 50,
-    probabilidadPct: 20,
-    cooldownHoras: 48,
+    nextRarity: "LEGENDARY",
+    cpRequired: 600,
+    costTF: 50,
+    successChance: 20,
+    failCooldownHours: 48,
+    availableAt: null
   },
 };

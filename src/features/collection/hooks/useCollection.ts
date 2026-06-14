@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+/* import { useState, useEffect } from 'react'
 import type { Tokagotchi } from '@/shared/types/tokagotchi'
 import type { Accesorio } from '@/features/collection/types/collection'
 import { userService } from '@/shared/services/userService'
@@ -194,4 +194,4 @@ function resolveAccessoryName(accessoryRef: unknown): string | null {
   }
 
   return null
-}
+} */

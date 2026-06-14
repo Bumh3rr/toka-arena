@@ -1,4 +1,4 @@
-import TokagotchiCanvas from '@/shared/canvas/TokagotchiCanvas'
+//import TokagotchiCanvas from '@/shared/canvas/TokagotchiCanvas'
 import styles from './Arena.module.css'
 import batallaStyles from './BatallaView.module.css'
 
@@ -61,13 +61,15 @@ export default function BatallaView({ batalla }: { batalla: any }) {
         ))}
       </div>
 
-      {/* Jugador */}
+      {/* Jugador*/}
       <div className={batallaStyles.jugadorSection}>
+        {/**
         <TokagotchiCanvas
           especie={tokagotchi.especie}
           width={110}
           height={110}
         />
+          */}
         <div className={batallaStyles.jugadorInfo}>
           <span className={batallaStyles.rivalNombre}>{tokagotchi.nombre}</span>
           <div className={styles.hpBar}>

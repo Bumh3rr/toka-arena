@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { Tokagotchi } from '@/shared/types/tokagotchi'
+import type { TokagotchiActive } from '@/shared/types/tokagotchi'
 import { useGiftSound } from './useGiftSound'
 import { useRevealSound } from './useRevealSound'
 import { useClaimStarter } from './useClaimStarter'
@@ -10,7 +10,7 @@ export type GiftFase = 'idle' | 'shaking' | 'exploding'
 export function useUnboxing() {
   const [phase, setPhase] = useState<UnboxingPhase>('reveal')
   const [giftFase, setGiftFase] = useState<GiftFase>('idle')
-  const [result, setResult] = useState<Tokagotchi | null>(null)
+  const [result, setResult] = useState<TokagotchiActive | null>(null)
   const { playShake, stopShake } = useGiftSound()
   const { playReveal } = useRevealSound()
   const { claimStarter, loading, error } = useClaimStarter()

@@ -1,11 +1,13 @@
-import { useBatalla } from '../hooks/useBatalla'
+import styles from './ArenaPage.module.css'
+
+/* import { useBatalla } from '../hooks/useBatalla'
 import LobbyView from './views/LobbyView'
 import PreparacionView from './views/PreparacionView'
 import EsperaView from './views/EsperaView'
 import BatallaView from './views/BatallaView'
 import VictoriaView from './views/VictoriaView'
 import DerrotaView from './views/DerrotaView'
-import styles from './ArenaPage.module.css'
+
 
 export default function ArenaPage() {
   const batalla = useBatalla()
@@ -19,6 +21,16 @@ export default function ArenaPage() {
       {batalla.fase === 'batalla' && <BatallaView batalla={batalla} />}
       {batalla.fase === 'victoria' && <VictoriaView batalla={batalla} />}
       {batalla.fase === 'derrota' && <DerrotaView batalla={batalla} />}
+    </div>
+  )
+} */
+
+
+export default function ArenaPage() {
+
+  return (
+    <div className={styles.container}>
+      <div>Arena</div>
     </div>
   )
 }

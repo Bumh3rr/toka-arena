@@ -1,6 +1,5 @@
 import api from './api'
-import type { Tokagotchi } from '../types/tokagotchi'
-import { mapResponseToTokagotchi } from './tokagotchiService'
+import type { TokagotchiActive } from '../types/tokagotchi' 
 
 export interface UserMeResponse {
   id: number
@@ -31,16 +30,19 @@ export interface MisionesResponse {
 export const userService = {
   getMe: async (): Promise<UserMeResponse> => {
     const response = await api.get('/users/me')
+    console.log("/users/me", response.data)
     return response.data
   },
 
-  renameTokagotchi: async (id: number, newName: string): Promise<Tokagotchi> => {
+  renameTokagotchi: async (id: number, newName: string): Promise<TokagotchiActive> => {
     const response = await api.post(`/tokagotchi/${id}/rename`, { newName })
-    return mapResponseToTokagotchi(response.data)
+    console.log("/tokagotchi/${id}/rename", response.data)
+    return response.data;
   },
 
   getMisiones: async (): Promise<MisionesResponse> => {
     const response = await api.get('/missions')
+    console.log("/missions", response.data)
     return response.data
   }
 }

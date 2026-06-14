@@ -1,5 +1,6 @@
 import { IcClock } from '@/shared/ui/Icons/Icons'
-import { CUIDADO_CONFIG, type AccionCuidado } from '../../constants/cuidado'
+import { CONFIG_CARE } from '../../constants/cuidado'
+import type { ActionCare } from '../../home.types'
 import type { Cooldowns, Floaters } from '../../hooks/useHome'
 import styles from './styles/CareRow.module.css'
 import { HeaderTitleLine } from '../CareSheet/CareSheet'
@@ -7,14 +8,14 @@ import { HeaderTitleLine } from '../CareSheet/CareSheet'
 const fmt = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`
 
 interface CareBtnProps {
-  accion: AccionCuidado
+  accion: ActionCare
   cooldown: number
   floater: number | undefined
-  onUse: (a: AccionCuidado) => void
+  onUse: (a: ActionCare) => void
 }
 
 function CareBtn({ accion, cooldown, floater, onUse }: CareBtnProps) {
-  const cfg = CUIDADO_CONFIG.find(c => c.key === accion)!
+  const cfg = CONFIG_CARE.find(c => c.key === accion)!
   const cool = cooldown > 0
 
   return (
@@ -50,7 +51,7 @@ function CareBtn({ accion, cooldown, floater, onUse }: CareBtnProps) {
 interface CareRowProps {
   cooldowns: Cooldowns
   floaters: Floaters
-  onUse: (a: AccionCuidado) => void
+  onUse: (a: ActionCare) => void
   showHeader?: boolean
 }
 
@@ -59,7 +60,7 @@ export default function CareRow({ cooldowns, floaters, onUse, showHeader = true 
     <div>
       {showHeader && <HeaderTitleLine title="Cuidado" />}
       <div className={styles.grid}>
-        {CUIDADO_CONFIG.map(cfg => (
+        {CONFIG_CARE.map(cfg => (
           <CareBtn
             key={cfg.key}
             accion={cfg.key}

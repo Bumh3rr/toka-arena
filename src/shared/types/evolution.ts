@@ -1,24 +1,14 @@
 // types/evolution.ts
 import type { Rarity } from "./tokagotchi";
 
-// Reglas para evolucionar al Tokagotchi
-export interface EvolutionRule {
+// Evolución del Tokagotchi
+export interface Evolution {
   nextRarity: Rarity; // Siguiente rareza por debloquear
   cpRequired: number; // CP mínimos para intentar
   costTF: number; // costo del intento (TF)
   successChance: number; // probabilidad de éxito (0–100)
   failCooldownHours: number; // cooldown que se aplica SI el intento falla (12,24,48 hrs)
-}
-
-// Cooldown ACTIVO tras un intento fallido.
-export interface EvolutionCooldown {
-  endsAt: string; // Si la evolucion fallo, se mostrará el tiempo en formato timestamp
-}
-
-// Evolución del Tokagotchi
-export interface Evolution {
-  rule: EvolutionRule | null; // null = ya es la rareza máxima
-  cooldown: EvolutionCooldown | null; // null = sin cooldown activo
+  availableAt: number | null;
 }
 
 // Motivo por el que NO se puede evolucionar

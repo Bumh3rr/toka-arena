@@ -5,7 +5,7 @@ import styles from './TokaStatusPill.module.css'
 
 interface TokaStatusPillProps {
   nombre: string
-  rareza?: Rarity
+  rareza: Rarity
   cp: number
   cpMeta: number
   onOpen: () => void

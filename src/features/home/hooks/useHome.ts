@@ -1,148 +1,194 @@
-import { useState, useEffect, useRef } from "react";
-import type { Tokagotchi, AnimationTokagotchi } from "@/shared/types/tokagotchi";
-import { userService } from "@/shared/services/userService";
-//import { careService } from "@/shared/services/careService";
-import { mapResponseToTokagotchi } from "@/shared/services/tokagotchiService";
-import { CUIDADO_CONFIG, type AccionCuidado } from "../constants/cuidado";
-import type { MisionResponse } from "@/shared/services/userService";
+import type { Session } from "@/shared/session/session.types";
+import type { HomeData } from "../home.types";
+import type { CareActionDTO, ApiError } from "../home.dto";
+import type { ActionCare } from "../home.types";
+import { useCallback, useEffect, useReducer, useState } from "react";
+import useSWR, {useSWRConfig} from "swr";
+import { applyAscendResponse } from "../home.mapper";
+import { homeApi } from "../api/home.api";
+import { mapHome, applyCareResponse, applyRename } from "../home.mapper";
+import { homeUiReducer, INITIAL_UI, type HomeUi } from "./homeUiReducer";
 import { useToast } from "@/shared/hooks/useToast";
+import { CONFIG_CARE } from "../constants/cuidado";
+import { RARITY_META } from '@/shared/constants/rarity'
 
-export type Floaters = Partial<Record<AccionCuidado, number>>;
-export type Cooldowns = Record<AccionCuidado, number>;
+// ── reloj del servidor (usa el serverTime para corregir desfase de reloj) ──
+let clockOffset = 0;
+const syncClock = (serverMs: number) => { clockOffset = serverMs - Date.now(); };
+const serverNow = () => Date.now() + clockOffset;
+
+const ACTION_TO_DTO: Record<ActionCare, CareActionDTO> = {
+  feed: "FEED",
+  play: "PLAY",
+  bathe: "BATHE",
+};
+const remaining = (at: number | null) => at == null ? 0 : Math.max(0, Math.ceil((at - serverNow()) / 1000));
+
+export type Cooldowns = Record<ActionCare, number>; // segundos restantes
+export type { Floaters } from "./homeUiReducer"; // re-export para consumidores (p. ej. CareRow)
+export type HomeState =
+  | { status: "loading" }
+  | { status: "error"; error: string }
+  | { status: "ready"; data: HomeData; ui: HomeUi; cooldowns: Cooldowns };
+
+// Re-render cada segundo SOLO mientras haya un cooldown activo
+function useTicker(active: boolean) {
+  const [, force] = useState(0);
+  useEffect(() => {
+    if (!active) return;
+    const id = setInterval(() => force((n) => n + 1), 1000);
+    return () => clearInterval(id);
+  }, [active]);
+}
 
 export function useHome() {
-  const [tokagotchi, setTokagotchi] = useState<Tokagotchi | null>(null);
-  const [animation, setAnimation] = useState<AnimationTokagotchi>("idle");
-  const [allTokas, setAllTokas] = useState<Tokagotchi[]>([]);
-  const [username, setUsername] = useState("");
-  const [tf, setTf] = useState(0);
-  const [cp, setCp] = useState(0);
-  const [misiones, setMisiones] = useState<MisionResponse[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [accionando, setAccionando] = useState<AccionCuidado | null>(null);
-  const [cooldowns, setCooldowns] = useState<Cooldowns>({ feed: 0, play: 0, bathe: 0,});
-  const [floaters, setFloaters] = useState<Floaters>({});
+  const { mutate: globalMutate } = useSWRConfig();
+
+  const { data, error, mutate } = useSWR<HomeData>("home", async () => {
+    const res = await homeApi.getHome();
+    console.log("homeApi: ",res)
+    syncClock(new Date(res.serverTime).getTime());
+    return mapHome(res);
+  });
+
+  const [ui, dispatch] = useReducer(homeUiReducer, INITIAL_UI);
   const { show, toast } = useToast();
 
-  const cooldownsRef = useRef(cooldowns);
-  useEffect(() => {
-    cooldownsRef.current = cooldowns;
-  }, [cooldowns]);
+  const care = data?.activeToka?.care;
+  const active = !!care && [care.feed, care.play, care.bathe].some((t) => (t ?? 0) > serverNow());
+  useTicker(active);
 
-  useEffect(() => {
-    const fetchData = async () => {
+  const runAction = useCallback(
+    async (action: ActionCare) => {
+      if (!data?.activeToka || ui.pendingAction) return;
+      if (remaining(data.activeToka.care[action]) > 0) return;
+      const cfg = CONFIG_CARE.find((c) => c.key === action);
+      if (!cfg) return;
+      const tokaId = data.activeToka.id;
+
+      dispatch({ type: "ACTION_START", action });
       try {
-        const [me, misionesData] = await Promise.all([
-          userService.getMe(),
-          userService.getMisiones(),
-        ]);
-        setUsername(me.username);
-        setTf(me.tf);
-        if (me.tokagotchiActivo) {
-          setTokagotchi(mapResponseToTokagotchi(me.tokagotchiActivo));
-          setCp(me.tokagotchiActivo.cp ?? 0);
-        }
-        setAllTokas((me.tokagotchis ?? []).map(mapResponseToTokagotchi));
-        setMisiones(misionesData.missions);
-        console.log("Datos cargados:", { me, misionesData });
+        await mutate(
+          async (prev) => {
+            const res = await homeApi.care(tokaId, ACTION_TO_DTO[action]);
+            return prev ? applyCareResponse(prev, res) : prev;
+          },
+          {
+            // CP optimista: se ve instantáneo, se reconcilia con el server, revierte si truena
+            optimisticData: (prev) =>
+              prev?.activeToka
+                ? {
+                    ...prev,
+                    activeToka: {
+                      ...prev.activeToka,
+                      cp: prev.activeToka.cp + cfg.cp,
+                    },
+                  }
+                : prev!,
+            revalidate: false,
+            rollbackOnError: true,
+          },
+        );
+        // solo en éxito:
+        dispatch({ type: "SET_ANIMATION", animation: cfg.animation });
+        window.setTimeout(
+          () => dispatch({ type: "SET_ANIMATION", animation: "idle" }),
+          3000,
+        );
+        const fid = Date.now();
+        dispatch({ type: "ADD_FLOATER", action, id: fid });
+        window.setTimeout(
+          () => dispatch({ type: "REMOVE_FLOATER", action, id: fid }),
+          1000,
+        );
+        show(`+${cfg.cp} CP por ${cfg.label.toLowerCase()}`, {
+          variant: "celebrity",
+        });
       } catch (err) {
-        console.error("Error cargando home:", err);
+        const e = err as ApiError;
+        show(
+          e?.error === "ON_COOLDOWN" ? "Aún en cooldown" : "Acción fallida",
+          { variant: "danger" },
+        );
+        if (e?.error === "ON_COOLDOWN") await mutate(); // re-sincroniza el cooldown real del server
       } finally {
-        setLoading(false);
+        dispatch({ type: "ACTION_END" });
       }
-    };
-    fetchData();
-  }, []);
+    },
+    [data, ui.pendingAction, mutate, show],
+  );
 
-  useEffect(() => {
-    const id = setInterval(() => {
-      setCooldowns((prev) => {
-        const next = { ...prev };
-        let changed = false;
-        for (const k of Object.keys(next) as AccionCuidado[]) {
-          if (next[k] > 0) {
-            next[k] = Math.max(0, next[k] - 1);
-            changed = true;
-          }
-        }
-        return changed ? next : prev;
-      });
-    }, 1000);
-    return () => clearInterval(id);
-  }, []);
-
-  const ejecutarAccion = async (accion: AccionCuidado) => {
-    if (!tokagotchi || accionando || cooldowns[accion] > 0) return;
-    setAccionando(accion);
-
+  const renameToka = useCallback(async (newName: string) => {
+    if (!data?.activeToka) return;
+    const tokaId = data.activeToka.id;
     try {
-      /** 
-      if (accion === "feed") await careService.feed(tokagotchi.id);
-      else if (accion === "play") await careService.play(tokagotchi.id);
-      else await careService.bathe(tokagotchi.id);
-*/
-      const cfg = CUIDADO_CONFIG.find((c) => c.key === accion)!;
-      setCp((prev) => prev + cfg.cp);
-      setCooldowns((prev) => ({ ...prev, [accion]: cfg.cooldownSeg }));
-
-      // Animacion del Tokagotchi
-      setAnimation(cfg.animation);
-      setTimeout(() => setAnimation("idle"), 3000);
-
-      // trigger floater animation
-      const fid = Date.now();
-      setFloaters((f) => ({ ...f, [accion]: fid }));
-      setTimeout(
-        () =>
-          setFloaters((f) => {
-            const n = { ...f };
-            if (n[accion] === fid) delete n[accion];
-            return n;
-          }),
-        1000,
+      await mutate(
+        async (prev) => {
+          const res = await homeApi.rename(tokaId, newName);
+          return prev ? applyRename(prev, res.name) : prev;
+        },
+        {
+          optimisticData: (prev) =>
+            prev?.activeToka ? { ...prev, activeToka: { ...prev.activeToka, name: newName.trim() } } : prev!,
+          revalidate: false,
+          rollbackOnError: true,
+        },
       );
-
-      show(`+${cfg.cp} CP por ${cfg.label.toLowerCase()}`, {
-        variant: "celebrity",
-      });
-    } catch (err: unknown) {
-      const msg =
-        (err as { response?: { data?: { message?: string } } })?.response?.data
-          ?.message ?? "Accion fallida";
-      show(msg, { variant: "danger" });
-    } finally {
-      setAccionando(null);
-    }
-  };
-
-  const renameToka = async (newName: string) => {
-    if (!tokagotchi) return;
-    try {
-      const updated = await userService.renameTokagotchi(
-        Number(tokagotchi.id),
-        newName,
-      );
-      setTokagotchi(updated);
       show("Nombre actualizado", { variant: "info" });
     } catch (err) {
-      show("Error actualizando nombre", { variant: "danger" });
+      const e = err as ApiError;
+      show(e?.error === "INVALID_NAME" ? "Nombre inválido" : "Error al renombrar", { variant: "danger" });
     }
-  };
+  }, [data, mutate, show]);
 
-  return {
-    tokagotchi,
-    allTokas,
-    username,
-    tf,
-    cp,
-    misiones,
-    loading,
-    renameToka,
-    ejecutarAccion,
-    accionando,
-    cooldowns,
-    floaters,
-    toast,
-    animation,
-  };
+  const ascend = useCallback(async (): Promise<"SUCCESS" | "FAIL" | null> => {
+    if (!data?.activeToka?.evolution) return null;
+    const tokaId = data.activeToka.id;
+    try {
+      const res = await homeApi.ascend(tokaId);
+      // 1) cache del toka (/home)
+      await mutate((prev) => (prev ? applyAscendResponse(prev, res) : prev), { revalidate: false });
+      // 2) cache del wallet (/me) — el TF se consumió
+      await globalMutate("me", (prev?: Session) => (prev ? { ...prev, tf: res.wallet.tf } : prev), { revalidate: false });
+
+      const rarityLabel = RARITY_META[res.toka.rarity].label
+      show(
+        res.result === "SUCCESS"
+          ? `¡Ascendió a ${rarityLabel}! ✨`
+          : "La ascensión falló. Toca esperar el cooldown.",
+        { variant: res.result === "SUCCESS" ? "celebrity" : "danger" },
+      );
+      return res.result;
+    } catch (err) {
+      const e = err as ApiError;
+      const msg: Record<string, string> = {
+        ON_COOLDOWN: "Aún en cooldown",
+        INSUFFICIENT_CP: "No tienes CP suficiente",
+        INSUFFICIENT_TF: "No tienes TF suficiente",
+        MAX_RARITY: "Ya estás en rareza máxima",
+      };
+      show(msg[e?.error ?? ""] ?? "No se pudo ascender", { variant: "danger" });
+      return null;
+    }
+  }, [data, mutate, globalMutate, show]);
+
+  const state: HomeState = error
+    ? {
+        status: "error",
+        error: error instanceof Error ? error.message : "Error al cargar",
+      }
+    : !data
+      ? { status: "loading" }
+      : {
+          status: "ready",
+          data,
+          ui,
+          cooldowns: {
+            feed: remaining(data.activeToka?.care.feed ?? null),
+            play: remaining(data.activeToka?.care.play ?? null),
+            bathe: remaining(data.activeToka?.care.bathe ?? null),
+          },
+        };
+
+  return { state, runAction, renameToka, ascend, reload: () => mutate(), toast };
 }

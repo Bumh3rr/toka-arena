@@ -1,17 +1,17 @@
-import { getImagenSrcByEspecie } from '../../services/tokagotchiService'
-import type { Tokagotchi } from '../../types/tokagotchi'
-import { RAR } from '../../types/tokagotchi'
+import { getImagenSrcByEspecie } from '@/shared/libs/tokagotchi'
+import type { TokagotchiActive } from '../../types/tokagotchi' 
+import { RARITY_META } from '@/shared/constants/rarity'
 import styles from './TokaAvatar.module.css'
 
 interface TokaAvatarProps {
-  tokagotchi: Tokagotchi
+  tokagotchi: TokagotchiActive
   size?: number
   isActive?: boolean
 }
 
 export default function TokaAvatar({ tokagotchi, size = 54, isActive = false }: TokaAvatarProps) {
   const imgSrc = getImagenSrcByEspecie(tokagotchi.species)
-  const rar = RAR[tokagotchi.rarity]
+  const rar = RARITY_META[tokagotchi.rarity]
   return (
     <div
       className={`${styles.wrap} ${isActive ? styles.active : ''}`}

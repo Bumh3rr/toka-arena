@@ -14,3 +14,5 @@ export function getTimeLeft(endsAt: string) {
     done: ms === 0,
   };
 }
+
+export const toMs = (s: string | null): number | null => s ? new Date(s).getTime() : null;

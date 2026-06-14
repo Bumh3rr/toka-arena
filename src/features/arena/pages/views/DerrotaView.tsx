@@ -1,9 +1,9 @@
-import TokagotchiCanvas from '@/shared/canvas/TokagotchiCanvas'
+//import TokagotchiCanvas from '@/shared/canvas/TokagotchiCanvas'
 import styles from './Arena.module.css'
 import resultStyles from './ResultadoView.module.css'
 
 export default function DerrotaView({ batalla }: { batalla: any }) {
-  const { tokagotchi, estadoBatalla, modo, volverLobby, resultado } = batalla
+  const { estadoBatalla, modo, volverLobby, resultado } = batalla
   const esApuesta = modo === 'apuesta'
 
   return (
@@ -18,6 +18,7 @@ export default function DerrotaView({ batalla }: { batalla: any }) {
         </span>
       </div>
 
+        {/** 
       <TokagotchiCanvas
         accesorioIndexCabeza={tokagotchi.accesorios.cabeza?.displayIndex ?? -1}
         accesorioIndexCuerpo={tokagotchi.accesorios.cuerpo?.displayIndex ?? -1}
@@ -26,7 +27,7 @@ export default function DerrotaView({ batalla }: { batalla: any }) {
         width={160}
         height={150}
       />
-
+*/}
       {esApuesta && (
         <div className={resultStyles.apuestaBanner} style={{ maxWidth: 520 }}>
           <svg viewBox="0 0 24 24" fill="none" width="20" height="20">

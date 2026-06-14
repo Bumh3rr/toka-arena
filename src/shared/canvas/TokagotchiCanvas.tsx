@@ -2,7 +2,8 @@ import { useEffect, useRef } from 'react'
 import { TokagotchiGame } from '../game/tokagotchi/TokagotchiGame'
 import type { TokagotchiConfig } from '../game/tokagotchi/types'
 import type { Species, Assets, AnimationTokagotchi } from '../types/tokagotchi'
-import { getAssetsBySpecies } from '../services/tokagotchiService'
+import { getAssetsBySpecies } from '../libs/tokagotchi' 
+import type { EquippedAccessory } from '../types/accessory'
 
 /**
  * Props de {@link TokagotchiCanvas}.
@@ -13,17 +14,15 @@ interface TokagotchiCanvasProps {
   width?: number
   /** Alto lógico del canvas en px CSS. */
   height?: number
-  /** Índice del accesorio de cabeza en el slot DragonBones. `-1` = sin accesorio. */
-  accesorioIndexCabeza?: number
-  /** Índice del accesorio de cuerpo en el slot DragonBones. `-1` = sin accesorio. */
-  accesorioIndexCuerpo?: number
+  /** Lista de accesorios equipados. */
+  accessories?: EquippedAccessory[]
   /** Animación activa. Cambia en tiempo real sin reiniciar Phaser. */
   animacionActual?: AnimationTokagotchi
   /**
    * Especie del Tokagotchi usada para resolver los assets cuando no se pasa `assets`.
    * Si se proporciona `assets`, este prop se ignora.
    */
-  especie?: Species
+  species?: Species
   /**
    * Assets precargados del Tokagotchi. Tiene prioridad sobre `especie`.
    * Pasar este prop evita la llamada a `getAssetsByEspecie` en cada render.
@@ -58,10 +57,9 @@ interface TokagotchiCanvasProps {
 export default function TokagotchiCanvas({
   width = 350,
   height = 310,
-  accesorioIndexCabeza = -1,
-  accesorioIndexCuerpo = -1,
+  accessories = [],
   animacionActual = 'idle',
-  especie = 'TOFU',
+  species = 'TOFU',
   assets,
   reverse = false,
   paused = false,
@@ -73,7 +71,7 @@ export default function TokagotchiCanvas({
   const pausedRef = useRef(paused)
 
   if (!assets) {
-    assets = getAssetsBySpecies(especie)
+    assets = getAssetsBySpecies(species)
   }
 
   // ── Crear / destruir (una sola vez al montar/desmontar) ───────────────────
@@ -82,8 +80,7 @@ export default function TokagotchiCanvas({
     if (!(window as any).Phaser || !(window as any).dragonBones) return
 
     const cfg: TokagotchiConfig = {
-      width, height, assets, animacionActual,
-      accesorioIndexCabeza, accesorioIndexCuerpo, reverse,
+      width, height, assets, animacionActual,accessories, reverse,
     }
 
     gameRef.current = new TokagotchiGame(containerRef.current, cfg)
@@ -103,8 +100,7 @@ export default function TokagotchiCanvas({
 
   // ── Props reactivas — cada una en su propio efecto ───────────────────────
   useEffect(() => { gameRef.current?.setAnimation(animacionActual) }, [animacionActual])
-  useEffect(() => { gameRef.current?.setAccesorioCabeza(accesorioIndexCabeza) }, [accesorioIndexCabeza])
-  useEffect(() => { gameRef.current?.setAccesorioCuerpo(accesorioIndexCuerpo) }, [accesorioIndexCuerpo])
+  useEffect(() => { gameRef.current?.setAccessories(accessories) }, [accessories])
   useEffect(() => { gameRef.current?.resize(width, height, reverse) }, [width, height, reverse])
   useEffect(() => {
     pausedRef.current = paused

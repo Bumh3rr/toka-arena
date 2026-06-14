@@ -3,6 +3,7 @@ import {
   type ITokagotchiScene,
 } from "./TokagotchiScene";
 import type { TokagotchiConfig } from "./types";
+import type { EquippedAccessory } from "@/shared/types/accessory";
 
 /**
  * Wrapper delgado sobre `Phaser.Game` que gestiona el ciclo de vida del juego
@@ -62,14 +63,9 @@ export class TokagotchiGame {
     this.scene.setAnimation(name);
   }
 
-  /** Cambia el accesorio de cabeza por índice de slot. `-1` oculta el slot. */
-  setAccesorioCabeza(index: number) {
-    this.scene.setAccesorioCabeza(index);
-  }
-
-  /** Cambia el accesorio de cuerpo por índice de slot. `-1` oculta el slot. */
-  setAccesorioCuerpo(index: number) {
-    this.scene.setAccesorioCuerpo(index);
+    /** Cambiar accesorios. */
+  setAccessories(arrays?: EquippedAccessory[]) {
+    this.scene.setAccessories(arrays);
   }
 
   /**

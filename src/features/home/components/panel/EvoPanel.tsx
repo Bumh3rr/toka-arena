@@ -1,24 +1,22 @@
-// src/components/Home/EvoPanel.tsx
 import { useState } from 'react'
 import { IcCrown, IcLock } from '@/shared/ui/Icons/Icons'
-import type { Rarity } from '@/shared/types/tokagotchi'
-import { EVOLUCION } from '../../constants/evolucion'
 import styles from './styles/EvoPanel.module.css'
 import { HeaderTitleLine } from '../CareSheet/CareSheet'
+import type { Evolution } from '@/shared/types/evolution'
+import { RARITY_META } from '@/shared/constants/rarity'
 
 interface EvoPanelProps {
-  rareza: Rarity
+  evolution: Evolution | null
   cp: number
   tf: number
+  onAscend: () => Promise<"SUCCESS" | "FAIL" | null>
 }
 
-export default function EvoPanel({ rareza, cp, tf }: EvoPanelProps) {
+export default function EvoPanel({ evolution, cp, tf, onAscend }: EvoPanelProps) {
   const [showHelp, setShowHelp] = useState(false)
-  const [ascended, setAscended] = useState(false)
+  const [pending, setPending] = useState(false)
 
-  const regla = EVOLUCION[rareza]
-
-  if (!regla) {
+  if (!evolution) {
     return (
       <div>
         <HeaderTitleLine title="Evolución" />
@@ -35,12 +33,14 @@ export default function EvoPanel({ rareza, cp, tf }: EvoPanelProps) {
     )
   }
 
-  const pct = Math.min(100, Math.round(cp / regla.cpMeta * 100))
-  const ready = cp >= regla.cpMeta && !ascended && tf >= regla.costoTF
+  const pct = Math.min(100, Math.round(cp / evolution.cpRequired * 100))
+  const onCooldown = evolution.availableAt != null && evolution.availableAt > Date.now()
+  const ready = cp >= evolution.cpRequired && tf >= evolution.costTF && !onCooldown && !pending
+  const nextRarity = RARITY_META[evolution.nextRarity].label
 
-  const handleAscend = () => {
-    // TODO: call ascension endpoint when available
-    setAscended(true)
+  const handleAscend = async () => {
+    setPending(true)
+    try { await onAscend() } finally { setPending(false) }
   }
 
   return (
@@ -51,17 +51,17 @@ export default function EvoPanel({ rareza, cp, tf }: EvoPanelProps) {
           <div className={styles.evoCrown}><IcCrown /></div>
           <div className={styles.evoTitles}>
             <div className={styles.k}>Evolución</div>
-            <div className={styles.t}>Ascender a {regla.siguiente}</div>
+            <div className={styles.t}>Ascender a {nextRarity}</div>
           </div>
           <button className={styles.helpBtn} aria-label="Detalles" onClick={() => setShowHelp(s => !s)}>?</button>
           {showHelp && (
             <div className={styles.pop}>
               <div className={styles.popHeader}>Detalles de ascensión</div>
               <div className={styles.popRow}>
-                <span>Probabilidad de éxito</span><b>{regla.probabilidadPct}%</b>
+                <span>Probabilidad de éxito</span><b>{evolution.successChance}%</b>
               </div>
               <div className={styles.popRow}>
-                <span>Si falla</span><b>Espera {regla.cooldownHoras} h</b>
+                <span>Si falla</span><b>Espera {evolution.failCooldownHours} h</b>
               </div>
             </div>
           )}
@@ -70,7 +70,7 @@ export default function EvoPanel({ rareza, cp, tf }: EvoPanelProps) {
         <div className={styles.cpbarWrap}>
           <div className={styles.cpbarTop}>
             <span className={styles.cpLabel}>Puntos de Cuidado</span>
-            <span className={styles.cpVal}><b>{cp}</b> / {regla.cpMeta} CP</span>
+            <span className={styles.cpVal}><b>{cp}</b> / {evolution.cpRequired} CP</span>
           </div>
           <div className={styles.cpbar}>
             <div className={styles.fill} style={{ width: `${pct}%` }} />
@@ -82,13 +82,13 @@ export default function EvoPanel({ rareza, cp, tf }: EvoPanelProps) {
           <span className={styles.costLabel}>Costo de ascensión</span>
           <span className={styles.costAmt}>
             <img src="/assets/ui/moneda_tf.svg" alt="TF" width={17} height={17} />
-            {regla.costoTF} TF
+            {evolution.costTF} TF
           </span>
         </div>
 
-        {ascended ? (
+        {pending ? (
           <div className={`${styles.evoBtn} ${styles.evoBtnUnlocked}`} style={{ cursor: 'default' }}>
-            ¡{regla.siguiente} alcanzado! ✨
+            ¡{nextRarity} alcanzado! ✨
           </div>
         ) : ready ? (
           <button className={`${styles.evoBtn} ${styles.evoBtnUnlocked}`} onClick={handleAscend}>
@@ -97,7 +97,7 @@ export default function EvoPanel({ rareza, cp, tf }: EvoPanelProps) {
         ) : (
           <div className={styles.evoBtn}>
             <span className={styles.lockIcon}><IcLock /></span>
-            Faltan {Math.max(0, regla.cpMeta - cp)} CP
+            Faltan {Math.max(0, evolution.cpRequired - cp)} CP
           </div>
         )}
       </div>

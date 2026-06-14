@@ -2,7 +2,6 @@ import { useEffect, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import styles from './BottomNav.module.css'
 import { IconButton } from '../../../shared/ui/Kit'
-import TokagotchiCanvas from '../../../shared/canvas/TokagotchiCanvas'
 import { IcGrid, IcPase, IcShop, IcArena, IcPaw } from '../../../shared/ui/Icons/Icons'
 import { useNavBar } from '../../../shared/hooks/useNavBar'
 

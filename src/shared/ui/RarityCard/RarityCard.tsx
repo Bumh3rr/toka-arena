@@ -1,17 +1,17 @@
 import styles from './RarityCard.module.css'
-import { RAR, type Rarity } from '../../types/tokagotchi'
+import type { Rarity } from '@/shared/types/tokagotchi'
+import { RARITY_META } from '@/shared/constants/rarity'
 
 export type RarityCardSize = 'sm' | 'md' | 'lg'
 
 interface Props {
-  rarity?: Rarity
-  /** Tamaño del badge — escala la fuente y el padding. Default 'md'. */
+  rarity: Rarity
   size?: RarityCardSize
   customStyles?: React.CSSProperties
 }
 
 export default function RarityCard({ rarity, size = 'md', customStyles }: Props) {
-  const { label, ring } = RAR[rarity ?? 'COMMON']
+  const { label, ring } = RARITY_META[rarity]
 
   return (
     <div

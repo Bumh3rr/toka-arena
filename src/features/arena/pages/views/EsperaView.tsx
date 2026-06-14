@@ -1,4 +1,4 @@
-import TokagotchiCanvas from '@/shared/canvas/TokagotchiCanvas'
+//import TokagotchiCanvas from '@/shared/canvas/TokagotchiCanvas'
 import styles from './Arena.module.css'
 import esperaStyles from './EsperaView.module.css'
 
@@ -15,12 +15,14 @@ export default function EsperaView({ batalla }: { batalla: any }) {
       {/* VS */}
       <div className={esperaStyles.vsContainer}>
         <div className={esperaStyles.tokaSlot}>
+          {/**
           <TokagotchiCanvas
             especie={tokagotchi.especie}
             animacionActual="idle"
             width={130}
             height={130}
           />
+           */}
           <span className={esperaStyles.tokaLabel}>{tokagotchi.nombre}</span>
           <span className={esperaStyles.tokaSubLabel}>Tú</span>
         </div>

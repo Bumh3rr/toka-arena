@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import TokagotchiCanvas from '@/shared/canvas/TokagotchiCanvas'
+//import TokagotchiCanvas from '@/shared/canvas/TokagotchiCanvas'
 import styles from './Arena.module.css'
 import lobbyStyles from './LobbyView.module.css'
 
@@ -19,6 +19,7 @@ export default function LobbyView({ batalla }: { batalla: any }) {
       {/* Toka activo */}
       <div className={styles.card} style={{ marginBottom: 12 }}>
         <div className={lobbyStyles.tokaRow}>
+          {/** 
           <TokagotchiCanvas
             accesorioIndexCabeza={tokagotchi.accesorios.cabeza?.displayIndex ?? -1}
             accesorioIndexCuerpo={tokagotchi.accesorios.cuerpo?.displayIndex ?? -1}
@@ -27,6 +28,7 @@ export default function LobbyView({ batalla }: { batalla: any }) {
             width={130}
             height={120}
           />
+          */}
 
           <div className={lobbyStyles.tokaInfo}>
             <span className={lobbyStyles.tokaName}>{tokagotchi.nombre}</span>

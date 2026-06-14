@@ -1,12 +1,13 @@
  import type { Assets } from '../../types/tokagotchi'
+ import type { EquippedAccessory } from '@/shared/types/accessory'
+
  
  export interface TokagotchiConfig {
     width: number
     height: number
     assets: Assets
     animacionActual: string
-    accesorioIndexCabeza: number
-    accesorioIndexCuerpo: number
+    accessories?: EquippedAccessory[]
     reverse: boolean
   }
 

@@ -1,13 +1,13 @@
+import { applyAccessories } from '@/shared/render/applyAccessories'
 import type { TokagotchiConfig } from './types'
+import type { EquippedAccessory } from '@/shared/types/accessory'
 
 /** API pública expuesta por la escena de Phaser al wrapper `TokagotchiGame` y al componente React. */
 export interface ITokagotchiScene {
   /** Cambia la animación activa. Si el nombre no existe en el .ske.json DragonBones falla en silencio. */
   setAnimation(name: string): void
-  /** Cambia el accesorio de cabeza por índice de slot DragonBones. `index = -1` oculta el slot. */
-  setAccesorioCabeza(index: number): void
-  /** Cambia el accesorio de cuerpo por índice de slot DragonBones. `index = -1` oculta el slot. */
-  setAccesorioCuerpo(index: number): void
+  /** Cambia los accesorios */
+  setAccessories(arrays?: EquippedAccessory[]): void
   /** Reposiciona y rescala el armature cuando el tamaño del canvas cambia. */
   updateLayout(width: number, height: number, reverse: boolean): void
   /**
@@ -42,12 +42,6 @@ export function createTokagotchiScene(cfg: TokagotchiConfig): ITokagotchiScene {
     armature.scaleY = scale
   }
 
-  function setSlot(slotName: string, index: number) {
-    if (!armature || index === -1) return
-    const slot = armature.armature.getSlot(slotName)
-    if (slot) slot.displayIndex = index
-  }
-
   class Scene extends Phaser.Scene {
     constructor() {
       super({ key: 'TokagotchiScene' })
@@ -67,8 +61,7 @@ export function createTokagotchiScene(cfg: TokagotchiConfig): ITokagotchiScene {
       armature = (this as any).add.armature('Armature', cfg.assets.armatureKey)
       applyLayout()
       armature.animation.play(cfg.animacionActual, 0)
-      setSlot('accesorios_cabeza', cfg.accesorioIndexCabeza)
-      setSlot('accesorios_cuerpo', cfg.accesorioIndexCuerpo)
+      applyAccessories(armature, cfg.accessories)
       // Aplica el flag de pausa si fue seteado antes de que Phaser terminara de arrancar.
       if (paused) armature.animation.timeScale = 0
     }
@@ -81,14 +74,9 @@ export function createTokagotchiScene(cfg: TokagotchiConfig): ITokagotchiScene {
       if (paused) armature.animation.timeScale = 0
     }
 
-    setAccesorioCabeza(index: number) {
-      cfg.accesorioIndexCabeza = index
-      setSlot('accesorios_cabeza', index)
-    }
-
-    setAccesorioCuerpo(index: number) {
-      cfg.accesorioIndexCuerpo = index
-      setSlot('accesorios_cuerpo', index)
+    setAccessories(arrays?: EquippedAccessory[]) {
+      cfg.accessories = arrays
+      applyAccessories(armature,arrays)
     }
 
     updateLayout(width: number, height: number, reverse: boolean) {

@@ -43,7 +43,6 @@ export default function UnboxingPage() {
                 <div className={styles.itemImgWrapper}>
                   <img
                     src={`/assets/tokagotchis/${result.species.toLocaleLowerCase()}.png`}
-                    alt={result.id}
                     className={styles.itemImg}
                   />
                 </div>

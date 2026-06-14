@@ -2,13 +2,13 @@ import { useState } from 'react'
 import BottomSheet from '@/shared/ui/BottomSheet/BottomSheet'
 import TokaAvatar from '@/shared/ui/TokaAvatar/TokaAvatar'
 import { IcCheck, IcChevronDown } from '@/shared/ui/Icons/Icons'
-import type { Tokagotchi } from '@/shared/types/tokagotchi'
-import { RAR } from '@/shared/types/tokagotchi'
+import type { TokagotchiActive } from '@/shared/types/tokagotchi'
+import { RARITY_META } from '@/shared/constants/rarity'
 import { tokagotchiService } from '@/shared/services/tokagotchiService'
 import styles from './styles/CollectionModal.module.css'
 
 interface CollectionModalProps {
-  roster: Tokagotchi[]
+  roster: TokagotchiActive[]
   activeId: number
   onActivate: (id: number) => void
   onClose: () => void
@@ -34,14 +34,14 @@ export default function CollectionModal({ roster, activeId, onActivate, onClose 
     }
   }
 
-  const groups = roster.reduce<Record<string, { nombre: string; especie: string; items: Tokagotchi[] }>>((acc, t) => {
+  const groups = roster.reduce<Record<string, { nombre: string; especie: string; items: TokagotchiActive[] }>>((acc, t) => {
     const key = t.name
     if (!acc[key]) acc[key] = { nombre: t.name, especie: t.species, items: [] }
     acc[key].items.push(t)
     return acc
   }, {})
 
-  const rarOrder = (r: Tokagotchi) => RAR[r.rarity].order
+  const rarOrder = (r: TokagotchiActive) => RARITY_META[r.rarity].order
   const list = Object.values(groups)
   list.forEach(g => { g.items.sort((a, b) => rarOrder(b) - rarOrder(a)) })
 
@@ -58,7 +58,7 @@ export default function CollectionModal({ roster, activeId, onActivate, onClose 
       <div className={styles.sub}>Acceso rápido</div>
       <div className={styles.quickStrip}>
         {quick.map(t => {
-          const rar = RAR[t.rarity]
+          const rar = RARITY_META[t.rarity]
           const isActive = t.id === activeId
           return (
             <button key={t.id} className={`${styles.qChip} ${isActive ? styles.qActive : ''}`}
@@ -105,7 +105,7 @@ export default function CollectionModal({ roster, activeId, onActivate, onClose 
             </div>
             <div className={styles.deckItems}>
               {g.items.map(it => {
-                const rar = RAR[it.rarity]
+                const rar = RARITY_META[it.rarity]
                 const isActive = it.id === activeId
                 return (
                   <div key={it.id} className={styles.colItem}>
@@ -115,8 +115,10 @@ export default function CollectionModal({ roster, activeId, onActivate, onClose 
                         {it.name}
                         <span className={styles.rarTag} style={{ background: rar.ring }}>{rar.label}</span>
                       </div>
+                      {/** 
                       <div className={styles.ciAcc}>{it.equippedAccessory.equippedHead?.name ?? 'Sin accesorio'}</div>
-                    </div>
+                    */}
+                      </div>
                     {isActive ? (
                       <span className={`${styles.activar} ${styles.activarActive}`}>
                         <IcCheck /> Activo
