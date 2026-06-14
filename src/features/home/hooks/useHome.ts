@@ -91,16 +91,10 @@ export function useHome() {
         );
         // solo en éxito:
         dispatch({ type: "SET_ANIMATION", animation: cfg.animation });
-        window.setTimeout(
-          () => dispatch({ type: "SET_ANIMATION", animation: "idle" }),
-          3000,
-        );
+        window.setTimeout(() => dispatch({ type: "SET_ANIMATION", animation: "idle" }),3000);
         const fid = Date.now();
         dispatch({ type: "ADD_FLOATER", action, id: fid });
-        window.setTimeout(
-          () => dispatch({ type: "REMOVE_FLOATER", action, id: fid }),
-          1000,
-        );
+        window.setTimeout(() => dispatch({ type: "REMOVE_FLOATER", action, id: fid }),1000);
         show(`+${cfg.cp} CP por ${cfg.label.toLowerCase()}`, {
           variant: "celebrity",
         });
@@ -155,9 +149,18 @@ export function useHome() {
       show(
         res.result === "SUCCESS"
           ? `¡Ascendió a ${rarityLabel}! ✨`
-          : "La ascensión falló. Toca esperar el cooldown.",
+          : "La ascensión falló. Toca esperar :(",
         { variant: res.result === "SUCCESS" ? "celebrity" : "danger" },
       );
+
+      if (res.result === 'SUCCESS') {
+        dispatch({ type: "SET_ANIMATION", animation: 'curacion' });
+        window.setTimeout(() => dispatch({ type: "SET_ANIMATION", animation: "idle" }),3000);
+      } else if (res.result === 'FAIL') {
+        dispatch({ type: "SET_ANIMATION", animation: 'curacion' });
+        window.setTimeout(() => dispatch({ type: "SET_ANIMATION", animation: "idle" }),3000);
+      }
+
       return res.result;
     } catch (err) {
       const e = err as ApiError;

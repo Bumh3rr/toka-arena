@@ -53,7 +53,6 @@ export default function HomePage() {
 
     const ready = state.status === 'ready'
     const activeToka = ready ? state.data.activeToka : null
-
     // Simulacion que redirecciona al apartado del pase de batalla, cambiar a /pase
     const onNavegatePasePage = () => { navigate('/ui-kit', { replace: true }) }
 
@@ -247,7 +246,7 @@ export default function HomePage() {
                         </div>
                     </div>
                     <StatsRow stats={activeToka.stats} />
-                    <EvoPanel evolution={activeToka.evolution} cp={activeToka.cp} tf={tf} onAscend={ascend} />
+                    <EvoPanel serverTime={data.serverTime} evolution={activeToka.evolution} cp={activeToka.cp} tf={tf} onAscend={ascend} />
                 </div>
             </div>
 
