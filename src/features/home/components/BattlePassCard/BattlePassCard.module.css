@@ -1,0 +1,454 @@
+.card {
+  position: absolute;
+  top: var(--bp-top, 88px);
+  z-index: 10;
+
+  width: 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 8px 9px;
+
+  /* Color de la card según el plan (--card-*); fallback dorado = premium */
+  background: linear-gradient(180deg, var(--card-bg-top, #FFE7A6), var(--card-bg, var(--gold)));
+  border: var(--ol) solid var(--ink);
+  /* El borde 3D (--bp-edge-x) y el radio asimétrico los define el lado (.left/.right) */
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, .65),
+    var(--bp-edge-x, -4px) 4px 0 var(--card-edge, var(--gold-edge)),
+    0 8px 18px rgba(74, 40, 0, .22);
+
+  /* El agua se recorta al radio asimétrico de la pestaña (no se sale de la card) */
+  overflow: hidden;
+  /* Aísla el stacking context: el z-index del agua/contenido no afecta a la app */
+  isolation: isolate;
+
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: box-shadow .1s ease;
+}
+
+/* ── Lado derecho (default): pestaña que asoma desde el borde derecho ──────── */
+.right {
+  right: -4px;
+  border-radius: var(--r-lg) 0 0 var(--r-lg);
+  --bp-edge-x: -4px;          /* el borde 3D se proyecta hacia la izquierda */
+}
+
+/* ── Lado izquierdo: espejo exacto del derecho ────────────────────────────── */
+.left {
+  left: -4px;
+  border-radius: 0 var(--r-lg) var(--r-lg) 0;
+  --bp-edge-x: 4px;           /* el borde 3D se proyecta hacia la derecha */
+}
+
+/* Feedback táctil: al pulsar se "hunde" (aplana el borde 3D), igual en ambos lados */
+.card:active {
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, .65),
+    0 2px 0 var(--card-edge, var(--gold-edge)),
+    0 6px 14px rgba(74, 40, 0, .28);
+}
+
+/* Realce del estado lleno: el groove gana un anillo interior del color del líquido */
+.filled {
+  box-shadow:
+    inset 0 0 0 1px var(--liq-ring),
+    inset 0 2px 0 rgba(255, 255, 255, .65),
+    var(--bp-edge-x, -4px) 4px 0 var(--card-edge, var(--gold-edge)),
+    0 8px 18px rgba(74, 40, 0, .22);
+}
+
+.premium {
+  /* Card dorada (tokens originales) */
+  --card-bg-top: #FFE7A6;
+  --card-bg:     var(--gold);
+  --card-edge:   var(--gold-edge);
+  /* Líquido oro fundido */
+  --liq-foam: #FFD876;
+  --liq-mid:  #E89A14;
+  --liq-deep: #8A4A05;
+  --liq-shade: rgba(74, 36, 0, .5);
+  --liq-ring:  rgba(134, 71, 5, .45);
+}
+
+.free {
+  /* Card plateada (más clara que el líquido para que el acero resalte) */
+  --card-bg-top: #F4F7FB;
+  --card-bg:     #C8D4E0;
+  --card-edge:   #93A4B5;
+  /* Líquido acero profundo */
+  --liq-foam: #E9EFF5;
+  --liq-mid:  #8597A9;
+  --liq-deep: #556778;
+  --liq-shade: rgba(34, 46, 60, .5);
+  --liq-ring:  rgba(110, 128, 146, .45);
+}
+
+.water {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  pointer-events: none;
+
+  /* Altura de la cresta (en px) — compartida por superficie y offset del cuerpo */
+  --crest-h: 9px;
+
+  /* La altura ES el progreso: arranca en 0 y sube hasta --tier-pct */
+  height: var(--tier-pct, 0%);
+
+  /* Recorta crestas, gloss y burbujas a la línea de flotación */
+  overflow: hidden;
+
+  /* Anillo de flotación brillante + sombra interna que da volumen al líquido */
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, .5),
+    inset 0 -6px 10px var(--liq-shade);
+
+  /* Subida del nivel: juicy, con un pequeño overshoot */
+  transition: height .6s cubic-bezier(.34, 1.3, .5, 1);
+  will-change: height;
+}
+
+/* Sin progreso (0%) el tanque queda vacío: no se pinta agua */
+.card:not(.filled) .water { display: none; }
+
+/* Guarda de progreso bajo: a 1–5% la franja de cresta no puede superar al
+   cuerpo y colapsar a una línea; garantizamos un mínimo legible de "tanque". */
+.filled .water { min-height: 14px; }
+
+/* Cuerpo de agua sólido: desde debajo de la cresta hasta el fondo.
+   Degradado de profundidad (espuma clara → azul → azul profundo) + realce
+   superior y sombra inferior que le dan volumen líquido. */
+.body {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: var(--crest-h);
+  background: linear-gradient(
+    180deg,
+    var(--liq-foam) 0%,
+    var(--liq-mid) 34%,
+    var(--liq-deep) 100%
+  );
+  box-shadow:
+    inset 0 2px 3px rgba(255, 255, 255, .55),
+    inset 0 -6px 10px var(--liq-shade);
+}
+
+/* Superficie: franja donde viven las dos crestas sinusoidales */
+.surface {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: var(--crest-h);
+  overflow: hidden;
+}
+
+/* Cada cresta SVG ocupa el DOBLE de ancho y se desplaza −50% (= 1 viewBox) */
+.waveBack,
+.waveFront {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: block;
+  width: 200%;
+  height: 100%;
+  will-change: transform;
+}
+
+/* Cresta de fondo: más lenta y tenue → parallax lejano */
+.waveBack {
+  color: var(--liq-deep);
+  opacity: .55;
+  transform: translateX(0);
+  animation: bpWaveBack 4.6s linear infinite;
+}
+
+/* Cresta frontal: más rápida y opaca, con highlight blanco en la cima */
+.waveFront {
+  color: var(--liq-mid);
+  opacity: 1;
+  transform: translateX(0);
+  animation: bpWaveFront 2.7s linear infinite;
+  filter: drop-shadow(0 -1px 0 rgba(255, 255, 255, .55));
+}
+
+/* El <path> hereda el color de cada cresta */
+.waveBack path,
+.waveFront path {
+  fill: currentColor;
+}
+
+/* Línea de flotación brillante que "respira" justo sobre la superficie */
+.gloss {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(var(--crest-h) - 2px);
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, .9) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  filter: blur(.4px);
+  opacity: .85;
+  will-change: transform, opacity;
+  animation: bpGlossBreathe 2.6s ease-in-out infinite;
+}
+
+/* Burbujas: 3 puntos que ascienden lentos y se desvanecen */
+.bubbles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.bubble {
+  position: absolute;
+  bottom: 6%;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .55);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .9);
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: bpBubbleRise 4.4s ease-in infinite;
+}
+
+.bubble:nth-child(1) { left: 24%; animation-delay: .2s;  animation-duration: 4.8s; }
+.bubble:nth-child(2) { left: 54%; animation-delay: 1.8s; width: 3px; height: 3px; }
+.bubble:nth-child(3) { left: 72%; animation-delay: 3.1s; animation-duration: 5.2s; }
+
+/* Brillo cristalino ESTÁTICO: reflejo diagonal que da volumen al "vidrio".
+   No anima → coste cero. */
+.gloss2 {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(
+    118deg,
+    rgba(255, 255, 255, 0) 42%,
+    rgba(255, 255, 255, .22) 50%,
+    rgba(255, 255, 255, 0) 58%
+  );
+}
+
+/* El contenido va por encima del agua */
+.iconWrap {
+  position: relative;
+  z-index: 3;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, .35);
+  border: 2px solid var(--ink);
+  border-radius: var(--r-sm);
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, .6);
+  color: var(--ink);
+}
+
+.iconWrap svg {
+  width: 20px;
+  height: 20px;
+}
+
+.label {
+  position: relative;
+  z-index: 3;
+  font-family: var(--font-title), system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1;
+}
+
+.tier {
+  position: relative;
+  z-index: 3;
+  font-family: var(--font-title), system-ui, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ink-2);
+  line-height: 1;
+  /* halo crema: mantiene la temporada legible cuando el agua la cubre */
+  text-shadow: 0 1px 0 rgba(255, 251, 241, .55);
+}
+
+/* ── Keyframes ─────────────────────────────────────────────────────────────── */
+
+/* Cada cresta se desplaza un viewBox completo (−50% del ancho 2×) → sin costura */
+@keyframes bpWaveFront {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes bpWaveBack {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes bpGlossBreathe {
+  0%, 100% { transform: translate3d(0, 0, 0);    opacity: .55; }
+  50%      { transform: translate3d(0, -1px, 0); opacity: .95; }
+}
+
+@keyframes bpBubbleRise {
+  0%   { transform: translate3d(0, 0, 0)     scale(.7); opacity: 0; }
+  15%  { opacity: .65; }
+  85%  { opacity: .35; }
+  100% { transform: translate3d(0, -58px, 0) scale(1);  opacity: 0; }
+}
+
+/* ── Accesibilidad: sin movimiento, el agua sigue mostrando el nivel ───────── */
+@media (prefers-reduced-motion: reduce) {
+  .water { transition: none; }
+  .waveBack,
+  .waveFront,
+  .gloss,
+  .bubble { animation: none; }
+  .bubble { opacity: 0; }
+}
+
+/* ── Días restantes de la temporada ────────────────────────────────────────── */
+.days {
+  position: relative;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin-top: 1px;
+  padding: 1px 6px 2px;
+  border-radius: var(--r-pill);
+  background: rgba(255, 251, 241, .92);
+  border: 1.5px solid var(--ink);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .7);
+  font-family: var(--font-title), system-ui, sans-serif;
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--ink);
+}
+
+.days svg {
+  width: 9px;
+  height: 9px;
+}
+
+/* ════ Estados de carga / error — misma silueta de pestaña que la card ════════ */
+.skeleton,
+.errorCard {
+  position: absolute;
+  top: var(--bp-top, 88px);
+  z-index: 10;
+  width: 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 8px 9px;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Loading — silueta crema + bloques con shimmer (estilo Facebook) */
+.skeleton {
+  background: linear-gradient(180deg, #FFFBF1, var(--cream));
+  border: var(--ol) solid var(--ink);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, .65),
+    var(--bp-edge-x, -4px) 4px 0 var(--edge-cream),
+    0 8px 18px rgba(74, 40, 0, .22);
+}
+
+.sk {
+  position: relative;
+  overflow: hidden;
+  background: var(--cream-2);
+  border-radius: var(--r-sm);
+}
+
+.sk::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .7), transparent);
+  animation: bpSkShimmer 1.2s ease-in-out infinite;
+}
+
+.skIcon { width: 32px; height: 32px; }
+.skLine { width: 74%; height: 11px; border-radius: var(--r-pill); }
+.skPill { width: 58%; height: 14px; border-radius: var(--r-pill); }
+
+/* Error — pestaña táctil en tono suave de alerta; toca = reload */
+.errorCard {
+  gap: 5px;
+  background: linear-gradient(180deg, #FFF1ED, #FBE0DA);
+  border: var(--ol) solid var(--ink);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, .6),
+    var(--bp-edge-x, -4px) 4px 0 #C0584A,
+    0 8px 18px rgba(74, 40, 0, .22);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: transform .1s ease, box-shadow .1s ease;
+}
+
+.errorCard:active {
+  transform: translateY(2px);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, .6),
+    0 2px 0 #C0584A;
+}
+
+.errIcon {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
+  background: rgba(255, 255, 255, .55);
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, .6);
+}
+
+.errIcon svg {
+  width: 17px;
+  height: 17px;
+}
+
+.errText {
+  font-family: var(--font-title), system-ui, sans-serif;
+  font-size: 8.5px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+
+@keyframes bpSkShimmer {
+  to { transform: translateX(100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sk::after { animation: none; }
+}

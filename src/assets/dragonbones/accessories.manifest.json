@@ -1,0 +1,7 @@
+{
+  "HELMET":     { "displayIndex": 0 },
+  "CROWN":      { "displayIndex": 1 },
+  "HAT":        { "displayIndex": 2 },
+  
+  "SUPER_CAPE": { "displayIndex": 0 }
+}
