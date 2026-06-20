@@ -1,5 +1,5 @@
-import type { AuthCodeMethod, AuthCodeScopeMap, BridgeAuthCodeResponse } from '@/features/auth/types/toka'
-const IS_DEV = import.meta.env.DEV
+import type { AuthCodeMethod, AuthCodeScopeMap, BridgeAuthCodeResponse } from '@/features/auth/model/toka'
+import { IS_DEV_MODE } from '@/shared/types/debug_dev'
 
 function waitForBridge(): Promise<void> {
   return new Promise((resolve) => {
@@ -15,7 +15,7 @@ export async function getAuthCode<M extends AuthCodeMethod>(
   method: M,
   scopes: AuthCodeScopeMap[M][]
 ): Promise<string> {
-  if (IS_DEV) {
+  if (IS_DEV_MODE) {
     console.log(`Simulando obtención de authCode`)
     return 'DEBUG'
   }

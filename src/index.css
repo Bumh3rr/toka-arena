@@ -54,6 +54,9 @@
   --legend: #F6A937;
   --legend-edge: #D9852A;
   --legend-glow: rgba(246, 169, 55, .55);
+  --cafe: #9B5E30;
+  --cafe-edge: #6B3A18;
+  --cafe-soft: #F2DFC9;
   
   font-synthesis: none;
 }

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { authService } from '../services/authService'
-//import { getAuthCode } from '../services/tokaAuth'
+import { getAuthCode } from '../services/tokaAuth'
 
 export function useAuth() {
   const [loading, setLoading] = useState(false)
@@ -11,8 +11,7 @@ export function useAuth() {
     setError(null)
     try {
       // Solicitar authCode a Toka
-      //const authCode = await getAuthCode('DigitalIdentity', ['USER_ID', 'USER_AVATAR', 'USER_NICKNAME'])
-      const authCode = "DEBUG"
+      const authCode = await getAuthCode('DigitalIdentity', ['USER_ID', 'USER_AVATAR', 'USER_NICKNAME'])
       if (!authCode) throw new Error('Error de Autenticación')
 
       // Enviar authCode al backend para login

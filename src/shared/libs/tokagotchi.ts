@@ -25,10 +25,11 @@ export function getAssetsBySpecies(especie: Species): Assets {
 }
 
 export function getImagenSrcByEspecie(especie: Species): string {
+  const url = "/assets/tokagotchis/png/";
   const map: Record<Species, string> = {
-    TOFU: "/assets/tokagotchis/tofu.png",
-    MOCHI: "/assets/tokagotchis/mochi.png",
-    HANA: "/assets/tokagotchis/hana.png",
+    TOFU: `${url}tofu.png`,
+    MOCHI: `${url}mochi.png`,
+    HANA: `${url}hana.png`,
   };
   return map[especie];
 }

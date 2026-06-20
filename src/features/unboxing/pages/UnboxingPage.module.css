@@ -1,8 +1,7 @@
-/* src/pages/Unboxing/UnboxingPage.module.css */
 .container {
   position: relative;
-  width: 100vw;
-  height: 100dvh;
+  width: auto;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -41,10 +40,6 @@
 }
 
 .card {
-  position: relative;
-  z-index: 1;
-  background-image: url('/assets/ui/card_wood.png');
-  background-size: 100% 100%;
   width: 300px;
   min-height: 320px;
   display: flex;
@@ -53,7 +48,6 @@
   justify-content: center;
   gap: 8px;
   padding: 26px;
-  cursor: pointer;
 }
 
 .eggStatic {
@@ -73,22 +67,7 @@
   margin-top: 30px;
 }
 
-.tokaName {
-  font-family: var(--font-title);
-  font-size: 28px;
-  font-weight: 600;
-  color: #ffffff;
-  text-shadow: 1px 1px 0px #3D2B1F;
-}
-
-.tokaType {
-  font-family: var(--font-body);
-  font-size: 16px;
-  color: #FFF8E7;
-  margin-bottom: 22px;
-}
-
-.itemImgWrapper {
+.itemWrapper {
   width: 150px;
   height: 150px;
   display: flex;
@@ -97,8 +76,28 @@
   border-radius: 12px;
 }
 
-.itemImg {
-  width: 150px;
-  height: 150px;
-  object-fit: contain;
+.sub,
+.nmWrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sub {
+  margin-top: 4px;
+  gap: 4px;
+}
+
+.nm {
+  font-family: var(--font-title);
+  font-size: 25px;
+  font-weight: 900;
+  line-height: .95;
+  letter-spacing: -.5px;
+  color: var(--ink);
+}
+
+.startButton{
+  position: relative;
+  width: 320px;
 }

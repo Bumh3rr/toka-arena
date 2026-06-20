@@ -8,6 +8,7 @@ export type ColorVariant =
   | 'purple'   // morado acento
   | 'cream'    // neutro / secundario
   | 'danger'   // rojo
+  | 'cafe'     // café / marrón cálido
 
 export interface ColorToken {
   bgFrom: string     // tope del gradiente
@@ -98,5 +99,15 @@ export const TOKENS: Record<ColorVariant, ColorToken> = {
     textShadow: '0 1px 0 rgba(80,0,0,.3)',
     softBg:     '#FDE8E8',
     softText:   '#C03030',
+  },
+  cafe: {
+    bgFrom:     '#C47840',
+    bg:         'var(--cafe)',
+    edge:       'var(--cafe-edge)',
+    text:       '#fff',
+    shine:      'rgba(255,255,255,.45)',
+    textShadow: '0 1px 0 rgba(30,10,0,.35)',
+    softBg:     'var(--cafe-soft)',
+    softText:   'var(--cafe-edge)',
   },
 }

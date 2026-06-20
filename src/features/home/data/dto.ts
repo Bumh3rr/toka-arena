@@ -1,5 +1,5 @@
 import type { AccessorySlot } from "@/shared/types/accessory";
-import type { Rarity, Species, Stats } from "@/shared/types/tokagotchi";
+import type { Rarity, Species } from "@/shared/types/tokagotchi";
 
 export type CareActionDTO = "FEED" | "PLAY" | "BATHE";
 export type AscendResult = "SUCCESS" | "FAIL";
@@ -11,7 +11,7 @@ export interface AscendResponseDTO {
   toka: {  
     rarity: Rarity;
     cp: number;
-    stats: Stats;
+    stats: StatsDTO;
     evolution: EvolutionDTO | null; // siguiente tier, o null si llegó a LEGENDARY
   };
 }
@@ -24,6 +24,11 @@ export interface CareDTO {
   feedAvailableAt: string | null;
   playAvailableAt: string | null;
   batheAvailableAt: string | null;
+}
+export interface StatsDTO {
+  hp: number;
+  atk: number;
+  def: number;
 }
 export interface AbilityDTO {
   id: number;
@@ -49,7 +54,7 @@ export interface ActiveTokaDTO {
   cp: number;
   abilities: AbilityDTO[];
   equipped: EquippedAccessoryDTO[];
-  stats: { hp: number; atk: number; def: number };
+  stats: StatsDTO;
   evolution: EvolutionDTO | null; // null = rareza máxima
   care: CareDTO;
 }

@@ -1,5 +1,5 @@
-import type { HomeData } from "./home.types";
-import type { HomeResponseDTO, ActiveTokaDTO, EvolutionDTO, CareDTO, CareResponseDTO, AscendResponseDTO } from "./home.dto";
+import type { HomeData } from "./types";
+import type { HomeResponseDTO, ActiveTokaDTO, EvolutionDTO, CareDTO, CareResponseDTO, AscendResponseDTO } from "./dto";
 import type { EquippedAccessory, EquippedAccessoryDTO } from "@/shared/types/accessory";
 import type { TokagotchiActive, CareTimestamps } from "@/shared/types/tokagotchi";
 import type { Evolution } from "@/shared/types/evolution";
@@ -54,7 +54,6 @@ export function applyRename(prev: HomeData, name: string): HomeData {
   return { ...prev, activeToka: { ...prev.activeToka, name } };
 }
 
-// Aplica la respuesta de /care a la cache existente (cp + cooldowns nuevos)
 export function applyCareResponse(
   prev: HomeData,
   res: CareResponseDTO,

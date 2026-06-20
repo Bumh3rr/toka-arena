@@ -1,4 +1,4 @@
-import type { BridgeAuthCodeResponse } from '../../features/auth/types/toka'
+import type { BridgeAuthCodeResponse } from '../../features/auth/model/toka'
 
 export {}
 

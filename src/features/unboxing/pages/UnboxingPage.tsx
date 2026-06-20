@@ -1,12 +1,18 @@
 import GiftBox from '../components/GiftBox/GiftBox'
-import WoodButton from '@/shared/ui/WoodButton/WoodButton'
 import { useUnboxing } from '../hooks/useUnboxing'
 import styles from './UnboxingPage.module.css'
 import { useNavigate } from 'react-router-dom'
+import { Card, IconButton, Label, Button, Toast } from '@/shared/ui/Kit'
+import TokagotchiCanvas from '@/shared/canvas/TokagotchiCanvas'
+import { IcPencil } from '@/shared/ui/Icons/Icons'
+import RarityCard from '@/shared/ui/RarityCard/RarityCard'
+import RenameModal from '@/shared/ui/modal/RenameModal'
+import { useState } from 'react'
 
 export default function UnboxingPage() {
-  const { phase, giftFase, result, startBreaking } = useUnboxing()
+  const { phase, giftFase, result, startBreaking, toast } = useUnboxing()
   const navigate = useNavigate()
+  const [renameOpen, setRenameOpen] = useState(false)
   const handleComplete = () => navigate('/home', { replace: true })
 
   return (
@@ -36,31 +42,57 @@ export default function UnboxingPage() {
       {phase === 'result' && (
         <>
           <h1 className={styles.title}>¡Es Tuyo!</h1>
-          <div className={styles.card}>
+          <Card className={styles.card} radius='lg' shadow='md' variant='warm'>
 
             {result && (
               <>
-                <div className={styles.itemImgWrapper}>
-                  <img
-                    src={`/assets/tokagotchis/${result.species.toLocaleLowerCase()}.png`}
-                    className={styles.itemImg}
+                <div className={styles.itemWrapper}>
+                  <TokagotchiCanvas
+                    width={230}
+                    height={230}
+                    species={result.species}
                   />
                 </div>
-
-                <p className={styles.tokaName}>{result.name}</p>
-                <p className={styles.tokaType}>
-                  {result.species.charAt(0).toUpperCase() + result.species.slice(1)} · {result.rarity}
-                </p>
+                <div className={styles.nmWrapper}>
+                  <p className={styles.nm}>{result.name}</p>
+                  <IconButton
+                    shape='sm'
+                    size={28}
+                    onClick={() => setRenameOpen(true)}
+                    aria-label="Renombrar"
+                  >
+                    <IcPencil />
+                  </IconButton>
+                </div>
+                <Label variant="warm" look="soft" size="sm">{result.species}</Label>
+                <RarityCard rarity={result.rarity} />
               </>
             )}
+          </Card>
 
-          </div>
-          <WoodButton
-            label="¡Empezar!"
+          <Button
+            className={styles.startButton}
+            variant='cafe'
             onClick={handleComplete}
-            width="300px"
-          />
+            fontSize={20}
+            padding='10px'
+          >
+            ¡Empezar!
+          </Button>
         </>
+      )}
+
+
+      {/* Toast */}
+      {toast && <Toast {...toast} />}
+
+      {/* Modals */}
+      {renameOpen && (
+        <RenameModal
+          currentName={result?.name || ''}
+          onSave={Promise<void> as any}
+          onClose={() => setRenameOpen(false)}
+        />
       )}
     </div>
   )

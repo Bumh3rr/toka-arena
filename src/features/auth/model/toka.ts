@@ -1,3 +1,9 @@
+/*
+ * src/features/auth/model/toka.ts
+ * Tipos relacionados con la autenticación en Toka
+ * Incluye los métodos de autenticación disponibles, los scopes asociados a cada método y la estructura de la respuesta del bridge de autenticación.
+ */
+
 // Metodos de autenticación disponibles en Toka
 export type AuthCodeMethod =
   | "DigitalIdentity"

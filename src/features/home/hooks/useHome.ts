@@ -1,15 +1,15 @@
 import type { Session } from "@/shared/session/session.types";
-import type { HomeData } from "../home.types";
-import type { CareActionDTO, ApiError } from "../home.dto";
-import type { ActionCare } from "../home.types";
+import type { HomeData } from "../data/types";
+import type { CareActionDTO, ApiError } from "../data/dto";
+import type { ActionCare } from "../data/types";
 import { useCallback, useEffect, useReducer, useState } from "react";
 import useSWR, {useSWRConfig} from "swr";
-import { applyAscendResponse } from "../home.mapper";
-import { homeApi } from "../api/home.api";
-import { mapHome, applyCareResponse, applyRename } from "../home.mapper";
+import { applyAscendResponse } from "../data/mapper";
+import { homeApi } from "../api/api";
+import { mapHome, applyCareResponse, applyRename } from "../data/mapper";
 import { homeUiReducer, INITIAL_UI, type HomeUi } from "./homeUiReducer";
 import { useToast } from "@/shared/hooks/useToast";
-import { CONFIG_CARE } from "../constants/cuidado";
+import { CONFIG_CARE } from "../constants/config";
 import { RARITY_META } from '@/shared/constants/rarity'
 
 // ── reloj del servidor (usa el serverTime para corregir desfase de reloj) ──
