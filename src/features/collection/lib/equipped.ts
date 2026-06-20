@@ -1,5 +1,5 @@
 import type { CollectionData, ColToka, AccSlotKey } from '../types/collection.types'
-import type { EquippedAccessory, AccessorySlot } from '@/shared/model/accessory'
+import type { EquippedAccessory, AccessorySlot } from '@/shared/domain/accessory'
 import { getRenderBinding } from '@/shared/render/accessoryManifest'
 
 /**

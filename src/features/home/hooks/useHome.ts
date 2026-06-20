@@ -1,4 +1,4 @@
-import type { PlayerProfile } from "@/shared/session/model/types";
+import type { PlayerProfile } from "@/shared/domain/player";
 import type { HomeData } from "../data/types";
 import type { CareActionDTO, ApiError } from "../data/dto";
 import type { ActionCare } from "../data/types";

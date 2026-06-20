@@ -1,5 +1,5 @@
 import { IcBolt, IcShield, IcHeart } from '@/shared/ui/Icons/Icons'
-import type { Stats } from '@/shared/model/tokagotchi'
+import type { Stats } from '@/shared/domain/tokagotchi'
 import styles from './styles/StatsRow.module.css'
 import { HeaderTitleLine } from '../CareSheet/CareSheet'
 import { Card } from '@/shared/ui/Kit'

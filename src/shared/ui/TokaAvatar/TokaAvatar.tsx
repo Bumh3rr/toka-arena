@@ -1,5 +1,5 @@
-import { getImagenSrcByEspecie } from '@/shared/libs/tokagotchi'
-import type { TokagotchiActive } from '../../model/tokagotchi' 
+import { getImagenSrcByEspecie } from '@/shared/game/assets'
+import type { TokagotchiActive } from '../../domain/tokagotchi' 
 import { RARITY_META } from '@/shared/constants/rarity'
 import styles from './TokaAvatar.module.css'
 

@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { IcTerminal, IcChevR } from '@/shared/ui/Icons/Icons'
-import type { Species, Rarity } from '@/shared/model/tokagotchi'
+import type { Species, Rarity } from '@/shared/domain/tokagotchi'
 import styles from './styles/DevPanel.module.css'
-import { authService } from '@/features/auth/services/authService'
+import { useAuth } from '@/shared/session/hooks/useAuth'
 import { useNavigate } from 'react-router-dom'
 
 // ── Constantes ────────────────────────────────────────────────────────────────
@@ -61,10 +61,10 @@ export default function DevPanel() {
     const [giveSpecies, setGiveSpecies] = useState<Species>('TOFU')
     const [giveRarity, setGiveRarity] = useState<Rarity>('COMMON')
     const navigate = useNavigate()
-    const { clearSession } = authService
+    const { logout } = useAuth()
 
     const handleLogout = () => {
-        clearSession()
+        logout()
         navigate('/login')
     }
 

@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import WoodButton from '@/shared/ui/WoodButton/WoodButton'
 import TokagotchiCanvas from '@/shared/canvas/TokagotchiCanvas'
-import { useAuth } from '../hooks/useAuth'
+import { useAuth } from '@/shared/session/hooks/useAuth'
 import styles from './LoginPage.module.css'
 import { Toast } from '@/shared/ui/Kit'
 
@@ -12,7 +12,7 @@ export default function LoginPage() {
   const handleLogin = async () => {
     const { success, isNewPlayer } = await login()
     if (success) {
-      navigate(isNewPlayer ? '/home' : '/unboxing', { replace: true })
+      navigate(isNewPlayer ? '/unboxing' : '/home', { replace: true })
     }
   }
 

@@ -1,16 +1,14 @@
-import GiftBox from '../components/GiftBox/GiftBox'
-import { useUnboxing } from '../hooks/useUnboxing'
-import styles from './UnboxingPage.module.css'
-import { useNavigate } from 'react-router-dom'
-import { Card, IconButton, Label, Button, Toast } from '@/shared/ui/Kit'
-import TokagotchiCanvas from '@/shared/canvas/TokagotchiCanvas'
-import { IcPencil } from '@/shared/ui/Icons/Icons'
-import RarityCard from '@/shared/ui/RarityCard/RarityCard'
-import RenameModal from '@/shared/ui/modal/RenameModal'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import GiftBox from '../components/GiftBox/GiftBox'
+import TokaReveal from '../components/TokaReveal/TokaReveal'
+import { useUnboxing } from '../hooks/useUnboxing'
+import { Button, Toast } from '@/shared/ui/Kit'
+import RenameModal from '@/shared/ui/modal/RenameModal'
+import styles from './UnboxingPage.module.css'
 
 export default function UnboxingPage() {
-  const { phase, giftFase, result, startBreaking, toast } = useUnboxing()
+  const { phase, giftFase, result, startBreaking, renameResult, toast } = useUnboxing()
   const navigate = useNavigate()
   const [renameOpen, setRenameOpen] = useState(false)
   const handleComplete = () => navigate('/home', { replace: true })
@@ -39,58 +37,35 @@ export default function UnboxingPage() {
       )}
 
       {/* FASE 3 — Tokagotchi revelado */}
-      {phase === 'result' && (
+      {phase === 'result' && result && (
         <>
-          <h1 className={styles.title}>¡Es Tuyo!</h1>
-          <Card className={styles.card} radius='lg' shadow='md' variant='warm'>
-
-            {result && (
-              <>
-                <div className={styles.itemWrapper}>
-                  <TokagotchiCanvas
-                    width={230}
-                    height={230}
-                    species={result.species}
-                  />
-                </div>
-                <div className={styles.nmWrapper}>
-                  <p className={styles.nm}>{result.name}</p>
-                  <IconButton
-                    shape='sm'
-                    size={28}
-                    onClick={() => setRenameOpen(true)}
-                    aria-label="Renombrar"
-                  >
-                    <IcPencil />
-                  </IconButton>
-                </div>
-                <Label variant="warm" look="soft" size="sm">{result.species}</Label>
-                <RarityCard rarity={result.rarity} />
-              </>
-            )}
-          </Card>
-
+          <h1 className={styles.title}>¡Es tuyo!</h1>
+          {result.mainTokagotchi && (
+            <TokaReveal
+              result={result.mainTokagotchi}
+              onRenameClick={() => setRenameOpen(true)}
+            />
+          )}
           <Button
             className={styles.startButton}
-            variant='cafe'
+            variant="cafe"
             onClick={handleComplete}
             fontSize={20}
-            padding='10px'
+            padding="10px"
           >
             ¡Empezar!
           </Button>
         </>
       )}
 
-
-      {/* Toast */}
+      {/* Toast de mensajes */}
       {toast && <Toast {...toast} />}
 
-      {/* Modals */}
-      {renameOpen && (
+      {/* Modal de renombrar */}
+      {renameOpen && result && (
         <RenameModal
-          currentName={result?.name || ''}
-          onSave={Promise<void> as any}
+          currentName={result?.mainTokagotchi?.name || ''}
+          onSave={renameResult}
           onClose={() => setRenameOpen(false)}
         />
       )}

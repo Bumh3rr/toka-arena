@@ -1,5 +1,5 @@
- import type { Assets } from '../../model/tokagotchi'
- import type { EquippedAccessory } from '@/shared/model/accessory'
+ import type { Assets } from '../../domain/tokagotchi'
+ import type { EquippedAccessory } from '@/shared/domain/accessory'
 
  
  export interface TokagotchiConfig {

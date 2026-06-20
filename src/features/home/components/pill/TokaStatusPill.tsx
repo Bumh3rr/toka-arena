@@ -1,4 +1,4 @@
-import type { Rarity } from '@/shared/model/tokagotchi'
+import type { Rarity } from '@/shared/domain/tokagotchi'
 import { IcChevUp } from '@/shared/ui/Icons/Icons'
 import RarityCard from '@/shared/ui/RarityCard/RarityCard'
 import styles from './TokaStatusPill.module.css'

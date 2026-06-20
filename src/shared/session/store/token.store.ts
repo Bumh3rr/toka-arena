@@ -1,8 +1,16 @@
-let accessToken: string | null = null;
+const KEY = 'toka_token'
+
+let token: string | null = localStorage.getItem(KEY)
 
 export const tokenStore = {
-  get: () => accessToken,
-  set: (token: string) => { accessToken = token; },
-  clear: () => { accessToken = null; },
-  exists: () => accessToken !== null,
-};
+  get: () => token,
+  set: (value: string) => {
+    token = value
+    localStorage.setItem(KEY, value)
+  },
+  clear: () => {
+    token = null
+    localStorage.removeItem(KEY)
+  },
+  exists: () => token !== null,
+}

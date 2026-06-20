@@ -1,4 +1,4 @@
-import type { Species, Assets } from "../model/tokagotchi";
+import type { Assets, Species } from "../domain/tokagotchi";
 
 export function getAssetsBySpecies(especie: Species): Assets {
   const assets: Record<Species, Assets> = {

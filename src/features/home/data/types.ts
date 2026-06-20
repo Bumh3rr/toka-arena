@@ -1,6 +1,6 @@
 import type { HomeResponseDTO, CareActionDTO, CareResponseDTO, RenameResponseDTO,AscendResponseDTO  } from "./dto";
-import type { TokagotchiActive } from "@/shared/model/tokagotchi";
-import type { AnimationTokagotchi } from "@/shared/model/tokagotchi";
+import type { TokagotchiActive } from "@/shared/domain/tokagotchi";
+import type { AnimationTokagotchi } from "@/shared/domain/tokagotchi";
 
 // Acciones del cuidado
 export type ActionCare = "feed" | "play" | "bathe";

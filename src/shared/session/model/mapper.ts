@@ -1,10 +1,10 @@
 import type {
   PlayerProfileDto,
   MainTokagotchiDTO,
-} from "@/shared/model/dto/dto.session";
-import type { PlayerProfile, MainTokagotchi } from "./types";
-import type { Evolution } from "@/shared/model/evolution";
-import type { EvolutionDTO } from "@/shared/model/dto/dto.tokagotchi"; 
+} from "@/shared/api/dto/session.dto";
+import type { Evolution } from "@/shared/domain/evolution";
+import type { EvolutionDTO } from "@/shared/api/dto/tokagotchi.dto"; 
+import type { MainTokagotchi, PlayerProfile } from "@/shared/domain/player";
 
 export const toPlayerProfile = (d: PlayerProfileDto): PlayerProfile => ({
   id: d.id,

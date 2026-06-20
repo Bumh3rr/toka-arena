@@ -1,38 +1,15 @@
-import type { Evolution } from "@/shared/model/evolution";
-import type { Rarity, Species, Stats } from "@/shared/model/tokagotchi";
+import type { AuthResponseDTO } from "@/shared/api/dto/auth.dto";
+import type { PlayerProfile } from "@/shared/domain/player";
 
-export interface PlayerProfile {
-  id: number;
-  username: string;
-  avatar: string | null;
-  tf: number;
-  genesisClaimed: boolean;
-  mainTokagotchi: MainTokagotchi | null;
-  createdAt: number;
-}
-
-export interface MainTokagotchi {
-  id: number;
-  name: string;
-  species: Species;
-  rarity: Rarity;
-  cp: number;
-  stats: Stats;
-  evolution: Evolution | null; 
-}
-
-export interface AuthSession {
-  token: string;
-  playerId: string;
+export interface LoginData {
+  success: boolean;
   isNewPlayer: boolean;
 }
 
-export type AuthState =
-  | { status: 'idle' }
-  | { status: 'authenticating' }
-  | { status: 'authenticated'; session: AuthSession }
-  | { status: 'error'; error: string };
-
 export interface SessionApi {
   getMe(): Promise<PlayerProfile>;
+}
+
+export interface AuthApi {
+  login(authCode: string): Promise<AuthResponseDTO>;
 }

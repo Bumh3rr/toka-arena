@@ -1,4 +1,4 @@
-import api from '@/shared/services/api'
+import api from '@/shared/api/client'
 
 export const careService = {
   feed: async (id: string): Promise<void> => {

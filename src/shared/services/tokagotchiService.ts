@@ -1,8 +1,8 @@
-import api from "./api";
-import type { TokagotchiActive } from "../model/tokagotchi";
+import api from "../api/client";
+import type { PlayerProfileDto } from "../api/dto/session.dto";
 
 export const tokagotchiService = {
-  claimStarter: async (): Promise<TokagotchiActive> => {
+  claimStarter: async (): Promise<PlayerProfileDto> => {
     const response = await api.post("/players/me/genesis-tokagotchi");
     return response.data;
   },

@@ -1,4 +1,4 @@
-import type { Rarity } from "../model/tokagotchi";
+import type { Rarity } from "../domain/tokagotchi";
 
 export interface RarityMeta {
   label: string;

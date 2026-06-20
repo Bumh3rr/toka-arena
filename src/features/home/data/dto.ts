@@ -1,4 +1,5 @@
-import type { ActiveTokaDTO, CareDTO, EvolutionDTO, RarityDTO, StatsDTO } from "@/shared/model/dto/dto.tokagotchi";
+import type { ActiveTokaDTO, CareDTO, EvolutionDTO, RarityDTO, StatsDTO } from "@/shared/api/dto/tokagotchi.dto";
+import type { MainTokagotchi } from "@/shared/domain/player";
 
 export type CareActionDTO = "FEED" | "PLAY" | "BATHE";
 export type AscendResult = "SUCCESS" | "FAIL";
@@ -29,7 +30,6 @@ export interface ApiError {
   error: string;
   availableAt?: string;
 }
-export interface RenameResponseDTO {
-  id: number;
-  name: string;
+export interface RenameResponseDTO extends MainTokagotchi {
+  any: any
 }

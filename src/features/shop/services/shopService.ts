@@ -1,4 +1,4 @@
-import api from '@/shared/services/api'
+import api from '@/shared/api/client'
 
 export const shopService = {
   comprarAccesorio: async (idAccesorio: string): Promise<{ message: string }> => {

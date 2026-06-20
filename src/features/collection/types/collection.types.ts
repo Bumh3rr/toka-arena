@@ -1,4 +1,4 @@
-import type { Rarity, Species } from '@/shared/model/tokagotchi'
+import type { Rarity, Species } from '@/shared/domain/tokagotchi'
 
 // La colección usa las especies reales del juego (las que tienen arte + soporte de canvas).
 export type ColSpecies = Species
