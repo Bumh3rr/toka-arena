@@ -3,17 +3,11 @@
  * (DTOs) relacionados con la autenticación
  */
 export interface LoginSuperAppRequestDTO {
-  authcode: string
+  authCode: string
 }
-export interface TokaUser {
-  id: number
-  username: string
-  hasFirstToka: boolean
-  tf: number
-}
+
 export interface AuthResponseDTO {
-  success: boolean
-  accessToken: string
-  tokenType: string
-  user: TokaUser
+  token: string
+  playerId: string
+  isNewPlayer: boolean
 }

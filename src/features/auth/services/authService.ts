@@ -3,13 +3,13 @@ import type { LoginSuperAppRequestDTO, AuthResponseDTO} from '../model/dto'
 
 export const authService = {
   loginWithAuthCode: async (authCode: string): Promise<AuthResponseDTO> => {
-    const body: LoginSuperAppRequestDTO = { authcode: authCode }
-    const response = await api.post<AuthResponseDTO>('/auth/login-superapp', body)
+    const body: LoginSuperAppRequestDTO = { authCode: authCode }
+    const response = await api.post<AuthResponseDTO>('/auth/login', body)
     return response.data
   },
 
   saveSession: (response: AuthResponseDTO): void => {
-    localStorage.setItem('toka_token', response.accessToken)
+    localStorage.setItem('toka_token', response.token)
     localStorage.setItem('is_authenticated', 'true')
   },
 

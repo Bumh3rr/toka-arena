@@ -1,7 +1,7 @@
-import type { HomeResponseDTO, CareResponseDTO, RenameResponseDTO} from "../data/dto";
-import type { AscendResponseDTO} from "../data/dto";
+//import type { HomeResponseDTO, CareResponseDTO, RenameResponseDTO} from "../data/dto";
+//import type { AscendResponseDTO} from "../data/dto";
 import type { HomeApi } from "../data/types"; 
-import api from "@/shared/services/api";
+//import api from "@/shared/services/api";
 import { responseHomeResponseDTO ,responseRenameResponseDTO, responseCareResponseDTO, responseAscendResponseDTO } from "../mock/db";
 
 export const mockHomeApi: HomeApi = {

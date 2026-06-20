@@ -9,9 +9,9 @@ export default function LoginPage() {
   const { loginWithToka, loading, error } = useAuth()
 
   const handleLogin = async () => {
-    const { success, hasFirstToka } = await loginWithToka()
+    const { success, isNewPlayer } = await loginWithToka()
     if (success) {
-      navigate(hasFirstToka ? '/home' : '/unboxing', { replace: true })
+      navigate(isNewPlayer ? '/home' : '/unboxing', { replace: true })
     }
   }
 

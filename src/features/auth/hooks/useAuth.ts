@@ -6,7 +6,7 @@ export function useAuth() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const loginWithToka = async (): Promise<{ success: boolean; hasFirstToka: boolean }> => {
+  const loginWithToka = async (): Promise<{ success: boolean; isNewPlayer: boolean }> => {
     setLoading(true)
     setError(null)
     try {
@@ -16,19 +16,19 @@ export function useAuth() {
 
       // Enviar authCode al backend para login
       const response = await authService.loginWithAuthCode(authCode)
-      if (!response.success) throw new Error('Login fallido')
+      if (!response) throw new Error('Login fallido')
 
       // Guardar sesión
       authService.saveSession(response)
 
       return {
         success: true,
-        hasFirstToka: response?.user?.hasFirstToka ?? false
+        isNewPlayer: response?.isNewPlayer ?? false
       }
     } catch (err: any) {
       const msg = err.message || 'Error al iniciar sesion con Toka'
       setError(msg)
-      return { success: false, hasFirstToka: false }
+      return { success: false, isNewPlayer: false }
     } finally {
       setLoading(false)
     }
