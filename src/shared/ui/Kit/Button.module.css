@@ -1,0 +1,48 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: var(--btn-w, auto);
+  padding: var(--btn-pad);
+  font-size: var(--btn-fs);
+  font-family: var(--font-title), system-ui, sans-serif;
+  font-weight: 700;
+  color: var(--btn-text);
+  text-shadow: var(--btn-ts, none);
+  background: linear-gradient(180deg, var(--btn-bg-from), var(--btn-bg));
+  border: 2.5px solid var(--ink);
+  border-radius: var(--btn-br);
+  box-shadow:
+    inset 0 2px 0 var(--btn-shine),
+    0 var(--btn-edge-h) 0 var(--btn-edge);
+  cursor: pointer;
+  transition: transform .08s ease, box-shadow .08s ease;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(var(--btn-edge-h));
+  box-shadow: inset 0 2px 0 var(--btn-shine);
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: .55;
+  transform: none;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.icon svg {
+  width: 1em;
+  height: 1em;
+}

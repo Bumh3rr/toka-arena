@@ -1,0 +1,8 @@
+.card {
+  position: relative;
+  background: linear-gradient(180deg, var(--card-bg-from), var(--card-bg));
+  border: var(--card-border);
+  border-radius: var(--card-br);
+  padding: var(--card-pad);
+  box-shadow: var(--card-shadow);
+}

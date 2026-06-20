@@ -1,0 +1,50 @@
+/* src/components/TokaAvatar/TokaAvatar.module.css */
+.wrap {
+  position: relative;
+  flex: none;
+  transition: transform .14s cubic-bezier(.34, 1.5, .5, 1);
+}
+
+.active {
+  transform: scale(1.1);
+}
+
+.av {
+  border-radius: 50%;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 38%, #FFF8EC, #FBE7C6);
+  border: 3px solid;
+}
+
+.active .av {
+  box-shadow: 0 0 0 2.5px var(--ink), 0 0 0 6px var(--ring-soft, rgba(163, 53, 238, .28));
+}
+
+.av img {
+  width: 128%;
+  height: 128%;
+  object-fit: contain;
+  margin: -15% 0 0;
+}
+
+.accBadge {
+  position: absolute;
+  right: -3px;
+  bottom: -3px;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  background: #FFFDF7;
+  border: 2px solid var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1.5px 0 rgba(74, 40, 0, .25);
+}
+
+.activeGlow {
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  pointer-events: none;
+}

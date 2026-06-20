@@ -1,0 +1,42 @@
+import { useState } from 'react'
+import { authService } from '../services/authService'
+import { getAuthCode } from '../services/tokaAuth'
+
+export function useAuth() {
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const loginWithToka = async (): Promise<{ success: boolean; isNewPlayer: boolean }> => {
+    setLoading(true)
+    setError(null)
+    try {
+      // Solicitar authCode a Toka
+      const authCode = await getAuthCode('DigitalIdentity', ['USER_ID', 'USER_AVATAR', 'USER_NICKNAME'])
+      if (!authCode) throw new Error('Error de Autenticación')
+
+      // Enviar authCode al backend para login
+      const response = await authService.loginWithAuthCode(authCode)
+      if (!response) throw new Error('Login fallido')
+
+      // Guardar sesión
+      authService.saveSession(response)
+
+      return {
+        success: true,
+        isNewPlayer: response?.isNewPlayer ?? false
+      }
+    } catch (err: any) {
+      const msg = err.message || 'Error al iniciar sesion con Toka'
+      setError(msg)
+      return { success: false, isNewPlayer: false }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const logout = () => {
+    authService.clearSession()
+  }
+
+  return { loginWithToka, logout, loading, error }
+}

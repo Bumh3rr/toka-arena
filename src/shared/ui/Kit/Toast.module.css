@@ -1,0 +1,76 @@
+.toast {
+  position: fixed;
+  z-index: 9000;
+  pointer-events: none;
+  width: max-content;
+  max-width: 84vw;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: var(--r-pill);
+  padding: 11px 20px;
+  font-family: var(--font-title), system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  border: var(--ol) solid var(--ink);
+  animation: toastIn .35s cubic-bezier(.34, 1.5, .5, 1) both;
+}
+
+/* ── Variantes ────────────────────────────────────────────────────────────── */
+
+.info {
+  background: linear-gradient(180deg, #FFFCF4, #FFF1D6);
+  color: var(--ink);
+  box-shadow: 0 6px 0 var(--gold-edge), 0 10px 24px rgba(74, 40, 0, .22);
+}
+.info .icon { color: #3A94D4; }
+
+.warn {
+  background: linear-gradient(180deg, #FFE7A6, var(--gold));
+  color: var(--ink);
+  box-shadow: 0 6px 0 var(--gold-edge), 0 10px 24px rgba(74, 40, 0, .3);
+}
+
+.danger {
+  background: linear-gradient(180deg, #F07070, #E85454);
+  color: #fff;
+  text-shadow: 0 1px 0 rgba(80, 0, 0, .3);
+  box-shadow: 0 6px 0 #C03030, 0 10px 24px rgba(80, 0, 0, .3);
+}
+
+.celebrity {
+  background: linear-gradient(180deg, #FFD15A, var(--legend));
+  color: #fff;
+  text-shadow: 0 1.5px 0 rgba(74, 40, 0, .3);
+  box-shadow: 0 6px 0 var(--legend-edge), 0 12px 30px rgba(74, 40, 0, .38);
+  padding: 13px 24px;
+  gap: 10px;
+}
+
+/* ── Icono ───────────────────────────────────────────────────────────────── */
+
+.icon {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Posición vertical ───────────────────────────────────────────────────── */
+
+.bottom { bottom: calc(env(safe-area-inset-bottom, 0px) + 45px); --_fy:  45px; }
+.top    { top:    calc(env(safe-area-inset-top,    0px) + 16px); --_fy: -16px; }
+
+/* ── Alineación horizontal ───────────────────────────────────────────────── */
+
+.center { left: 50%; --_tx: -50%; }
+.start  { left: 16px; --_tx: 0; }
+.end    { right: 16px; --_tx: 0; }
+
+/* ── Animación ───────────────────────────────────────────────────────────── */
+
+/* Las CSS vars --_tx y --_fy son leídas desde el elemento en tiempo de animación */
+@keyframes toastIn {
+  from { opacity: 0; transform: translate(var(--_tx, 0), var(--_fy, 16px)) scale(.88); }
+  to   { opacity: 1; transform: translate(var(--_tx, 0), 0) scale(1); }
+}

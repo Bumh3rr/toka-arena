@@ -1,0 +1,26 @@
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: var(--lbl-pad);
+  font-size: var(--lbl-fs);
+  font-family: var(--font-title), system-ui, sans-serif;
+  font-weight: var(--lbl-fw);
+  color: var(--lbl-text);
+  background: var(--lbl-bg);
+  border: var(--lbl-border);
+  border-radius: var(--r-pill);
+  text-transform: var(--lbl-tt);
+  letter-spacing: var(--lbl-ls);
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  flex: none;
+}

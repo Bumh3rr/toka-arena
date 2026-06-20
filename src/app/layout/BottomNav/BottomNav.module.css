@@ -1,0 +1,135 @@
+/* ── Nav container ───────────────────────────────────────────────────────── */
+
+.nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  /* Misma curva y duración que AppLayout.main para que suban/bajen sincronizados */
+  transition: transform .35s cubic-bezier(.4, 0, .2, 1);
+  will-change: transform;
+  padding-top: 36px; /* Importante para el click en IOS */
+}
+
+/* El nav se desliza hacia abajo fuera de pantalla */
+.navHidden {
+  transform: translateY(130%); /* 130% cubre también el box-shadow */
+  pointer-events: none;
+}
+
+.container {
+  --nav-top: #FFF8EE;     /* tope del gradiente — usado en el arco y el sello */
+  --arch-w:  90px;        /* ancho del arco (≥ tamaño del botón flotante) */
+  --arch-h:  32px;        /* altura del arco = cuánto sobresale el botón */
+
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  position: relative;
+
+  border-top: var(--ol) solid var(--ink);
+  background: linear-gradient(180deg, var(--nav-top), #FFEED0);
+  box-shadow: 0 -6px 20px rgba(74, 40, 0, .12);
+  padding: 20px 8px calc(env(safe-area-inset-bottom, 0px) + 20px);
+}
+
+/* ── Item ────────────────────────────────────────────────────────────────── */
+
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 10px;
+  color: var(--ink-3);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: transform .12s ease, color .15s ease;
+  flex: 1;
+}
+
+.item:active {
+  transform: scale(0.86);
+}
+
+.item.active {
+  color: var(--legend-edge);
+}
+
+/* ── Ícono ───────────────────────────────────────────────────────────────── */
+
+.iconWrapper {
+  position: relative;
+  width: 46px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon {
+  position: relative;
+  z-index: 1;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* ── Indicador activo ────────────────────────────────────────────────────── */
+
+.activePill {
+  position: absolute;
+  inset: 0;   /* llena el iconWrapper exactamente — garantiza centrado perfecto */
+  background: linear-gradient(180deg, rgba(255,255,255,.55), rgba(246,169,55,.18));
+  border: 1.5px solid rgba(217, 133, 42, .35);
+  border-radius: 14px;
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, .75);
+  animation: pillIn .28s cubic-bezier(.34, 1.5, .5, 1);
+}
+
+@keyframes pillIn {
+  from { transform: scale(.5); opacity: 0; }
+  to   { transform: scale(1);  opacity: 1; }
+}
+
+/* ── Slot central ────────────────────────────────────────────────────────── */
+
+.centerSlot {
+  flex: 1;
+  visibility: hidden;
+  height: 40px;
+}
+
+/* ── Botón flotante ──────────────────────────────────────────────────────── */
+
+.flotanteWrapper {
+  position: absolute;
+  top: -28px;
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  z-index: 10;
+  transition: transform .15s cubic-bezier(.34, 1.5, .5, 1);
+}
+
+.flotanteWrapper:active {
+  transform: translateX(-50%) scale(0.9);
+}
+
+@keyframes ringIn {
+  from { transform: scale(.7); opacity: 0; }
+  to   { transform: scale(1);  opacity: .5; }
+}

@@ -1,0 +1,119 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.btn {
+  position: relative;
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transition: transform .1s ease;
+}
+
+.cool { cursor: not-allowed; }
+
+.btn:not(.cool):active { transform: translateY(4px); }
+
+.badge {
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  white-space: nowrap;
+  font-family: var(--font-title), system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  border: 2px solid var(--ink);
+  border-radius: var(--r-pill);
+  padding: 2px 9px;
+  box-shadow: 0 2px 0 rgba(74, 40, 0, .25);
+  background: linear-gradient(180deg, #8FD96A, var(--green));
+  text-shadow: 0 1px 0 rgba(74, 40, 0, .3);
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #EAFFD8;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, .35);
+}
+
+.face {
+  position: relative;
+  width: 100%;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r);
+  overflow: hidden;
+}
+
+.face img {
+  width: 100%;
+  display: block;
+  filter: drop-shadow(0 4px 4px rgba(74, 40, 0, .22));
+}
+
+.cool .face img {
+  filter: grayscale(.7) brightness(1.04);
+  opacity: .6;
+}
+
+.veil {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: var(--r);
+  background: rgba(74, 40, 0, .28);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: #fff;
+}
+
+.clock { width: 20px; height: 20px; }
+
+.timer {
+  font-family: var(--font-title), system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, .3);
+  font-variant-numeric: tabular-nums;
+}
+
+.floater {
+  position: absolute;
+  left: 50%;
+  top: -4px;
+  transform: translateX(-50%);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--green-edge);
+  pointer-events: none;
+  text-shadow: 0 1px 0 #fff;
+  animation: floatUp 1s ease-out forwards;
+  z-index: 6;
+}
+
+@keyframes floatUp {
+  0%   { opacity: 0; transform: translate(-50%, 4px) scale(.8); }
+  20%  { opacity: 1; transform: translate(-50%, -6px) scale(1.1); }
+  100% { opacity: 0; transform: translate(-50%, -34px) scale(1); }
+}

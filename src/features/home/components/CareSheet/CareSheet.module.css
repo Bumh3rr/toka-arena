@@ -1,0 +1,86 @@
+.dsheet {
+  position: relative;
+  z-index: 5;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sheet {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #FFFCF4 0%, var(--cream) 12%, var(--cream) 100%);
+  border-top: var(--ol) solid var(--ink);
+  border-radius: 26px 26px 0 0;
+  box-shadow: 0 -7px 20px rgba(74, 40, 0, .16), inset 0 3px 0 rgba(255, 255, 255, .7);
+  overflow: hidden;
+}
+
+.handle {
+  flex: none;
+  padding: 14px 0 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.handle:active { cursor: grabbing; }
+
+.grabLine {
+  width: 50px;
+  height: 7px;
+  border-radius: 99px;
+  background: rgba(74, 40, 0, .2);
+  transition: width .2s ease, background .2s ease;
+}
+
+.expanded .grabLine {
+  width: 65px;
+  background: rgba(74, 40, 0, .32);
+}
+
+.scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 2px 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  scrollbar-width: none;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+}
+
+.scroll::-webkit-scrollbar { display: none; }
+
+.secHeader {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 2px 4px 0;
+  margin-bottom: 12px;
+}
+
+.secTitle {
+  font-family: var(--font-title), system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.secLine {
+  flex: 1;
+  height: 2.5px;
+  background: rgba(74, 40, 0, .1);
+  border-radius: 2px;
+}
