@@ -1,7 +1,6 @@
-import type { AuthCodeMethod, AuthCodeScopeMap, BridgeAuthCodeResponse } from '@/features/auth/model/toka'
-import { IS_DEV_MODE } from '@/shared/types/debug_dev'
+import type { AuthCodeMethod, AuthCodeScopeMap, BridgeAuthCodeResponse } from '@/shared/model/toka'
 
-function waitForBridge(): Promise<void> {
+export async function waitForBridge(): Promise<void> {
   return new Promise((resolve) => {
     if (window.AlipayJSBridge) {
       resolve()
@@ -15,14 +14,6 @@ export async function getAuthCode<M extends AuthCodeMethod>(
   method: M,
   scopes: AuthCodeScopeMap[M][]
 ): Promise<string> {
-  if (IS_DEV_MODE) {
-    console.log(`Simulando obtención de authCode`)
-    return 'DEBUG'
-  }
-
-  console.log(`[INFO] Solicitando authCode`)
-  await waitForBridge()
-
   return new Promise((resolve, reject) => {
     window.AlipayJSBridge.call(
       `getUser${method}AuthCode`,

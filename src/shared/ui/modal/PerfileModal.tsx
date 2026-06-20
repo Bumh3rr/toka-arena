@@ -4,7 +4,7 @@ import { IcCheck, IcCopy, IcPencil, IcPerson, IcMusic, IcHelp, IcDoc, IcInfo, Ic
 import styles from './styles/PerfileModal.module.css'
 import { IconButton, Button, Toggle, Label } from '@/shared/ui/Kit'
 import DevPanel from '../../../features/home/components/panel/DevPanel'
-import { IS_DEV_MODE } from '@/shared/types/debug_dev'
+import { IS_DEV_MODE } from '@/shared/model/debug_dev'
 import { musicManager } from '@/shared/hooks/music/musicManager'
 
 interface PerfileModalProps {

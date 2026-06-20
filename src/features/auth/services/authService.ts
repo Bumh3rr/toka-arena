@@ -1,9 +1,9 @@
+import type { AuthResponseDTO, LoginSuperAppRequestDTO } from '@/shared/model/dto/dto.auth'
 import api from '@/shared/services/api'
-import type { LoginSuperAppRequestDTO, AuthResponseDTO} from '../model/dto'
 
 export const authService = {
-  loginWithAuthCode: async (authCode: string): Promise<AuthResponseDTO> => {
-    const body: LoginSuperAppRequestDTO = { authCode: authCode }
+  login: async (authCode: string): Promise<AuthResponseDTO> => {
+    const body: LoginSuperAppRequestDTO = { authCode }
     const response = await api.post<AuthResponseDTO>('/auth/login', body)
     return response.data
   },

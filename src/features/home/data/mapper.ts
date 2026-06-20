@@ -1,8 +1,8 @@
 import type { HomeData } from "./types";
 import type { HomeResponseDTO, ActiveTokaDTO, EvolutionDTO, CareDTO, CareResponseDTO, AscendResponseDTO } from "./dto";
-import type { EquippedAccessory, EquippedAccessoryDTO } from "@/shared/types/accessory";
-import type { TokagotchiActive, CareTimestamps } from "@/shared/types/tokagotchi";
-import type { Evolution } from "@/shared/types/evolution";
+import type { EquippedAccessory, EquippedAccessoryDTO } from "@/shared/model/accessory";
+import type { TokagotchiActive, CareTimestamps } from "@/shared/model/tokagotchi";
+import type { Evolution } from "@/shared/model/evolution";
 import { getRenderBinding } from "@/shared/render/accessoryManifest";
 import { getAssetsBySpecies } from "@/shared/libs/tokagotchi";
 import { toMs } from "@/shared/libs/time";

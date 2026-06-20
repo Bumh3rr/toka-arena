@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { tokagotchiService } from '@/shared/services/tokagotchiService'
-import type { TokagotchiActive } from '@/shared/types/tokagotchi'
+import type { TokagotchiActive } from '@/shared/model/tokagotchi'
 
 export function useClaimStarter() {
   const [loading, setLoading] = useState(false)

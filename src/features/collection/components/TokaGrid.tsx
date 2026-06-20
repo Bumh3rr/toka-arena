@@ -1,0 +1,55 @@
+// src/features/collection/components/TokaGrid.tsx
+import { useMemo } from 'react'
+import type { CollectionData, ColFilter } from '../types/collection.types'
+import { RARITY_META } from '@/shared/constants/rarity'
+import TokaCard from './TokaCard'
+import LockedCard from './LockedCard'
+
+interface TokaGridProps {
+  data: CollectionData
+  filter: ColFilter
+  group: boolean
+  onSelect: (id: string) => void
+}
+
+export default function TokaGrid({ data, filter, group, onSelect }: TokaGridProps) {
+  const filtered = useMemo(() => {
+    let list = [...data.roster]
+    if (filter === 'fav') list = list.filter(t => t.fav)
+    else if (filter !== 'all') list = list.filter(t => t.rarity === filter)
+    list.sort((a, b) =>
+      RARITY_META[b.rarity].order - RARITY_META[a.rarity].order ||
+      a.nick.localeCompare(b.nick)
+    )
+    return list
+  }, [data.roster, filter])
+
+  const cards = useMemo(() => {
+    if (!group) return filtered.map(t => ({ toka: t, count: 1, stacked: false }))
+    const groups: Record<string, typeof filtered> = {}
+    filtered.forEach(t => {
+      const k = `${t.nick}-${t.species}`
+      ;(groups[k] = groups[k] ?? []).push(t)
+    })
+    return Object.values(groups).map(g => {
+      const top = g.sort((a, b) => RARITY_META[b.rarity].order - RARITY_META[a.rarity].order)[0]
+      return { toka: top, count: g.length, stacked: g.length > 1 }
+    })
+  }, [filtered, group])
+
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 10 }} role="list">
+      {cards.map(c => (
+        <TokaCard
+          key={c.toka.id}
+          toka={c.toka}
+          isActive={c.toka.id === data.activeTokaId}
+          count={c.count}
+          stacked={c.stacked}
+          onClick={() => onSelect(c.toka.id)}
+        />
+      ))}
+      {data.lockedSpecies.map(ls => <LockedCard key={ls.key} />)}
+    </div>
+  )
+}

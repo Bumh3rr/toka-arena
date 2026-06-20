@@ -1,5 +1,5 @@
 import api from './api'
-import type { TokagotchiActive } from '../types/tokagotchi' 
+import type { TokagotchiActive } from '../model/tokagotchi' 
 
 export interface UserMeResponse {
   id: number

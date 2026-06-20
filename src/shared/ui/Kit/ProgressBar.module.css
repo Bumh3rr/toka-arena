@@ -1,0 +1,15 @@
+/* src/shared/ui/Kit/ProgressBar.module.css */
+.track {
+  height: var(--pb-h, 12px);
+  border-radius: 99px;
+  background: #EAD9BB;
+  border: 2.5px solid var(--ink);
+  overflow: hidden;
+  box-shadow: inset 0 1px 1px rgba(74,40,0,.18);
+}
+.fill {
+  height: 100%;
+  border-radius: 99px;
+  box-shadow: inset 0 1.5px 0 rgba(255,255,255,.5);
+  transition: width .5s ease;
+}

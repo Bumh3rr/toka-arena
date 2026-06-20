@@ -1,9 +1,9 @@
 import api from "./api";
-import type { TokagotchiActive } from "../types/tokagotchi";
+import type { TokagotchiActive } from "../model/tokagotchi";
 
 export const tokagotchiService = {
   claimStarter: async (): Promise<TokagotchiActive> => {
-    const response = await api.post("/tokagotchi/claim-starter");
+    const response = await api.post("/players/me/genesis-tokagotchi");
     return response.data;
   },
   activar: async (id: number): Promise<void> => {

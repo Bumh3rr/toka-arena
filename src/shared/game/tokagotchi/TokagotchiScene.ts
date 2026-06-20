@@ -1,6 +1,6 @@
 import { applyAccessories } from '@/shared/render/applyAccessories'
 import type { TokagotchiConfig } from './types'
-import type { EquippedAccessory } from '@/shared/types/accessory'
+import type { EquippedAccessory } from '@/shared/model/accessory'
 
 /** API pública expuesta por la escena de Phaser al wrapper `TokagotchiGame` y al componente React. */
 export interface ITokagotchiScene {

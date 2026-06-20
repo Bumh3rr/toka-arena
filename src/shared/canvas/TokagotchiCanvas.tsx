@@ -1,9 +1,9 @@
 import { useEffect, useRef } from 'react'
 import { TokagotchiGame } from '../game/tokagotchi/TokagotchiGame'
 import type { TokagotchiConfig } from '../game/tokagotchi/types'
-import type { Species, Assets, AnimationTokagotchi } from '../types/tokagotchi'
+import type { Species, Assets, AnimationTokagotchi } from '../model/tokagotchi'
 import { getAssetsBySpecies } from '../libs/tokagotchi' 
-import type { EquippedAccessory } from '../types/accessory'
+import type { EquippedAccessory } from '../model/accessory'
 
 /**
  * Props de {@link TokagotchiCanvas}.

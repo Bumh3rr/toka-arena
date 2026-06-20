@@ -1,5 +1,5 @@
 import styles from './RarityCard.module.css'
-import type { Rarity } from '@/shared/types/tokagotchi'
+import type { Rarity } from '@/shared/model/tokagotchi'
 import { RARITY_META } from '@/shared/constants/rarity'
 
 export type RarityCardSize = 'sm' | 'md' | 'lg'

@@ -1,5 +1,6 @@
 import axios from 'axios'
 const API_URL = import.meta.env.VITE_API_URL
+import { tokenStore } from '../session/store/token.store' 
 
 const api = axios.create({
   baseURL: API_URL,
@@ -11,7 +12,7 @@ const api = axios.create({
 })
 
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('toka_token')
+  const token = tokenStore.get()
   if (token) config.headers.Authorization = `Bearer ${token}`
   return config
 })
@@ -20,8 +21,8 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('toka_token')
-      window.location.href = '/login'
+      // Dispara evento para que el hook de auth reaccione a la expiración del token
+      window.dispatchEvent(new CustomEvent('auth:expired'));
     }
     return Promise.reject(error)
   }

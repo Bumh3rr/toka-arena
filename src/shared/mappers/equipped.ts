@@ -1,4 +1,4 @@
-import type { EquippedAccessoryDTO, EquippedAccessory, EquippedBySlot } from "@/shared/types/accessory";
+import type { EquippedAccessoryDTO, EquippedAccessory, EquippedBySlot } from "@/shared/model/accessory";
 import { getRenderBinding } from "@/shared/render/accessoryManifest";
 
 export function mapEquipped(dtos: EquippedAccessoryDTO[]): EquippedAccessory[] {

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { IcCrown, IcLock, IcClock } from '@/shared/ui/Icons/Icons'
 import styles from './styles/EvoPanel.module.css'
 import { HeaderTitleLine } from '../CareSheet/CareSheet'
-import type { Evolution } from '@/shared/types/evolution'
+import type { Evolution } from '@/shared/model/evolution'
 import { RARITY_META } from '@/shared/constants/rarity'
 
 interface EvoPanelProps {

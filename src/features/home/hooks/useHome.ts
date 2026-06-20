@@ -1,4 +1,4 @@
-import type { Session } from "@/shared/session/session.types";
+import type { PlayerProfile } from "@/shared/session/model/types";
 import type { HomeData } from "../data/types";
 import type { CareActionDTO, ApiError } from "../data/dto";
 import type { ActionCare } from "../data/types";
@@ -143,7 +143,7 @@ export function useHome() {
       // 1) cache del toka (/home)
       await mutate((prev) => (prev ? applyAscendResponse(prev, res) : prev), { revalidate: false });
       // 2) cache del wallet (/me) — el TF se consumió
-      await globalMutate("me", (prev?: Session) => (prev ? { ...prev, tf: res.wallet.tf } : prev), { revalidate: false });
+      await globalMutate("me", (prev?: PlayerProfile) => (prev ? { ...prev, tf: res.wallet.tf } : prev), { revalidate: false });
 
       const rarityLabel = RARITY_META[res.toka.rarity].label
       show(

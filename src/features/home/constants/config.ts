@@ -1,6 +1,6 @@
 import type { ConfigCare } from "../data/types"; 
-import type { Rarity, Species } from "@/shared/types/tokagotchi";
-import type { Evolution } from "@/shared/types/evolution";
+import type { Rarity, Species } from "@/shared/model/tokagotchi";
+import type { Evolution } from "@/shared/model/evolution";
 import type { AbilityDTO } from "../data/dto"; 
 
 export const CONFIG_CARE: ConfigCare[] = [

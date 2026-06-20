@@ -1,0 +1,30 @@
+.slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 4px;
+  border: 2.5px solid var(--ink);
+  border-radius: 14px;
+  background: var(--cream);
+  cursor: pointer;
+  box-shadow: inset 0 1.5px 0 #fff;
+  transition: transform .1s ease;
+}
+.slot:active:not(.future) { transform: translateY(2px); box-shadow: inset 0 1.5px 0 #fff; }
+.future { border-style: dashed; border-color: var(--ink-3); opacity: .5; cursor: default; }
+.thumb {
+  width: 32px; height: 32px;
+  border-radius: 10px;
+  background: var(--cream-2);
+  border: 2px solid rgba(74,40,0,.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-3);
+}
+.thumb svg { width: 18px; height: 18px; }
+.filled .thumb { background: var(--gold-soft); border-color: var(--ink); color: var(--ink); }
+.label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .3px; color: var(--ink-2); }
+.name { font-family: var(--font-title); font-size: 11px; font-weight: 700; color: var(--ink); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.soon { font-size: 9px; font-weight: 700; color: var(--ink-3); }

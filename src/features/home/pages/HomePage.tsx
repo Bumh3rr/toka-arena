@@ -53,6 +53,7 @@ export default function HomePage() {
 
     const ready = state.status === 'ready'
     const activeToka = ready ? state.data.activeToka : null
+
     // Simulacion que redirecciona al apartado del pase de batalla, cambiar a /pase
     const onNavegatePasePage = () => { navigate('/ui-kit', { replace: true }) }
 
@@ -75,11 +76,6 @@ export default function HomePage() {
         ro.observe(el)
         return () => ro.disconnect()
     }, [ready])
-
-    // Usuario sin Tokagotchi → flujo génesis (unboxing)
-    useEffect(() => {
-        if (ready && !activeToka) navigate('/unboxing', { replace: true })
-    }, [ready, activeToka, navigate])
 
     // ── Drag desde el handle del sheet ──────────────────────────────────────────
     const onGrabDown = (e: React.PointerEvent<HTMLDivElement>) => {

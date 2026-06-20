@@ -1,4 +1,4 @@
-import type { EquippedAccessory, AccessorySlot } from "@/shared/types/accessory";
+import type { EquippedAccessory, AccessorySlot } from "@/shared/model/accessory";
 
 const ALL_SLOTS: AccessorySlot[] = ["HEAD", "FACE", "NECK", "BACK"];
 

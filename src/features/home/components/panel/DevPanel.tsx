@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { IcTerminal, IcChevR } from '@/shared/ui/Icons/Icons'
-import type { Species, Rarity } from '@/shared/types/tokagotchi'
+import type { Species, Rarity } from '@/shared/model/tokagotchi'
 import styles from './styles/DevPanel.module.css'
 import { authService } from '@/features/auth/services/authService'
 import { useNavigate } from 'react-router-dom'
