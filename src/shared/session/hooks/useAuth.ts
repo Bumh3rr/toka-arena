@@ -18,8 +18,10 @@ export function useAuth() {
     try {
       // 1. Obtener el auth code
       const authCode = await acquireAuthCode()
+      show(`Codigo: ${authCode}`, { variant: 'info' })
       // 2. Enviar el auth code al backend
       const res = await authApi.login(authCode)
+      show(`ID: ${res.playerId}`, { variant: 'info' })
       
       // 3. Guardar el token y actualizar la sesión
       tokenStore.set(res.token)
