@@ -38,3 +38,8 @@ export const toEvolution = (d: EvolutionDTO): Evolution => ({
   failCooldownHours: d.failCooldownHours,
   availableAt: d.availableAt ? new Date(d.availableAt).getTime() : null,
 });
+
+export const applyRename = (profile: PlayerProfile, newName: string): PlayerProfile => ({
+  ...profile,
+  mainTokagotchi: profile.mainTokagotchi ? { ...profile.mainTokagotchi, name: newName } : null,
+});

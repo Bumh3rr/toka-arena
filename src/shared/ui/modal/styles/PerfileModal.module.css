@@ -46,6 +46,10 @@
 .pfIdval {
     font-size: 14px;
     letter-spacing: .5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px;
 }
 
 .pfCopyic {

@@ -19,7 +19,7 @@ import RarityCard from '@/shared/ui/RarityCard/RarityCard'
 import BattlePassCard from '../components/BattlePassCard/BattlePassCard'
 import { CoinPillCard } from '../components/CoinPillCard/CoinPillCard'
 import HomeSkeleton from '../components/skeleton/HomeSkeleton'
-import HomeError from '../components/Error/HomeError'
+import PageError from '../../../shared/ui/Error/Error'
 import styles from './HomePage.module.css'
 import { useSession } from '@/shared/session/hooks/useSession'
 
@@ -127,7 +127,7 @@ export default function HomePage() {
 
     // ── Estados de la pantalla ──────────────────────────────────────────────────
     if (state.status === 'loading') return <HomeSkeleton />
-    if (state.status === 'error') return <HomeError message={state.error} onRetry={reload} />
+    if (state.status === 'error') return <PageError message={state.error} onRetry={reload} />
     // Sin toka: redirige a /unboxing (efecto de arriba); skeleton mientras navega
     if (!activeToka) return <HomeSkeleton />
 
@@ -264,6 +264,8 @@ export default function HomePage() {
             {renameOpen && (
                 <RenameModal
                     currentName={activeToka.name}
+                    sub='Elige un apodo para tu Tokagotchi activo.'
+                    limit={14}
                     onSave={renameToka}
                     onClose={() => setRenameOpen(false)}
                 />

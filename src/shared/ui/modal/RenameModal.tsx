@@ -5,29 +5,31 @@ import { Button } from '@/shared/ui/Kit'
 
 interface RenameModalProps {
   currentName: string
-  onSave: (name: string) => Promise<void>
+  onSave?: (name: string) => Promise<void>
   onClose: () => void
+  sub?: string
+  limit?: number
 }
 
-export default function RenameModal({ currentName, onSave, onClose }: RenameModalProps) {
+export default function RenameModal({ currentName, onSave = async () => {}, onClose, sub = '', limit = 14 }: RenameModalProps) {
   const [value, setValue] = useState(currentName)
   const [saving, setSaving] = useState(false)
 
   const handleSave = async () => {
-    const name = (value.trim() || currentName).slice(0, 14)
+    const name = (value.trim() || currentName).slice(0, limit)
     setSaving(true)
-    await onSave(name)
+    if (onSave) await onSave(name)
     setSaving(false)
     onClose()
   }
 
   return (
     <BottomSheet title="Renombrar apodo" onClose={onClose}>
-      <p className={styles.hint}>Elige un apodo para tu Tokagotchi activo.</p>
+      <p className={styles.hint}>{sub}</p>
       <input
         className={styles.input}
         value={value}
-        maxLength={14}
+        maxLength={limit}
         onChange={e => setValue(e.target.value)}
         onKeyDown={e => e.key === 'Enter' && handleSave()}
       />

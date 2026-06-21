@@ -1,19 +1,15 @@
-import WoodButton from '@/shared/ui/WoodButton/WoodButton'
-import styles from './HomeError.module.css'
+import styles from './Error.module.css'
+import { Card, Button } from '../Kit'
 
-interface HomeErrorProps {
+interface PageErrorProps {
   message: string
   onRetry: () => void
 }
 
-/**
- * Estado de error del Home: amable y centrado (no un dump). Tokagotchi
- * confundido + mensaje + botón Reintentar. Mismo lenguaje visual del proyecto.
- */
-export default function HomeError({ message, onRetry }: HomeErrorProps) {
+export default function PageError({ message, onRetry }: PageErrorProps) {
   return (
     <div className={styles.container}>
-      <div className={styles.card}>
+      <Card variant='warm' shadow='md' className={styles.card}>
         <div className={styles.face} aria-hidden="true">
           <svg viewBox="0 0 64 64" fill="none">
             {/* cuerpo redondeado */}
@@ -33,8 +29,8 @@ export default function HomeError({ message, onRetry }: HomeErrorProps) {
         <h2 className={styles.title}>Algo salió mal</h2>
         <p className={styles.message}>{message}</p>
 
-        <WoodButton label="Reintentar" onClick={onRetry} width="220px" />
-      </div>
+        <Button variant='danger' onClick={onRetry} fullWidth padding='16px' fontSize={17}>Reintentar</Button>
+      </Card>
     </div>
   )
 }

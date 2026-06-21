@@ -1,20 +1,18 @@
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import GiftBox from '../components/GiftBox/GiftBox'
-import TokaReveal from '../components/TokaReveal/TokaReveal'
+import GenesisReveal from '../components/GenesisReveal/GenesisReveal'
 import { useUnboxing } from '../hooks/useUnboxing'
-import { Button, Toast } from '@/shared/ui/Kit'
-import RenameModal from '@/shared/ui/modal/RenameModal'
+import { Toast } from '@/shared/ui/Kit'
 import styles from './UnboxingPage.module.css'
 
 export default function UnboxingPage() {
   const { phase, giftFase, result, startBreaking, renameResult, toast } = useUnboxing()
   const navigate = useNavigate()
-  const [renameOpen, setRenameOpen] = useState(false)
   const handleComplete = () => navigate('/home', { replace: true })
 
   return (
     <div className={styles.container}>
+      <div className={styles.overlay} />
       <div className={styles.background} />
 
       {/* FASE 1 — Regalo con animación idle */}
@@ -30,45 +28,23 @@ export default function UnboxingPage() {
 
       {/* FASE 2 — Regalo vibrando y explotando */}
       {phase === 'breaking' && (
-        <>
+        <div>
           <h1 className={styles.titleBreaking}>¡Se está<br />rompiendo!</h1>
           <GiftBox fase={giftFase} onClick={() => { }} />
-        </>
+        </div>
       )}
 
-      {/* FASE 3 — Tokagotchi revelado */}
-      {phase === 'result' && result && (
-        <>
-          <h1 className={styles.title}>¡Es tuyo!</h1>
-          {result.mainTokagotchi && (
-            <TokaReveal
-              result={result.mainTokagotchi}
-              onRenameClick={() => setRenameOpen(true)}
-            />
-          )}
-          <Button
-            className={styles.startButton}
-            variant="cafe"
-            onClick={handleComplete}
-            fontSize={20}
-            padding="10px"
-          >
-            ¡Empezar!
-          </Button>
-        </>
+      {/* FASE 3 — Revelación génesis (overlay full-screen sobre el fondo) */}
+      {phase === 'result' && result?.mainTokagotchi && (
+        <GenesisReveal
+          tokagotchi={result.mainTokagotchi}
+          onStart={handleComplete}
+          onRename={renameResult}
+        />
       )}
 
       {/* Toast de mensajes */}
       {toast && <Toast {...toast} />}
-
-      {/* Modal de renombrar */}
-      {renameOpen && result && (
-        <RenameModal
-          currentName={result?.mainTokagotchi?.name || ''}
-          onSave={renameResult}
-          onClose={() => setRenameOpen(false)}
-        />
-      )}
     </div>
   )
 }

@@ -2,7 +2,7 @@ import type { Evolution } from "./evolution";
 import type { Rarity, Species, Stats } from "./tokagotchi";
 
 export interface PlayerProfile {
-  id: number;
+  id: string;
   username: string;
   avatar: string | null;
   tf: number;
@@ -12,7 +12,7 @@ export interface PlayerProfile {
 }
 
 export interface MainTokagotchi {
-  id: number;
+  id: string;
   name: string;
   species: Species;
   rarity: Rarity;

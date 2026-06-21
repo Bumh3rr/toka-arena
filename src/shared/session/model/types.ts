@@ -8,6 +8,7 @@ export interface LoginData {
 
 export interface SessionApi {
   getMe(): Promise<PlayerProfile>;
+  renameUsername(newUsername: string): Promise<PlayerProfile>;
 }
 
 export interface AuthApi {

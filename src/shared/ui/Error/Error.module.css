@@ -6,7 +6,6 @@
   align-items: center;
   justify-content: center;
   padding: 24px;
-  background: linear-gradient(#BFE3FF, #EAF6FF);
   color: var(--ink);
   font-family: var(--font-body), system-ui, sans-serif;
 }
@@ -20,13 +19,6 @@
   width: 100%;
   max-width: 320px;
   padding: 28px 24px 24px;
-  background: linear-gradient(180deg, #FFFBF1, var(--cream));
-  border: var(--ol) solid var(--ink);
-  border-radius: var(--r-lg);
-  box-shadow:
-    inset 0 2px 0 #fff,
-    0 6px 0 var(--edge-cream),
-    0 14px 26px rgba(74, 40, 0, .18);
 }
 
 .face {

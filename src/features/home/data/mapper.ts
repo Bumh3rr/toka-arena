@@ -1,6 +1,7 @@
+import type { ActiveTokaDTO, CareDTO, EquippedAccessoryDTO, EvolutionDTO } from "@/shared/api/dto/tokagotchi.dto";
 import type { HomeData } from "./types";
-import type { HomeResponseDTO, ActiveTokaDTO, EvolutionDTO, CareDTO, CareResponseDTO, AscendResponseDTO } from "./dto";
-import type { EquippedAccessory, EquippedAccessoryDTO } from "@/shared/domain/accessory";
+import type { HomeResponseDTO, CareResponseDTO, AscendResponseDTO } from "./dto";
+import type { EquippedAccessory} from "@/shared/domain/accessory";
 import type { TokagotchiActive, CareTimestamps } from "@/shared/domain/tokagotchi";
 import type { Evolution } from "@/shared/domain/evolution";
 import { getRenderBinding } from "@/shared/render/accessoryManifest";

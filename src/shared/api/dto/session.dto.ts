@@ -6,7 +6,7 @@ import type { EvolutionDTO, RarityDTO, SpeciesDTO } from "./tokagotchi.dto";
  */
 export interface PlayerProfileDto {
   /** Identificador único del jugador. */
-  id: number;
+  id: string;
   /** Nombre de usuario visible en la UI. */
   username: string;
   /** URL del avatar del jugador, o null si no tiene uno asignado. */
@@ -25,7 +25,7 @@ export interface PlayerProfileDto {
  */
 export interface MainTokagotchiDTO {
   /** Identificador único del Tokagotchi. */
-  id: number;
+  id: string;
   /** Nombre personalizado del Tokagotchi. */
   name: string;
   /** Especie del Tokagotchi (TOFU, MOCHI, HANA). */

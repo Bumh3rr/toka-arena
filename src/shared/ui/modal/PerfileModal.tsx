@@ -2,10 +2,13 @@ import React, { useState } from 'react'
 import BottomSheet from '@/shared/ui/BottomSheet/BottomSheet'
 import { IcCheck, IcCopy, IcPencil, IcPerson, IcMusic, IcHelp, IcDoc, IcInfo, IcSpeaker, IcChevR } from '@/shared/ui/Icons/Icons'
 import styles from './styles/PerfileModal.module.css'
-import { IconButton, Button, Toggle, Label } from '@/shared/ui/Kit'
-import DevPanel from '../../../features/home/components/panel/DevPanel'
+import { IconButton, Button, Toggle, Label, Toast } from '@/shared/ui/Kit'
+import DevPanel from '@/shared/ui/Panel/DevPanel'
 import { IS_DEV_MODE } from '@/shared/domain/debug_dev'
 import { musicManager } from '@/shared/hooks/music/musicManager'
+import { useSession } from '@/shared/session/hooks/useSession'
+import PageError from '../Error/Error'
+import RenameModal from './RenameModal'
 
 interface PerfileModalProps {
     onClose: () => void
@@ -13,8 +16,31 @@ interface PerfileModalProps {
 
 export default function PerfileModal({ onClose }: PerfileModalProps) {
     const [copied, setCopied] = useState(false)
-    // Inicializa desde el manager para reflejar la preferencia guardada
+    const [renameOpen, setRenameOpen] = useState(false)
     const [musicOn, setMusicOn] = useState(() => !musicManager.muted)
+    const { state, reload, renameUsername, toast } = useSession()
+
+    const status = state.status
+
+    if (status === 'loading') {
+        return (
+            <BottomSheet title="Perfil" sub={''} onClose={onClose}>
+                <div className={styles.container}>
+                    <p>Cargando perfil...</p>
+                </div>
+            </BottomSheet>
+        )
+    }
+
+    if (status === 'error') {
+        return (
+            <BottomSheet title="Perfil" sub={''} onClose={onClose}>
+                <PageError message={'state.error'} onRetry={reload} />
+            </BottomSheet>
+        )
+    }
+
+    const { data } = state
 
     const handleMusicToggle = (v: boolean) => {
         setMusicOn(v)
@@ -22,7 +48,8 @@ export default function PerfileModal({ onClose }: PerfileModalProps) {
     }
 
     const handleCopy = () => {
-        navigator.clipboard.writeText('TKA-123456789')
+        const id = data.mainTokagotchi?.id || ''
+        navigator.clipboard.writeText(id)
         setCopied(true)
         setTimeout(() => setCopied(false), 300)
     }
@@ -30,10 +57,20 @@ export default function PerfileModal({ onClose }: PerfileModalProps) {
     return (
         <BottomSheet title="Perfil" sub={''} onClose={onClose}>
             <div className={styles.container}>
-                <ProfileScene apodo="JohnDoe" id="TKA-123456789" onRename={() => { }} onCopy={handleCopy} copied={copied} />
+                <ProfileScene apodo={data.username} id={data.mainTokagotchi?.id || ''} onRename={() => setRenameOpen(true)} onCopy={handleCopy} copied={copied} />
             </div>
             <Settings music={musicOn} sfx={false} version={'1.0.0'} onMusic={handleMusicToggle} onSfx={() => { }} />
             {IS_DEV_MODE && <DevPanel />}
+            {renameOpen && (
+                <RenameModal
+                    currentName={data.username}
+                    sub='Elige tu apodo de jugador. 20 caracteres máximo.'
+                    limit={20}
+                    onSave={renameUsername}
+                    onClose={() => setRenameOpen(false)}
+                />
+            )}
+            {toast && <Toast {...toast} />}
         </BottomSheet>
     )
 }
@@ -48,7 +85,7 @@ function ProfileScene({ apodo, id, onRename, onCopy, copied }: { apodo: string, 
             <div className={styles.pfIdBlock}>
                 <div className={styles.pfNickRow}>
                     <span className={styles.pfNick}>{apodo}</span>
-                    <Button disabled variant='cream' radius='sm' padding='5px 5px 5px 3px' onClick={onRename} aria-label="Renombrar" icon={<IcPencil />} />
+                    <Button variant='cream' radius='sm' padding='5px 5px 5px 3px' onClick={onRename} aria-label="Renombrar" icon={<IcPencil />} />
                 </div>
                 <Button variant='warm' radius='lg' className={`${styles.pfIdpill} ${copied ? styles.copied : ''}`} onClick={onCopy}>
                     <span className={styles.pfIdlabel}>ID</span>
@@ -86,11 +123,11 @@ function Settings({ music, sfx, version, onMusic, onSfx }: { music: boolean, sfx
         <div className={styles.settings}>
             <div className={styles.secH}><span className={styles.t}>Ajustes</span><span className={styles.line}></span></div>
             <div className={styles.setCard}>
-                <SettingRow icon={<IcMusic />}   label="Música"><Toggle checked={music} onChange={onMusic} /></SettingRow>
+                <SettingRow icon={<IcMusic />} label="Música"><Toggle checked={music} onChange={onMusic} /></SettingRow>
                 <SettingRow icon={<IcSpeaker />} label="Efectos de sonido"><Toggle disabled checked={sfx} onChange={onSfx} /></SettingRow>
-                <SettingRow icon={<IcHelp />}    label="Ayuda y soporte" onClick={() => { }}><IcChevR /></SettingRow>
-                <SettingRow icon={<IcDoc />}     label="Términos y condiciones" onClick={() => { }}><IcChevR /></SettingRow>
-                <SettingRow icon={<IcInfo />}    label="Versión" last><Label look='soft' variant='cream'>{version}</Label></SettingRow>
+                <SettingRow icon={<IcHelp />} label="Ayuda y soporte" onClick={() => { }}><IcChevR /></SettingRow>
+                <SettingRow icon={<IcDoc />} label="Términos y condiciones" onClick={() => { }}><IcChevR /></SettingRow>
+                <SettingRow icon={<IcInfo />} label="Versión" last><Label look='soft' variant='cream'>{version}</Label></SettingRow>
             </div>
         </div>
     )
