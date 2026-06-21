@@ -1,5 +1,6 @@
+import type { ActiveTokaDTO, CareDTO } from "@/shared/api/dto/tokagotchi.dto";
 import { SPECIES_ABILITIES } from "../constants/config";
-import type { ActiveTokaDTO, CareDTO, AscendResponseDTO } from "../data/dto";
+import type { AscendResponseDTO } from "../data/dto";
 
 export const responseHomeResponseDTO = {
   serverTime: new Date().toISOString(),
@@ -48,10 +49,7 @@ export const responseCareResponseDTO = {
 };
 
 export const responseRenameResponseDTO = (str: string) => {
-  return {
-    id: 1023,
-    name: str,
-  };
+  return str;
 };
 
 export const responseAscendResponseDTO = {

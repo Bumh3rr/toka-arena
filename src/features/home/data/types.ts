@@ -1,4 +1,4 @@
-import type { HomeResponseDTO, CareActionDTO, CareResponseDTO, RenameResponseDTO,AscendResponseDTO  } from "./dto";
+import type { HomeResponseDTO, CareActionDTO, CareResponseDTO,AscendResponseDTO  } from "./dto";
 import type { TokagotchiActive } from "@/shared/domain/tokagotchi";
 import type { AnimationTokagotchi } from "@/shared/domain/tokagotchi";
 
@@ -25,7 +25,7 @@ export interface HomeData {
 // Interfaz para el API del Home
 export interface HomeApi {
   getHome(): Promise<HomeResponseDTO>;
-  care(tokaId: number, action: CareActionDTO): Promise<CareResponseDTO>;
-  rename(tokaId: number, name: string): Promise<RenameResponseDTO>;
-  ascend(tokaId: number): Promise<AscendResponseDTO>;
+  care(tokaId: string, action: CareActionDTO): Promise<CareResponseDTO>;
+  rename(tokaId: string, name: string): Promise<string>;
+  ascend(tokaId: string): Promise<AscendResponseDTO>;
 }

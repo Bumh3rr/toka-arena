@@ -70,7 +70,7 @@ export function useHome() {
       try {
         await mutate(
           async (prev) => {
-            const res = await homeApi.care(tokaId, ACTION_TO_DTO[action]);
+            const res = await homeApi.care(String(tokaId), ACTION_TO_DTO[action]);
             return prev ? applyCareResponse(prev, res) : prev;
           },
           {
@@ -114,12 +114,12 @@ export function useHome() {
 
   const renameToka = useCallback(async (newName: string) => {
     if (!data?.activeToka) return;
-    const tokaId = data.activeToka.id;
+    const tokaId = String(data.activeToka.id);
     try {
       await mutate(
         async (prev) => {
           const res = await homeApi.rename(tokaId, newName);
-          return prev ? applyRename(prev, res.name) : prev;
+          return prev ? applyRename(prev, res) : prev;
         },
         {
           optimisticData: (prev) =>
@@ -139,7 +139,7 @@ export function useHome() {
     if (!data?.activeToka?.evolution) return null;
     const tokaId = data.activeToka.id;
     try {
-      const res = await homeApi.ascend(tokaId);
+      const res = await homeApi.ascend(String(tokaId));
       // 1) cache del toka (/home)
       await mutate((prev) => (prev ? applyAscendResponse(prev, res) : prev), { revalidate: false });
       // 2) cache del wallet (/me) — el TF se consumió

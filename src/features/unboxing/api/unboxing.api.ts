@@ -7,7 +7,7 @@ const realUnboxingApi: UnboxingApi = {
     const { data } = await api.post<PlayerProfileDto>('/players/me/genesis-tokagotchi');
     return data;
   },
-  async rename(id: number, newName: string) {
+  async rename(id: string, newName: string) {
     const body = { newName };
     const { data } = await api.patch<MainTokagotchiDTO>(`/tokagotchis/${id}/name`, body);
     return data;
