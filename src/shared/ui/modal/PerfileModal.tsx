@@ -3,12 +3,13 @@ import BottomSheet from '@/shared/ui/BottomSheet/BottomSheet'
 import { IcCheck, IcCopy, IcPencil, IcPerson, IcMusic, IcHelp, IcDoc, IcInfo, IcSpeaker, IcChevR } from '@/shared/ui/Icons/Icons'
 import styles from './styles/PerfileModal.module.css'
 import { IconButton, Button, Toggle, Label, Toast } from '@/shared/ui/Kit'
-import DevPanel from '@/shared/ui/Panel/DevPanel'
+import DevPanel from '@/shared/dev/component/DevPanel'
 import { IS_DEV_MODE } from '@/shared/domain/debug_dev'
 import { musicManager } from '@/shared/hooks/music/musicManager'
 import { useSession } from '@/shared/session/hooks/useSession'
 import PageError from '../Error/Error'
 import RenameModal from './RenameModal'
+import Loading from '../Loading/Loading'
 
 interface PerfileModalProps {
     onClose: () => void
@@ -19,14 +20,13 @@ export default function PerfileModal({ onClose }: PerfileModalProps) {
     const [renameOpen, setRenameOpen] = useState(false)
     const [musicOn, setMusicOn] = useState(() => !musicManager.muted)
     const { state, reload, renameUsername, toast } = useSession()
-
     const status = state.status
 
     if (status === 'loading') {
         return (
             <BottomSheet title="Perfil" sub={''} onClose={onClose}>
                 <div className={styles.container}>
-                    <p>Cargando perfil...</p>
+                    <Loading fullscreen text="Cargando perfil..." />
                 </div>
             </BottomSheet>
         )
@@ -35,18 +35,19 @@ export default function PerfileModal({ onClose }: PerfileModalProps) {
     if (status === 'error') {
         return (
             <BottomSheet title="Perfil" sub={''} onClose={onClose}>
-                <PageError message={'state.error'} onRetry={reload} />
+                <div className={styles.container}>
+                    <PageError message={state.error} onRetry={reload} />
+                </div>
+                {IS_DEV_MODE && <DevPanel />}
             </BottomSheet>
         )
     }
 
     const { data } = state
-
     const handleMusicToggle = (v: boolean) => {
         setMusicOn(v)
         musicManager.setMuted(!v)
     }
-
     const handleCopy = () => {
         const id = data.mainTokagotchi?.id || ''
         navigator.clipboard.writeText(id)

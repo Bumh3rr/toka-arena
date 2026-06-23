@@ -1,10 +1,10 @@
 import { getImagenSrcByEspecie } from '@/shared/game/assets'
-import type { TokagotchiActive } from '../../domain/tokagotchi' 
+import type { MainTokagotchi } from '../../domain/tokagotchi' 
 import { RARITY_META } from '@/shared/constants/rarity'
 import styles from './TokaAvatar.module.css'
 
 interface TokaAvatarProps {
-  tokagotchi: TokagotchiActive
+  tokagotchi: MainTokagotchi
   size?: number
   isActive?: boolean
 }

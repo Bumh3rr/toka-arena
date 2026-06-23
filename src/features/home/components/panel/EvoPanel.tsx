@@ -6,7 +6,7 @@ import type { Evolution } from '@/shared/domain/evolution'
 import { RARITY_META } from '@/shared/constants/rarity'
 
 interface EvoPanelProps {
-  evolution: Evolution | null
+  nextEvolution: Evolution | null
   cp: number
   tf: number
   serverTime: number
@@ -20,12 +20,12 @@ const fmtCountdown = (ms: number) => {
   return `${pad(Math.floor(s / 3600))}:${pad(Math.floor((s % 3600) / 60))}:${pad(s % 60)}`
 }
 
-export default function EvoPanel({ evolution, cp, tf, serverTime, onAscend }: EvoPanelProps) {
+export default function EvoPanel({ nextEvolution, cp, tf, serverTime, onAscend }: EvoPanelProps) {
   const [pending, setPending] = useState(false)
   const [flash, setFlash] = useState<'SUCCESS' | 'FAIL' | null>(null)
   const [, tick] = useState(0)
 
-  const availableAt = evolution?.availableAt ?? null
+  const availableAt = nextEvolution?.evolvedAvailableAt ?? null
 
   // Cuenta regresiva: fuerza un re-render por segundo mientras el cooldown siga activo.
   useEffect(() => {
@@ -52,12 +52,12 @@ export default function EvoPanel({ evolution, cp, tf, serverTime, onAscend }: Ev
 
   const cooldownLeftMs = availableAt != null ? Math.max(0, availableAt - serverTime) : 0
   const onCooldown = cooldownLeftMs > 0
-  const enoughCp = !!evolution && cp >= evolution.cpRequired
-  const enoughTf = !!evolution && tf >= evolution.costTF
-  const ready = !!evolution && enoughCp && enoughTf && !onCooldown && !pending
+  const enoughCp = !!nextEvolution && cp >= nextEvolution.cpRequired
+  const enoughTf = !!nextEvolution && tf >= nextEvolution.costTF
+  const ready = !!nextEvolution && enoughCp && enoughTf && !onCooldown && !pending
 
-  const pct = evolution
-    ? Math.min(100, Math.round((cp / evolution.cpRequired) * 100))
+  const pct = nextEvolution
+    ? Math.min(100, Math.round((cp / nextEvolution.cpRequired) * 100))
     : 100
 
   return (
@@ -65,7 +65,7 @@ export default function EvoPanel({ evolution, cp, tf, serverTime, onAscend }: Ev
       <HeaderTitleLine title="Evolución" />
 
       <div
-        className={`${styles.evo} ${!evolution ? styles.maxed : ''} ${ready ? styles.ready : ''} ${flash === 'FAIL' ? styles.shake : ''}`}
+        className={`${styles.evo} ${!nextEvolution ? styles.maxed : ''} ${ready ? styles.ready : ''} ${flash === 'FAIL' ? styles.shake : ''}`}
       >
         {/* FX de resultado (éxito / fallo) */}
         {flash && (
@@ -80,7 +80,7 @@ export default function EvoPanel({ evolution, cp, tf, serverTime, onAscend }: Ev
           </div>
         )}
 
-        {!evolution ? (
+        {!nextEvolution ? (
           /* Rareza máxima */
           <div className={styles.evoTop}>
             <div className={styles.evoCrown}><IcCrown /></div>
@@ -95,7 +95,7 @@ export default function EvoPanel({ evolution, cp, tf, serverTime, onAscend }: Ev
               <div className={styles.evoCrown}><IcCrown /></div>
               <div className={styles.evoTitles}>
                 <div className={styles.k}>Evolución</div>
-                <div className={styles.t}>Ascender a {RARITY_META[evolution.nextRarity].label}</div>
+                <div className={styles.t}>Ascender a {RARITY_META[nextEvolution.nextRarity].label}</div>
               </div>
             </div>
 
@@ -103,7 +103,7 @@ export default function EvoPanel({ evolution, cp, tf, serverTime, onAscend }: Ev
             <div className={styles.cpbarWrap}>
               <div className={styles.cpbarTop}>
                 <span className={styles.cpLabel}>Puntos de Cuidado</span>
-                <span className={styles.cpVal}><b>{cp}</b> / {evolution.cpRequired} CP</span>
+                <span className={styles.cpVal}><b>{cp}</b> / {nextEvolution.cpRequired} CP</span>
               </div>
               <div className={styles.cpbar}>
                 <div className={styles.fill} style={{ width: `${pct}%` }} />
@@ -116,16 +116,16 @@ export default function EvoPanel({ evolution, cp, tf, serverTime, onAscend }: Ev
               <div className={styles.attr}>
                 <span className={styles.attrK}>Costo</span>
                 <span className={styles.attrV}>
-                  <img src="/assets/ui/moneda_tf.svg" alt="TF" width={15} height={15} />{evolution.costTF}
+                  <img src="/assets/ui/moneda_tf.svg" alt="TF" width={15} height={15} />{nextEvolution.costTF}
                 </span>
               </div>
               <div className={styles.attr}>
                 <span className={styles.attrK}>Éxito</span>
-                <span className={styles.attrV}>{evolution.successChance}%</span>
+                <span className={styles.attrV}>{nextEvolution.successChance}%</span>
               </div>
               <div className={styles.attr}>
                 <span className={styles.attrK}>Si falla</span>
-                <span className={styles.attrV}>{evolution.failCooldownHours}h</span>
+                <span className={styles.attrV}>{nextEvolution.failCooldownHours}h</span>
               </div>
             </div>
 
@@ -140,12 +140,12 @@ export default function EvoPanel({ evolution, cp, tf, serverTime, onAscend }: Ev
             ) : !enoughCp ? (
               <div className={styles.evoBtn}>
                 <span className={styles.lockIcon}><IcLock /></span>
-                Faltan {evolution.cpRequired - cp} CP
+                Faltan {nextEvolution.cpRequired - cp} CP
               </div>
             ) : !enoughTf ? (
               <div className={styles.evoBtn}>
                 <span className={styles.lockIcon}><IcLock /></span>
-                Faltan {evolution.costTF - tf} TF
+                Faltan {nextEvolution.costTF - tf} TF
               </div>
             ) : (
               <button className={`${styles.evoBtn} ${styles.evoBtnUnlocked}`} onClick={handleAscend}>

@@ -5,7 +5,8 @@ import { useToast } from "@/shared/hooks/useToast";
 import { useNavigate } from "react-router-dom";
 import type { PlayerProfile } from "@/shared/domain/player";
 import { unboxingApi } from "../api/unboxing.api";
-import { toMainTokagotchi, toPlayerProfile } from "@/shared/session/model/mapper";
+import { mapPlayerProfileDTO } from "@/shared/domain/mappers/player.mapper";
+import { mapMainTokagotchiDTO } from "@/shared/domain/mappers/tokagotchi.mapper";
 
 export type UnboxingPhase = "reveal" | "breaking" | "result";
 export type GiftFase = "idle" | "shaking" | "exploding";
@@ -22,7 +23,7 @@ export function useUnboxing() {
   async function claimStarter() {
     try {
       const player = await unboxingApi.getUnboxing();
-      return toPlayerProfile(player);
+      return mapPlayerProfileDTO(player);
     } catch (error) {
       console.error("Error al reclamar el Tokagotchi:", error);
       return null;
@@ -60,7 +61,7 @@ export function useUnboxing() {
     if (!result || !result.mainTokagotchi) return;
     try {
       const updated = await unboxingApi.rename(result.mainTokagotchi.id , name);
-      const mainTokagotchi = toMainTokagotchi(updated);
+      const mainTokagotchi = mapMainTokagotchiDTO(updated);
       setResult(prev => prev ? ({ ...prev, mainTokagotchi }) : prev);
 
       show("¡Nombre guardado!", { variant: "celebrity" });

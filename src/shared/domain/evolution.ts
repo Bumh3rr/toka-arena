@@ -8,5 +8,5 @@ export interface Evolution {
   costTF: number; // costo del intento (TF)
   successChance: number; // probabilidad de éxito (0–100)
   failCooldownHours: number; // cooldown que se aplica SI el intento falla (12,24,48 hrs)
-  availableAt: number | null; // fecha desde la cual se puede intentar esta evolución (null = siempre disponible)
+  evolvedAvailableAt: number | null; // fecha desde la cual se puede intentar esta evolución (null = siempre disponible)
 }

@@ -48,16 +48,14 @@ export interface CareTimestamps {
 }
 
 // Tokagotchi principal
-export interface TokagotchiActive {
-  id: number;
+export interface MainTokagotchi {
+  id: string;
   name: string;
   species: Species;
   rarity: Rarity;
   stats: Stats;
-  abilities: Ability[];
-  equipped: EquippedAccessory[];
   cp: number;
-  assets: Assets;
-  evolution: Evolution | null;
-  care: CareTimestamps;
+  equipped: EquippedAccessory[];
+  nextEvolution: Evolution | null;
+  careCooldown: CareTimestamps;
 }

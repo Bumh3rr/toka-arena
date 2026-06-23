@@ -23,13 +23,11 @@ export interface EvolutionDTO {
   /** Horas de cooldown aplicadas si la evolución falla. */
   failCooldownHours: number;
   /** ISO 8601 con la fecha desde la que puede intentarse la evolución, o null si ya está disponible. */
-  availableAt: string | null;
+  evolvedAvailableAt: string | null;
 }
 
 /** Accesorio equipado actualmente en un Tokagotchi. */
 export interface EquippedAccessoryDTO {
-  /** Identificador único del accesorio. */
-  id: number;
   /** Ruta al manifiesto de accesorios. */
   /** /src/assets/dragonbones/accessories.manifest.json */
   /** Código interno que identifica el asset del accesorio. */
@@ -82,25 +80,16 @@ export interface AbilityDTO {
  * Tokagotchi activo del jugador con todos sus datos de combate,
  * accesorios, estadísticas, evolución y cooldowns de cuidado.
  */
-export interface ActiveTokaDTO {
-  /** Identificador único del Tokagotchi. */
-  id: number;
-  /** Nombre personalizado. */
+export interface MainTokagotchiDTO {
+  id: string;
   name: string;
-  /** Especie del Tokagotchi. */
   species: SpeciesDTO;
-  /** Rareza actual. */
   rarity: RarityDTO;
-  /** Puntos de combate acumulados. */
   cp: number;
-  /** Lista de habilidades de combate disponibles. */
-  abilities: AbilityDTO[];
-  /** Accesorios equipados actualmente. */
-  equipped: EquippedAccessoryDTO[];
-  /** Estadísticas base de combate. */
-  stats: StatsDTO;
-  /** Datos de la próxima evolución, o null si está en rareza máxima. */
-  evolution: EvolutionDTO | null;
-  /** Cooldowns de las acciones de cuidado. */
-  care: CareDTO;
+  hp: number;
+  atk: number;
+  def: number;
+  nextEvolution: EvolutionDTO | null;
+  equipped: EquippedAccessoryDTO[] | null;
+  careCooldown: CareDTO;
 }

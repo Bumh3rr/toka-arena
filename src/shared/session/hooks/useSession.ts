@@ -1,8 +1,8 @@
 import useSWR from "swr";
-import { sessionApi } from "../api/me.api";
+import { sessionApi } from "../../api/me.api";
 import type { PlayerProfile } from "@/shared/domain/player";
 import { useCallback } from "react";
-import { applyRename } from "../model/mapper";
+import { applyRenamePlayerUsername } from "../model/mapper";
 import { useToast } from "@/shared/hooks/useToast";
 
 export type SessionState =
@@ -32,8 +32,8 @@ export function useSession(): UseSessionResult {
     try {
       await mutate(
         async (prev) => {
-          const res = await sessionApi.renameUsername(username);
-          return prev ? applyRename(prev, res.username) : prev;
+          const res = await sessionApi.renamePlayerUsername(username);
+          return prev ? applyRenamePlayerUsername(prev, res.username) : prev;
         },
         {
           optimisticData: (prev) =>
@@ -48,7 +48,6 @@ export function useSession(): UseSessionResult {
       show("Error al renombrar", { variant: "danger" });
     }
   }, [data, mutate, show]);
-
 
   const state: SessionState = data
     ? { status: "ready", data }

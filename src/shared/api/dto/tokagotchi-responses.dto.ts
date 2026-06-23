@@ -1,5 +1,5 @@
-import type { ActiveTokaDTO, CareDTO, EvolutionDTO, RarityDTO, StatsDTO } from "@/shared/api/dto/tokagotchi.dto";
-import type { MainTokagotchi } from "@/shared/domain/player";
+import type { CareDTO, EvolutionDTO, MainTokagotchiDTO, RarityDTO, StatsDTO } from "@/shared/api/dto/tokagotchi.dto";
+import type { MainTokagotchi } from "@/shared/domain/tokagotchi";
 
 export type CareActionDTO = "FEED" | "PLAY" | "BATHE";
 export type AscendResult = "SUCCESS" | "FAIL";
@@ -15,21 +15,14 @@ export interface AscendResponseDTO {
     evolution: EvolutionDTO | null; // siguiente tier, o null si llegó a LEGENDARY
   };
 }
-export interface HomeResponseDTO {
-  serverTime: string;
-  missions: { claimable: number };
-  activeToka: ActiveTokaDTO | null;
-}
+
 export interface CareResponseDTO {
-  serverTime: string;
-  cp: number;
-  missions: { claimable: number };
-  care: CareDTO;
+  serverTime: string; // pendientes por pedirle al backend
+  missions: { claimable: number }; // pendientes por pedirle al backend
+  tokagotchi: MainTokagotchiDTO;
+  caresAvailableAt: CareDTO;
 }
-export interface ApiError {
-  error: string;
-  availableAt?: string;
-}
+
 export interface RenameResponseDTO extends MainTokagotchi {
   any: any
 }

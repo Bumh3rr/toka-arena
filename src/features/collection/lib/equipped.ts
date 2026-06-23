@@ -36,12 +36,12 @@ export function getActiveTokaView(data: CollectionData): ActiveTokaView {
   const body = findAcc(toka.equippedBody)
 
   const equipped: EquippedAccessory[] = []
-  for (const [i, acc] of [head, body].entries()) {
+  for (const [, acc] of [head, body].entries()) {
     if (!acc || !acc.code) continue
     const binding = getRenderBinding(acc.code)
     const canvasSlot = SLOT_TO_CANVAS[acc.slot]
     if (!binding || !canvasSlot) continue
-    equipped.push({ id: i, code: acc.code, slot: canvasSlot, displayIndex: binding.displayIndex })
+    equipped.push({ code: acc.code, slot: canvasSlot, displayIndex: binding.displayIndex })
   }
 
   return { toka, equipped, headName: head?.name ?? null, bodyName: body?.name ?? null }

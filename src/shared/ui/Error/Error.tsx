@@ -7,6 +7,7 @@ interface PageErrorProps {
 }
 
 export default function PageError({ message, onRetry }: PageErrorProps) {
+
   return (
     <div className={styles.container}>
       <Card variant='warm' shadow='md' className={styles.card}>

@@ -1,11 +1,16 @@
 import React, { useState } from 'react'
 import { IcTerminal, IcChevR } from '@/shared/ui/Icons/Icons'
-import type { Species, Rarity } from '@/shared/domain/tokagotchi'
 import styles from './DevPanel.module.css'
 import { useAuth } from '@/shared/session/hooks/useAuth'
 import { useNavigate } from 'react-router-dom'
+import { useSession } from '@/shared/session/hooks/useSession'
+import { useDev } from '../useDev'
+import { Toast } from '@/shared/ui/Kit'
+import Loading from '@/shared/ui/Loading/Loading'
+//import type { Species, Rarity } from '@/shared/domain/tokagotchi'
 
 // ── Constantes ────────────────────────────────────────────────────────────────
+/** 
 const ESPECIES: Species[] = ['TOFU', 'MOCHI', 'HANA']
 const RAREZAS: { value: Rarity; label: string }[] = [
     { value: 'COMMON', label: 'C' },
@@ -13,6 +18,7 @@ const RAREZAS: { value: Rarity; label: string }[] = [
     { value: 'EPIC', label: 'É' },
     { value: 'LEGENDARY', label: 'L' },
 ]
+    */
 type Ambiente = 'auto' | 'amanecer' | 'dia' | 'atardecer' | 'noche'
 const opcionesAmbiente: { value: Ambiente; label: string }[] = [
     { value: 'auto', label: 'Automatico' },
@@ -53,21 +59,40 @@ function DvSeg<T extends string>({ value, options, onChange }: { value: T; optio
 
 // ── DevPanel ──────────────────────────────────────────────────────────────────
 export default function DevPanel() {
+    //const [rarity, setRarity] = useState<Rarity>('COMMON')
+    //const [giveSpecies, setGiveSpecies] = useState<Species>('TOFU')
+    // const [giveRarity, setGiveRarity] = useState<Rarity>('COMMON')
     const [open, setOpen] = useState(false)
     const [ambiente, setAmbiente] = useState<Ambiente>('auto')
-    const [tf, setTf] = useState(1500)
-    const [cp, setCp] = useState(0)
-    const [rarity, setRarity] = useState<Rarity>('COMMON')
-    const [giveSpecies, setGiveSpecies] = useState<Species>('TOFU')
-    const [giveRarity, setGiveRarity] = useState<Rarity>('COMMON')
     const navigate = useNavigate()
+    const { toast, resetCooldown, resetRarity, addCP, loading } = useDev()
     const { logout } = useAuth()
+    const { state } = useSession()
+    const status = state.status
+
+    if (status === 'loading') {
+        return <Loading text="Cargando DevPanel..." />
+    }
 
     const handleLogout = () => {
         logout()
         navigate('/login')
     }
 
+    if (status === 'error') {
+        return <div className={styles.wrap}>
+            <div className={styles.devPanel}>
+                <div className={styles.dvBody}>
+                    <div className={styles.dvSec}>Error cargando sesión</div>
+                    <DvField label="">
+                        <DvBtn tone="danger" onClick={handleLogout}>Cerrar sesión</DvBtn>
+                    </DvField>
+                </div>
+            </div>
+        </div>
+    }
+
+    const mainTokagotchi = state.data.mainTokagotchi || null
     return (
         <div className={styles.wrap}>
             <div className={styles.devPanel}>
@@ -87,26 +112,28 @@ export default function DevPanel() {
                         </DvField>
 
                         <div className={styles.dvSec}>Economía</div>
-                        <DvField label={`TF — ${tf.toLocaleString()}`}>
-                            <DvBtn onClick={() => setTf(t => t + 100)}>+100</DvBtn>
-                            <DvBtn onClick={() => setTf(t => t + 1000)}>+1000</DvBtn>
-                            <DvBtn tone="warn" onClick={() => setTf(t => Math.max(0, t - 100))}>−100</DvBtn>
+                        <DvField label={`TF`}>
+                            <DvBtn onClick={() => addCP(mainTokagotchi?.id, 100)}>+100</DvBtn>
+                            <DvBtn onClick={() => addCP(mainTokagotchi?.id, 1000)}>+1000</DvBtn>
+                            <DvBtn tone="warn" onClick={() => addCP(mainTokagotchi?.id, -100)}> -100</DvBtn>
                         </DvField>
 
                         <div className={styles.dvSec}>Tokagotchi activo</div>
-                        <DvField label={`CP — ${cp}`}>
-                            <DvBtn onClick={() => setCp(0)}>0</DvBtn>
-                            <DvBtn onClick={() => setCp(420)}>420</DvBtn>
-                            <DvBtn onClick={() => setCp(600)}>Máx</DvBtn>
-                        </DvField>
-                        <DvField label="Rareza">
-                            <DvSeg value={rarity} onChange={setRarity} options={RAREZAS} />
-                        </DvField>
-                        <DvField label="Evolución">
-                            <DvBtn tone="go" onClick={() => { }}>Forzar ascensión</DvBtn>
-                            <DvBtn onClick={() => { }}>Reset cooldowns</DvBtn>
+                        <DvField label={`CP`}>
+                            <DvBtn onClick={() => addCP(mainTokagotchi?.id, 0)}>0</DvBtn>
+                            <DvBtn onClick={() => addCP(mainTokagotchi?.id, 420)}>420</DvBtn>
+                            <DvBtn onClick={() => addCP(mainTokagotchi?.id, 600)}>Máx</DvBtn>
                         </DvField>
 
+                        <DvField label="Evolución">
+                            <DvBtn onClick={() => { resetCooldown(mainTokagotchi?.id); }}>Reset cooldowns</DvBtn>
+                        </DvField>
+                        <DvField label="Rareza">
+                            {/** <DvSeg value={rarity} onChange={setRarity} options={RAREZAS} />*/}
+                            <DvBtn tone="danger" onClick={() => { resetRarity(mainTokagotchi?.id); }}>Resetear Rareza</DvBtn>
+                        </DvField>
+
+                        {/** 
                         <div className={styles.dvSec}>Otorgar Tokagotchi</div>
                         <DvField label="Especie">
                             <DvSeg value={giveSpecies} onChange={setGiveSpecies}
@@ -115,15 +142,11 @@ export default function DevPanel() {
                         <DvField label="Rareza">
                             <DvSeg value={giveRarity} onChange={setGiveRarity} options={RAREZAS} />
                         </DvField>
+                        
                         <DvField label="">
                             <DvBtn tone="go" onClick={() => { }}>+ Otorgar</DvBtn>
                         </DvField>
-
-                        <div className={styles.dvSec}>Peligro</div>
-                        <DvField label="">
-                            <DvBtn tone="danger" onClick={() => { setTf(0); setCp(0) }}>Resetear progreso</DvBtn>
-                        </DvField>
-
+*/}
                         <div className={styles.dvSec}>Logout</div>
                         <DvField label="">
                             <DvBtn tone="danger" onClick={() => { handleLogout() }}>Cerrar sesión</DvBtn>
@@ -131,6 +154,8 @@ export default function DevPanel() {
                     </div>
                 )}
             </div>
+            {toast && <Toast {...toast} />}
+            {loading && <Loading fullscreen text="Procesando..." />}
         </div>
     )
 }

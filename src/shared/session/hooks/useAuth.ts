@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { useSWRConfig } from 'swr'
-import { authApi } from '../api/auth.api'
+import { authApi } from '../../api/auth.api'
 import { acquireAuthCode } from '../lib/authCode'
 import { tokenStore } from '../store/token.store'
 import { useToast } from '@/shared/hooks/useToast'
@@ -10,7 +9,6 @@ export function useAuth() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const { toast, show } = useToast()
-  const { mutate } = useSWRConfig()
 
   const login = async (): Promise<LoginData> => {
     setLoading(true)
@@ -18,14 +16,12 @@ export function useAuth() {
     try {
       // 1. Obtener el auth code
       const authCode = await acquireAuthCode()
-      show(`Codigo: ${authCode}`, { variant: 'info' })
+      
       // 2. Enviar el auth code al backend
       const res = await authApi.login(authCode)
-      show(`ID: ${res.playerId}`, { variant: 'info' })
       
       // 3. Guardar el token y actualizar la sesión
       tokenStore.set(res.token)
-      await mutate('me')
       
       // 4. Retornar el resultado
       return { success: true, isNewPlayer: res.isNewPlayer }
@@ -43,7 +39,6 @@ export function useAuth() {
 
   const logout = () => {
     tokenStore.clear()
-    mutate('me', undefined, { revalidate: false })
   }
 
   return { login, logout, loading, error, toast }

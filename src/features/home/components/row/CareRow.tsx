@@ -1,6 +1,6 @@
 import { IcClock } from '@/shared/ui/Icons/Icons'
 import { CONFIG_CARE } from '../../constants/config'
-import type { ActionCare } from '../../data/types'
+import type { ActionCare } from '../../data/home.types'
 import type { Cooldowns, Floaters } from '../../hooks/useHome'
 import styles from './styles/CareRow.module.css'
 import { HeaderTitleLine } from '../CareSheet/CareSheet'

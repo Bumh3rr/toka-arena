@@ -1,6 +1,7 @@
 import axios from 'axios'
 const API_URL = import.meta.env.VITE_API_URL
 import { tokenStore } from '../session/store/token.store'
+import type { ApiErrorDTO } from './dto/api-error.dto'
 
 /**
  * Instancia de Axios preconfigurada para consumir la API del backend.
@@ -45,5 +46,20 @@ api.interceptors.response.use(
     return Promise.reject(error)
   }
 )
+
+export function getApiErrorMessage(
+  error: unknown,
+  fallback = "Ocurrió un error inesperado",
+): string {
+  if (axios.isAxiosError<ApiErrorDTO>(error)) {
+    return error.response?.data?.message ?? error.message ?? fallback;
+  }
+
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  return fallback;
+}
 
 export default api

@@ -1,6 +1,7 @@
 import api from "@/shared/api/client";
 import type { UnboxingApi } from "../type";
-import type { PlayerProfileDto,MainTokagotchiDTO } from "@/shared/api/dto/session.dto";
+import type { PlayerProfileDto} from "@/shared/api/dto/session.dto";
+import type { MainTokagotchiDTO } from "@/shared/api/dto/tokagotchi.dto";
 
 const realUnboxingApi: UnboxingApi = {
   async getUnboxing() {
