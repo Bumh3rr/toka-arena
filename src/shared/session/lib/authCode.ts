@@ -16,7 +16,7 @@ const isDevMode = import.meta.env.VITE_IS_DEV_MODE === 'true'
  * @throws si no hay bridge ni code de dev configurado.
  */
 export async function acquireAuthCode(): Promise<string> {
-  if (isDevMode && !window.AlipayJSBridge) {
+  if (isDevMode) {
     const devCode = import.meta.env.VITE_DEV_AUTH_CODE
     if (!devCode) throw new Error('Falta VITE_DEV_AUTH_CODE para iniciar sesión en modo desarrollo')
     return devCode
