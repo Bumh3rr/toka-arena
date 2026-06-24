@@ -1,4 +1,3 @@
-// src/features/collection/components/FilterChips.tsx
 import type { ColFilter } from '../types/collection.types'
 import { RARITY_META } from '@/shared/constants/rarity'
 import type { Rarity } from '@/shared/domain/tokagotchi'

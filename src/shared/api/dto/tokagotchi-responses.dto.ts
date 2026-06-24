@@ -4,6 +4,7 @@ export type CareActionDTO = "FEED" | "PLAY" | "BATHE";
 export type AscendResultDTO = "SUCCESS" | "FAIL";
 
 export interface AscendResponseDTO {
+  serverTime: string; // pendientes por pedirle al backend
   result: AscendResultDTO;
   tokagotchi: MainTokagotchiDTO;
 }

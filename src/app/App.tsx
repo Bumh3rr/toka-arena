@@ -11,9 +11,12 @@ import HomePage from '@/features/home/pages/HomePage'
 import UIKitPage from '@/features/devkit/pages/UIKitPage'
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
+  /** 
   return tokenStore.exists()
     ? <>{children}</>
     : <Navigate to="/login" replace />
+*/
+  return <>{children}</>
 }
 
 export default function App() {

@@ -4,6 +4,8 @@ import type { ColToka } from '../types/collection.types'
 import { RARITY_META } from '@/shared/constants/rarity'
 import { COL_SPECIES_LABEL } from '../types/collection.types'
 import styles from './TokaCard.module.css'
+import TokagotchiCanvas from '@/shared/canvas/TokagotchiCanvas'
+import type { EquippedAccessory } from '@/shared/domain/accessory'
 
 interface TokaCardProps {
   toka: ColToka
@@ -15,6 +17,20 @@ interface TokaCardProps {
 
 export default function TokaCard({ toka, isActive, count, stacked, onClick }: TokaCardProps) {
   const meta = RARITY_META[toka.rarity]
+  const accessories: EquippedAccessory[] = 
+  [
+    {
+      code: 'HELMET',
+      slot: 'HEAD',
+      displayIndex: 0,
+    },
+    {
+      code: 'SUPER_CAPE',
+      slot: 'BACK',
+      displayIndex: 0,
+    },
+  ];
+
 
   return (
     <button
@@ -30,11 +46,13 @@ export default function TokaCard({ toka, isActive, count, stacked, onClick }: To
         </>
       )}
       <div className={styles.inner}>
-        <img
-          src={`/assets/tokagotchis/png/${toka.species.toLowerCase()}.png`}
-          alt={toka.nick}
-          className={styles.img}
+        <TokagotchiCanvas
+          width={140} 
+          height={120}
+          species={toka.species.toUpperCase() as any}
+          accessories={accessories}
         />
+
         {isActive && (
           <span className={styles.activeBadge} aria-label="Tokagotchi activo">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

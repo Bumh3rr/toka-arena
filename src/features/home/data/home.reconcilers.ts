@@ -61,6 +61,7 @@ export function applyAscendResponse(prev: HomeData, res: AscendResponseDTO): Hom
     ...prev,
     player: {
       ...prev.player,
+      serverTime: new Date(res.serverTime).getTime(),
       mainTokagotchi: prev.player.mainTokagotchi ? {
         ...prev.player.mainTokagotchi,
         rarity: res.tokagotchi.rarity,

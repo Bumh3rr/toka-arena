@@ -1,4 +1,3 @@
-// src/features/collection/pages/CollectionPage.tsx
 import { useEffect } from 'react'
 import { useCollection } from '../hooks/useCollection'
 import { useNavBar } from '@/shared/hooks/useNavBar'
@@ -9,6 +8,8 @@ import TokaGrid from '../components/TokaGrid'
 import AccGrid from '../components/AccGrid'
 import DetailScreen from '../components/DetailScreen'
 import styles from './CollectionPage.module.css'
+import { IconButton } from '@/shared/ui/Kit'
+import { IcSearch } from '@/shared/ui/Icons/Icons'
 
 export default function CollectionPage() {
   const {
@@ -78,12 +79,7 @@ export default function CollectionPage() {
       {/* Main grid view */}
       <div className={styles.topbar}>
         <span className={styles.title}>Colección</span>
-        <button className={styles.searchBtn} aria-label="Buscar">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" aria-hidden="true">
-            <circle cx="10.5" cy="10.5" r="6"/>
-            <path d="M15 15l4.5 4.5"/>
-          </svg>
-        </button>
+        <IconButton shape='sm' size={38} iconSize={19}  aria-label="Buscar"><IcSearch/></IconButton>
       </div>
 
       <ColTabs tab={ui.tab} onSetTab={setTab} />

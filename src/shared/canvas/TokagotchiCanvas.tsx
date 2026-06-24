@@ -108,5 +108,5 @@ export default function TokagotchiCanvas({
     gameRef.current?.setPaused(paused || document.hidden)
   }, [paused])
 
-  return <div ref={containerRef} style={{ width, height }} aria-hidden="true" />
+  return <div ref={containerRef} style={{ width, height, pointerEvents: 'none' }} aria-hidden="true" />
 }

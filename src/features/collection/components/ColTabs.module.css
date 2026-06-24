@@ -14,7 +14,7 @@
 }
 .btn.on { color: var(--ink); border-bottom-color: var(--gold); }
 .future {
-  color: var(--ink-3);
+  color: aliceblue;
   opacity: .55;
   cursor: not-allowed;
   display: flex;

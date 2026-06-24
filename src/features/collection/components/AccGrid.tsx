@@ -1,4 +1,3 @@
-// src/features/collection/components/AccGrid.tsx
 import type { CollectionData, AccSlotFilter, AccSlotKey } from '../types/collection.types'
 import { ProgressBar } from '@/shared/ui/Kit'
 import AccCard from './AccCard'

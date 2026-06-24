@@ -1,4 +1,3 @@
-// src/features/collection/components/ColTabs.tsx
 import type { ColTab } from '../types/collection.types'
 import styles from './ColTabs.module.css'
 
