@@ -44,7 +44,16 @@ export const mapCareDTO = (c: CareDTO): CareTimestamps => ({
  * @returns Domain Evolution o null
  */
 export const mapEvolutionDTO = (e: EvolutionDTO | null): Evolution | null =>
-  e ? { ...e, evolvedAvailableAt: toMs(e.evolvedAvailableAt) } : null;
+  e
+    ? {
+        nextRarity: e.nextRarity,
+        cpRequired: e.cpRequired,
+        tfRequired: e.tfRequired,
+        successChance: e.successChance,
+        failCooldownHours: e.failCooldownHours,
+        evolvedAvailableAt: toMs(e.evolvedAvailableAt),
+      }
+    : null
 
 /**
  * Mapea tokagotchi activo completo desde DTO.

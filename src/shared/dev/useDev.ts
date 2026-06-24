@@ -9,7 +9,7 @@ export function useDev() {
   const [error, setError] = useState<string | null>(null);
   const { toast, show } = useToast();
   const { mutate: globalMutate } = useSWRConfig();
-  
+
   const withTokaId = useCallback(
     async <T,>(
       tokaId: string | undefined,
@@ -71,5 +71,24 @@ export function useDev() {
     );
   };
 
-  return { resetCooldown, resetRarity, addCP, loading, error, toast };
+
+  const addTF = async (amount?: number) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const data = await devApi.addTF(amount || 0);
+      show(`Agrego ${amount ?? 0} TF`, { variant: "info" });
+      await globalMutate("home");
+      return data;
+    } catch (err) {
+      const msg = getApiErrorMessage(err) || "Error adding TF";
+      setError(msg);
+      show(msg, { variant: "danger", position: "top" });
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return { resetCooldown, resetRarity, addCP, addTF, loading, error, toast };
 }

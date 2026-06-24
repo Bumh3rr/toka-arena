@@ -34,7 +34,7 @@ export const EVOLUCION: Partial<Record<Rarity, Evolution>> = {
   COMMON: {
     nextRarity: "RARE",
     cpRequired: 100,
-    costTF: 10,
+    tfRequired: 10,
     successChance: 40,
     failCooldownHours: 12,
     evolvedAvailableAt: null
@@ -42,7 +42,7 @@ export const EVOLUCION: Partial<Record<Rarity, Evolution>> = {
   RARE: {
     nextRarity: "EPIC",
     cpRequired: 300,
-    costTF: 25,
+    tfRequired: 25,
     successChance: 30,
     failCooldownHours: 24,
     evolvedAvailableAt: null
@@ -50,7 +50,7 @@ export const EVOLUCION: Partial<Record<Rarity, Evolution>> = {
   EPIC: {
     nextRarity: "LEGENDARY",
     cpRequired: 600,
-    costTF: 50,
+    tfRequired: 50,
     successChance: 20,
     failCooldownHours: 48,
     evolvedAvailableAt: null

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { IcCrown, IcLock, IcClock } from '@/shared/ui/Icons/Icons'
 import styles from './styles/EvoPanel.module.css'
 import { HeaderTitleLine } from '../CareSheet/CareSheet'
@@ -21,22 +21,43 @@ const fmtCountdown = (ms: number) => {
 }
 
 export default function EvoPanel({ nextEvolution, cp, tf, serverTime, onAscend }: EvoPanelProps) {
-  const [pending, setPending] = useState(false)
-  const [flash, setFlash] = useState<'SUCCESS' | 'FAIL' | null>(null)
-  const [, tick] = useState(0)
-
+  console.log('EvoPanel render', { nextEvolution, cp, tf, serverTime })
   const availableAt = nextEvolution?.evolvedAvailableAt ?? null
 
-  // Cuenta regresiva: fuerza un re-render por segundo mientras el cooldown siga activo.
+  const [pending, setPending] = useState(false)
+  const [flash, setFlash] = useState<'SUCCESS' | 'FAIL' | null>(null)
+  // Inicializado desde props (sin Date.now) para no llamar función impura en render.
+  const [cooldownLeftMs, setCooldownLeftMs] = useState(() =>
+    availableAt != null ? Math.max(0, availableAt - serverTime) : 0
+  )
+
+  // offsetRef guarda la diferencia cliente−servidor.
+  // Date.now() se llama solo en callbacks (setTimeout / setInterval), nunca en el body del efecto ni en render.
+  const offsetRef = useRef(0)
+
   useEffect(() => {
-    if (availableAt == null) return
-    const offset = Date.now() - serverTime
+    offsetRef.current = Date.now() - serverTime
+
+    const computeMs = () =>
+      availableAt != null
+        ? Math.max(0, availableAt - (Date.now() - offsetRef.current))
+        : 0
+
+    // setState siempre dentro de callbacks para cumplir con las reglas del compilador de React.
+    const initId = setTimeout(() => setCooldownLeftMs(computeMs()), 0)
+
+    if (availableAt == null) return () => clearTimeout(initId)
+
     const id = setInterval(() => {
-      tick((n) => n + 1)
-      const now = Date.now() - offset // Simula tiempo del servidor
-      if (now >= availableAt) clearInterval(id)
+      const ms = computeMs()
+      setCooldownLeftMs(ms)
+      if (ms <= 0) clearInterval(id)
     }, 1000)
-    return () => clearInterval(id)
+
+    return () => {
+      clearTimeout(initId)
+      clearInterval(id)
+    }
   }, [availableAt, serverTime])
 
   const handleAscend = async () => {
@@ -50,15 +71,12 @@ export default function EvoPanel({ nextEvolution, cp, tf, serverTime, onAscend }
     }
   }
 
-  const cooldownLeftMs = availableAt != null ? Math.max(0, availableAt - serverTime) : 0
   const onCooldown = cooldownLeftMs > 0
   const enoughCp = !!nextEvolution && cp >= nextEvolution.cpRequired
-  const enoughTf = !!nextEvolution && tf >= nextEvolution.costTF
+  const enoughTf = !!nextEvolution && tf >= nextEvolution.tfRequired
   const ready = !!nextEvolution && enoughCp && enoughTf && !onCooldown && !pending
 
-  const pct = nextEvolution
-    ? Math.min(100, Math.round((cp / nextEvolution.cpRequired) * 100))
-    : 100
+  const pct = nextEvolution ? Math.min(100, Math.round((cp / nextEvolution.cpRequired) * 100)) : 100
 
   return (
     <div>
@@ -102,7 +120,7 @@ export default function EvoPanel({ nextEvolution, cp, tf, serverTime, onAscend }
             {/* Progreso de CP */}
             <div className={styles.cpbarWrap}>
               <div className={styles.cpbarTop}>
-                <span className={styles.cpLabel}>Puntos de Cuidado</span>
+                <span className={styles.cpLabel}>Puntos de Crianza</span>
                 <span className={styles.cpVal}><b>{cp}</b> / {nextEvolution.cpRequired} CP</span>
               </div>
               <div className={styles.cpbar}>
@@ -116,7 +134,7 @@ export default function EvoPanel({ nextEvolution, cp, tf, serverTime, onAscend }
               <div className={styles.attr}>
                 <span className={styles.attrK}>Costo</span>
                 <span className={styles.attrV}>
-                  <img src="/assets/ui/moneda_tf.svg" alt="TF" width={15} height={15} />{nextEvolution.costTF}
+                  <img src="/assets/ui/moneda_tf.svg" alt="TF" width={15} height={15} />{nextEvolution.tfRequired}
                 </span>
               </div>
               <div className={styles.attr}>
@@ -145,7 +163,7 @@ export default function EvoPanel({ nextEvolution, cp, tf, serverTime, onAscend }
             ) : !enoughTf ? (
               <div className={styles.evoBtn}>
                 <span className={styles.lockIcon}><IcLock /></span>
-                Faltan {nextEvolution.costTF - tf} TF
+                Faltan {nextEvolution.tfRequired - tf} TF
               </div>
             ) : (
               <button className={`${styles.evoBtn} ${styles.evoBtnUnlocked}`} onClick={handleAscend}>

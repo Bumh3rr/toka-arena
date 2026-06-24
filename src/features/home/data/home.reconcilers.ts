@@ -1,6 +1,6 @@
 import type { CareResponseDTO, AscendResponseDTO } from "@/shared/api/dto/tokagotchi-responses.dto";
 import type { HomeData } from "./home.types";
-import { mapCareDTO, mapEvolutionDTO } from "@/shared/domain/mappers/tokagotchi.mapper";
+import { mapCareDTO, mapEvolutionDTO, mapStatsDTO } from "@/shared/domain/mappers/tokagotchi.mapper";
 
 /**
  * Reconcilia respuesta de rename con HomeData.
@@ -61,13 +61,12 @@ export function applyAscendResponse(prev: HomeData, res: AscendResponseDTO): Hom
     ...prev,
     player: {
       ...prev.player,
-      serverTime: new Date(res.serverTime).getTime(),
       mainTokagotchi: prev.player.mainTokagotchi ? {
         ...prev.player.mainTokagotchi,
-        rarity: res.toka.rarity,
-        cp: res.toka.cp,
-        stats: res.toka.stats,
-        nextEvolution: mapEvolutionDTO(res.toka.evolution),
+        rarity: res.tokagotchi.rarity,
+        cp: res.tokagotchi.cp,
+        stats: mapStatsDTO(res.tokagotchi),
+        nextEvolution: mapEvolutionDTO(res.tokagotchi.nextEvolution),
       } : null,
     },
   };

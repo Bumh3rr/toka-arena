@@ -17,7 +17,7 @@ export interface EvolutionDTO {
   /** CP mínimos requeridos para intentar la evolución. */
   cpRequired: number;
   /** Costo en TF (TokaFeed) para iniciar la evolución. */
-  costTF: number;
+  tfRequired: number;
   /** Probabilidad de éxito de la evolución */
   successChance: number;
   /** Horas de cooldown aplicadas si la evolución falla. */

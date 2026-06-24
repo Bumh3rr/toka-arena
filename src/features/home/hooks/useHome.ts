@@ -1,9 +1,9 @@
-import type { PlayerProfile } from "@/shared/domain/player";
+//import type { PlayerProfile } from "@/shared/domain/player";
 import type { HomeData } from "../data/home.types";
 import type { CareActionDTO } from "../../../shared/api/dto/tokagotchi-responses.dto";
 import type { ActionCare } from "../data/home.types";
 import { useCallback, useEffect, useReducer, useState } from "react";
-import useSWR, {useSWRConfig} from "swr";
+import useSWR from "swr";
 import { homeApi } from "../api/home.api";
 import { tokagotchiApi } from "@/shared/api/tokagotchi.api"
 import { applyAscendResponse, applyCareResponse, applyRename } from "../data/home.reconcilers";
@@ -13,6 +13,7 @@ import { CONFIG_CARE } from "../constants/config";
 import { RARITY_META } from '@/shared/constants/rarity'
 import { mapHomeResponseDTO } from "../data/home.mapper";
 import { getApiErrorMessage } from "@/shared/api/client";
+import { sessionApi } from "@/shared/api/me.api";
 
 // ── reloj del servidor (usa el serverTime para corregir desfase de reloj) ──
 let clockOffset = 0;
@@ -44,7 +45,7 @@ function useTicker(active: boolean) {
 }
 
 export function useHome() {
-  const { mutate: globalMutate } = useSWRConfig();
+  //const { mutate: globalMutate } = useSWRConfig();
 
   const { data, error, mutate } = useSWR<HomeData>("home", async () => {
     const res = await homeApi.getHome();
@@ -140,13 +141,12 @@ export function useHome() {
     if (!data?.player?.mainTokagotchi?.nextEvolution) return null;
     const tokaId = data.player.mainTokagotchi.id;
     try {
+      // 1. Petición al server
       const res = await tokagotchiApi.ascend(String(tokaId));
-      // 1) cache del toka (/home)
+      
       await mutate((prev) => (prev ? applyAscendResponse(prev, res) : prev), { revalidate: false });
-      // 2) cache del wallet (/me) — el TF se consumió
-      await globalMutate("me", (prev?: PlayerProfile) => (prev ? { ...prev, tf: res.wallet.tf } : prev), { revalidate: false });
-
-      const rarityLabel = RARITY_META[res.toka.rarity].label
+      // 2. Mostrar mensaje de resultado
+      const rarityLabel = RARITY_META[res.tokagotchi.rarity].label
       show(
         res.result === "SUCCESS"
           ? `¡Ascendió a ${rarityLabel}! ✨`
@@ -162,6 +162,10 @@ export function useHome() {
         window.setTimeout(() => dispatch({ type: "SET_ANIMATION", animation: "idle" }),3000);
       }
 
+      // 3) Obtener TF actualizado mediante /me
+      const resMe = await sessionApi.getMe();
+      await mutate((prev) => (prev ? { ...prev, player: { ...prev.player, tf: resMe.tf } } : prev), { revalidate: false });
+
       return res.result;
     } catch (err) {
       const msg = getApiErrorMessage(err, "No se pudo ascender");
@@ -169,7 +173,7 @@ export function useHome() {
       show(msg, { variant: "danger" });
       return null;
     }
-  }, [data, mutate, globalMutate, show]);
+  }, [data, mutate, show]);
 
   const state: HomeState = error
     ? {

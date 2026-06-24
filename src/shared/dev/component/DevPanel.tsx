@@ -65,7 +65,7 @@ export default function DevPanel() {
     const [open, setOpen] = useState(false)
     const [ambiente, setAmbiente] = useState<Ambiente>('auto')
     const navigate = useNavigate()
-    const { toast, resetCooldown, resetRarity, addCP, loading } = useDev()
+    const { toast, resetCooldown, resetRarity, addCP, addTF, loading } = useDev()
     const { logout } = useAuth()
     const { state } = useSession()
     const status = state.status
@@ -113,9 +113,9 @@ export default function DevPanel() {
 
                         <div className={styles.dvSec}>Economía</div>
                         <DvField label={`TF`}>
-                            <DvBtn onClick={() => addCP(mainTokagotchi?.id, 100)}>+100</DvBtn>
-                            <DvBtn onClick={() => addCP(mainTokagotchi?.id, 1000)}>+1000</DvBtn>
-                            <DvBtn tone="warn" onClick={() => addCP(mainTokagotchi?.id, -100)}> -100</DvBtn>
+                            <DvBtn onClick={() => addTF(100)}>+100</DvBtn>
+                            <DvBtn onClick={() => addTF(1000)}>+1000</DvBtn>
+                            <DvBtn tone="warn" onClick={() => addTF(-100)}> -100</DvBtn>
                         </DvField>
 
                         <div className={styles.dvSec}>Tokagotchi activo</div>
