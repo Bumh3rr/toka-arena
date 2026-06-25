@@ -4,7 +4,7 @@ import { Button } from '@/shared/ui/Kit'
 import { IcPencil } from '@/shared/ui/Icons/Icons'
 import RenameModal from '@/shared/ui/modal/RenameModal'
 import { RARITY_META } from '@/shared/constants/rarity'
-import type { MainTokagotchi, Rarity } from '@/shared/domain/tokagotchi'
+import type { Tokagotchi, Rarity } from '@/shared/domain/tokagotchi'
 import styles from './GenesisReveal.module.css'
 import { FLAVOR, SPECIES_LABEL } from '@/shared/constants/tokagotchi'
 
@@ -22,7 +22,7 @@ const SPARKLE_POS: CSSProperties[] = [
 const SPARKLE_COUNT: Record<Rarity, number> = { COMMON: 4, RARE: 5, EPIC: 6, LEGENDARY: 7 }
 
 interface GenesisRevealProps {
-  tokagotchi: MainTokagotchi
+  tokagotchi: Tokagotchi
   onStart: () => void
   onRename: (newName: string) => void
 }

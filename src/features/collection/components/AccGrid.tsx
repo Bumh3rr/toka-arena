@@ -1,32 +1,30 @@
-import type { CollectionData, AccSlotFilter, AccSlotKey } from '../types/collection.types'
+import type { CollectionData, AccSlotFilter } from '../types/collection.types'
 import { ProgressBar } from '@/shared/ui/Kit'
 import AccCard from './AccCard'
 import LockedCard from './LockedCard'
 import EquippedPreview from './EquippedPreview'
 import styles from './AccGrid.module.css'
+import { SLOT_CHIPS } from '../hooks/accessories/useCollectionAccessoriesData'
 
 interface AccGridProps {
   data: CollectionData
   slotFilter: AccSlotFilter
   onSetSlot: (slot: AccSlotFilter) => void
+  owned: number
+  total: number
+  pct: number
+  visibleAccessories: CollectionData['accessories']
 }
 
-const SLOT_CHIPS: { key: AccSlotFilter; label: string; future?: boolean }[] = [
-  { key: 'todos',   label: 'Todos' },
-  { key: 'cabeza',  label: 'Cabeza' },
-  { key: 'cuerpo',  label: 'Cuerpo' },
-  { key: 'cara',    label: 'Cara 🔒',    future: true },
-  { key: 'espalda', label: 'Espalda 🔒', future: true },
-]
-
-export default function AccGrid({ data, slotFilter, onSetSlot }: AccGridProps) {
-  const owned = data.accessories.filter(a => !a.locked).length
-  const total = data.accessories.length
-  const pct = total > 0 ? Math.round((owned / total) * 100) : 0
-
-  const visible = slotFilter === 'todos'
-    ? data.accessories
-    : data.accessories.filter(a => a.slot === (slotFilter as AccSlotKey))
+export default function AccGrid({
+  data,
+  slotFilter,
+  onSetSlot,
+  owned,
+  total,
+  pct,
+  visibleAccessories,
+}: AccGridProps) {
 
   return (
     <div className={styles.tab}>
@@ -54,7 +52,7 @@ export default function AccGrid({ data, slotFilter, onSetSlot }: AccGridProps) {
       </div>
 
       <div className={styles.grid} role="list">
-        {visible.map(a =>
+        {visibleAccessories.map(a =>
           a.locked
             ? <LockedCard key={a.id} />
             : <AccCard key={a.id} acc={a} />

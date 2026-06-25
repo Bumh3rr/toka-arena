@@ -1,4 +1,4 @@
-import type { MainTokagotchi } from "./tokagotchi";
+import type { Tokagotchi } from "./tokagotchi";
 
 export interface HomeResponse {
   missions: { claimable: number };
@@ -11,6 +11,6 @@ export interface PlayerProfileHome {
   avatarUrl: string | null;
   tf: number;
   genesisClaimed: boolean;
-  mainTokagotchi: MainTokagotchi | null;
+  mainTokagotchi: Tokagotchi | null;
   serverTime: number;
 }

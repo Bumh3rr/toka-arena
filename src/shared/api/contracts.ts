@@ -2,7 +2,9 @@ import type { AscendResponseDTO, CareActionDTO, CareResponseDTO } from "@/shared
 import type { HomeResponseDTO } from "./dto/home.dto";
 import type { PlayerProfile } from "../domain/player";
 import type { AuthResponseDTO } from "./dto/auth.dto";
-import type { MainTokagotchiDTO } from "./dto/tokagotchi.dto";
+import type { TokagotchiDTO } from "./dto/tokagotchi.dto";
+import type { PlayerTokagotchisPageDTO } from "./dto/player.dto";
+import type { Tokagotchi } from "../domain/tokagotchi";
 
 /**
  * Contrato para todas las operaciones relacionadas con el Tokagotchi.
@@ -23,7 +25,7 @@ export interface TokagotchiApi {
    * @param name - Nuevo nombre
    * @returns Tokagotchi actualizado con el nuevo nombre
    */
-  rename(tokaId: string, name: string): Promise<MainTokagotchiDTO>;
+  rename(tokaId: string, name: string): Promise<TokagotchiDTO>;
 
   /**
    * Intenta evolucionar (ascender) el tokagotchi a la siguiente rareza
@@ -47,7 +49,7 @@ export interface HomeApi {
 /**
  * Contrato para operaciones de sesión del jugador autenticado.
  */
-export interface SessionApi {
+export interface PlayerApi {
   /**
    * Obtiene el perfil actual del jugador autenticado.
    * @returns Perfil del jugador en formato de dominio
@@ -60,6 +62,18 @@ export interface SessionApi {
    * @returns Perfil del jugador actualizado
    */
   renamePlayerUsername(newUsername: string): Promise<PlayerProfile>;
+
+  /**
+   * Obtiene la lista paginada de tokagotchis del jugador autenticado.
+   * @param page - Índice de página (base 0)
+   * @param size - Tamaño de página
+   */
+  getMyTokagotchis(page: number, size: number): Promise<PlayerTokagotchisPageDTO>;
+
+  /**
+   * Establece el tokagotchi activo del jugador autenticado.
+   */
+  setMyActiveTokagotchi(tokagotchiId: string): Promise<Tokagotchi>;
 }
 
 /**

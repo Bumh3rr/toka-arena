@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { tokenStore } from '@/shared/session/store/token.store'
-import SessionWatcher from '@/shared/session/components/SessionWatcher'
+import { tokenStore } from '@/shared/player/store/token.store'
+import SessionWatcher from '@/shared/player/components/SessionWatcher'
 import AppLayout from './layout/AppLayout/AppLayout'
 import LoginPage from '@/features/auth/pages/LoginPage'
 import UnboxingPage from '@/features/unboxing/pages/UnboxingPage'

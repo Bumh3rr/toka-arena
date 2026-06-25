@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import type { PlayerProfile } from "@/shared/domain/player";
 import { unboxingApi } from "../api/unboxing.api";
 import { mapPlayerProfileDTO } from "@/shared/domain/mappers/player.mapper";
-import { mapMainTokagotchiDTO } from "@/shared/domain/mappers/tokagotchi.mapper";
+import { mapTokagotchiDTO } from "@/shared/domain/mappers/tokagotchi.mapper";
 
 export type UnboxingPhase = "reveal" | "breaking" | "result";
 export type GiftFase = "idle" | "shaking" | "exploding";
@@ -61,7 +61,7 @@ export function useUnboxing() {
     if (!result || !result.mainTokagotchi) return;
     try {
       const updated = await unboxingApi.rename(result.mainTokagotchi.id , name);
-      const mainTokagotchi = mapMainTokagotchiDTO(updated);
+      const mainTokagotchi = mapTokagotchiDTO(updated);
       setResult(prev => prev ? ({ ...prev, mainTokagotchi }) : prev);
 
       show("¡Nombre guardado!", { variant: "celebrity" });

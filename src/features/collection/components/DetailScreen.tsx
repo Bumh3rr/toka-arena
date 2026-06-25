@@ -1,17 +1,17 @@
-// src/features/collection/components/DetailScreen.tsx
-import type { CSSProperties } from 'react'
-import type { CollectionData } from '../types/collection.types'
+import { useState, type CSSProperties } from 'react'
 import { RARITY_META } from '@/shared/constants/rarity'
-import { COL_SPECIES_LABEL } from '../types/collection.types'
-import { Button, ProgressBar } from '@/shared/ui/Kit'
-import StatBox from './StatBox'
+import { Button, IconButton, Label, ProgressBar } from '@/shared/ui/Kit'
 import AbilityRow from './AbilityRow'
 import AccSlot from './AccSlot'
 import styles from './DetailScreen.module.css'
+import StatsRow from '@/features/home/components/row/StatsRow'
+import RarityCard from '@/shared/ui/RarityCard/RarityCard'
+import { IcPencil } from '@/shared/ui/Icons/Icons'
+import type { Tokagotchi } from '@/shared/domain/tokagotchi'
 
 interface DetailScreenProps {
-  tokaId: string
-  data: CollectionData
+  isActivo: boolean
+  tokagotchi: Tokagotchi
   expandedAbility: number | null
   onBack: () => void
   onToggleFav: (id: string, fav: boolean) => void
@@ -19,31 +19,17 @@ interface DetailScreenProps {
   onToggleAbility: (idx: number) => void
 }
 
-const EVO_NEXT: Record<string, string> = {
-  COMMON: 'Raro', RARE: 'Épico', EPIC: 'Legendario',
-}
-const EVO_CP: Record<string, number> = { COMMON: 200, RARE: 400, EPIC: 600 }
-const EVO_TF: Record<string, number> = { COMMON: 20, RARE: 35, EPIC: 50 }
-
 export default function DetailScreen({
-  tokaId, data, expandedAbility,
+  isActivo, tokagotchi, expandedAbility,
   onBack, onToggleFav, onActivate, onToggleAbility,
 }: DetailScreenProps) {
-  const tk = data.roster.find(t => t.id === tokaId)
-  if (!tk) return null
+  const [isFav, setIsFav] = useState(false)
 
-  const meta = RARITY_META[tk.rarity]
-  const isActive = tk.id === data.activeTokaId
-  const roster = data.roster
-  const idx = roster.findIndex(t => t.id === tk.id)
+  const meta = RARITY_META[tokagotchi.rarity]
+  const isActive = isActivo
 
-  const headAcc = data.accessories.find(a => a.slot === 'cabeza' && a.equipped.includes(tk.id) && !a.locked)
-  const bodyAcc = data.accessories.find(a => a.slot === 'cuerpo' && a.equipped.includes(tk.id) && !a.locked)
-
-  const nextRar = EVO_NEXT[tk.rarity]
-  const evoCp = EVO_CP[tk.rarity]
-  const evoTf = EVO_TF[tk.rarity]
-  const cpPct = evoCp ? Math.min(100, Math.round((tk.cp / evoCp) * 100)) : 100
+  const headAcc = undefined
+  const bodyAcc = undefined
 
   return (
     <div className={styles.screen}>
@@ -59,9 +45,12 @@ export default function DetailScreen({
             </svg>
           </button>
           <button
-            className={`${styles.favBtn} ${tk.fav ? styles.favOn : ''}`}
-            onClick={() => onToggleFav(tk.id, !tk.fav)}
-            aria-label={tk.fav ? 'Quitar de favoritos' : 'Añadir a favoritos'}
+            className={`${styles.favBtn} ${isFav ? styles.favOn : ''}`}
+            onClick={() => {
+              setIsFav(!isFav)
+              onToggleFav(tokagotchi.id, !isFav)
+            }}
+            aria-label={isFav ? 'Quitar de favoritos' : 'Añadir a favoritos'}
           >
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12 3l2.3 6.2 6.5 0-5.2 4.1 1.9 6.3L12 15.8l-5.5 3.8 1.9-6.3-5.2-4.1 6.5 0z" fill="currentColor"/>
@@ -72,18 +61,11 @@ export default function DetailScreen({
         <div className={styles.glow} aria-hidden="true" />
         <div className={styles.char}>
           <img
-            src={`/assets/tokagotchis/png/${tk.species.toLowerCase()}.png`}
-            alt={tk.nick}
+            src={`/assets/tokagotchis/png/${tokagotchi.species.toLowerCase()}.png`}
+            alt={tokagotchi.id}
           />
         </div>
 
-        {roster.length > 1 && (
-          <div className={styles.dots} aria-hidden="true">
-            {roster.map((t, i) => (
-              <span key={t.id} className={`${styles.dot} ${i === idx ? styles.dotOn : ''}`} />
-            ))}
-          </div>
-        )}
       </div>
 
       {/* Info card */}
@@ -93,29 +75,31 @@ export default function DetailScreen({
         {/* Identity */}
         <div className={styles.identity}>
           <div className={styles.nameRow}>
-            <span className={styles.name}>{tk.nick}</span>
+            <span className={styles.name}>{tokagotchi.name}</span>
+            <IconButton
+              shape='sm'
+              size={28}
+              onClick={() => {}}
+              aria-label="Renombrar"
+            >
+            <IcPencil />
+            </IconButton>
           </div>
           <div className={styles.idRow}>
-            <span className={styles.rarBadge} style={{ background: meta.ring }}>
-              {meta.label}
-            </span>
-            <span className={styles.species}>{COL_SPECIES_LABEL[tk.species]}</span>
+            <RarityCard rarity={tokagotchi.rarity}/>
+            <span>|</span>
+            <Label variant="warm" look="soft" size="sm">{tokagotchi.species}</Label>
           </div>
         </div>
 
         {/* Stats */}
-        <h3 className={styles.secHeader}>Estadísticas</h3>
-        <div className={styles.statsGrid}>
-          <StatBox label="HP"  value={tk.stats.hp}  color="#46A8DC" />
-          <StatBox label="ATK" value={tk.stats.atk} color="#F08A4B" />
-          <StatBox label="DEF" value={tk.stats.def} color="#6FC04A" />
-          <StatBox label="NRG" value={tk.stats.nrg} color="#9D74D6" />
-        </div>
+        <StatsRow stats={tokagotchi.stats}></StatsRow>
 
         {/* Abilities */}
         <h3 className={styles.secHeader}>Habilidades</h3>
         <div className={styles.abilities}>
-          {tk.abilities.map((ab, i) => (
+          {/** 
+          {tokagotchi.abilities.map((ab, i) => (
             <AbilityRow
               key={ab.name}
               ability={ab}
@@ -124,25 +108,26 @@ export default function DetailScreen({
               onToggle={onToggleAbility}
             />
           ))}
+            */}
         </div>
 
         {/* Evolution */}
-        {nextRar && (
+        {tokagotchi.nextEvolution && (
           <>
             <h3 className={styles.secHeader}>Evolución</h3>
             <div className={styles.evo}>
-              <p className={styles.evoTitle}>Ascender a {nextRar}</p>
+              <p className={styles.evoTitle}>Ascender a {tokagotchi.nextEvolution?.nextRarity}</p>
               <div className={styles.evoBarWrap}>
                 <div className={styles.evoBarTop}>
                   <span>CP</span>
-                  <b>{tk.cp}/{evoCp}</b>
+                  <b>{tokagotchi.cp}/{tokagotchi.nextEvolution?.cpRequired}</b>
                 </div>
                 <ProgressBar
-                  pct={cpPct}
+                  pct={77}
                   color="linear-gradient(180deg,#8FD96A,var(--green))"
                 />
               </div>
-              <p className={styles.evoCost}>Costo: {evoTf} TF</p>
+              <p className={styles.evoCost}>Costo: {tokagotchi.nextEvolution?.tfRequired} TF</p>
             </div>
           </>
         )}
@@ -170,12 +155,12 @@ export default function DetailScreen({
               variant="green"
               size="lg"
               fullWidth
-              onClick={() => onActivate(tk.id)}
+              onClick={() => onActivate(tokagotchi.id)}
             >
               Activar como principal
             </Button>
           )}
-          <p className={styles.origin}>Origen: {tk.origin}</p>
+          <p className={styles.origin}>Origen: Desconocido</p>
         </div>
 
         <div style={{ height: 18 }} />

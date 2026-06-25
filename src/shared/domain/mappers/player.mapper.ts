@@ -1,6 +1,6 @@
-import type { PlayerProfileDto } from "@/shared/api/dto/session.dto";
+import type { PlayerProfileDto } from "@/shared/api/dto/player.dto";
 import type { PlayerProfile } from "../player";
-import { mapMainTokagotchiDTO } from "./tokagotchi.mapper";
+import { mapTokagotchiDTO } from "./tokagotchi.mapper";
 
 export const mapPlayerProfileDTO = (d: PlayerProfileDto): PlayerProfile => ({
   id: d.id,
@@ -8,7 +8,7 @@ export const mapPlayerProfileDTO = (d: PlayerProfileDto): PlayerProfile => ({
   avatar: d.avatarUrl,
   tf: d.tokafeed,
   genesisClaimed: d.genesisClaimed,
-  mainTokagotchi: d.mainTokagotchi ? mapMainTokagotchiDTO(d.mainTokagotchi) : null,
+  mainTokagotchi: d.mainTokagotchi ? mapTokagotchiDTO(d.mainTokagotchi) : null,
   createdAt: Date.now(),
 });
 

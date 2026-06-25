@@ -1,7 +1,7 @@
 import api from "@/shared/api/client";
 import type { UnboxingApi } from "../type";
-import type { PlayerProfileDto} from "@/shared/api/dto/session.dto";
-import type { MainTokagotchiDTO } from "@/shared/api/dto/tokagotchi.dto";
+import type { PlayerProfileDto} from "@/shared/api/dto/player.dto";
+import type { TokagotchiDTO } from "@/shared/api/dto/tokagotchi.dto";
 
 const realUnboxingApi: UnboxingApi = {
   async getUnboxing() {
@@ -10,7 +10,7 @@ const realUnboxingApi: UnboxingApi = {
   },
   async rename(id: string, newName: string) {
     const body = { newName };
-    const { data } = await api.patch<MainTokagotchiDTO>(`/tokagotchis/${id}/name`, body);
+    const { data } = await api.patch<TokagotchiDTO>(`/tokagotchis/${id}/name`, body);
     return data;
   },
 };

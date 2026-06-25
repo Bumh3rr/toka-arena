@@ -1,6 +1,6 @@
 import type { PlayerProfileHomeDTO } from "@/shared/api/dto/home.dto";
 import type { PlayerProfileHome } from "../home";
-import { mapMainTokagotchiDTO } from "./tokagotchi.mapper";
+import { mapTokagotchiDTO } from "./tokagotchi.mapper";
 
 /**
  * Mapea perfil del jugador desde DTO a domain type.
@@ -17,6 +17,6 @@ export function mapPlayerHomeDTO(dto: PlayerProfileHomeDTO): PlayerProfileHome {
     avatarUrl: dto.avatarUrl,
     tf: dto.tokafeed,
     genesisClaimed: dto.genesisClaimed,
-    mainTokagotchi: dto.mainTokagotchi ? mapMainTokagotchiDTO(dto.mainTokagotchi) : null,
+    mainTokagotchi: dto.mainTokagotchi ? mapTokagotchiDTO(dto.mainTokagotchi) : null,
   };
 }

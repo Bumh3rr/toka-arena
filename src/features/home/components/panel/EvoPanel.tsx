@@ -2,11 +2,11 @@ import { useState, useEffect, useRef, useCallback, useMemo, memo } from 'react'
 import { IcCrown, IcLock, IcClock } from '@/shared/ui/Icons/Icons'
 import styles from './styles/EvoPanel.module.css'
 import { HeaderTitleLine } from '../CareSheet/CareSheet'
-import type { Evolution } from '@/shared/domain/evolution'
-import { RARITY_META } from '@/shared/constants/rarity'
+import type { Evolution } from '@/shared/domain/tokagotchi'
+import { NEXT_RARITY_META } from '@/shared/constants/rarity'
 
 interface EvoPanelProps {
-  nextEvolution: Evolution | null
+  nextEvolution: Evolution
   cp: number
   tf: number
   serverTime: number
@@ -209,7 +209,7 @@ const EvoAvailable = memo(({ evo, cp, tf, pending, cooldownLeftMs, onAscend }: E
         <div className={styles.evoCrown}><IcCrown /></div>
         <div className={styles.evoTitles}>
           <div className={styles.k}>Evolución</div>
-          <div className={styles.t}>Ascender a {RARITY_META[evo.nextRarity].label}</div>
+          <div className={styles.t}>Ascender a {NEXT_RARITY_META[evo.nextRarity].label}</div>
         </div>
       </div>
 
@@ -271,7 +271,7 @@ export default function EvoPanel({ nextEvolution, cp, tf, serverTime, onAscend }
       >
         <EvoFlash flash={flash} />
 
-        {!nextEvolution ? (
+        {nextEvolution.nextRarity === 'MAX' ? (
           <MaxedEvo />
         ) : (
           <EvoAvailable

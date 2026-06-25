@@ -1,4 +1,5 @@
-import type { MainTokagotchiDTO } from "./tokagotchi.dto";
+import type { PaginatedResponseDTO } from "./pagination.dto";
+import type { TokagotchiDTO } from "./tokagotchi.dto";
 
 /**
  * Respuesta del endpoint GET /players/me.
@@ -16,5 +17,7 @@ export interface PlayerProfileDto {
   /** Indica si el jugador ya reclamó su Tokagotchi de génesis. */
   genesisClaimed: boolean;
   /** Tokagotchi activo del jugador, o null si aún no tiene ninguno. */
-  mainTokagotchi: MainTokagotchiDTO | null;
+  mainTokagotchi: TokagotchiDTO | null;
 }
+
+export type PlayerTokagotchisPageDTO = PaginatedResponseDTO<TokagotchiDTO>

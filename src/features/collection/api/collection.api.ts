@@ -1,7 +1,10 @@
-import type { CollectionResponseDTO, ColAbility } from '../types/collection.types'
+import type { TokagotchiDTO } from '@/shared/api/dto/tokagotchi.dto'
+import type { CollectionResponseDTO, ColAbility, ColAcc } from '../types/collection.types'
+import { playerApi } from '@/shared/api/player.api'
+import type { Tokagotchi } from '@/shared/domain/tokagotchi'
 
 export interface CollectionApi {
-  getCollection(): Promise<CollectionResponseDTO>
+  getCollection(page: number, size: number): Promise<CollectionResponseDTO>
   activate(tokaId: string): Promise<void>
   toggleFav(tokaId: string, fav: boolean): Promise<void>
 }
@@ -27,75 +30,162 @@ const ABILITIES_HANA: ColAbility[] = [
   { name: 'Tormenta de Pétalos', nrg: 45, desc: 'Daño 1.35x Atk', signature: true },
 ]
 
-// ── roster mock ─────────────────────────────────────────────────────────────────
-// 3 especies reales (TOFU/MOCHI/HANA), mismo `nick` por especie para que "Agrupar"
-// apile duplicados. El activo (tofu1) lleva Corona + Super Capa para lucir el preview.
-const MOCK_ROSTER: CollectionResponseDTO['roster'] = [
-  { id: 'tofu1', nick: 'Tofu', species: 'TOFU', rarity: 'EPIC',   fav: true,  origin: 'Génesis',
-    cp: 195, stats: { hp: 140, atk: 18, def: 38, nrg: 110 }, equippedHead: 'acc_crown', equippedBody: 'acc_cape', abilities: ABILITIES_TOFU },
-  { id: 'tofu2', nick: 'Tofu', species: 'TOFU', rarity: 'RARE',   fav: false, origin: 'Comprado',
-    cp: 80,  stats: { hp: 75,  atk: 10, def: 22, nrg: 70  }, equippedHead: 'acc_helmet', equippedBody: null, abilities: ABILITIES_TOFU },
-  { id: 'tofu3', nick: 'Tofu', species: 'TOFU', rarity: 'COMMON', fav: false, origin: 'Génesis',
-    cp: 30,  stats: { hp: 60,  atk: 7,  def: 18, nrg: 60  }, equippedHead: null, equippedBody: null, abilities: ABILITIES_TOFU },  
-  { id: 'tofu4', nick: 'Tofu_1', species: 'TOFU', rarity: 'EPIC', fav: false, origin: 'Génesis',
-    cp: 30,  stats: { hp: 60,  atk: 7,  def: 18, nrg: 60  }, equippedHead: null, equippedBody: null, abilities: ABILITIES_TOFU },
-
-  { id: 'mochi1', nick: 'Mochi', species: 'MOCHI', rarity: 'LEGENDARY', fav: true,  origin: 'Ganado en apuesta',
-    cp: 480, stats: { hp: 150, atk: 12, def: 52, nrg: 105 }, equippedHead: 'acc_helmet', equippedBody: null, abilities: ABILITIES_MOCHI },
-  { id: 'mochi2', nick: 'Mochi', species: 'MOCHI', rarity: 'EPIC',      fav: false, origin: 'Comprado',
-    cp: 180, stats: { hp: 115, atk: 10, def: 40, nrg: 92  }, equippedHead: null, equippedBody: null, abilities: ABILITIES_MOCHI },
-  { id: 'mochi3', nick: 'Mochi', species: 'MOCHI', rarity: 'COMMON',    fav: false, origin: 'Génesis',
-    cp: 25,  stats: { hp: 55,  atk: 6,  def: 15, nrg: 55  }, equippedHead: null, equippedBody: null, abilities: ABILITIES_MOCHI },
-
-  { id: 'hana1', nick: 'Hana', species: 'HANA', rarity: 'RARE',   fav: false, origin: 'Génesis',
-    cp: 88,  stats: { hp: 90,  atk: 8,  def: 32, nrg: 80  }, equippedHead: 'acc_hat', equippedBody: null, abilities: ABILITIES_HANA },
-  { id: 'hana2', nick: 'Hana', species: 'HANA', rarity: 'COMMON', fav: false, origin: 'Comprado',
-    cp: 18,  stats: { hp: 52,  atk: 5,  def: 14, nrg: 50  }, equippedHead: null, equippedBody: null, abilities: ABILITIES_HANA },
-  { id: 'hana3', nick: 'Hana', species: 'HANA', rarity: 'EPIC',   fav: true,  origin: 'Ganado en apuesta',
-    cp: 200, stats: { hp: 108, atk: 15, def: 32, nrg: 93  }, equippedHead: null, equippedBody: null, abilities: ABILITIES_HANA },
-]
-
-// ── catálogo de accesorios ──────────────────────────────────────────────────────
-// Los 4 reales (con code de render + PNG) y 2 entradas bloqueadas (teasers ???).
-const MOCK_ACCESSORIES: CollectionResponseDTO['accessories'] = [
-  { id: 'acc_helmet', name: 'Casco',      slot: 'cabeza', owned: 2, equipped: ['tofu2', 'mochi1'], locked: false, code: 'HELMET',     image: '/assets/accesorios/casco.png' },
-  { id: 'acc_crown',  name: 'Corona',     slot: 'cabeza', owned: 1, equipped: ['tofu1'],           locked: false, code: 'CROWN',      image: '/assets/accesorios/corona.png' },
-  { id: 'acc_hat',    name: 'Sombrero',   slot: 'cabeza', owned: 1, equipped: ['hana1'],           locked: false, code: 'HAT',        image: '/assets/accesorios/sombrero.png' },
-  { id: 'acc_cape',   name: 'Super Capa', slot: 'cuerpo', owned: 1, equipped: ['tofu1'],           locked: false, code: 'SUPER_CAPE', image: '/assets/accesorios/capa.png' },
+// ── catálogo base de accesorios (fase 1: visual local) ─────────────────────────
+const BASE_ACCESSORIES: ColAcc[] = [
+  { id: 'acc_helmet', name: 'Casco',      slot: 'cabeza', owned: 0, equipped: [], locked: false, code: 'HELMET',     image: '/assets/accesorios/casco.png' },
+  { id: 'acc_crown',  name: 'Corona',     slot: 'cabeza', owned: 0, equipped: [], locked: false, code: 'CROWN',      image: '/assets/accesorios/corona.png' },
+  { id: 'acc_hat',    name: 'Sombrero',   slot: 'cabeza', owned: 0, equipped: [], locked: false, code: 'HAT',        image: '/assets/accesorios/sombrero.png' },
+  { id: 'acc_cape',   name: 'Super Capa', slot: 'cuerpo', owned: 0, equipped: [], locked: false, code: 'SUPER_CAPE', image: '/assets/accesorios/capa.png' },
   { id: 'acc_locked1', name: '???', slot: 'cara',    owned: 0, equipped: [], locked: true, code: null, image: null },
   { id: 'acc_locked2', name: '???', slot: 'espalda', owned: 0, equipped: [], locked: true, code: null, image: null },
 ]
 
-// Estado mutable en memoria para simular activate/fav entre llamadas.
-const _db = {
-  activeTokaId: 'tofu1',
-  roster: structuredClone(MOCK_ROSTER) as CollectionResponseDTO['roster'],
+const ABILITIES_BY_SPECIES: Record<string, ColAbility[]> = {
+  TOFU: ABILITIES_TOFU,
+  MOCHI: ABILITIES_MOCHI,
+  HANA: ABILITIES_HANA,
 }
 
-const delay = (ms: number) => new Promise<void>((r) => setTimeout(r, ms))
+const ACCESSORY_ID_BY_CODE: Record<string, string> = {
+  HELMET: 'acc_helmet',
+  CROWN: 'acc_crown',
+  HAT: 'acc_hat',
+  SUPER_CAPE: 'acc_cape',
+}
 
-export const mockCollectionApi: CollectionApi = {
-  async getCollection() {
-    await delay(800)
+const ACCESSORY_SLOT_BY_CODE: Record<string, 'cabeza' | 'cuerpo'> = {
+  HELMET: 'cabeza',
+  CROWN: 'cabeza',
+  HAT: 'cabeza',
+  SUPER_CAPE: 'cuerpo',
+}
+
+const favByTokaId = new Map<string, boolean>()
+
+function mapEnergyByRarity(rarity: TokagotchiDTO['rarity']): number {
+  switch (rarity) {
+    case 'COMMON':
+      return 60
+    case 'RARE':
+      return 80
+    case 'EPIC':
+      return 95
+    case 'LEGENDARY':
+      return 110
+  }
+}
+
+function mapColToka(t: TokagotchiDTO): CollectionResponseDTO['roster'][number] {
+  const equippedHead = t.equipped?.find((e) => ACCESSORY_SLOT_BY_CODE[e.code] === 'cabeza')
+  const equippedBody = t.equipped?.find((e) => ACCESSORY_SLOT_BY_CODE[e.code] === 'cuerpo')
+
+  return {
+    id: t.id,
+    nick: t.name,
+    species: t.species,
+    rarity: t.rarity,
+    fav: favByTokaId.get(t.id) ?? false,
+    origin: 'Colección',
+    cp: t.cp,
+    stats: {
+      hp: t.hp,
+      atk: t.atk,
+      def: t.def,
+      nrg: mapEnergyByRarity(t.rarity),
+    },
+    abilities: ABILITIES_BY_SPECIES[t.species] ?? [],
+    equippedHead: equippedHead ? ACCESSORY_ID_BY_CODE[equippedHead.code] ?? null : null,
+    equippedBody: equippedBody ? ACCESSORY_ID_BY_CODE[equippedBody.code] ?? null : null,
+  }
+}
+
+function mapRoster(content: TokagotchiDTO[]): CollectionResponseDTO['roster'] {
+  return content.map(mapColToka)
+}
+
+function mapColTokaFromDomain(t: Tokagotchi): CollectionResponseDTO['roster'][number] {
+  const equippedHead = t.equipped?.find((e) => ACCESSORY_SLOT_BY_CODE[e.code] === 'cabeza')
+  const equippedBody = t.equipped?.find((e) => ACCESSORY_SLOT_BY_CODE[e.code] === 'cuerpo')
+
+  return {
+    id: t.id,
+    nick: t.name,
+    species: t.species,
+    rarity: t.rarity,
+    fav: favByTokaId.get(t.id) ?? false,
+    origin: 'Colección',
+    cp: t.cp,
+    stats: {
+      hp: t.stats.hp,
+      atk: t.stats.atk,
+      def: t.stats.def,
+      nrg: mapEnergyByRarity(t.rarity),
+    },
+    abilities: ABILITIES_BY_SPECIES[t.species] ?? [],
+    equippedHead: equippedHead ? ACCESSORY_ID_BY_CODE[equippedHead.code] ?? null : null,
+    equippedBody: equippedBody ? ACCESSORY_ID_BY_CODE[equippedBody.code] ?? null : null,
+  }
+}
+
+function mapAccessories(
+  roster: CollectionResponseDTO['roster'],
+  activeTokagotchi: CollectionResponseDTO['activeTokagotchi'],
+): CollectionResponseDTO['accessories'] {
+  const accessories = structuredClone(BASE_ACCESSORIES)
+  const source = activeTokagotchi && !roster.some((t) => t.id === activeTokagotchi.id)
+    ? [...roster, activeTokagotchi]
+    : roster
+
+  for (const acc of accessories) {
+    if (acc.locked) continue
+    const equippedIds = source
+      .filter((t) => t.equippedHead === acc.id || t.equippedBody === acc.id)
+      .map((t) => t.id)
+
+    acc.equipped = equippedIds
+    acc.owned = equippedIds.length > 0 ? 1 : 0
+  }
+
+  return accessories
+}
+
+export const realCollectionApi: CollectionApi = {
+  async getCollection(page, size) {
+    const [paged, profile] = await Promise.all([
+      playerApi.getMyTokagotchis(page, size),
+      playerApi.getMe(),
+    ])
+    const roster = mapRoster(paged.content)
+    const activeTokagotchi = profile.mainTokagotchi ? mapColTokaFromDomain(profile.mainTokagotchi) : null
+    const activeTokaId = activeTokagotchi?.id ?? ''
+
     return {
       serverTime: new Date().toISOString(),
-      activeTokaId: _db.activeTokaId,
-      roster: structuredClone(_db.roster),
-      accessories: structuredClone(MOCK_ACCESSORIES),
+      activeTokaId,
+      activeTokagotchi,
+      roster,
+      accessories: mapAccessories(roster, activeTokagotchi),
       lockedSpecies: [{ key: 'mystery' }],
       speciesTotal: 4,
+      pagination: {
+        page: paged.page,
+        size: paged.size,
+        totalElements: paged.totalElements,
+        totalPages: paged.totalPages,
+        hasNext: paged.hasNext,
+        hasPrevious: paged.hasPrevious,
+      },
     }
   },
-  async activate(tokaId) {
-    await delay(200)
-    _db.activeTokaId = tokaId
+
+  async activate(tokaId: string) {
+    await playerApi.setMyActiveTokagotchi(tokaId)
   },
-  async toggleFav(tokaId, fav) {
-    await delay(100)
-    const t = _db.roster.find((r) => r.id === tokaId)
-    if (t) t.fav = fav
+
+  async toggleFav(tokaId: string, fav: boolean) {
+    // Fase 1: placeholder local hasta tener endpoint backend de favoritos.
+    favByTokaId.set(tokaId, fav)
   },
 }
 
-// ── SWAP POINT ─────────────────────────────────────────────────────────────────
-export const collectionApi: CollectionApi = mockCollectionApi
+export const collectionApi: CollectionApi = realCollectionApi

@@ -1,4 +1,5 @@
-import type { Rarity, Species } from '@/shared/domain/tokagotchi'
+import type { TokagotchiDTO } from '@/shared/api/dto/tokagotchi.dto'
+import type { Rarity, Species, Tokagotchi } from '@/shared/domain/tokagotchi'
 
 // La colección usa las especies reales del juego (las que tienen arte + soporte de canvas).
 export type ColSpecies = Species
@@ -9,8 +10,8 @@ export const COL_SPECIES_LABEL: Record<ColSpecies, string> = {
   HANA: 'Hana',
 }
 
-export type ColTab = 'toka' | 'acc'
-export type ColFilter = 'all' | Rarity | 'fav'
+export type ColTab = 'toka' | 'acc' | 'reactions'
+export type ColFilter = 'all' | Rarity
 export type AccSlotKey = 'cabeza' | 'cuerpo' | 'cara' | 'espalda'
 export type AccSlotFilter = AccSlotKey | 'todos'
 
@@ -19,20 +20,6 @@ export interface ColAbility {
   nrg: number
   desc: string
   signature: boolean
-}
-
-export interface ColToka {
-  id: string
-  nick: string
-  species: ColSpecies
-  rarity: Rarity
-  fav: boolean
-  origin: string
-  cp: number
-  stats: { hp: number; atk: number; def: number; nrg: number }
-  abilities: ColAbility[]
-  equippedHead: string | null   // acc id
-  equippedBody: string | null   // acc id
 }
 
 export interface ColAcc {
@@ -53,25 +40,59 @@ export interface ColLockedSpecies {
 export interface CollectionResponseDTO {
   serverTime: string
   activeTokaId: string
-  roster: ColToka[]
+  activeTokagotchi: TokagotchiDTO | null
+  roster: TokagotchiDTO[]
   accessories: ColAcc[]
   lockedSpecies: ColLockedSpecies[]
   speciesTotal: number
+  pagination: {
+    page: number
+    size: number
+    totalElements: number
+    totalPages: number
+    hasNext: boolean
+    hasPrevious: boolean
+  }
 }
 
 export interface CollectionData {
   serverTime: number
   activeTokaId: string
-  roster: ColToka[]
+  activeTokagotchi: Tokagotchi | null
+  roster: Tokagotchi[]
   accessories: ColAcc[]
   lockedSpecies: ColLockedSpecies[]
   speciesTotal: number
+  pagination: {
+    page: number
+    size: number
+    totalElements: number
+    totalPages: number
+    hasNext: boolean
+    hasPrevious: boolean
+  }
 }
 
-export type CollectionState =
+export interface CollectionTokagotchiData {
+  activeTokaId: string | null
+  activeTokagotchi: Tokagotchi | null
+  roster: Tokagotchi[]
+  pagination: {
+    page: number
+    size: number
+    totalElements: number
+    totalPages: number
+    hasNext: boolean
+    hasPrevious: boolean
+  }
+}
+
+export type CollectionState<T> =
   | { status: 'loading' }
   | { status: 'error'; error: string }
-  | { status: 'ready'; data: CollectionData }
+  | { status: 'ready'; data: T }
+
+export type CollectionTokasState = CollectionState<CollectionTokagotchiData>
 
 export interface CollectionUi {
   tab: ColTab

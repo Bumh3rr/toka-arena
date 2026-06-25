@@ -26,7 +26,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 16px 20px 0;
+  padding: 22px 20px 0;
   position: relative;
   z-index: 1;
 }
@@ -36,7 +36,7 @@
   font-family: var(--font-title);
   font-size: 22px;
   font-weight: 700;
-  color: #FFF8ED
+  color: #FFF8ED;
 }
 
 .scroll {
@@ -55,6 +55,38 @@
 
 .scroll::-webkit-scrollbar {
   display: none;
+}
+
+.pagination {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.pageBtn {
+  font-family: var(--font-title);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  background: linear-gradient(180deg, #ffe7a6, var(--gold));
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+
+.pageBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.pageInfo {
+  font-family: var(--font-title);
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff8ed;
 }
 
 .loading,

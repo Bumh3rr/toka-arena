@@ -26,7 +26,7 @@ const EMPTY: ActiveTokaView = { toka: null, equipped: [], headName: null, bodyNa
  * reutilizando el manifest de render para obtener el `displayIndex`.
  */
 export function getActiveTokaView(data: CollectionData): ActiveTokaView {
-  const toka = data.roster.find((t) => t.id === data.activeTokaId) ?? null
+  const toka = data.activeTokagotchi ?? data.roster.find((t) => t.id === data.activeTokaId) ?? null
   if (!toka) return EMPTY
 
   const findAcc = (id: string | null) =>

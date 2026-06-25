@@ -1,4 +1,4 @@
-import type { MainTokagotchiDTO } from "./tokagotchi.dto";
+import type { TokagotchiDTO } from "./tokagotchi.dto";
 
 export interface HomeResponseDTO {
   missions: { claimable: number };
@@ -12,5 +12,5 @@ export interface PlayerProfileHomeDTO {
   avatarUrl: string | null;
   tokafeed: number;
   genesisClaimed: boolean;
-  mainTokagotchi: MainTokagotchiDTO | null;
+  mainTokagotchi: TokagotchiDTO | null;
 }

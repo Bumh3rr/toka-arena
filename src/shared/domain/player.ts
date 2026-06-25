@@ -1,4 +1,4 @@
-import type { MainTokagotchi } from "./tokagotchi";
+import type { Tokagotchi } from "./tokagotchi";
 
 export interface PlayerProfile {
   id: string;
@@ -6,6 +6,6 @@ export interface PlayerProfile {
   avatar: string | null;
   tf: number;
   genesisClaimed: boolean;
-  mainTokagotchi: MainTokagotchi | null;
+  mainTokagotchi: Tokagotchi | null;
   createdAt: number;
 }

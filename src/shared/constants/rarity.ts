@@ -1,4 +1,4 @@
-import type { Rarity } from "../domain/tokagotchi";
+import type { NextRarity, Rarity } from "../domain/tokagotchi";
 
 export interface RarityMeta {
   label: string;
@@ -31,5 +31,15 @@ export const RARITY_META: Record<Rarity, RarityMeta> = {
     ring: "#FF8000",
     soft: "rgba(255,128,0,.32)",
     order: 3,
+  },
+};
+
+export const NEXT_RARITY_META: Record<NextRarity, RarityMeta> = {
+  ...RARITY_META,
+  MAX: {
+    label: "Máximo",
+    ring: "#FFD700",
+    soft: "rgba(255,215,0,.30)",
+    order: 4,
   },
 };

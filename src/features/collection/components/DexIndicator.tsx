@@ -1,4 +1,3 @@
-// src/features/collection/components/DexIndicator.tsx
 import { ProgressBar } from '@/shared/ui/Kit'
 import type { CollectionData } from '../types/collection.types'
 import styles from './DexIndicator.module.css'

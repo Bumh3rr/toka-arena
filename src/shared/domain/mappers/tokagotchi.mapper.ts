@@ -1,7 +1,7 @@
-import type { CareDTO, EquippedAccessoryDTO, EvolutionDTO, MainTokagotchiDTO } from "@/shared/api/dto/tokagotchi.dto";
+import type { CareDTO, EquippedAccessoryDTO, EvolutionDTO, TokagotchiDTO } from "@/shared/api/dto/tokagotchi.dto";
 import type { EquippedAccessory } from "../accessory";
 import { getRenderBinding } from "@/shared/render/accessoryManifest";
-import type { CareTimestamps, MainTokagotchi, Stats } from "../tokagotchi";
+import type { CareTimestamps, Tokagotchi, Stats } from "../tokagotchi";
 import { toMs } from "@/shared/utils/time";
 import type { Evolution } from "../evolution";
 
@@ -59,10 +59,9 @@ export const mapEvolutionDTO = (e: EvolutionDTO | null): Evolution | null =>
  * Mapea tokagotchi activo completo desde DTO.
  * Orquestadora: compone stats, evolution, equipped, careCooldown usando mappers específicos.
  * @param dto - DTO del tokagotchi home
- * @returns Domain MainTokagotchiHome con todos los datos transformados
+ * @returns Domain Tokagotchi con todos los datos transformados
  */
-export function mapMainTokagotchiDTO(dto: MainTokagotchiDTO): MainTokagotchi {
-  console.log("Mapeando MainTokagotchiHomeDTO:", dto);
+export function mapTokagotchiDTO(dto: TokagotchiDTO): Tokagotchi {
   return {
     id: dto.id,
     name: dto.name,
@@ -76,6 +75,6 @@ export function mapMainTokagotchiDTO(dto: MainTokagotchiDTO): MainTokagotchi {
   };
 }
 
-export function mapStatsDTO(dto: MainTokagotchiDTO): Stats {
+export function mapStatsDTO(dto: TokagotchiDTO): Stats {
   return { hp: dto.hp, atk: dto.atk, def: dto.def };
 }

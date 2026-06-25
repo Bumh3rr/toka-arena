@@ -1,5 +1,5 @@
 import useSWR from "swr";
-import { sessionApi } from "../../api/me.api";
+import { playerApi } from "../../api/player.api";
 import type { PlayerProfile } from "@/shared/domain/player";
 import { useCallback } from "react";
 import { applyRenamePlayerUsername } from "../model/mapper";
@@ -23,7 +23,7 @@ function getSessionErrorMessage(error: unknown) {
 }
 
 export function useSession(): UseSessionResult {
-  const { data, error, mutate, isValidating } = useSWR<PlayerProfile>("me", () => sessionApi.getMe());
+  const { data, error, mutate, isValidating } = useSWR<PlayerProfile>("me", () => playerApi.getMe());
   const { show, toast } = useToast();
 
   const renameUsername = useCallback(async (newName: string) => {
@@ -32,7 +32,7 @@ export function useSession(): UseSessionResult {
     try {
       await mutate(
         async (prev) => {
-          const res = await sessionApi.renamePlayerUsername(username);
+          const res = await playerApi.renamePlayerUsername(username);
           return prev ? applyRenamePlayerUsername(prev, res.username) : prev;
         },
         {
