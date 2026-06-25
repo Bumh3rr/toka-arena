@@ -20,6 +20,7 @@ import BattlePassCard from '../components/BattlePassCard/BattlePassCard'
 import { CoinPillCard } from '../components/CoinPillCard/CoinPillCard'
 import HomeSkeleton from '../components/skeleton/HomeSkeleton'
 import PageError from '../../../shared/ui/Error/Error'
+import SheetPanel from '@/shared/ui/SheetPanel/SheetPanel'
 import styles from './HomePage.module.css'
 
 // ── Geometría del Tokzagotchi flotante ──────────────────────────────────────────
@@ -45,7 +46,6 @@ export default function HomePage() {
     //const [collectionOpen, setCollectionOpen] = useState(false)
 
     const containerRef = useRef<HTMLDivElement>(null)
-    const sheetRef = useRef<HTMLDivElement>(null)
     const floatingRef = useRef<HTMLDivElement>(null)
     const tokaWrapRef = useRef<HTMLDivElement>(null)
 
@@ -76,52 +76,25 @@ export default function HomePage() {
         return () => ro.disconnect()
     }, [ready])
 
-    // ── Drag desde el handle del sheet ──────────────────────────────────────────
-    const onGrabDown = (e: React.PointerEvent<HTMLDivElement>) => {
-        const sheetEl = sheetRef.current
-        const container = containerRef.current
+    // ── Sincronización live con el drag del SheetPanel ──────────────────────────
+    const handleSheetDragProgress = (progress: number) => {
+        // progress: 0 = expandido · 1 = colapsado
         const floatingEl = floatingRef.current
         const tokaEl = tokaWrapRef.current
-        if (!sheetEl || !container) return
-
-        const startY = e.clientY
-        const startExpanded = sheetExpanded
-        const startPct = startExpanded ? 0 : 100   // 0 = expandido · 100 = colapsado
-        const shH = sheetEl.offsetHeight
         const collapsedTop = floatingEl ? floatingEl.offsetTop - TOKA_H + TOKA_OVERLAP : 0
-        let livePct = startPct
-        let moved = 0
-
-        setDragging(true)
-        e.currentTarget.setPointerCapture(e.pointerId)
-
-        const onMove = (ev: PointerEvent) => {
-            const dy = ev.clientY - startY
-            moved = Math.max(moved, Math.abs(dy))
-            livePct = Math.max(0, Math.min(100, startPct + (dy / shH) * 100))
-
-            sheetEl.style.transform = `translateY(${livePct}%)`
-            if (tokaEl) {
-                const top = TOKA_TOP_EXPANDED + (collapsedTop - TOKA_TOP_EXPANDED) * livePct / 100
-                tokaEl.style.top = `${top}px`
-            }
-            if (floatingEl) floatingEl.style.opacity = `${livePct / 100}`
+        if (tokaEl) {
+            const top = TOKA_TOP_EXPANDED + (collapsedTop - TOKA_TOP_EXPANDED) * progress
+            tokaEl.style.top = `${top}px`
         }
+        if (floatingEl) floatingEl.style.opacity = `${progress}`
+    }
 
-        const onUp = () => {
-            window.removeEventListener('pointermove', onMove)
-            window.removeEventListener('pointerup', onUp)
-            sheetEl.style.transform = ''
-            if (tokaEl) tokaEl.style.top = ''
-            if (floatingEl) floatingEl.style.opacity = ''
-            setDragging(false)
-            const next = moved < 6 ? !startExpanded : livePct < 50
-            setSheetExpanded(next)
+    const handleSheetDragging = (isDragging: boolean) => {
+        setDragging(isDragging)
+        if (!isDragging) {
+            if (tokaWrapRef.current) tokaWrapRef.current.style.top = ''
+            if (floatingRef.current) floatingRef.current.style.opacity = ''
         }
-
-        window.addEventListener('pointermove', onMove)
-        window.addEventListener('pointerup', onUp)
-        e.preventDefault()
     }
 
     // ── Estados de la pantalla ──────────────────────────────────────────────────
@@ -204,46 +177,43 @@ export default function HomePage() {
             </div>
 
             {/* Sheet panel */}
-            <div
-                ref={sheetRef}
-                className={`${styles.sheetPanel} ${sheetExpanded ? styles.sheetPanelExpanded : ''}`}
+            <SheetPanel
+                expanded={sheetExpanded}
+                onExpandedChange={setSheetExpanded}
+                onDragging={handleSheetDragging}
+                onDragProgress={handleSheetDragProgress}
+                topOffset={240}
             >
-                <div className={styles.sheetHandle} onPointerDown={onGrabDown}>
-                    <div className={styles.sheetGrab} />
-                </div>
-
-                <div className={styles.sheetScroll}>
-                    <div className={styles.identity}>
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                            <div className={styles.nmWrapper}>
-                                <div className={styles.nm}>{mainTokagotchi.name}</div>
-                                <IconButton
-                                    shape='sm'
-                                    size={28}
-                                    onClick={() => setRenameOpen(true)}
-                                    aria-label="Renombrar"
-                                >
-                                    <IcPencil />
-                                </IconButton>
+                <div className={styles.identity}>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                        <div className={styles.nmWrapper}>
+                            <div className={styles.nm}>{mainTokagotchi.name}</div>
+                            <IconButton
+                                shape='sm'
+                                size={28}
+                                onClick={() => setRenameOpen(true)}
+                                aria-label="Renombrar"
+                            >
+                                <IcPencil />
+                            </IconButton>
+                        </div>
+                        <div className={styles.nmRow}>
+                            <div className={styles.sub}>
+                                <RarityCard rarity={mainTokagotchi.rarity} />
+                                <span>|</span>
+                                <Label variant="warm" look="soft" size="sm">{mainTokagotchi.species}</Label>
                             </div>
-                            <div className={styles.nmRow}>
-                                <div className={styles.sub}>
-                                    <RarityCard rarity={mainTokagotchi.rarity} />
-                                    <span>|</span>
-                                    <Label variant="warm" look="soft" size="sm">{mainTokagotchi.species}</Label>
-                                </div>
-                                <Button
-                                    variant="warm"
-                                    size="md"
-                                    icon={<IcSwap />}
-                                    onClick={() => {{/** setCollectionOpen(true) */}}}>Cambiar</Button>
-                            </div>
+                            <Button
+                                variant="warm"
+                                size="md"
+                                icon={<IcSwap />}
+                                onClick={() => {{/** setCollectionOpen(true) */}}}>Cambiar</Button>
                         </div>
                     </div>
-                    <StatsRow stats={mainTokagotchi.stats} />
-                    <EvoPanel serverTime={data.player.serverTime} nextEvolution={mainTokagotchi.nextEvolution} cp={mainTokagotchi.cp} tf={tf} onAscend={ascend} />
                 </div>
-            </div>
+                <StatsRow stats={mainTokagotchi.stats} />
+                <EvoPanel serverTime={data.player.serverTime} nextEvolution={mainTokagotchi.nextEvolution} cp={mainTokagotchi.cp} tf={tf} onAscend={ascend} />
+            </SheetPanel>
 
             {/* Card de Pase de Batalla — la data sale de usePass (/pass) */}
             <BattlePassCard onClick={onNavegatePasePage} top={90} />

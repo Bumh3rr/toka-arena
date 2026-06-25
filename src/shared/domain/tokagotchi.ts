@@ -67,6 +67,6 @@ export interface Tokagotchi {
   stats: Stats;
   cp: number;
   equipped: EquippedAccessory[];
-  nextEvolution: Evolution | null;
+  nextEvolution: Evolution;
   careCooldown: CareTimestamps;
 }
