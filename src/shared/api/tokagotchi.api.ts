@@ -21,10 +21,10 @@ const tokagotchi: TokagotchiApi = {
 
   /**
    * PATCH /tokagotchis/{id}/name
-   * Body: { newName: string }
+   * Body: { newTokagotchiName: string }
    */
-  async rename(_tokaId, name) {
-    const body = { newName: name };
+  async rename(_tokaId, newName) {
+    const body = { newTokagotchiName: newName };
     const { data } = await api.patch<MainTokagotchiDTO>(`tokagotchis/${_tokaId}/name`, body);
     console.log("Peticion PATCH /tokagotchis/${_tokaId}/name con body:", body, "Respuesta:", data);
     return data;

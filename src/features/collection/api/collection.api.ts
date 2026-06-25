@@ -36,6 +36,8 @@ const MOCK_ROSTER: CollectionResponseDTO['roster'] = [
   { id: 'tofu2', nick: 'Tofu', species: 'TOFU', rarity: 'RARE',   fav: false, origin: 'Comprado',
     cp: 80,  stats: { hp: 75,  atk: 10, def: 22, nrg: 70  }, equippedHead: 'acc_helmet', equippedBody: null, abilities: ABILITIES_TOFU },
   { id: 'tofu3', nick: 'Tofu', species: 'TOFU', rarity: 'COMMON', fav: false, origin: 'Génesis',
+    cp: 30,  stats: { hp: 60,  atk: 7,  def: 18, nrg: 60  }, equippedHead: null, equippedBody: null, abilities: ABILITIES_TOFU },  
+  { id: 'tofu4', nick: 'Tofu_1', species: 'TOFU', rarity: 'EPIC', fav: false, origin: 'Génesis',
     cp: 30,  stats: { hp: 60,  atk: 7,  def: 18, nrg: 60  }, equippedHead: null, equippedBody: null, abilities: ABILITIES_TOFU },
 
   { id: 'mochi1', nick: 'Mochi', species: 'MOCHI', rarity: 'LEGENDARY', fav: true,  origin: 'Ganado en apuesta',

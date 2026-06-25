@@ -20,8 +20,13 @@ export default function TokaCard({ toka, isActive, count, stacked, onClick }: To
   const accessories: EquippedAccessory[] = 
   [
     {
-      code: 'HELMET',
+      code: 'CHEFS_HAT',
       slot: 'HEAD',
+      displayIndex: 3,
+    },
+    {
+      code: 'GLASSES',
+      slot: 'FACE',
       displayIndex: 0,
     },
     {

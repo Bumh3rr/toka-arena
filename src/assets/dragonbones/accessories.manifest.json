@@ -1,7 +1,14 @@
 {
-  "HELMET":     { "displayIndex": 0 },
-  "CROWN":      { "displayIndex": 1 },
-  "HAT":        { "displayIndex": 2 },
+  "HELMET":       { "displayIndex": 0 },
+  "CROWN":        { "displayIndex": 1 },
+  "HAT":          { "displayIndex": 2 },
+  "CHEFS_HAT": { "displayIndex": 3 },
+  "MARTIAN_EARS": { "displayIndex": 4 },
   
-  "SUPER_CAPE": { "displayIndex": 0 }
+  "SUPER_CAPE": { "displayIndex": 0 },
+  
+  "GLASSES": { "displayIndex": 0 },
+  "MOUSTACHE": { "displayIndex": 1 },
+  "PATCH": { "displayIndex": 2 }
+
 }

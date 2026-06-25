@@ -100,7 +100,6 @@ export default function CollectionPage() {
               group={ui.group}
               onSelect={openDetail}
             />
-            <p className={styles.legend}>✓ Activo &nbsp; ★ Favorito &nbsp; ×N Duplicados &nbsp; 🔒 Falta</p>
           </>
         ) : (
           <AccGrid
