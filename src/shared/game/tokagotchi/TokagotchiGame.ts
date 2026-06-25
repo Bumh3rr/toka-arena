@@ -3,7 +3,7 @@ import {
   type ITokagotchiScene,
 } from "./TokagotchiScene";
 import type { TokagotchiConfig } from "./types";
-import type { EquippedAccessory } from "@/shared/types/accessory";
+import type { EquippedAccessory } from "@/shared/domain/accessory";
 
 /**
  * Wrapper delgado sobre `Phaser.Game` que gestiona el ciclo de vida del juego

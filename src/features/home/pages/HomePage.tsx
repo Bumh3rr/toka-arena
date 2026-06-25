@@ -9,7 +9,7 @@ import EvoPanel from '../components/panel/EvoPanel'
 import CareRow from '../components/row/CareRow'
 import RenameModal from '../../../shared/ui/modal/RenameModal'
 import MissionsModal from '../../missions/components/MissionsModal'
-import CollectionModal from '../../../shared/ui/modal/CollectionModal'
+//import CollectionModal from '../../../shared/ui/modal/CollectionModal'
 import TokaStatusPill from '../components/pill/TokaStatusPill'
 import TokagotchiCanvas from '@/shared/canvas/TokagotchiCanvas'
 import BackgroundCanvas from '@/shared/canvas/BackgroundCanvas'
@@ -19,9 +19,8 @@ import RarityCard from '@/shared/ui/RarityCard/RarityCard'
 import BattlePassCard from '../components/BattlePassCard/BattlePassCard'
 import { CoinPillCard } from '../components/CoinPillCard/CoinPillCard'
 import HomeSkeleton from '../components/skeleton/HomeSkeleton'
-import HomeError from '../components/Error/HomeError'
+import PageError from '../../../shared/ui/Error/Error'
 import styles from './HomePage.module.css'
-import { useSession } from '@/shared/session/hooks/useSession'
 
 // ── Geometría del Tokzagotchi flotante ──────────────────────────────────────────
 const TOKA_H = 230            // alto del canvas (== prop height)
@@ -37,14 +36,13 @@ export default function HomePage() {
     const navigate = useNavigate()
     const { hideBar, showBar } = useNavBar()
     const { state, runAction, renameToka, ascend, reload, toast } = useHome()
-    const { state: sessionState } = useSession()
 
     const [sheetExpanded, setSheetExpanded] = useState(false)
     const [dragging, setDragging] = useState(false)
     const [perfileOpen, setPerfileOpen] = useState(false)
     const [renameOpen, setRenameOpen] = useState(false)
     const [missionsOpen, setMissionsOpen] = useState(false)
-    const [collectionOpen, setCollectionOpen] = useState(false)
+    //const [collectionOpen, setCollectionOpen] = useState(false)
 
     const containerRef = useRef<HTMLDivElement>(null)
     const sheetRef = useRef<HTMLDivElement>(null)
@@ -52,7 +50,9 @@ export default function HomePage() {
     const tokaWrapRef = useRef<HTMLDivElement>(null)
 
     const ready = state.status === 'ready'
-    const activeToka = ready ? state.data.activeToka : null
+    const player = ready ? state.data.player : null
+    const mainTokagotchi = player?.mainTokagotchi ?? null
+
     // Simulacion que redirecciona al apartado del pase de batalla, cambiar a /pase
     const onNavegatePasePage = () => { navigate('/ui-kit', { replace: true }) }
 
@@ -75,11 +75,6 @@ export default function HomePage() {
         ro.observe(el)
         return () => ro.disconnect()
     }, [ready])
-
-    // Usuario sin Tokagotchi → flujo génesis (unboxing)
-    useEffect(() => {
-        if (ready && !activeToka) navigate('/unboxing', { replace: true })
-    }, [ready, activeToka, navigate])
 
     // ── Drag desde el handle del sheet ──────────────────────────────────────────
     const onGrabDown = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -131,15 +126,15 @@ export default function HomePage() {
 
     // ── Estados de la pantalla ──────────────────────────────────────────────────
     if (state.status === 'loading') return <HomeSkeleton />
-    if (state.status === 'error') return <HomeError message={state.error} onRetry={reload} />
+    if (state.status === 'error') return <PageError message={state.error} onRetry={reload} />
     // Sin toka: redirige a /unboxing (efecto de arriba); skeleton mientras navega
-    if (!activeToka) return <HomeSkeleton />
+    if (!mainTokagotchi) return <HomeSkeleton />
 
     const { cooldowns, ui, data } = state
-    const cpMeta = activeToka.evolution?.cpRequired ?? activeToka.cp
+    const cpMeta = mainTokagotchi.nextEvolution?.cpRequired ?? 0
 
-    const tf = sessionState.status === 'ready' ? sessionState.data.tf : 0
-    const username = sessionState.status === 'ready' ? sessionState.data.username : ""
+    const tf = player?.tf ?? 0
+    const username = player?.username ?? '...'
 
     const handleClaim = () => {
         // TODO: reclamar misión (endpoint pendiente)
@@ -156,7 +151,7 @@ export default function HomePage() {
                 <BackgroundCanvas paused={sheetExpanded} />
             </div>
 
-            {/* Header — TODO: username/TF/avatar vienen de useSession (/me) */}
+            {/* Header: username/TF/avatar */}
             <div className={styles.topbar}>
                 <div className={styles.user}>
                     <IconButton
@@ -180,8 +175,8 @@ export default function HomePage() {
             >
                 <TokagotchiCanvas
                     animacionActual={ui.animation}
-                    species={activeToka.species}
-                    accessories={activeToka.equipped}
+                    species={mainTokagotchi.species}
+                    accessories={mainTokagotchi.equipped}
                     width={230}
                     height={TOKA_H}
                 />
@@ -193,9 +188,9 @@ export default function HomePage() {
                 className={`${styles.floatingControls} ${sheetExpanded ? styles.floatingHidden : ''}`}
             >
                 <TokaStatusPill
-                    nombre={activeToka.name}
-                    rareza={activeToka.rarity}
-                    cp={activeToka.cp}
+                    nombre={mainTokagotchi.name}
+                    rareza={mainTokagotchi.rarity}
+                    cp={mainTokagotchi.cp}
                     cpMeta={cpMeta}
                     onOpen={() => setSheetExpanded(true)}
                 />
@@ -221,7 +216,7 @@ export default function HomePage() {
                     <div className={styles.identity}>
                         <div style={{ flex: 1, minWidth: 0 }}>
                             <div className={styles.nmWrapper}>
-                                <div className={styles.nm}>{activeToka.name}</div>
+                                <div className={styles.nm}>{mainTokagotchi.name}</div>
                                 <IconButton
                                     shape='sm'
                                     size={28}
@@ -233,27 +228,27 @@ export default function HomePage() {
                             </div>
                             <div className={styles.nmRow}>
                                 <div className={styles.sub}>
-                                    <RarityCard rarity={activeToka.rarity} />
+                                    <RarityCard rarity={mainTokagotchi.rarity} />
                                     <span>|</span>
-                                    <Label variant="warm" look="soft" size="sm">{activeToka.species}</Label>
+                                    <Label variant="warm" look="soft" size="sm">{mainTokagotchi.species}</Label>
                                 </div>
                                 <Button
                                     variant="warm"
                                     size="md"
                                     icon={<IcSwap />}
-                                    onClick={() => setCollectionOpen(true)}>Cambiar</Button>
+                                    onClick={() => {{/** setCollectionOpen(true) */}}}>Cambiar</Button>
                             </div>
                         </div>
                     </div>
-                    <StatsRow stats={activeToka.stats} />
-                    <EvoPanel serverTime={data.serverTime} evolution={activeToka.evolution} cp={activeToka.cp} tf={tf} onAscend={ascend} />
+                    <StatsRow stats={mainTokagotchi.stats} />
+                    <EvoPanel serverTime={data.player.serverTime} nextEvolution={mainTokagotchi.nextEvolution} cp={mainTokagotchi.cp} tf={tf} onAscend={ascend} />
                 </div>
             </div>
 
             {/* Card de Pase de Batalla — la data sale de usePass (/pass) */}
             <BattlePassCard onClick={onNavegatePasePage} top={90} />
 
-            {/* FAB de Misiones (badge = claimable del hook) */}
+            {/* FAB de Misiones */}
             <div className={styles.btnMissionFab}>
                 <MissionFab
                     onOpen={() => setMissionsOpen(true)}
@@ -267,7 +262,9 @@ export default function HomePage() {
             {/* Modales */}
             {renameOpen && (
                 <RenameModal
-                    currentName={activeToka.name}
+                    currentName={mainTokagotchi.name}
+                    sub='Elige un apodo para tu Tokagotchi activo.'
+                    limit={14}
                     onSave={renameToka}
                     onClose={() => setRenameOpen(false)}
                 />
@@ -282,14 +279,16 @@ export default function HomePage() {
                     onClose={() => setMissionsOpen(false)}
                 />
             )}
+            {/** 
             {collectionOpen && (
                 <CollectionModal
                     roster={[]} // TODO: el roster viene de la feature collection (useCollection/endpoint)
-                    activeId={activeToka.id}
+                    activeId={mainTokagotchi.id}
                     onActivate={() => setCollectionOpen(false)}
                     onClose={() => setCollectionOpen(false)}
                 />
             )}
+                */}
         </div>
     )
 }

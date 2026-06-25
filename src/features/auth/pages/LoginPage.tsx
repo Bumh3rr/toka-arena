@@ -1,17 +1,18 @@
 import { useNavigate } from 'react-router-dom'
 import WoodButton from '@/shared/ui/WoodButton/WoodButton'
 import TokagotchiCanvas from '@/shared/canvas/TokagotchiCanvas'
-import { useAuth } from '../hooks/useAuth'
+import { useAuth } from '@/shared/session/hooks/useAuth'
 import styles from './LoginPage.module.css'
+import { Toast } from '@/shared/ui/Kit'
 
 export default function LoginPage() {
   const navigate = useNavigate()
-  const { loginWithToka, loading, error } = useAuth()
+  const { login, loading, error, toast } = useAuth()
 
   const handleLogin = async () => {
-    const { success, hasFirstToka } = await loginWithToka()
+    const { success, isNewPlayer } = await login()
     if (success) {
-      navigate(hasFirstToka ? '/home' : '/unboxing', { replace: true })
+      navigate(isNewPlayer ? '/unboxing' : '/home', { replace: true })
     }
   }
 
@@ -46,6 +47,9 @@ export default function LoginPage() {
           width="300px"
           disabled={loading}
         />
+
+        {/* Toast de mensajes */}
+        {toast && <Toast {...toast} />}
 
         {/* Mensaje de error */}
         {error && <div className={styles.errorMessage}>{error}</div>}

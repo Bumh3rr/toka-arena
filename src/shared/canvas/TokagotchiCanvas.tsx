@@ -1,9 +1,9 @@
 import { useEffect, useRef } from 'react'
 import { TokagotchiGame } from '../game/tokagotchi/TokagotchiGame'
 import type { TokagotchiConfig } from '../game/tokagotchi/types'
-import type { Species, Assets, AnimationTokagotchi } from '../types/tokagotchi'
-import { getAssetsBySpecies } from '../libs/tokagotchi' 
-import type { EquippedAccessory } from '../types/accessory'
+import type { Species, Assets, AnimationTokagotchi } from '../domain/tokagotchi'
+import { getAssetsBySpecies } from '../game/assets'
+import type { EquippedAccessory } from '../domain/accessory'
 
 /**
  * Props de {@link TokagotchiCanvas}.
@@ -108,5 +108,5 @@ export default function TokagotchiCanvas({
     gameRef.current?.setPaused(paused || document.hidden)
   }, [paused])
 
-  return <div ref={containerRef} style={{ width, height }} aria-hidden="true" />
+  return <div ref={containerRef} style={{ width, height, pointerEvents: 'none' }} aria-hidden="true" />
 }

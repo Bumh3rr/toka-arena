@@ -1,6 +1,6 @@
 // features/home/hooks/homeUiReducer.ts
-import type { AnimationTokagotchi } from "@/shared/types/tokagotchi";
-import type { ActionCare } from "../data/types"; // "feed" | "play" | "bathe"
+import type { AnimationTokagotchi } from "@/shared/domain/tokagotchi";
+import type { ActionCare } from "../data/home.types"; // "feed" | "play" | "bathe"
 
 export type Floaters = Partial<Record<ActionCare, number>>;
 export interface HomeUi {

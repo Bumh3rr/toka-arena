@@ -1,4 +1,4 @@
-import api from '@/shared/services/api'
+import api from '@/shared/api/client'
 
 export const accesorioService = {
   equipar: async (idTokagotchi: string, idAccesorio: string): Promise<void> => {

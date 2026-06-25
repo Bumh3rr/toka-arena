@@ -1,7 +1,7 @@
-import type { ConfigCare } from "../data/types"; 
-import type { Rarity, Species } from "@/shared/types/tokagotchi";
-import type { Evolution } from "@/shared/types/evolution";
-import type { AbilityDTO } from "../data/dto"; 
+import type { ConfigCare } from "../data/home.types"; 
+import type { Rarity, Species } from "@/shared/domain/tokagotchi";
+import type { Evolution } from "@/shared/domain/evolution";
+import type { AbilityDTO } from "@/shared/api/dto/tokagotchi.dto";
 
 export const CONFIG_CARE: ConfigCare[] = [
   {
@@ -34,26 +34,26 @@ export const EVOLUCION: Partial<Record<Rarity, Evolution>> = {
   COMMON: {
     nextRarity: "RARE",
     cpRequired: 100,
-    costTF: 10,
+    tfRequired: 10,
     successChance: 40,
     failCooldownHours: 12,
-    availableAt: null
+    evolvedAvailableAt: null
   },
   RARE: {
     nextRarity: "EPIC",
     cpRequired: 300,
-    costTF: 25,
+    tfRequired: 25,
     successChance: 30,
     failCooldownHours: 24,
-    availableAt: null
+    evolvedAvailableAt: null
   },
   EPIC: {
     nextRarity: "LEGENDARY",
     cpRequired: 600,
-    costTF: 50,
+    tfRequired: 50,
     successChance: 20,
     failCooldownHours: 48,
-    availableAt: null
+    evolvedAvailableAt: null
   },
 };
 

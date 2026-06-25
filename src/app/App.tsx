@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { authService } from '@/features/auth/services/authService'
+import { tokenStore } from '@/shared/session/store/token.store'
+import SessionWatcher from '@/shared/session/components/SessionWatcher'
 import AppLayout from './layout/AppLayout/AppLayout'
 import LoginPage from '@/features/auth/pages/LoginPage'
 import UnboxingPage from '@/features/unboxing/pages/UnboxingPage'
@@ -10,14 +11,18 @@ import HomePage from '@/features/home/pages/HomePage'
 import UIKitPage from '@/features/devkit/pages/UIKitPage'
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
-  return authService.isAuthenticated()
+  /** 
+  return tokenStore.exists()
     ? <>{children}</>
     : <Navigate to="/login" replace />
+*/
+  return <>{children}</>
 }
 
 export default function App() {
   return (
     <BrowserRouter>
+      <SessionWatcher />
       <Routes>
         {/* Rutas públicas — sin nav */}
         <Route path="/login" element={<LoginPage />} />
@@ -41,7 +46,7 @@ export default function App() {
         </Route>
 
         <Route path="/" element={
-          authService.isAuthenticated()
+          tokenStore.exists()
             ? <Navigate to="/home" replace />
             : <Navigate to="/login" replace />
         } />

@@ -1,5 +1,6 @@
-import type { EquippedAccessoryDTO, EquippedAccessory, EquippedBySlot } from "@/shared/types/accessory";
+import type { EquippedAccessory, EquippedBySlot } from "@/shared/domain/accessory";
 import { getRenderBinding } from "@/shared/render/accessoryManifest";
+import type { EquippedAccessoryDTO } from "../api/dto/tokagotchi.dto";
 
 export function mapEquipped(dtos: EquippedAccessoryDTO[]): EquippedAccessory[] {
   return dtos.flatMap((dto) => {

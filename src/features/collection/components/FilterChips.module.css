@@ -1,0 +1,30 @@
+.chips {
+  display: flex;
+  gap: 7px;
+  overflow-x: auto;
+  padding: 2px 0 4px;
+  scrollbar-width: none;
+  flex: none;
+}
+.chips::-webkit-scrollbar { display: none; }
+.chip {
+  font-family: var(--font-title);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  padding: 7px 13px;
+  border: 2.5px solid var(--ink);
+  border-radius: 99px;
+  cursor: pointer;
+  flex: none;
+  background: var(--cream);
+  color: var(--ink-2);
+  box-shadow: inset 0 1.5px 0 #fff;
+  transition: all .15s ease;
+}
+.chip.on {
+  color: var(--ink);
+  background: linear-gradient(180deg, #FFE7A6, var(--gold));
+  box-shadow: inset 0 1.5px 0 rgba(255,255,255,.6), 0 2px 0 var(--gold-edge);
+}
+.chip:active { transform: translateY(2px); }

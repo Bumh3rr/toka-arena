@@ -1,16 +1,19 @@
-import type { Session } from "@/shared/session/session.types";
-import type { HomeData } from "../data/types";
-import type { CareActionDTO, ApiError } from "../data/dto";
-import type { ActionCare } from "../data/types";
+//import type { PlayerProfile } from "@/shared/domain/player";
+import type { HomeData } from "../data/home.types";
+import type { CareActionDTO } from "../../../shared/api/dto/tokagotchi-responses.dto";
+import type { ActionCare } from "../data/home.types";
 import { useCallback, useEffect, useReducer, useState } from "react";
-import useSWR, {useSWRConfig} from "swr";
-import { applyAscendResponse } from "../data/mapper";
-import { homeApi } from "../api/api";
-import { mapHome, applyCareResponse, applyRename } from "../data/mapper";
+import useSWR from "swr";
+import { homeApi } from "../api/home.api";
+import { tokagotchiApi } from "@/shared/api/tokagotchi.api"
+import { applyAscendResponse, applyCareResponse, applyRename } from "../data/home.reconcilers";
 import { homeUiReducer, INITIAL_UI, type HomeUi } from "./homeUiReducer";
 import { useToast } from "@/shared/hooks/useToast";
 import { CONFIG_CARE } from "../constants/config";
 import { RARITY_META } from '@/shared/constants/rarity'
+import { mapHomeResponseDTO } from "../data/home.mapper";
+import { getApiErrorMessage } from "@/shared/api/client";
+import { sessionApi } from "@/shared/api/me.api";
 
 // ── reloj del servidor (usa el serverTime para corregir desfase de reloj) ──
 let clockOffset = 0;
@@ -42,46 +45,49 @@ function useTicker(active: boolean) {
 }
 
 export function useHome() {
-  const { mutate: globalMutate } = useSWRConfig();
+  //const { mutate: globalMutate } = useSWRConfig();
 
   const { data, error, mutate } = useSWR<HomeData>("home", async () => {
     const res = await homeApi.getHome();
-    console.log("homeApi: ",res)
-    syncClock(new Date(res.serverTime).getTime());
-    return mapHome(res);
+    console.log("Fetch /home:", res);
+    syncClock(new Date(res.player.serverTime).getTime());
+    return mapHomeResponseDTO(res);
   });
 
   const [ui, dispatch] = useReducer(homeUiReducer, INITIAL_UI);
   const { show, toast } = useToast();
 
-  const care = data?.activeToka?.care;
+  const care = data?.player?.mainTokagotchi?.careCooldown
   const active = !!care && [care.feed, care.play, care.bathe].some((t) => (t ?? 0) > serverNow());
   useTicker(active);
 
   const runAction = useCallback(
     async (action: ActionCare) => {
-      if (!data?.activeToka || ui.pendingAction) return;
-      if (remaining(data.activeToka.care[action]) > 0) return;
+      if (!data?.player?.mainTokagotchi || ui.pendingAction) return;
+      if (remaining(data.player.mainTokagotchi.careCooldown[action]) > 0) return;
       const cfg = CONFIG_CARE.find((c) => c.key === action);
       if (!cfg) return;
-      const tokaId = data.activeToka.id;
+      const tokaId = data.player.mainTokagotchi.id;
 
       dispatch({ type: "ACTION_START", action });
       try {
         await mutate(
           async (prev) => {
-            const res = await homeApi.care(tokaId, ACTION_TO_DTO[action]);
+            const res = await tokagotchiApi.care(tokaId, ACTION_TO_DTO[action]);
+            if (!res) throw new Error("No se recibió respuesta del servidor");
             return prev ? applyCareResponse(prev, res) : prev;
           },
           {
             // CP optimista: se ve instantáneo, se reconcilia con el server, revierte si truena
             optimisticData: (prev) =>
-              prev?.activeToka
-                ? {
+              prev?.player?.mainTokagotchi ? {
                     ...prev,
-                    activeToka: {
-                      ...prev.activeToka,
-                      cp: prev.activeToka.cp + cfg.cp,
+                    player: {
+                      ...prev.player,
+                      mainTokagotchi: {
+                        ...prev.player.mainTokagotchi,
+                        cp: prev.player.mainTokagotchi.cp + cfg.cp,
+                      },
                     },
                   }
                 : prev!,
@@ -95,16 +101,11 @@ export function useHome() {
         const fid = Date.now();
         dispatch({ type: "ADD_FLOATER", action, id: fid });
         window.setTimeout(() => dispatch({ type: "REMOVE_FLOATER", action, id: fid }),1000);
-        show(`+${cfg.cp} CP por ${cfg.label.toLowerCase()}`, {
-          variant: "celebrity",
-        });
+        show(`+${cfg.cp} CP por ${cfg.label.toLowerCase()}`, {variant: "celebrity"});
       } catch (err) {
-        const e = err as ApiError;
-        show(
-          e?.error === "ON_COOLDOWN" ? "Aún en cooldown" : "Acción fallida",
-          { variant: "danger" },
-        );
-        if (e?.error === "ON_COOLDOWN") await mutate(); // re-sincroniza el cooldown real del server
+        const msg = getApiErrorMessage(err, "Acción fallida");
+        console.error("Error en acción de cuidado:", err);
+        show(msg, { variant: "danger" });
       } finally {
         dispatch({ type: "ACTION_END" });
       }
@@ -113,39 +114,39 @@ export function useHome() {
   );
 
   const renameToka = useCallback(async (newName: string) => {
-    if (!data?.activeToka) return;
-    const tokaId = data.activeToka.id;
+    if (!data?.player?.mainTokagotchi) return;
+    const tokaId = String(data.player.mainTokagotchi.id);
     try {
       await mutate(
         async (prev) => {
-          const res = await homeApi.rename(tokaId, newName);
+          const res = await tokagotchiApi.rename(tokaId, newName);
           return prev ? applyRename(prev, res.name) : prev;
         },
         {
           optimisticData: (prev) =>
-            prev?.activeToka ? { ...prev, activeToka: { ...prev.activeToka, name: newName.trim() } } : prev!,
+            prev?.player?.mainTokagotchi ? { ...prev, player: { ...prev.player, mainTokagotchi: { ...prev.player.mainTokagotchi, name: newName.trim() } } } : prev!,
           revalidate: false,
           rollbackOnError: true,
         },
       );
       show("Nombre actualizado", { variant: "info" });
     } catch (err) {
-      const e = err as ApiError;
-      show(e?.error === "INVALID_NAME" ? "Nombre inválido" : "Error al renombrar", { variant: "danger" });
+      const msg = getApiErrorMessage(err, "No se pudo renombrar");
+      console.error("Error al renombrar:", err);
+      show(msg, { variant: "danger" });
     }
   }, [data, mutate, show]);
 
   const ascend = useCallback(async (): Promise<"SUCCESS" | "FAIL" | null> => {
-    if (!data?.activeToka?.evolution) return null;
-    const tokaId = data.activeToka.id;
+    if (!data?.player?.mainTokagotchi?.nextEvolution) return null;
+    const tokaId = data.player.mainTokagotchi.id;
     try {
-      const res = await homeApi.ascend(tokaId);
-      // 1) cache del toka (/home)
+      // 1. Petición al server
+      const res = await tokagotchiApi.ascend(String(tokaId));
+      
       await mutate((prev) => (prev ? applyAscendResponse(prev, res) : prev), { revalidate: false });
-      // 2) cache del wallet (/me) — el TF se consumió
-      await globalMutate("me", (prev?: Session) => (prev ? { ...prev, tf: res.wallet.tf } : prev), { revalidate: false });
-
-      const rarityLabel = RARITY_META[res.toka.rarity].label
+      // 2. Mostrar mensaje de resultado
+      const rarityLabel = RARITY_META[res.tokagotchi.rarity].label
       show(
         res.result === "SUCCESS"
           ? `¡Ascendió a ${rarityLabel}! ✨`
@@ -161,19 +162,18 @@ export function useHome() {
         window.setTimeout(() => dispatch({ type: "SET_ANIMATION", animation: "idle" }),3000);
       }
 
+      // 3) Obtener TF actualizado mediante /me
+      const resMe = await sessionApi.getMe();
+      await mutate((prev) => (prev ? { ...prev, player: { ...prev.player, tf: resMe.tf } } : prev), { revalidate: false });
+
       return res.result;
     } catch (err) {
-      const e = err as ApiError;
-      const msg: Record<string, string> = {
-        ON_COOLDOWN: "Aún en cooldown",
-        INSUFFICIENT_CP: "No tienes CP suficiente",
-        INSUFFICIENT_TF: "No tienes TF suficiente",
-        MAX_RARITY: "Ya estás en rareza máxima",
-      };
-      show(msg[e?.error ?? ""] ?? "No se pudo ascender", { variant: "danger" });
+      const msg = getApiErrorMessage(err, "No se pudo ascender");
+      console.error("Error al ascender:", err);
+      show(msg, { variant: "danger" });
       return null;
     }
-  }, [data, mutate, globalMutate, show]);
+  }, [data, mutate, show]);
 
   const state: HomeState = error
     ? {
@@ -187,9 +187,9 @@ export function useHome() {
           data,
           ui,
           cooldowns: {
-            feed: remaining(data.activeToka?.care.feed ?? null),
-            play: remaining(data.activeToka?.care.play ?? null),
-            bathe: remaining(data.activeToka?.care.bathe ?? null),
+            feed: remaining(data.player?.mainTokagotchi?.careCooldown.feed ?? null),
+            play: remaining(data.player?.mainTokagotchi?.careCooldown.play ?? null),
+            bathe: remaining(data.player?.mainTokagotchi?.careCooldown.bathe ?? null),
           },
         };
 
