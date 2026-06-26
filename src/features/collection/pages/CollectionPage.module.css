@@ -7,7 +7,21 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: linear-gradient(180deg, #FFF8ED 0%, var(--cream) 100%);
+  background: transparent;
+}
+
+/* Velo oscuro sobre el fondo — mejora el contraste de todo el contenido */
+.screen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg,
+    rgba(20, 10, 4, .52) 0%,
+    rgba(20, 10, 4, .38) 40%,
+    rgba(20, 10, 4, .20) 100%
+  );
 }
 
 .background {
@@ -18,7 +32,7 @@
   background-image: url('/assets/backgrounds/bg_coleccion.png');
   background-size: cover;
   background-position: center top;
-  filter: brightness(0.9) blur(2px);
+  filter: brightness(0.72) blur(2px);
 }
 
 .topbar {
@@ -104,13 +118,13 @@
 .loadingText {
   font-family: var(--font-title);
   font-size: 18px;
-  color: var(--ink-2);
+  color: rgba(255, 248, 237, .85);
 }
 
 .errorMsg {
   font-family: var(--font-title);
   font-size: 16px;
-  color: var(--ink);
+  color: #FFF8ED;
   text-align: center;
   padding: 0 24px;
 }

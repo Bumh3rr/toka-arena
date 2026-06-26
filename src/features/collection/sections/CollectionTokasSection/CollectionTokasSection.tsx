@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import DetailScreen from '../../components/DetailScreen'
+import TokaDetailSheet from '../../components/TokaDetailSheet/TokaDetailSheet'
 import FilterChips from '../../components/FilterChips'
 import TokaGrid from '../../components/TokaGrid'
 import PageError from '@/shared/ui/Error/Error'
@@ -15,14 +15,10 @@ export default function CollectionTokasSection() {
   const { hideBar, showBar } = useNavBar()
 
   useEffect(() => {
-    if (ui.detailId) {
-      hideBar()
-    } else {
-      showBar()
-    }
+    if (ui.detailId) hideBar()
+    else showBar()
     return () => showBar()
   }, [ui.detailId, hideBar, showBar])
-
 
   if (state.status === 'error') {
     return <PageError message={state.error} onRetry={reload} />
@@ -33,17 +29,17 @@ export default function CollectionTokasSection() {
     return <Loading fullscreen text='Cargando colección...' />
   }
 
+  const selectedToka = ui.detailId ? data.roster.find((t) => t.id === ui.detailId) ?? null : null
+
   return (
     <>
-      {ui.detailId && (
-        <DetailScreen
-          isActivo={data.activeTokaId === ui.detailId}
-          tokagotchi={data.roster.find((t) => t.id === ui.detailId)!}
-          expandedAbility={ui.expandedAbility}
+      {selectedToka && (
+        <TokaDetailSheet
+          tokagotchi={selectedToka}
+          isActive={data.activeTokaId === selectedToka.id}
           onBack={ui.closeDetail}
           onToggleFav={setFavorite}
           onActivate={activate}
-          onToggleAbility={ui.toggleAbility}
         />
       )}
 
