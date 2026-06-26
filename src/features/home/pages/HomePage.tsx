@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, type CSSProperties } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useHome } from '../hooks/useHome'
 import { useNavBar } from '@/shared/hooks/useNavBar'
-import { IcSwap, IcPencil, IcPerson } from '@/shared/ui/Icons/Icons'
+import { IcSwap, IcPerson } from '@/shared/ui/Icons/Icons'
 import { Button, Label, IconButton, Toast } from '@/shared/ui/Kit'
 import StatsRow from '../components/row/StatsRow'
 import EvoPanel from '../components/panel/EvoPanel'
@@ -15,7 +15,7 @@ import TokagotchiCanvas from '@/shared/canvas/TokagotchiCanvas'
 import BackgroundCanvas from '@/shared/canvas/BackgroundCanvas'
 import PerfileModal from '../../../shared/ui/modal/PerfileModal'
 import MissionFab from '../../missions/components/MissionFab'
-import RarityCard from '@/shared/ui/RarityCard/RarityCard'
+import TokaIdentity from '@/shared/ui/TokaIdentity/TokaIdentity'
 import BattlePassCard from '../components/BattlePassCard/BattlePassCard'
 import { CoinPillCard } from '../components/CoinPillCard/CoinPillCard'
 import HomeSkeleton from '../components/skeleton/HomeSkeleton'
@@ -185,31 +185,20 @@ export default function HomePage() {
                 topOffset={240}
             >
                 <div className={styles.identity}>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                        <div className={styles.nmWrapper}>
-                            <div className={styles.nm}>{mainTokagotchi.name}</div>
-                            <IconButton
-                                shape='sm'
-                                size={28}
-                                onClick={() => setRenameOpen(true)}
-                                aria-label="Renombrar"
-                            >
-                                <IcPencil />
-                            </IconButton>
-                        </div>
-                        <div className={styles.nmRow}>
-                            <div className={styles.sub}>
-                                <RarityCard rarity={mainTokagotchi.rarity} />
-                                <span>|</span>
-                                <Label variant="warm" look="soft" size="sm">{mainTokagotchi.species}</Label>
-                            </div>
-                            <Button
-                                variant="warm"
-                                size="md"
-                                icon={<IcSwap />}
-                                onClick={() => {{/** setCollectionOpen(true) */}}}>Cambiar</Button>
-                        </div>
-                    </div>
+                    <TokaIdentity
+                        name={mainTokagotchi.name}
+                        rarity={mainTokagotchi.rarity}
+                        species={mainTokagotchi.species}
+                        cp={mainTokagotchi.cp}
+                        onRename={() => setRenameOpen(true)}
+                    />
+                    <Button
+                        variant="warm"
+                        size="md"
+                        icon={<IcSwap />}
+                        onClick={() => {/** setCollectionOpen(true) */}}>
+                        Cambiar
+                    </Button>
                 </div>
                 <StatsRow stats={mainTokagotchi.stats} />
                 <EvoPanel serverTime={data.player.serverTime} nextEvolution={mainTokagotchi.nextEvolution} cp={mainTokagotchi.cp} tf={tf} onAscend={ascend} />

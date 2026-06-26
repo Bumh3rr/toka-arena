@@ -2,7 +2,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: var(--ol) solid var(--ink);
+  border: var(--ol-thin) solid var(--ink);
   border-radius: var(--r-pill);
   font-family: var(--font-title), system-ui, sans-serif;
   font-weight: 800;

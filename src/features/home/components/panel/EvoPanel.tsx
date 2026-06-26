@@ -95,7 +95,9 @@ const CpProgressBar = memo(({ cp, required }: { cp: number; required: number }) 
     <div className={styles.cpbarWrap}>
       <div className={styles.cpbarTop}>
         <span className={styles.cpLabel}>Puntos de Crianza</span>
-        <span className={styles.cpVal}><b>{cp}</b> / {required} CP</span>
+        <span className={styles.cpVal}>
+          <b>{cp}</b> / {required} <img src="/assets/ui/cp/cp_stars.png" alt="CP" className={styles.iconCp} />
+        </span>
       </div>
       <div className={styles.cpbar}>
         <div className={styles.fill} style={{ width: `${pct}%` }} />
@@ -115,7 +117,7 @@ const EvoAttributes = memo(
       <div className={styles.attr}>
         <span className={styles.attrK}>Costo</span>
         <span className={styles.attrV}>
-          <img src="/assets/ui/moneda_tf.svg" alt="TF" width={15} height={15} />
+          <img src="/assets/ui/tf/tf.svg" alt="TF" width={15} height={15} />
           {evo.tfRequired}
         </span>
       </div>
@@ -163,7 +165,7 @@ const EvoActionButton = memo(
       return (
         <div className={styles.evoBtn}>
           <span className={styles.lockIcon}><IcLock /></span>
-          Faltan {missingCp} CP
+          Faltan {missingCp} <img src="/assets/ui/cp/cp.png" alt="CP" className={`${styles.iconEnough} ${styles.iconLock}`} />
         </div>
       )
     }
@@ -171,7 +173,7 @@ const EvoActionButton = memo(
       return (
         <div className={styles.evoBtn}>
           <span className={styles.lockIcon}><IcLock /></span>
-          Faltan {missingTf} TF
+          Faltan {missingTf} <img src="/assets/ui/tf/tf.svg" alt="TF" className={`${styles.iconEnough} ${styles.iconLock}`} />
         </div>
       )
     }

@@ -1,4 +1,3 @@
-// src/features/collection/components/TokaGrid.tsx
 import { useMemo } from 'react'
 import type { ColFilter } from '../types/collection.types'
 import { RARITY_META } from '@/shared/constants/rarity'

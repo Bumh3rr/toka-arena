@@ -4,6 +4,7 @@ import type { ActionCare } from '../../data/home.types'
 import type { Cooldowns, Floaters } from '../../hooks/useHome'
 import styles from './styles/CareRow.module.css'
 import { HeaderTitleLine } from '../CareSheet/CareSheet'
+import CpWidget from '../../../../shared/ui/CpWidget/CpWidget'
 
 const fmt = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`
 
@@ -24,13 +25,12 @@ function CareBtn({ accion, cooldown, floater, onUse }: CareBtnProps) {
       disabled={cool}
       onClick={() => !cool && onUse(accion)}
     >
-      {!cool && (
-        <span className={styles.badge}>
-          <span className={styles.dot} />+{cfg.cp} CP
-        </span>
-      )}
       {floater !== undefined && (
-        <span className={styles.floater} key={floater}>+{cfg.cp} CP</span>
+        <span className={styles.floater} key={floater}>
+          <span className={styles.containerCp}>
+            <CpWidget size={35} /> +{cfg.cp}
+          </span>
+        </span>
       )}
       <div className={styles.face}>
         <img

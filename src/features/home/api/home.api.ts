@@ -1,6 +1,7 @@
-import type { HomeResponseDTO } from "@/shared/api/dto/home.dto";
 import type { HomeApi } from "@/shared/api/contracts";
+import type { HomeResponseDTO } from "@/shared/api/dto/home.dto";
 import api from "@/shared/api/client";
+import { HomeResponseDTOMock } from "@/shared/mock/mockData";
 
 export const home: HomeApi = {
   async getHome() {
@@ -10,4 +11,10 @@ export const home: HomeApi = {
   }
 };
 
-export const homeApi: HomeApi = home;
+export const homeMock: HomeApi = {
+  async getHome() {
+    return HomeResponseDTOMock();
+  }
+};
+
+export const homeApi: HomeApi = homeMock;

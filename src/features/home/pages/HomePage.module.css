@@ -80,7 +80,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 26px;
+  gap: 45px;
   padding: 0 16px;
   transition: opacity .22s ease, transform .28s cubic-bezier(.4, 0, .2, 1);
 }
@@ -100,15 +100,30 @@
 }
 
 .nmRow,
-.nmWrapper,
 .sub {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.nmRow {
-  justify-content: space-between;
+.nmWrapper {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 8px;
+}
+.nameAndBtn{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.iconCp{
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 6px rgba(74, 40, 0, .35));
 }
 
 .nm {

@@ -11,6 +11,14 @@ export function useAuth() {
   const { toast, show } = useToast()
 
   const login = async (): Promise<LoginData> => {
+    
+    if (import.meta.env.VITE_ENABLE_DEV_MOCKS === 'true') {
+      return {
+        success: true,
+        isNewPlayer: false,
+      }
+    }
+    
     setLoading(true)
     setError(null)
     try {

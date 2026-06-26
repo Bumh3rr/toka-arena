@@ -1,7 +1,3 @@
-/* ── Pastilla de estado: identidad + Crianza (unificada) ─────────────────────
-   2 filas: identidad (nombre + rareza + chevron) + progreso de Crianza
-   (barra CP + valor). Es el target táctil que abre el sheet del Home. */
-
 .statusPill {
   display: flex;
   flex-direction: column;
@@ -88,11 +84,10 @@
   height: 100%;
   overflow: hidden;
   border-radius: 99px;
-  /* verde jugoso con profundidad: brillo arriba → verde → borde abajo */
-  background: linear-gradient(180deg, #A6E87A 0%, var(--green) 55%, var(--green-edge) 100%);
+  background: linear-gradient(90deg, #FFD700 0%, #E8A000 100%);
   box-shadow:
     inset 0 1.5px 0 rgba(255, 255, 255, .65),
-    inset 0 -2px 2px rgba(74, 40, 0, .22);
+    inset 0 -2px 2px rgba(74, 40, 0, .25);
   transition: width .5s cubic-bezier(.34, 1.4, .5, 1);
 }
 
@@ -112,6 +107,32 @@
   animation: cpSheen 2.4s ease-in-out infinite;
 }
 
+.cpVal {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-family: var(--font-title), system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+
+.cpNow {
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.icon {
+  display: block;
+  width: 22px;
+  height: 22px;
+  flex: none;
+}
+
+
 @keyframes cpSheen {
   0% {
     transform: translateX(-180%);
@@ -127,19 +148,4 @@
   .cpFillActive::after {
     animation: none;
   }
-}
-
-.cpVal {
-  flex: none;
-  font-family: var(--font-title), system-ui, sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--ink-2);
-  white-space: nowrap;
-}
-
-/* Resalta el CP actual frente a la meta/unidad para dar jerarquía */
-.cpNow {
-  color: var(--ink);
-  font-weight: 800;
 }

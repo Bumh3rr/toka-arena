@@ -1,6 +1,6 @@
 import type { Rarity } from '@/shared/domain/tokagotchi'
 import { IcChevUp } from '@/shared/ui/Icons/Icons'
-import RarityCard from '@/shared/ui/RarityCard/RarityCard'
+import RarityCard from '@/shared/ui/Cards/RarityCard/RarityCard'
 import styles from './TokaStatusPill.module.css'
 
 interface TokaStatusPillProps {
@@ -11,7 +11,6 @@ interface TokaStatusPillProps {
   onOpen: () => void
 }
 
-/** Pastilla táctil (identidad + progreso de Crianza) que abre el sheet del Home. */
 export default function TokaStatusPill({ nombre, rareza, cp, cpMeta, onOpen }: TokaStatusPillProps) {
   const pct = Math.min(100, Math.round((cp / Math.max(1, cpMeta)) * 100))
 
@@ -29,7 +28,9 @@ export default function TokaStatusPill({ nombre, rareza, cp, cpMeta, onOpen }: T
             style={{ width: `${pct}%` }}
           />
         </div>
-        <span className={styles.cpVal}><b className={styles.cpNow}>{cp}</b>/{cpMeta} CP</span>
+        <span className={styles.cpVal}><b className={styles.cpNow}>{cp}</b>/{cpMeta} 
+          <img src="/assets/ui/cp/cp.png" alt="" className={styles.icon} />
+        </span>
       </div>
     </button>
   )

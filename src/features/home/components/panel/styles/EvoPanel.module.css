@@ -243,8 +243,9 @@
   font-variant-numeric: tabular-nums;
 }
 
-.lockIcon { width: 18px; height: 18px; }
-
+.lockIcon{ width: 18px; height: 18px; }
+.iconCp { width: 27px; height: 27px; }
+.iconEnough{ width: 27px; height: 27px; }
 /* ── FX de resultado ───────────────────────────────────────────────────────── */
 .fx {
   position: absolute;
@@ -296,6 +297,10 @@
   color: var(--ink);
   text-shadow: 0 1px 0 rgba(255, 255, 255, .6);
   animation: fxPop .5s cubic-bezier(.34, 1.6, .5, 1);
+}
+
+.iconLock{
+  filter: grayscale(0.7) 
 }
 
 /* ── Keyframes ─────────────────────────────────────────────────────────────── */
