@@ -1,12 +1,14 @@
-import api from "../api/client";
-import type { TokagotchiDTO } from "../api/dto/tokagotchi.dto";
-import type { PlayerProfileDto } from "./dto/player.dto";
+import type { PlayerProfileDto } from "@/shared/player/api/player.dto";
+import api from "../../api/client";
+import type { TokagotchiDTO } from "../../api/dto/tokagotchi.dto";
+import type { Rarity, Species } from "../../domain/tokagotchi";
 
 export interface DevApi {
   resetCooldown(tokaId: string): Promise<TokagotchiDTO>;
   resetRarity(tokaId: string): Promise<TokagotchiDTO>;
   addCP(tokaId: string, amount: number): Promise<TokagotchiDTO>;
   addTF(amount: number): Promise<PlayerProfileDto>;
+  addTokagotchi(species: Species, rarity: Rarity): Promise<PlayerProfileDto>;
 }
 
 const dev: DevApi = {
@@ -28,6 +30,12 @@ const dev: DevApi = {
     async addTF(amount) {
         const { data } = await api.post<PlayerProfileDto>(`/players/me/add-tokafeed?amount=${amount}`);
         console.log("Peticion POST /players/me/add-tokafeed con body:", { amount }, "Respuesta:", data);
+        return data;
+    },
+    async addTokagotchi(species, rarity) {
+        const body = { species, rarity };
+        const { data } = await api.post<PlayerProfileDto>(`/tokagotchis/dev`, body);
+        console.log("Peticion POST /tokagotchis/dev con body:", body, "Respuesta:", data);
         return data;
     }
 };

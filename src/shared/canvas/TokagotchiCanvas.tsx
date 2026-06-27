@@ -80,7 +80,7 @@ export default function TokagotchiCanvas({
     if (!(window as any).Phaser || !(window as any).dragonBones) return
 
     const cfg: TokagotchiConfig = {
-      width, height, assets, animacionActual,accessories, reverse,
+      width, height, assets, animacionActual,accessories, reverse
     }
 
     gameRef.current = new TokagotchiGame(containerRef.current, cfg)

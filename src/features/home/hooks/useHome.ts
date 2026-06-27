@@ -13,7 +13,7 @@ import { CONFIG_CARE } from "../constants/config";
 import { RARITY_META } from '@/shared/constants/rarity'
 import { mapHomeResponseDTO } from "../data/home.mapper";
 import { getApiErrorMessage } from "@/shared/api/client";
-import { playerApi } from "@/shared/api/player.api";
+import { playerApi } from "@/shared/player/api/player.api";
 
 // ── reloj del servidor (usa el serverTime para corregir desfase de reloj) ──
 let clockOffset = 0;

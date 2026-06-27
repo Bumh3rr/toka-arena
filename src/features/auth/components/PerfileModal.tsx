@@ -6,10 +6,10 @@ import { IconButton, Button, Toggle, Label, Toast } from '@/shared/ui/Kit'
 import DevPanel from '@/shared/dev/component/DevPanel'
 import { IS_DEV_MODE } from '@/shared/domain/debug_dev'
 import { musicManager } from '@/shared/hooks/music/musicManager'
-import { useSession } from '@/shared/player/hooks/useSession'
-import PageError from '../Error/Error'
-import RenameModal from './RenameModal'
-import Loading from '../Loading/Loading'
+import { useSession } from '@/features/auth/hooks/useSession'
+import PageError from '@/shared/ui/Error/Error'
+import RenameModal from '@/shared/ui/modal/RenameModal'
+import Loading from '@/shared/ui/Loading/Loading'
 
 interface PerfileModalProps {
     onClose: () => void
@@ -48,11 +48,29 @@ export default function PerfileModal({ onClose }: PerfileModalProps) {
         setMusicOn(v)
         musicManager.setMuted(!v)
     }
-    const handleCopy = () => {
-        const id = data.mainTokagotchi?.id || ''
-        navigator.clipboard.writeText(id)
+
+    const handleCopy = async () => {
+    const id = data.mainTokagotchi?.id
+    if (!id) return
+
+    try {
+        if (navigator.clipboard?.writeText) {
+            await navigator.clipboard.writeText(id)
+        } else {
+            const textarea = document.createElement('textarea')
+            textarea.value = id
+            textarea.style.position = 'fixed'
+            textarea.style.opacity = '0'
+            document.body.appendChild(textarea)
+            textarea.select()
+            document.execCommand('copy')
+            document.body.removeChild(textarea)
+        }
         setCopied(true)
-        setTimeout(() => setCopied(false), 300)
+        setTimeout(() => setCopied(false), 1500)
+    } catch (err) {
+        console.error('Error al copiar:', err)
+    }
     }
 
     return (

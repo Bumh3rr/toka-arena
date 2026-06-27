@@ -1,4 +1,4 @@
-import type { Tokagotchi } from "./tokagotchi";
+import type { Tokagotchi } from "@/shared/domain/tokagotchi";
 
 export interface PlayerProfile {
   id: string;

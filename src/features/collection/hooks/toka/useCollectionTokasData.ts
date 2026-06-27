@@ -2,12 +2,10 @@ import { useCallback } from 'react'
 import useSWR from 'swr'
 import type { ColFilter, CollectionTokagotchiData, CollectionTokasState } from '../../types/collection.types'
 import { collectionKeys } from '../../swr/keys'
-import { playerApi } from '@/shared/api/player.api' 
-import { favoritesApi } from '../../api/favorites.api'
+import { playerApi } from '@/shared/player/api/player.api'
 import { mapTokaDtoListToColRoster } from '../../mappers/toka/toka.dto-to-domain.mapper'
 
 const PAGE_SIZE = 20
-
 export function useCollectionTokasData(page: number, filter: ColFilter) {
 
   const { data, error, mutate } = useSWR<CollectionTokagotchiData, Error>(
@@ -22,6 +20,7 @@ export function useCollectionTokasData(page: number, filter: ColFilter) {
       const activeTokagotchi = profile.mainTokagotchi
 
       return {
+        serverTime: new Date().getTime(),
         activeTokaId: activeTokagotchi?.id ?? null,
         activeTokagotchi,
         roster,
@@ -60,7 +59,7 @@ export function useCollectionTokasData(page: number, filter: ColFilter) {
   const setFavorite = useCallback(async (tokaId: string, fav: boolean) => {
     await mutate(
       async (prev) => {
-        await favoritesApi.setFavorite(tokaId, fav)
+        // await favoritesApi.setFavorite(tokaId, fav)
         return prev
           ? {
             ...prev,

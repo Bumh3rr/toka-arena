@@ -1,4 +1,4 @@
-import type { TokagotchiDTO } from "./tokagotchi.dto";
+import type { TokagotchiDTO } from "@/shared/api/dto/tokagotchi.dto";
 
 export interface HomeResponseDTO {
   missions: { claimable: number };

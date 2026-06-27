@@ -5,7 +5,7 @@ import { useToast } from "@/shared/hooks/useToast";
 import { useNavigate } from "react-router-dom";
 import type { PlayerProfile } from "@/shared/domain/player";
 import { unboxingApi } from "../api/unboxing.api";
-import { mapPlayerProfileDTO } from "@/shared/domain/mappers/player.mapper";
+import { mapPlayerProfileDTO } from "@/shared/player/data/player.mapper";
 import { mapTokagotchiDTO } from "@/shared/domain/mappers/tokagotchi.mapper";
 
 export type UnboxingPhase = "reveal" | "breaking" | "result";

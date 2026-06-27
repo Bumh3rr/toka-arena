@@ -65,7 +65,7 @@ export default function TokaDetailSheet({
 }: TokaDetailSheetProps) {
   const [sheetExpanded, setSheetExpanded] = useState(true)
   const [exiting, setExiting]           = useState(false)
-  const [isFav, setIsFav]               = useState(tokagotchi.fav ?? false)
+  const [isFav, setIsFav]               = useState(false)
   const [renameOpen, setRenameOpen]     = useState(false)
 
   const overlayRef = useRef<HTMLDivElement>(null)
@@ -117,6 +117,7 @@ export default function TokaDetailSheet({
       <div className={styles.topbar}>
         <button
           type="button"
+          disabled
           className={`${styles.btn} ${isFav ? styles.favOn : ''}`}
           onClick={() => {
             const next = !isFav

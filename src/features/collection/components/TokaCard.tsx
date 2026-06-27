@@ -2,9 +2,8 @@ import type { CSSProperties } from 'react'
 import { RARITY_META } from '@/shared/constants/rarity'
 import { COL_SPECIES_LABEL } from '../types/collection.types'
 import styles from './TokaCard.module.css'
-import TokagotchiCanvas from '@/shared/canvas/TokagotchiCanvas'
-import { getTokaPreviewAccessories } from '../lib/tokaPreviewAccessories.ts'
 import type { Tokagotchi, Rarity } from '@/shared/domain/tokagotchi.ts'
+import { getImagenSrcByEspecie } from '@/shared/game/assets.ts'
 
 // Color oscuro del info-band según rareza — crea la identidad cromática de cada card
 const BAND_BG: Record<Rarity, string> = {
@@ -24,7 +23,6 @@ interface TokaCardProps {
 
 export default function TokaCard({ toka, isActive, count, stacked, onClick }: TokaCardProps) {
   const meta               = RARITY_META[toka.rarity]
-  const previewAccessories = getTokaPreviewAccessories(toka, [])
 
   return (
     <button
@@ -50,12 +48,7 @@ export default function TokaCard({ toka, isActive, count, stacked, onClick }: To
 
         {/* Canvas + count badge */}
         <div className={styles.canvasWrap}>
-          <TokagotchiCanvas
-            width={140}
-            height={120}
-            species={toka.species}
-            accessories={previewAccessories}
-          />
+          <img src={getImagenSrcByEspecie(toka.species)} alt={toka.name} style={{ width: 140, height: 120, objectFit: 'contain' }} />
           {stacked && <span className={styles.count}>×{count}</span>}
         </div>
 

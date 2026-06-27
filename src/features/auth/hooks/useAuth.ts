@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { authApi } from '../../api/auth.api'
+import { authApi } from '../api/auth.api'
 import { acquireAuthCode } from '../lib/authCode'
-import { tokenStore } from '../store/token.store'
+import { tokenStore } from '@/shared/player/lib/token.store' 
 import { useToast } from '@/shared/hooks/useToast'
-import type { LoginData } from '../model/types'
+import type { LoginData } from '../auth.types' 
 
 export function useAuth() {
   const [loading, setLoading] = useState(false)
@@ -11,14 +11,7 @@ export function useAuth() {
   const { toast, show } = useToast()
 
   const login = async (): Promise<LoginData> => {
-    
-    if (import.meta.env.VITE_ENABLE_DEV_MOCKS === 'true') {
-      return {
-        success: true,
-        isNewPlayer: false,
-      }
-    }
-    
+
     setLoading(true)
     setError(null)
     try {
@@ -45,9 +38,5 @@ export function useAuth() {
     }
   }
 
-  const logout = () => {
-    tokenStore.clear()
-  }
-
-  return { login, logout, loading, error, toast }
+  return { login, loading, error, toast }
 }

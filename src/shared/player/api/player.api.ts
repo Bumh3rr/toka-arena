@@ -1,9 +1,41 @@
-import type { PlayerProfileDto } from "./dto/player.dto";
-import type { PlayerTokagotchisPageDTO } from "./dto/player.dto";
+import type { PlayerProfileDto } from "./player.dto";
+import type { PlayerTokagotchisPageDTO } from "./player.dto";
 import api from "@/shared/api/client";
-import type { PlayerApi } from "@/shared/api/contracts";
-import { mapPlayerProfileDTO } from "@/shared/domain/mappers/player.mapper";
-import { PlayerProfileDTOMock, PlayerTokagotchisPageDTOMock } from "../mock/mockData";
+import { mapPlayerProfileDTO } from "@/shared/player/data/player.mapper";
+import { PlayerProfileDTOMock, PlayerTokagotchisPageDTOMock, toka_activo } from "../../mock/mockData";
+import { mapTokagotchiDTO } from "../../domain/mappers/tokagotchi.mapper";
+import type { PlayerProfile } from "../data/player";
+import type { Tokagotchi } from "@/shared/domain/tokagotchi";
+
+/**
+ * Contrato para operaciones de sesión del jugador autenticado.
+ */
+export interface PlayerApi {
+  /**
+   * Obtiene el perfil actual del jugador autenticado.
+   * @returns Perfil del jugador en formato de dominio
+   */
+  getMe(): Promise<PlayerProfile>;
+
+  /**
+   * Renombra el username del jugador autenticado.
+   * @param newUsername - Nuevo username del jugador
+   * @returns Perfil del jugador actualizado
+   */
+  renamePlayerUsername(newUsername: string): Promise<PlayerProfile>;
+
+  /**
+   * Obtiene la lista paginada de tokagotchis del jugador autenticado.
+   * @param page - Índice de página (base 0)
+   * @param size - Tamaño de página
+   */
+  getMyTokagotchis(page: number, size: number): Promise<PlayerTokagotchisPageDTO>;
+
+  /**
+   * Establece el tokagotchi activo del jugador autenticado.
+   */
+  setMyActiveTokagotchi(tokagotchiId: string): Promise<Tokagotchi>;
+}
 
 export const player: PlayerApi = {
   async getMe() {
@@ -44,10 +76,9 @@ export const playerMock: PlayerApi = {
     return PlayerTokagotchisPageDTOMock()
   },
   async setMyActiveTokagotchi(tokagotchiId: string) {
-    const { data } =await api.post('/players/me/active-tokagotchi', { tokagotchiId })
-    console.log(`Peticion POST /players/me/active-tokagotchi con body: { tokagotchiId: ${tokagotchiId} }, Respuesta:`, data)
-    return data
+    console.log(`Peticion POST /players/me/active-tokagotchi con body: { tokagotchiId: ${tokagotchiId} }, Respuesta: (mocked)`);
+    return mapTokagotchiDTO(toka_activo);
   },
 };
 
-export const playerApi: PlayerApi = playerMock;
+export const playerApi: PlayerApi = player;

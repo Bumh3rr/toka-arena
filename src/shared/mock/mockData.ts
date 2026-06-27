@@ -1,22 +1,17 @@
-import type { HomeResponseDTO } from "../api/dto/home.dto";
+import type { HomeResponseDTO } from "../../features/home/api/dto/home.dto";
 import type { PlayerProfileDto, PlayerTokagotchisPageDTO } from "../api/dto/player.dto";
-import type { CareResponseDTO } from "../api/dto/tokagotchi-responses.dto";
+import type { AscendResponseDTO, CareResponseDTO } from "../api/dto/tokagotchi-responses.dto";
 import type { RarityDTO, SpeciesDTO, TokagotchiDTO } from "../api/dto/tokagotchi.dto";
 
 const id_toka_activo = "mocked-id-1";
-const toka_activo = TokagotchiDTOMock("mocked-main-toka", id_toka_activo, "EPIC", "HANA")
+export const toka_activo = TokagotchiDTOMock("mocked-main-toka", id_toka_activo, "EPIC", "HANA")
 
 export function HomeResponseDTOMock() :HomeResponseDTO{
     return {
         missions: { claimable: 0 },
         player: {
-            serverTime: new Date().toISOString(),
-            id: "mocked-id",
-            username: "mocked-username",
-            avatarUrl: null,
-            tokafeed: 20,
-            genesisClaimed: false,
-            mainTokagotchi: toka_activo
+            ... PlayerProfileDTOMock(),
+            serverTime: new Date().toISOString()
         }
     };
 }
@@ -32,7 +27,7 @@ export function TokagotchiDTOMock(str = "mocked-name", id: string, rarity: Rarit
         atk: 10,
         def: 10,
         nextEvolution: {
-            nextRarity: 'RARE',
+            nextRarity: 'EPIC',
             cpRequired: 200,
             tfRequired: 50,
             successChance: 0.8,
@@ -47,6 +42,15 @@ export function TokagotchiDTOMock(str = "mocked-name", id: string, rarity: Rarit
         }
     };
 }
+
+export function AscendResponseDTOMock() :AscendResponseDTO{
+    return {
+        serverTime: new Date().toISOString(),
+        result: 'SUCCESS',
+        tokagotchi: toka_activo
+    };
+}
+
 export function CareResponseDTOMock() :CareResponseDTO{
     return {
         serverTime: new Date().toISOString(),
@@ -65,7 +69,7 @@ export function PlayerProfileDTOMock() :PlayerProfileDto{
         id: "mocked-id",
         username: "mocked-username",
         avatarUrl: null,
-        tokafeed: 20,
+        tokafeed: 0,
         genesisClaimed: false,
         mainTokagotchi: toka_activo
     };

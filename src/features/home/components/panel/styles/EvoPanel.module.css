@@ -1,3 +1,4 @@
+/* ── Card principal con aura dinámica ───────────────────────────────────────── */
 .evo {
   position: relative;
   background: linear-gradient(180deg, #FFFCF4, #FFF4DC);
@@ -5,29 +6,65 @@
   border-radius: var(--r-lg);
   padding: 14px 14px 15px;
   box-shadow:
-    0 0 0 4px var(--legend),
+    0 0 0 4px var(--aura-main),
     0 0 0 6.5px var(--ink),
-    0 0 26px var(--legend-glow),
+    0 0 26px var(--aura-glow),
     inset 0 3px 0 rgba(255, 255, 255, .7);
   margin-top: 3px;
+  overflow: hidden;
 }
 
+/* Marco interior sutil — efecto "doble borde" con el color del aura */
+.evo::before {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border-radius: calc(var(--r-lg) - 3px);
+  border: 1px solid var(--aura-main);
+  opacity: .18;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Halo en la base del card — el color del aura "derrama" hacia abajo */
+.evo::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 18%;
+  right: 18%;
+  height: 10px;
+  background: var(--aura-main);
+  filter: blur(10px);
+  opacity: .50;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Pulso del aura cuando está listo para ascender */
 .ready {
-  animation: legendGlow 1.8s ease-in-out infinite;
+  animation: auraGlow 1.8s ease-in-out infinite;
 }
 
 .maxed {
   box-shadow: inset 0 3px 0 rgba(255, 255, 255, .7), 0 3px 0 var(--edge-cream);
 }
 
+.maxed::before,
+.maxed::after { display: none; }
+
+/* ── Encabezado de la card ──────────────────────────────────────────────────── */
 .evoTop {
   display: flex;
   align-items: center;
   gap: 9px;
   margin-bottom: 11px;
   position: relative;
+  z-index: 1;
 }
 
+/* Ícono corona — tintado con el aura destino */
 .evoCrown {
   width: 30px;
   height: 30px;
@@ -35,22 +72,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, #FFE39A, var(--legend));
+  background: linear-gradient(180deg, var(--aura-crown), var(--aura-main));
   border: 2.5px solid var(--ink);
   border-radius: 10px;
-  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, .6);
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, .6), 0 0 8px var(--aura-glow);
 }
 
 .evoCrown svg { width: 18px; height: 18px; }
 
 .evoTitles { line-height: 1.05; flex: 1; }
 
+/* "EVOLUCIÓN" label — color del aura */
 .k {
   font-size: 10px;
   font-weight: 600;
   letter-spacing: .8px;
   text-transform: uppercase;
-  color: var(--legend-edge);
+  color: var(--aura-edge);
 }
 
 .t {
@@ -59,7 +97,8 @@
   font-weight: 700;
 }
 
-.cpbarWrap { margin-bottom: 12px; }
+/* ── Barra de CP ────────────────────────────────────────────────────────────── */
+.cpbarWrap { margin-bottom: 12px; position: relative; z-index: 1; }
 
 .cpbarTop {
   display: flex;
@@ -82,7 +121,8 @@
   font-weight: 700;
 }
 
-.cpVal b { color: var(--green-edge); }
+/* Número actual — tintado con el aura */
+.cpVal b { color: var(--aura-edge); }
 
 .cpbar {
   position: relative;
@@ -94,6 +134,7 @@
   overflow: hidden;
 }
 
+/* Relleno coloreado con el aura */
 .fill {
   position: absolute;
   left: 0;
@@ -101,12 +142,12 @@
   bottom: 0;
   min-width: 0;
   border-radius: var(--r-pill);
-  background: linear-gradient(180deg, #A3E66A 0%, #5EC436 52%, #4BAF25 100%);
+  background: linear-gradient(180deg, var(--aura-crown) 0%, var(--aura-main) 52%, var(--aura-edge) 100%);
   box-shadow: inset 0 2.5px 0 rgba(255, 255, 255, .55), inset 0 -2px 0 rgba(0, 0, 0, .1);
   transition: width .65s cubic-bezier(.34, 1.15, .5, 1);
 }
 
-/* moving diagonal stripes — proper -45deg tiling */
+/* Rayas diagonales en movimiento */
 .fill::before {
   content: '';
   position: absolute;
@@ -120,7 +161,7 @@
   animation: stripes 2s linear infinite;
 }
 
-/* static top-shine */
+/* Brillo superior estático */
 .fill::after {
   content: '';
   position: absolute;
@@ -153,11 +194,13 @@
   letter-spacing: .2px;
 }
 
-/* ── Atributos del intento (costo / éxito / cooldown si falla) ─────────────── */
+/* ── Atributos del intento ──────────────────────────────────────────────────── */
 .attrs {
   display: flex;
   gap: 7px;
   margin-bottom: 12px;
+  position: relative;
+  z-index: 1;
 }
 
 .attr {
@@ -191,7 +234,7 @@
   color: var(--ink);
 }
 
-/* ── Botón / estado del intento ────────────────────────────────────────────── */
+/* ── Botón de acción ────────────────────────────────────────────────────────── */
 .evoBtn {
   position: relative;
   width: 100%;
@@ -210,43 +253,47 @@
   background: linear-gradient(180deg, #EDE2CC, #E2D2B2);
   box-shadow: inset 0 2px 0 rgba(255, 255, 255, .45), 0 5px 0 #C9B68E;
   transition: transform .08s ease, box-shadow .08s ease;
+  z-index: 1;
 }
 
+/* Listo para ascender — usa los colores primarios del aura */
 .evoBtnUnlocked {
   cursor: pointer;
   color: #fff;
-  background: linear-gradient(180deg, #FFD15A, var(--legend));
-  box-shadow: inset 0 2px 0 rgba(255, 255, 255, .6), 0 5px 0 var(--legend-edge);
-  text-shadow: 0 1.5px 0 rgba(74, 40, 0, .3);
+  background: linear-gradient(180deg, var(--aura-main), var(--aura-edge));
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, .6), 0 5px 0 var(--aura-edge);
+  text-shadow: 0 1.5px 0 rgba(0, 0, 0, .2);
   animation: throb 1s ease-in-out infinite;
 }
 
 .evoBtnUnlocked:active {
   transform: translateY(5px);
-  box-shadow: inset 0 2px 0 rgba(255, 255, 255, .6), 0 0 0 var(--legend-edge);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, .6), 0 0 0 var(--aura-edge);
   animation: none;
 }
 
-/* Intentando (rolling) */
+/* Procesando */
 .evoBtnPending {
   cursor: default;
-  color: var(--legend-edge);
-  background: linear-gradient(180deg, #FFE7A6, #FFD777);
-  box-shadow: inset 0 2px 0 rgba(255, 255, 255, .5), 0 5px 0 var(--legend-edge);
+  color: #fff;
+  background: linear-gradient(180deg, var(--aura-main), var(--aura-edge));
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, .5), 0 5px 0 var(--aura-edge);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, .15);
   animation: throb .7s ease-in-out infinite;
 }
 
-/* En cooldown: muestra la cuenta regresiva (números tabulares para que no salte) */
+/* En cooldown */
 .evoBtnCooldown {
   cursor: default;
   color: var(--ink-2);
   font-variant-numeric: tabular-nums;
 }
 
-.lockIcon{ width: 18px; height: 18px; }
-.iconCp { width: 27px; height: 27px; }
-.iconEnough{ width: 27px; height: 27px; }
-/* ── FX de resultado ───────────────────────────────────────────────────────── */
+.lockIcon { width: 18px; height: 18px; }
+.iconCp   { width: 27px; height: 27px; }
+.iconEnough { width: 27px; height: 27px; }
+
+/* ── FX de resultado ────────────────────────────────────────────────────────── */
 .fx {
   position: absolute;
   inset: 0;
@@ -261,7 +308,7 @@
 }
 
 .fxSuccess {
-  background: radial-gradient(circle at 50% 44%, var(--legend-glow), rgba(255, 209, 90, .22) 46%, transparent 72%);
+  background: radial-gradient(circle at 50% 44%, var(--aura-glow), rgba(255, 209, 90, .22) 46%, transparent 72%);
   animation: fxFade 2.2s ease-out forwards;
 }
 
@@ -278,8 +325,8 @@
   justify-content: center;
   border-radius: 50%;
   border: 3px solid var(--ink);
-  background: linear-gradient(180deg, #FFE39A, var(--legend));
-  box-shadow: inset 0 2px 0 rgba(255, 255, 255, .6), 0 4px 0 var(--legend-edge);
+  background: linear-gradient(180deg, var(--aura-crown), var(--aura-legend));
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, .6), 0 4px 0 var(--aura-legend-edge);
   animation: fxPop .5s cubic-bezier(.34, 1.6, .5, 1);
 }
 
@@ -299,14 +346,26 @@
   animation: fxPop .5s cubic-bezier(.34, 1.6, .5, 1);
 }
 
-.iconLock{
-  filter: grayscale(0.7) 
-}
+.iconLock { filter: grayscale(0.7); }
 
-/* ── Keyframes ─────────────────────────────────────────────────────────────── */
-@keyframes legendGlow {
-  0%, 100% { box-shadow: 0 0 0 4px var(--legend), 0 0 0 6.5px var(--ink), 0 0 26px var(--legend-glow), inset 0 3px 0 rgba(255, 255, 255, .7); }
-  50%       { box-shadow: 0 0 0 4px var(--legend), 0 0 0 6.5px var(--ink), 0 0 40px var(--legend-glow), inset 0 3px 0 rgba(255, 255, 255, .7); }
+/* ── Keyframes ──────────────────────────────────────────────────────────────── */
+
+/* Pulso del aura (estado listo) */
+@keyframes auraGlow {
+  0%, 100% {
+    box-shadow:
+      0 0 0 4px var(--aura-main),
+      0 0 0 6.5px var(--ink),
+      0 0 26px var(--aura-glow),
+      inset 0 3px 0 rgba(255, 255, 255, .7);
+  }
+  50% {
+    box-shadow:
+      0 0 0 5px var(--aura-main),
+      0 0 0 7.5px var(--ink),
+      0 0 46px var(--aura-glow),
+      inset 0 3px 0 rgba(255, 255, 255, .7);
+  }
 }
 
 @keyframes throb {
@@ -326,15 +385,15 @@
 }
 
 @keyframes fxFade {
-  0% { opacity: 0; }
-  12% { opacity: 1; }
-  72% { opacity: 1; }
+  0%   { opacity: 0; }
+  12%  { opacity: 1; }
+  72%  { opacity: 1; }
   100% { opacity: 0; }
 }
 
 @keyframes fxPop {
-  0% { opacity: 0; transform: scale(.6); }
-  60% { opacity: 1; transform: scale(1.08); }
+  0%   { opacity: 0; transform: scale(.6); }
+  60%  { opacity: 1; transform: scale(1.08); }
   100% { transform: scale(1); }
 }
 

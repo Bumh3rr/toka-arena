@@ -1,5 +1,5 @@
-import type { PaginatedResponseDTO } from "./pagination.dto";
-import type { TokagotchiDTO } from "./tokagotchi.dto";
+import type { PaginatedResponseDTO } from "@/shared/api/dto/pagination.dto"
+import type { TokagotchiDTO } from "@/shared/api/dto/tokagotchi.dto"
 
 /**
  * Respuesta del endpoint GET /players/me.

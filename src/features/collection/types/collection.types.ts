@@ -1,17 +1,9 @@
 import type { TokagotchiDTO } from '@/shared/api/dto/tokagotchi.dto'
-import type { Rarity, Species, Tokagotchi } from '@/shared/domain/tokagotchi'
+import type { Rarity, Tokagotchi } from '@/shared/domain/tokagotchi'
 
-// La colección usa las especies reales del juego (las que tienen arte + soporte de canvas).
-export type ColSpecies = Species
-
-export const COL_SPECIES_LABEL: Record<ColSpecies, string> = {
-  TOFU: 'Tofu',
-  MOCHI: 'Mochi',
-  HANA: 'Hana',
-}
 
 export type ColTab = 'toka' | 'acc' | 'reactions'
-export type ColFilter = 'all' | Rarity
+export type ColFilter = 'all' | Rarity | 'fav'
 export type AccSlotKey = 'cabeza' | 'cuerpo' | 'cara' | 'espalda'
 export type AccSlotFilter = AccSlotKey | 'todos'
 
@@ -74,6 +66,7 @@ export interface CollectionData {
 }
 
 export interface CollectionTokagotchiData {
+  serverTime: number
   activeTokaId: string | null
   activeTokagotchi: Tokagotchi | null
   roster: Tokagotchi[]

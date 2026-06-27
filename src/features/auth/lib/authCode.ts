@@ -1,4 +1,4 @@
-import { waitForBridge, getAuthCode } from '@/shared/bridge/bridge'
+import { waitForBridge, getAuthCode } from '@/features/auth/lib/bridge'
 import type { DigitalIdentityScope } from '@/shared/domain/bridge.types'
 
 // Scopes solocitados para autenticarse

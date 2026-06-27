@@ -1,9 +1,8 @@
 import type { CareDTO, EquippedAccessoryDTO, EvolutionDTO, TokagotchiDTO } from "@/shared/api/dto/tokagotchi.dto";
 import type { EquippedAccessory } from "../accessory";
 import { getRenderBinding } from "@/shared/render/accessoryManifest";
-import type { CareTimestamps, Tokagotchi, Stats } from "../tokagotchi";
+import type { CareTimestamps, Tokagotchi, Stats, Evolution } from "../tokagotchi";
 import { toMs } from "@/shared/utils/time";
-import type { Evolution } from "../evolution";
 
 /**
  * Transforma DTOs de accesorios equipados a domain types.
@@ -39,21 +38,17 @@ export const mapCareDTO = (c: CareDTO): CareTimestamps => ({
 
 /**
  * Transforma datos de evolución a domain type.
- * Si null, retorna null. Sino, convierte evolvedAvailableAt a ms.
- * @param e - DTO de evolución o null si está en rareza máxima
- * @returns Domain Evolution o null
+ * @param e - DTO de evolución
+ * @returns Domain Evolution
  */
-export const mapEvolutionDTO = (e: EvolutionDTO | null): Evolution | null =>
-  e
-    ? {
-        nextRarity: e.nextRarity,
-        cpRequired: e.cpRequired,
-        tfRequired: e.tfRequired,
-        successChance: e.successChance,
-        failCooldownHours: e.failCooldownHours,
-        evolvedAvailableAt: toMs(e.evolvedAvailableAt),
-      }
-    : null
+export const mapEvolutionDTO = (e: EvolutionDTO): Evolution => ({
+  nextRarity: e.nextRarity,
+  cpRequired: e.cpRequired,
+  tfRequired: e.tfRequired,
+  successChance: e.successChance,
+  failCooldownHours: e.failCooldownHours,
+  evolvedAvailableAt: toMs(e.evolvedAvailableAt),
+});
 
 /**
  * Mapea tokagotchi activo completo desde DTO.
@@ -69,7 +64,7 @@ export function mapTokagotchiDTO(dto: TokagotchiDTO): Tokagotchi {
     rarity: dto.rarity,
     cp: dto.cp,
     stats: mapStatsDTO(dto),
-    nextEvolution: dto.nextEvolution ? mapEvolutionDTO(dto.nextEvolution) : null,
+    nextEvolution: mapEvolutionDTO(dto.nextEvolution),
     equipped: dto.equipped ? mapEquippedDTO(dto.equipped) : [],
     careCooldown: mapCareDTO(dto.careCooldown),
   };

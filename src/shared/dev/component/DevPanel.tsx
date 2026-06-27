@@ -1,16 +1,15 @@
 import React, { useState } from 'react'
 import { IcTerminal, IcChevR } from '@/shared/ui/Icons/Icons'
 import styles from './DevPanel.module.css'
-import { useAuth } from '@/shared/player/hooks/useAuth'
 import { useNavigate } from 'react-router-dom'
-import { useSession } from '@/shared/player/hooks/useSession'
-import { useDev } from '../useDev'
 import { Toast } from '@/shared/ui/Kit'
 import Loading from '@/shared/ui/Loading/Loading'
-//import type { Species, Rarity } from '@/shared/domain/tokagotchi'
+import type { Rarity, Species } from '@/shared/domain/tokagotchi'
+import { useDev } from '../hooks/useDev'
+import { usePlayer } from '@/shared/player/hooks/usePlayer'
+import { logout } from "@/shared/player/lib/sessionActions";
 
 // ── Constantes ────────────────────────────────────────────────────────────────
-/** 
 const ESPECIES: Species[] = ['TOFU', 'MOCHI', 'HANA']
 const RAREZAS: { value: Rarity; label: string }[] = [
     { value: 'COMMON', label: 'C' },
@@ -18,7 +17,7 @@ const RAREZAS: { value: Rarity; label: string }[] = [
     { value: 'EPIC', label: 'É' },
     { value: 'LEGENDARY', label: 'L' },
 ]
-    */
+
 type Ambiente = 'auto' | 'amanecer' | 'dia' | 'atardecer' | 'noche'
 const opcionesAmbiente: { value: Ambiente; label: string }[] = [
     { value: 'auto', label: 'Automatico' },
@@ -59,15 +58,14 @@ function DvSeg<T extends string>({ value, options, onChange }: { value: T; optio
 
 // ── DevPanel ──────────────────────────────────────────────────────────────────
 export default function DevPanel() {
-    //const [rarity, setRarity] = useState<Rarity>('COMMON')
-    //const [giveSpecies, setGiveSpecies] = useState<Species>('TOFU')
-    // const [giveRarity, setGiveRarity] = useState<Rarity>('COMMON')
+    const [rarity, setRarity] = useState<Rarity>('COMMON')
+    const [giveSpecies, setGiveSpecies] = useState<Species>('TOFU')
+    const [giveRarity, setGiveRarity] = useState<Rarity>('COMMON')
     const [open, setOpen] = useState(false)
     const [ambiente, setAmbiente] = useState<Ambiente>('auto')
     const navigate = useNavigate()
-    const { toast, resetCooldown, resetRarity, addCP, addTF, loading } = useDev()
-    const { logout } = useAuth()
-    const { state } = useSession()
+    const { toast, resetCooldown, resetRarity, addCP, addTF, addTokagotchi, loading } = useDev()
+    const { state } = usePlayer()
     const status = state.status
 
     if (status === 'loading') {
@@ -77,6 +75,10 @@ export default function DevPanel() {
     const handleLogout = () => {
         logout()
         navigate('/login')
+    }
+
+    const handleGiveTokagotchi = () => {
+        addTokagotchi(giveSpecies, giveRarity)
     }
 
     if (status === 'error') {
@@ -129,11 +131,10 @@ export default function DevPanel() {
                             <DvBtn onClick={() => { resetCooldown(mainTokagotchi?.id); }}>Reset cooldowns</DvBtn>
                         </DvField>
                         <DvField label="Rareza">
-                            {/** <DvSeg value={rarity} onChange={setRarity} options={RAREZAS} />*/}
+                            <DvSeg value={rarity} onChange={setRarity} options={RAREZAS} />
                             <DvBtn tone="danger" onClick={() => { resetRarity(mainTokagotchi?.id); }}>Resetear Rareza</DvBtn>
                         </DvField>
 
-                        {/** 
                         <div className={styles.dvSec}>Otorgar Tokagotchi</div>
                         <DvField label="Especie">
                             <DvSeg value={giveSpecies} onChange={setGiveSpecies}
@@ -144,9 +145,9 @@ export default function DevPanel() {
                         </DvField>
                         
                         <DvField label="">
-                            <DvBtn tone="go" onClick={() => { }}>+ Otorgar</DvBtn>
+                            <DvBtn tone="go" onClick={handleGiveTokagotchi}>+ Otorgar</DvBtn>
                         </DvField>
-*/}
+
                         <div className={styles.dvSec}>Logout</div>
                         <DvField label="">
                             <DvBtn tone="danger" onClick={() => { handleLogout() }}>Cerrar sesión</DvBtn>

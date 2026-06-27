@@ -1,3 +1,5 @@
+/** 
+
 import type { ColAcc } from '../types/collection.types'
 
 export interface AccessoriesApi {
@@ -17,3 +19,4 @@ export const accessoriesApi: AccessoriesApi = {
     return
   },
 }
+*/

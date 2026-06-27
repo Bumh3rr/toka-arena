@@ -9,11 +9,11 @@ import EvoPanel from '../components/panel/EvoPanel'
 import CareRow from '../components/row/CareRow'
 import RenameModal from '../../../shared/ui/modal/RenameModal'
 import MissionsModal from '../../missions/components/MissionsModal'
-//import CollectionModal from '../../../shared/ui/modal/CollectionModal'
+import CollectionModal from '../components/modals/CollectionModal/CollectionModal'
 import TokaStatusPill from '../components/pill/TokaStatusPill'
 import TokagotchiCanvas from '@/shared/canvas/TokagotchiCanvas'
 import BackgroundCanvas from '@/shared/canvas/BackgroundCanvas'
-import PerfileModal from '../../../shared/ui/modal/PerfileModal'
+import PerfileModal from '../../auth/components/PerfileModal'
 import MissionFab from '../../missions/components/MissionFab'
 import TokaIdentity from '@/shared/ui/TokaIdentity/TokaIdentity'
 import BattlePassCard from '../components/BattlePassCard/BattlePassCard'
@@ -43,7 +43,7 @@ export default function HomePage() {
     const [perfileOpen, setPerfileOpen] = useState(false)
     const [renameOpen, setRenameOpen] = useState(false)
     const [missionsOpen, setMissionsOpen] = useState(false)
-    //const [collectionOpen, setCollectionOpen] = useState(false)
+    const [collectionOpen, setCollectionOpen] = useState(false)
 
     const containerRef = useRef<HTMLDivElement>(null)
     const floatingRef = useRef<HTMLDivElement>(null)
@@ -196,7 +196,7 @@ export default function HomePage() {
                         variant="warm"
                         size="md"
                         icon={<IcSwap />}
-                        onClick={() => {/** setCollectionOpen(true) */}}>
+                        onClick={() => setCollectionOpen(true)}>
                         Cambiar
                     </Button>
                 </div>
@@ -238,16 +238,11 @@ export default function HomePage() {
                     onClose={() => setMissionsOpen(false)}
                 />
             )}
-            {/** 
             {collectionOpen && (
                 <CollectionModal
-                    roster={[]} // TODO: el roster viene de la feature collection (useCollection/endpoint)
-                    activeId={mainTokagotchi.id}
-                    onActivate={() => setCollectionOpen(false)}
                     onClose={() => setCollectionOpen(false)}
                 />
             )}
-                */}
         </div>
     )
 }

@@ -36,10 +36,11 @@ export default function FilterChips({ filter, group, onFilter, onToggleGroup }: 
         </button>
       ))}
       <button
+        disabled
         className={`${styles.chip} ${filter === 'fav' ? styles.on : ''}`}
         onClick={() => onFilter('fav')}
       >
-        ★ Favoritos
+        Favoritos
       </button>
       <button
         className={`${styles.chip} ${group ? styles.on : ''}`}

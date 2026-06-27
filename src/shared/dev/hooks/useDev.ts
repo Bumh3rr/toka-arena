@@ -1,8 +1,9 @@
+import { getApiErrorMessage } from "@/shared/api/client";
+import type { Species, Rarity } from "@/shared/domain/tokagotchi";
+import { useToast } from "@/shared/hooks/useToast";
 import { useCallback, useState } from "react";
 import { useSWRConfig } from "swr";
-import { getApiErrorMessage } from "../api/client";
 import { devApi } from "../api/dev.api";
-import { useToast } from "../hooks/useToast";
 
 export function useDev() {
   const [loading, setLoading] = useState(false);
@@ -71,7 +72,6 @@ export function useDev() {
     );
   };
 
-
   const addTF = async (amount?: number) => {
     setLoading(true);
     setError(null);
@@ -90,5 +90,23 @@ export function useDev() {
     }
   }
 
-  return { resetCooldown, resetRarity, addCP, addTF, loading, error, toast };
+  const addTokagotchi = async (species: Species, rarity: Rarity) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const data = await devApi.addTokagotchi(species, rarity);
+      show(`Agrego Tokagotchi: ${species} - ${rarity}`, { variant: "info" });
+      await globalMutate("home");
+      return data;
+    } catch (err) {
+      const msg = getApiErrorMessage(err) || "Error adding Tokagotchi";
+      setError(msg);
+      show(msg, { variant: "danger", position: "top" });
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return { resetCooldown, resetRarity, addCP, addTF, addTokagotchi, loading, error, toast };
 }

@@ -1,3 +1,4 @@
+/**
 const favByTokaId = new Map<string, boolean>()
 
 export interface FavoritesApi {
@@ -13,3 +14,4 @@ export const favoritesApi: FavoritesApi = {
     return favByTokaId.get(tokaId) ?? false
   },
 }
+*/

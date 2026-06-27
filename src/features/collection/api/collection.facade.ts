@@ -1,3 +1,5 @@
+
+/** 
 import { tokasApi } from './tokas.api'
 import { accessoriesApi } from './accessories.api'
 import { favoritesApi } from './favorites.api'
@@ -7,3 +9,4 @@ export const collectionFacade = {
   accessories: accessoriesApi,
   favorites: favoritesApi,
 }
+*/

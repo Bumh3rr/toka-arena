@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import useSWR from 'swr'
 import type { AccSlotFilter, CollectionData } from '../../types/collection.types'
 import { collectionKeys } from '../../swr/keys'
-import { playerApi } from '@/shared/api/player.api'
+import { playerApi } from '@/shared/player/api/player.api'
 import {  mapTokaDtoListToColRoster } from '../../mappers/toka/toka.dto-to-domain.mapper'
 import { mapRosterToAccessories } from '../../mappers/accessories/accessories.dto-to-domain.mapper'
 

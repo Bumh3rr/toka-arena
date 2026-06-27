@@ -1,29 +1,29 @@
 import useSWR from "swr";
-import { playerApi } from "../../api/player.api";
-import type { PlayerProfile } from "@/shared/domain/player";
 import { useCallback } from "react";
-import { applyRenamePlayerUsername } from "../model/mapper";
 import { useToast } from "@/shared/hooks/useToast";
+import type { PlayerProfile } from "../data/player";
+import { playerApi } from "../api/player.api";
+import { applyRenamePlayerUsername } from "../data/player.mapper";
 
-export type SessionState =
+export type PlayerState =
   | { status: "loading" }
   | { status: "error"; error: string }
   | { status: "ready"; data: PlayerProfile };
 
-type UseSessionResult = {
-  state: SessionState;
+type UsePlayerResult = {
+  state: PlayerState;
   reload: () => Promise<PlayerProfile | undefined>;
   isRefreshing: boolean;
   renameUsername: (newName: string) => Promise<void>;
   toast: ReturnType<typeof useToast>["toast"];
 };
 
-function getSessionErrorMessage(error: unknown) {
+function getPlayerErrorMessage(error: unknown) {
   return error instanceof Error ? error.message : "Error de sesión";
 }
 
-export function useSession(): UseSessionResult {
-  const { data, error, mutate, isValidating } = useSWR<PlayerProfile>("me", () => playerApi.getMe());
+export function usePlayer(): UsePlayerResult {
+  const { data, error, mutate, isValidating } = useSWR<PlayerProfile>("player", () => playerApi.getMe());
   const { show, toast } = useToast();
 
   const renameUsername = useCallback(async (newName: string) => {
@@ -49,10 +49,10 @@ export function useSession(): UseSessionResult {
     }
   }, [data, mutate, show]);
 
-  const state: SessionState = data
+  const state: PlayerState = data
     ? { status: "ready", data }
     : error
-      ? { status: "error", error: getSessionErrorMessage(error) }
+      ? { status: "error", error: getPlayerErrorMessage(error) }
       : { status: "loading" };
 
   const reload = () => mutate();

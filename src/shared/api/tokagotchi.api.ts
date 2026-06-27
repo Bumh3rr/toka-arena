@@ -2,7 +2,7 @@ import type { TokagotchiApi } from "./contracts";
 import api from "./client";
 import type { AscendResponseDTO, CareResponseDTO } from "./dto/tokagotchi-responses.dto";
 import type { TokagotchiDTO } from "./dto/tokagotchi.dto";
-import { CareResponseDTOMock } from "../mock/mockData";
+import { AscendResponseDTOMock, CareResponseDTOMock, toka_activo } from "../mock/mockData";
 
 /**
  * Implementación del cliente HTTP para operaciones de Tokagotchi.
@@ -42,21 +42,23 @@ const tokagotchi: TokagotchiApi = {
   },
 };
 
-export const tokagotchiApiMock: TokagotchiApi = {
+export const tokagotchiMock: TokagotchiApi = {
   async care(_tokaId, action) {
     console.log("Mocked care called with:", _tokaId, action);
     return CareResponseDTOMock();
   },
-  rename: function (tokaId: string, name: string): Promise<TokagotchiDTO> {
-    throw new Error("Function not implemented.");
+  async rename(tokaId: string, name: string): Promise<TokagotchiDTO> {
+    console.log("Mocked rename called with:", tokaId, name);
+    return Promise.resolve(toka_activo);
   },
-  ascend: function (tokaId: string): Promise<AscendResponseDTO> {
-    throw new Error("Function not implemented.");
+  async ascend(tokaId: string): Promise<AscendResponseDTO> {
+    console.log("Mocked ascend called with:", tokaId);
+    return AscendResponseDTOMock();
   }
 }
 
 /** Cliente HTTP para operaciones de Tokagotchi. Exportado como singleton. */
-export const tokagotchiApi: TokagotchiApi = tokagotchiApiMock;
+export const tokagotchiApi: TokagotchiApi = tokagotchi;
 
 
 

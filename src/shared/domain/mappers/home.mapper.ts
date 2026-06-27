@@ -1,4 +1,4 @@
-import type { PlayerProfileHomeDTO } from "@/shared/api/dto/home.dto";
+import type { PlayerProfileHomeDTO } from "@/features/home/api/dto/home.dto";
 import type { PlayerProfileHome } from "../home";
 import { mapTokagotchiDTO } from "./tokagotchi.mapper";
 

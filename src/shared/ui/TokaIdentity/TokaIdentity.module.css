@@ -77,3 +77,11 @@
   color: var(--ink);
   line-height: 1;
 }
+
+.cpLabel {
+  font-family: var(--font-title);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ink-2);
+  line-height: 1;
+}

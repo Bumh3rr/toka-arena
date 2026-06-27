@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { tokenStore } from '../store/token.store'
+import { tokenStore } from '../../../shared/player/lib/token.store'
 
 /**
  * Reacciona a la expiración del token: el interceptor de axios emite `auth:expired`
