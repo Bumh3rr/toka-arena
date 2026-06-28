@@ -9,13 +9,14 @@ interface TokaGridProps {
   filter: ColFilter
   group: boolean
   tokagotchiIdActive?: string | null
-  onSelect: (id: string) => void
+  onSelect: (ids: string[]) => void
 }
 
 export default function TokaGrid({ data, filter, group, tokagotchiIdActive, onSelect }: TokaGridProps) {
   const filtered = useMemo(() => {
     let list = [...data]
-    if (filter !== 'all') list = list.filter(t => t.rarity === filter)
+    // Rarity filter is handled server-side; only apply fav client-side
+    if (filter === 'fav') list = list.filter(t => t.fav)
     list.sort((a, b) =>
       RARITY_META[b.rarity].order - RARITY_META[a.rarity].order ||
       a.name.localeCompare(b.name)
@@ -24,15 +25,17 @@ export default function TokaGrid({ data, filter, group, tokagotchiIdActive, onSe
   }, [data, filter])
 
   const cards = useMemo(() => {
-    if (!group) return filtered.map(t => ({ toka: t, count: 1, stacked: false }))
-    const groups: Record<string, typeof filtered> = {}
+    if (!group) {
+      return filtered.map(t => ({ toka: t, ids: [t.id], count: 1, stacked: false }))
+    }
+    const groups: Record<string, Tokagotchi[]> = {}
     filtered.forEach(t => {
       const k = `${t.name}-${t.species}`
       ;(groups[k] = groups[k] ?? []).push(t)
     })
     return Object.values(groups).map(g => {
-      const top = g.sort((a, b) => RARITY_META[b.rarity].order - RARITY_META[a.rarity].order)[0]
-      return { toka: top, count: g.length, stacked: g.length > 1 }
+      const sorted = [...g].sort((a, b) => RARITY_META[b.rarity].order - RARITY_META[a.rarity].order)
+      return { toka: sorted[0], ids: sorted.map(t => t.id), count: sorted.length, stacked: sorted.length > 1 }
     })
   }, [filtered, group])
 
@@ -45,7 +48,7 @@ export default function TokaGrid({ data, filter, group, tokagotchiIdActive, onSe
           isActive={c.toka.id === tokagotchiIdActive}
           count={c.count}
           stacked={c.stacked}
-          onClick={() => onSelect(c.toka.id)}
+          onClick={() => onSelect(c.ids)}
         />
       ))}
     </div>

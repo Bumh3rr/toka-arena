@@ -1,4 +1,4 @@
-import { useState, useRef, type CSSProperties } from 'react'
+import { useState, useRef, useEffect, type CSSProperties, type PointerEvent } from 'react'
 import TokagotchiCanvas from '@/shared/canvas/TokagotchiCanvas'
 import SheetPanel from '@/shared/ui/SheetPanel/SheetPanel'
 import { Button } from '@/shared/ui/Kit'
@@ -13,6 +13,8 @@ import styles from './TokaDetailSheet.module.css'
 import { TokaIdentity } from '@/shared/ui/TokaIdentity/TokaIdentity'
 import { IcFavorite, IcReady } from '@/shared/ui/Icons/Icons'
 import EvoPanel from '@/features/home/components/panel/EvoPanel'
+
+const SLIDE_W = 176  // horizontal offset between carousel items (px)
 
 // ── Nombres de accesorios para AccSlot ──────────────────────────────────────
 const ACC_DISPLAY_NAME: Record<string, string> = {
@@ -37,8 +39,8 @@ function toColAcc(ea: EquippedAccessory): ColAcc {
 
 // ── Props ────────────────────────────────────────────────────────────────────
 interface TokaDetailSheetProps {
-  tokagotchi: Tokagotchi
-  isActive: boolean
+  tokagotchiGroup: Tokagotchi[]
+  activeTokaId: string | null
   serverTime: number
   tf: number
   onBack: () => void
@@ -48,9 +50,102 @@ interface TokaDetailSheetProps {
   onRename: (tokaId: string, newName: string) => Promise<void>
 }
 
+// ── Carrusel del hero ────────────────────────────────────────────────────────
+interface HeroCarouselProps {
+  tokas: Tokagotchi[]
+  currentIndex: number
+  onChangeIndex: (i: number) => void
+}
+
+function HeroCarousel({ tokas, currentIndex, onChangeIndex }: HeroCarouselProps) {
+  const dragStartX = useRef<number | null>(null)
+  const [liveOffset, setLiveOffset] = useState(0)
+  const isAnimating = liveOffset === 0
+
+  const onPointerDown = (e: PointerEvent<HTMLDivElement>) => {
+    dragStartX.current = e.clientX
+    e.currentTarget.setPointerCapture(e.pointerId)
+  }
+
+  const onPointerMove = (e: PointerEvent<HTMLDivElement>) => {
+    if (dragStartX.current === null) return
+    setLiveOffset(e.clientX - dragStartX.current)
+  }
+
+  const onPointerUp = () => {
+    if (dragStartX.current === null) return
+    const THRESHOLD = 55
+    if (liveOffset < -THRESHOLD && currentIndex < tokas.length - 1) {
+      onChangeIndex(currentIndex + 1)
+    } else if (liveOffset > THRESHOLD && currentIndex > 0) {
+      onChangeIndex(currentIndex - 1)
+    }
+    setLiveOffset(0)
+    dragStartX.current = null
+  }
+
+  return (
+    <div
+      className={styles.carousel}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      onPointerCancel={onPointerUp}
+    >
+      {tokas.map((t, i) => {
+        const rawOffset = (i - currentIndex) * SLIDE_W + liveOffset
+        const absStep = Math.abs(i - currentIndex)
+        const scale = Math.max(0.38, 1 - absStep * 0.32)
+        const opacity = Math.max(0.15, 1 - absStep * 0.45)
+        return (
+          <div
+            key={t.id}
+            className={styles.carouselItem}
+            style={{
+              transform: `translateX(${rawOffset}px) scale(${scale})`,
+              opacity,
+              zIndex: 10 - absStep,
+              transition: isAnimating
+                ? 'transform 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.32s ease'
+                : 'none',
+            }}
+            onClick={() => absStep > 0 && onChangeIndex(i)}
+          >
+            <TokagotchiCanvas
+              width={178}
+              height={178}
+              species={t.species}
+              accessories={t.equipped}
+              animacionActual="idle"
+            />
+          </div>
+        )
+      })}
+
+      {/* Dot indicators */}
+      <div className={styles.carouselDots}>
+        {tokas.map((_, i) => (
+          <button
+            key={i}
+            className={`${styles.dot} ${i === currentIndex ? styles.dotActive : ''}`}
+            onClick={() => onChangeIndex(i)}
+            aria-label={`Tokagotchi ${i + 1} de ${tokas.length}`}
+          />
+        ))}
+      </div>
+
+      {/* Counter badge */}
+      <div className={styles.carouselCounter}>
+        {currentIndex + 1} / {tokas.length}
+      </div>
+    </div>
+  )
+}
+
+// ── Componente principal ─────────────────────────────────────────────────────
 export default function TokaDetailSheet({
-  tokagotchi,
-  isActive,
+  tokagotchiGroup,
+  activeTokaId,
   serverTime,
   tf,
   onBack,
@@ -59,12 +154,18 @@ export default function TokaDetailSheet({
   onAscend,
   onRename,
 }: TokaDetailSheetProps) {
+  const [currentIndex, setCurrentIndex] = useState(0)
   const [sheetExpanded, setSheetExpanded] = useState(true)
   const [exiting, setExiting] = useState(false)
   const [isFav, setIsFav] = useState(false)
   const [renameOpen, setRenameOpen] = useState(false)
 
   const overlayRef = useRef<HTMLDivElement>(null)
+
+  const safeIndex = Math.min(currentIndex, tokagotchiGroup.length - 1)
+  const tokagotchi = tokagotchiGroup[safeIndex]
+  const isActive = activeTokaId === tokagotchi.id
+  const isGroup = tokagotchiGroup.length > 1
 
   const meta = RARITY_META[tokagotchi.rarity]
   const sparkles = SPARKLE_POS.slice(0, SPARKLE_COUNT[tokagotchi.rarity])
@@ -76,21 +177,24 @@ export default function TokaDetailSheet({
 
   const themeVars = { '--glow-soft': meta.soft } as CSSProperties
 
-  // Desvanece el overlay mientras el usuario arrastra el sheet hacia abajo
+  // Reset toka-level UI when carousel changes
+  useEffect(() => {
+    setIsFav(tokagotchi.fav ?? false)
+    setRenameOpen(false)
+  }, [safeIndex, tokagotchi.fav])
+
   const handleDragProgress = (progress: number) => {
     if (overlayRef.current) {
       overlayRef.current.style.opacity = `${Math.max(0, 1 - progress * 0.55)}`
     }
   }
 
-  // Limpia el opacity inline al soltar el drag
   const handleDragging = (isDragging: boolean) => {
     if (!isDragging && overlayRef.current) {
       overlayRef.current.style.opacity = ''
     }
   }
 
-  // Al colapsar el sheet → animación de salida + onBack
   const handleExpandedChange = (next: boolean) => {
     setSheetExpanded(next)
     if (!next) {
@@ -109,7 +213,7 @@ export default function TokaDetailSheet({
       <div className={styles.bg} aria-hidden="true" />
       <div className={styles.bgGradient} aria-hidden="true" />
 
-      {/* Topbar — solo favorito */}
+      {/* Topbar — favorito */}
       <div className={styles.topbar}>
         <button
           type="button"
@@ -121,32 +225,45 @@ export default function TokaDetailSheet({
           }}
           disabled
           aria-label={isFav ? 'Quitar de favoritos' : 'Añadir a favoritos'}
-        > <IcFavorite /></button>
+        >
+          <IcFavorite />
+        </button>
       </div>
 
-      {/* Hero: canvas animado + glow + sparkles */}
+      {/* Hero: canvas / carrusel + glow + sparkles */}
       <div className={styles.heroArea} aria-hidden="true">
         <div className={styles.glow} />
-        <div className={styles.sparkles}>
-          {sparkles.map((pos, i) => (
-            <span
-              key={i}
-              className={styles.sparkle}
-              style={{ ...pos, animationDelay: `${i * 0.38}s` }}
-            />
-          ))}
-        </div>
-        <div className={styles.tokaWrap}>
-          <div className={styles.toka}>
-            <TokagotchiCanvas
-              width={200}
-              height={200}
-              species={tokagotchi.species}
-              accessories={tokagotchi.equipped}
-              animacionActual="idle"
-            />
-          </div>
-        </div>
+
+        {isGroup ? (
+          <HeroCarousel
+            tokas={tokagotchiGroup}
+            currentIndex={safeIndex}
+            onChangeIndex={setCurrentIndex}
+          />
+        ) : (
+          <>
+            <div className={styles.sparkles}>
+              {sparkles.map((pos, i) => (
+                <span
+                  key={i}
+                  className={styles.sparkle}
+                  style={{ ...pos, animationDelay: `${i * 0.38}s` }}
+                />
+              ))}
+            </div>
+            <div className={styles.tokaWrap}>
+              <div className={styles.toka}>
+                <TokagotchiCanvas
+                  width={200}
+                  height={200}
+                  species={tokagotchi.species}
+                  accessories={tokagotchi.equipped}
+                  animacionActual="idle"
+                />
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
       {/* SheetPanel */}
@@ -157,7 +274,6 @@ export default function TokaDetailSheet({
         onDragProgress={handleDragProgress}
         topOffset={230}
       >
-        {/* Identidad */}
         <TokaIdentity
           cp={tokagotchi.cp}
           name={tokagotchi.name}
@@ -166,12 +282,10 @@ export default function TokaDetailSheet({
           onRename={() => setRenameOpen(true)}
         />
 
-        {/* Stats */}
         <SheetPanel.Separator title="Estadísticas">
           <StatsRow stats={tokagotchi.stats} />
         </SheetPanel.Separator>
 
-        {/* Evolución */}
         <SheetPanel.Separator title="Evolución">
           <EvoPanel
             serverTime={serverTime}
@@ -182,7 +296,6 @@ export default function TokaDetailSheet({
           />
         </SheetPanel.Separator>
 
-        {/* Slots de accesorios */}
         <SheetPanel.Separator title="Accesorios">
           <div className={styles.slots}>
             <AccSlot label="Cabeza" acc={headAcc} />
@@ -192,11 +305,12 @@ export default function TokaDetailSheet({
           </div>
         </SheetPanel.Separator>
 
-        {/* Acción principal */}
         <SheetPanel.Separator title="Acción principal">
           <div className={styles.actions}>
             {isActive ? (
-              <div className={styles.activeBadge}> <IcReady /> Tokagotchi activo</div>
+              <div className={styles.activeBadge}>
+                <IcReady /> Tokagotchi activo
+              </div>
             ) : (
               <Button
                 variant="green"
@@ -209,13 +323,15 @@ export default function TokaDetailSheet({
             )}
           </div>
         </SheetPanel.Separator>
-
       </SheetPanel>
 
       {renameOpen && (
         <RenameModal
           currentName={tokagotchi.name}
-          onSave={async (name) => { await onRename(tokagotchi.id, name); setRenameOpen(false) }}
+          onSave={async (name) => {
+            await onRename(tokagotchi.id, name)
+            setRenameOpen(false)
+          }}
           onClose={() => setRenameOpen(false)}
         />
       )}

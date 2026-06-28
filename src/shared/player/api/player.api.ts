@@ -28,8 +28,13 @@ export interface PlayerApi {
    * Obtiene la lista paginada de tokagotchis del jugador autenticado.
    * @param page - Índice de página (base 0)
    * @param size - Tamaño de página
+   * @param filters - Filtros opcionales de rareza o especie
    */
-  getMyTokagotchis(page: number, size: number): Promise<PlayerTokagotchisPageDTO>;
+  getMyTokagotchis(
+    page: number,
+    size: number,
+    filters?: { rarity?: string; species?: string },
+  ): Promise<PlayerTokagotchisPageDTO>;
 
   /**
    * Establece el tokagotchi activo del jugador autenticado.
@@ -49,8 +54,8 @@ export const player: PlayerApi = {
     console.log("Peticion PATCH /players/me/name con body:", body, "Respuesta:", data);
     return mapPlayerProfileDTO(data);
   },
-  async getMyTokagotchis(page: number, size: number) {
-    const { data } = await api.get<PlayerTokagotchisPageDTO>('/players/me/tokagotchis', { params: { page, size }})
+  async getMyTokagotchis(page: number, size: number, filters?: { rarity?: string; species?: string }) {
+    const { data } = await api.get<PlayerTokagotchisPageDTO>('/players/me/tokagotchis', { params: { page, size, ...filters } })
     //await new Promise((resolve) => setTimeout(resolve, 3000)) // Simulando retraso de 1 segundo
     console.log(`Peticion GET /players/me/tokagotchis?page=${page}&size=${size}, Respuesta:`, data)
     return data
@@ -71,8 +76,8 @@ export const playerMock: PlayerApi = {
     console.log("Peticion PATCH /players/me/name con body:", { newUsername }, "Respuesta: (mocked)");
     return mapPlayerProfileDTO(PlayerProfileDTOMock());
   },
-  async getMyTokagotchis(page: number, size: number) {
-    console.log(`Peticion GET /players/me/tokagotchis?page=${page}&size=${size}, Respuesta: (mocked)`);
+  async getMyTokagotchis(page: number, size: number, filters?: { rarity?: string; species?: string }) {
+    console.log(`Peticion GET /players/me/tokagotchis?page=${page}&size=${size}`, filters ?? '', 'Respuesta: (mocked)');
     return PlayerTokagotchisPageDTOMock()
   },
   async setMyActiveTokagotchi(tokagotchiId: string) {

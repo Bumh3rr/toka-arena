@@ -18,10 +18,12 @@ export function useCollectionTokasData(page: number, filter: ColFilter) {
   const { show, toast } = useToast()
   const { data: playerProfile } = useSWR<PlayerProfile>('player', () => playerApi.getMe())
 
+  const apiFilters = filter !== 'all' && filter !== 'fav' ? { rarity: filter } : undefined
+
   const { data, error, mutate } = useSWR<CollectionTokagotchiData, Error>(
     playerProfile ? collectionKeys.tokas(page, PAGE_SIZE, filter) : null,
     async (): Promise<CollectionTokagotchiData> => {
-      const paged = await playerApi.getMyTokagotchis(page, PAGE_SIZE)
+      const paged = await playerApi.getMyTokagotchis(page, PAGE_SIZE, apiFilters)
       const roster = mapTokaDtoListToColRoster(paged.content)
 
       return {

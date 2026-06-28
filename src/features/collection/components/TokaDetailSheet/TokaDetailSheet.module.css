@@ -73,6 +73,73 @@
   pointer-events: none;
 }
 
+/* ── Carrusel de grupo ─────────────────────────────────────────────────────── */
+.carousel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  pointer-events: auto;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+.carousel:active { cursor: grabbing; }
+
+/* Cada ítem: posición absoluta, centrado, escalado por JS */
+.carouselItem {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: center center;
+  filter: drop-shadow(0 10px 14px rgba(20, 10, 0, .45));
+}
+
+/* Dots — pastilla dinámica */
+.carouselDots {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  pointer-events: auto;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, .35);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: width .3s cubic-bezier(.4, 0, .2, 1), background .3s ease;
+  flex-shrink: 0;
+}
+
+.dotActive {
+  width: 22px;
+  background: rgba(255, 255, 255, .92);
+}
+
+/* Counter "1 / 6" */
+.carouselCounter {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  font-family: var(--font-title), system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, .75);
+  letter-spacing: .4px;
+  pointer-events: none;
+}
+
 .glow {
   position: absolute;
   width: 220px;

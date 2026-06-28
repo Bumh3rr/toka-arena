@@ -2,18 +2,26 @@ import { useCallback, useState } from 'react'
 import type { ColFilter } from '../../types/collection.types'
 
 export function useCollectionTokasUi() {
-  const [filter, setFilter] = useState<ColFilter>('all')
+  const [filter, setFilterState] = useState<ColFilter>('all')
   const [group, setGroup] = useState(false)
-  const [detailId, setDetailId] = useState<string | null>(null)
+  const [detailGroupIds, setDetailGroupIds] = useState<string[] | null>(null)
   const [expandedAbility, setExpandedAbility] = useState<number | null>(null)
   const [page, setPage] = useState(0)
 
+  const setFilter = useCallback((f: ColFilter) => {
+    setFilterState(f)
+    setPage(0)
+  }, [])
+
   const toggleGroup = useCallback(() => setGroup((prev) => !prev), [])
-  const openDetail = useCallback((id: string) => setDetailId(id), [])
+
+  const openDetail = useCallback((ids: string[]) => setDetailGroupIds(ids), [])
+
   const closeDetail = useCallback(() => {
-    setDetailId(null)
+    setDetailGroupIds(null)
     setExpandedAbility(null)
   }, [])
+
   const toggleAbility = useCallback((idx: number) => {
     setExpandedAbility((prev) => (prev === idx ? null : idx))
   }, [])
@@ -23,7 +31,7 @@ export function useCollectionTokasUi() {
     setFilter,
     group,
     toggleGroup,
-    detailId,
+    detailGroupIds,
     openDetail,
     closeDetail,
     expandedAbility,

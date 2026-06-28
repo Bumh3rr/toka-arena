@@ -14,12 +14,12 @@ export default function CollectionTokasSection() {
   const ui = useCollectionTokasUi()
   const { state, activate, setFavorite, ascend, rename, reload, toast } = useCollectionTokasData(ui.page, ui.filter)
   const { hideBar, showBar } = useNavBar()
-  
+
   useEffect(() => {
-    if (ui.detailId) hideBar()
+    if (ui.detailGroupIds) hideBar()
     else showBar()
     return () => showBar()
-  }, [ui.detailId, hideBar, showBar])
+  }, [ui.detailGroupIds, hideBar, showBar])
 
   if (state.status === 'error') {
     return <PageError message={state.error} onRetry={reload} />
@@ -30,14 +30,20 @@ export default function CollectionTokasSection() {
     return <Loading fullscreen text='Cargando colección...' />
   }
 
-  const selectedToka = ui.detailId ? data.roster.find((t) => t.id === ui.detailId) ?? null : null
+  // Resolve fresh toka objects from roster using stored IDs
+  const detailGroup = ui.detailGroupIds
+    ? ui.detailGroupIds.flatMap(id => {
+        const t = data.roster.find(t => t.id === id)
+        return t ? [t] : []
+      })
+    : null
 
   return (
     <>
-      {selectedToka && (
+      {detailGroup && detailGroup.length > 0 && (
         <TokaDetailSheet
-          tokagotchi={selectedToka}
-          isActive={data.activeTokaId === selectedToka.id}
+          tokagotchiGroup={detailGroup}
+          activeTokaId={data.activeTokaId}
           serverTime={data.serverTime}
           tf={data.tf}
           onBack={ui.closeDetail}
