@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, type CSSProperties, type PointerEvent } from 'react'
+import { useState, useRef, type CSSProperties, type PointerEvent } from 'react'
 import TokagotchiCanvas from '@/shared/canvas/TokagotchiCanvas'
 import SheetPanel from '@/shared/ui/SheetPanel/SheetPanel'
 import { Button } from '@/shared/ui/Kit'
@@ -176,12 +176,6 @@ export default function TokaDetailSheet({
   const bodyAcc = bodyEquipped ? toColAcc(bodyEquipped) : undefined
 
   const themeVars = { '--glow-soft': meta.soft } as CSSProperties
-
-  // Reset toka-level UI when carousel changes
-  useEffect(() => {
-    setIsFav(tokagotchi.fav ?? false)
-    setRenameOpen(false)
-  }, [safeIndex, tokagotchi.fav])
 
   const handleDragProgress = (progress: number) => {
     if (overlayRef.current) {

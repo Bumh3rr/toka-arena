@@ -146,6 +146,7 @@ export default function HomePage() {
                 className={`${styles.tokaWrap} ${sheetExpanded ? styles.tokaWrapExpanded : ''}`}
             >
                 <TokagotchiCanvas
+                    key={mainTokagotchi.species}
                     animacionActual={ui.animation}
                     species={mainTokagotchi.species}
                     accessories={mainTokagotchi.equipped}
