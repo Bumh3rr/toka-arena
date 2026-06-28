@@ -1,4 +1,4 @@
-import type { PlayerProfileDto } from "./player.dto";
+import type { PlayerProfileDTO } from "./player.dto";
 import type { PlayerTokagotchisPageDTO } from "./player.dto";
 import api from "@/shared/api/client";
 import { mapPlayerProfileDTO } from "@/shared/player/data/player.mapper";
@@ -39,13 +39,13 @@ export interface PlayerApi {
 
 export const player: PlayerApi = {
   async getMe() {
-    const { data } = await api.get<PlayerProfileDto>("/players/me");
+    const { data } = await api.get<PlayerProfileDTO>("/players/me");
     console.log("Peticion GET /players/me, Respuesta:", data);
     return mapPlayerProfileDTO(data);
   },
   async renamePlayerUsername(newUsername: string) {
     const body = { newUsername };
-    const { data } = await api.patch<PlayerProfileDto>("/players/me/name", body);
+    const { data } = await api.patch<PlayerProfileDTO>("/players/me/name", body);
     console.log("Peticion PATCH /players/me/name con body:", body, "Respuesta:", data);
     return mapPlayerProfileDTO(data);
   },

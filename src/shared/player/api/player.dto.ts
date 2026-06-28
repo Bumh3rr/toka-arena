@@ -5,7 +5,8 @@ import type { TokagotchiDTO } from "@/shared/api/dto/tokagotchi.dto"
  * Respuesta del endpoint GET /players/me.
  * Representa el perfil completo del jugador autenticado.
  */
-export interface PlayerProfileDto {
+export interface PlayerProfileDTO {
+  serverTime: string
   /** Identificador único del jugador. */
   id: string;
   /** Nombre de usuario visible en la UI. */

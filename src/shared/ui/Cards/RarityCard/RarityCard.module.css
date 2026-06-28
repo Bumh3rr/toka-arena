@@ -9,11 +9,10 @@
   line-height: 1;
   color: #fff;
   white-space: nowrap;
-  /* mejora la legibilidad del label blanco sobre colores claros (ej. COMMON gris) */
   text-shadow: 0 1px 1px rgba(0, 0, 0, .22);
 }
 
-/* ── Tamaños: escalan fuente y padding proporcionalmente ─────────────────── */
+/* ── Tamaños ─────────────────────────────────────────────────────────────── */
 
 .sm {
   font-size: 10.5px;
@@ -28,4 +27,71 @@
 .lg {
   font-size: 15px;
   padding: 6px 18px;
+}
+
+/* ── LEGENDARY ───────────────────────────────────────────────────────────── */
+
+.rarBadgeLegend {
+  position: relative;
+
+  /* Gradiente de fuego — mismo patrón que los demás badges pero con llamas */
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .30), rgba(0, 0, 0, .08)),
+    linear-gradient(150deg, #FFE566 0%, #FF9500 42%, #FF4A00 100%);
+
+  /* Misma sombra que el UIKit: highlight interior + drop bottom */
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, .40),
+    0 3px 0 #C04400;
+}
+
+/* Chispa superior izquierda */
+.rarBadgeLegend::before {
+  content: '✦';
+  position: absolute;
+  top: -11px;
+  left: 6px;
+  font-size: 11px;
+  font-family: serif;
+  color: #FFE566;
+  text-shadow: 0 0 8px #FF8C00, 0 0 16px #FF4500;
+  line-height: 1;
+  pointer-events: none;
+  animation: sparkLeft 1.6s ease-in-out infinite;
+}
+
+/* Chispa superior derecha — más pequeña y desfasada */
+.rarBadgeLegend::after {
+  content: '✦';
+  position: absolute;
+  top: -8px;
+  right: 8px;
+  font-size: 8px;
+  font-family: serif;
+  color: #FFCE00;
+  text-shadow: 0 0 6px #FF6D00, 0 0 12px #FF4500;
+  line-height: 1;
+  pointer-events: none;
+  animation: sparkRight 1.6s ease-in-out infinite 0.8s;
+}
+
+/* ── Keyframes ──────────────────────────────────────────────────────────── */
+
+@keyframes sparkLeft {
+  0%   { transform: translateY(0)    scale(1);   opacity: 1; }
+  60%  { transform: translateY(-5px) scale(1.3); opacity: 0.6; }
+  100% { transform: translateY(-9px) scale(0.7); opacity: 0; }
+}
+
+@keyframes sparkRight {
+  0%   { transform: translateY(0)    scale(0.8); opacity: 0.8; }
+  50%  { transform: translateY(-4px) scale(1.2); opacity: 1; }
+  100% { transform: translateY(-8px) scale(0.5); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rarBadgeLegend::before,
+  .rarBadgeLegend::after {
+    animation: none;
+  }
 }

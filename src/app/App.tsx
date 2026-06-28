@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { tokenStore } from '@/shared/player/lib/token.store'
-import SessionWatcher from '@/shared/player/components/SessionWatcher'
 import AppLayout from './layout/AppLayout/AppLayout'
 import LoginPage from '@/features/auth/pages/LoginPage'
 import UnboxingPage from '@/features/unboxing/pages/UnboxingPage'
@@ -9,6 +8,7 @@ import ColeccionPage from '@/features/collection/pages/CollectionPage'
 import TiendaPage from '@/features/shop/pages/ShopPage'
 import HomePage from '@/features/home/pages/HomePage'
 import UIKitPage from '@/features/devkit/pages/UIKitPage'
+import SessionWatcher from '@/features/auth/components/SessionWatcher'
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
   /** 

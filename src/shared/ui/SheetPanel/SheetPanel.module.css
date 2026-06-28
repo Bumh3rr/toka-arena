@@ -70,3 +70,25 @@
 .scroll::-webkit-scrollbar {
   display: none;
 }
+
+/* ── Section Separator ─────────────────────────────────────────────────────── */
+.secSeparator {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 2px 4px 0;
+}
+
+.secTitle {
+  font-family: var(--font-title), system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.secLine {
+  flex: 1;
+  height: 2.5px;
+  background: rgba(74, 40, 0, .1);
+  border-radius: 2px;
+}

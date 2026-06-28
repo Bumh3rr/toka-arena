@@ -8,12 +8,13 @@ import { useCollectionTokasUi } from '../../hooks/toka/useCollectionTokasUi'
 import { useCollectionTokasData } from '../../hooks/toka/useCollectionTokasData'
 import styles from '../../pages/CollectionPage.module.css'
 import Loading from '@/shared/ui/Loading/Loading'
+import { Toast } from '@/shared/ui/Kit'
 
 export default function CollectionTokasSection() {
   const ui = useCollectionTokasUi()
-  const { state, activate, setFavorite, reload } = useCollectionTokasData(ui.page, ui.filter)
+  const { state, activate, setFavorite, ascend, rename, reload, toast } = useCollectionTokasData(ui.page, ui.filter)
   const { hideBar, showBar } = useNavBar()
-
+  
   useEffect(() => {
     if (ui.detailId) hideBar()
     else showBar()
@@ -37,11 +38,16 @@ export default function CollectionTokasSection() {
         <TokaDetailSheet
           tokagotchi={selectedToka}
           isActive={data.activeTokaId === selectedToka.id}
+          serverTime={data.serverTime}
+          tf={data.tf}
           onBack={ui.closeDetail}
           onToggleFav={setFavorite}
           onActivate={activate}
+          onAscend={ascend}
+          onRename={rename}
         />
       )}
+      {toast && <Toast {...toast} />}
 
       <FilterChips
         filter={ui.filter}
@@ -54,6 +60,7 @@ export default function CollectionTokasSection() {
         data={data.roster}
         filter={ui.filter}
         group={ui.group}
+        tokagotchiIdActive={data.activeTokaId}
         onSelect={ui.openDetail}
       />
 
@@ -62,9 +69,7 @@ export default function CollectionTokasSection() {
           className={styles.pageBtn}
           onClick={() => ui.setPage((prev) => Math.max(0, prev - 1))}
           disabled={!data.pagination.hasPrevious}
-        >
-          Anterior
-        </button>
+        >Anterior</button>
         <span className={styles.pageInfo}>
           Pagina {data.pagination.page + 1} de {Math.max(1, data.pagination.totalPages)}
         </span>

@@ -41,7 +41,7 @@ export interface SheetPanelProps {
  * </SheetPanel>
  * ```
  */
-export default function SheetPanel({
+function SheetPanel({
   expanded,
   onExpandedChange,
   onDragging,
@@ -115,3 +115,18 @@ export default function SheetPanel({
     </div>
   )
 }
+
+function SheetPanelSeparator({ title, children }: { title: string; children?: React.ReactNode }) {
+  return (
+    <>
+      <div className={styles.secSeparator}>
+        <span className={styles.secTitle}>{title}</span>
+        <span className={styles.secLine} />
+      </div>
+      {children}
+    </>
+  )
+}
+
+SheetPanel.Separator = SheetPanelSeparator
+export default SheetPanel

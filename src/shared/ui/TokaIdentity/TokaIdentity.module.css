@@ -4,17 +4,17 @@
   flex-direction: column;
   gap: 8px;
   min-width: 0;
+  --meta-icon-size: 20px;
 }
 
 /* ── Nombre + botón ─────────────────────────────────────────────────────────── */
 .nameRow {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
 }
 
 .name {
-  font-family: var(--font-title);
   font-size: 25px;
   font-weight: 900;
   line-height: .95;
@@ -23,7 +23,6 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  flex: 1;
   min-width: 0;
 }
 
@@ -33,7 +32,7 @@
   align-items: center;
   gap: 8px;
   flex-wrap: nowrap;
-  overflow: hidden;
+  padding-top: 10px;
   padding-bottom: 3%;
 }
 
@@ -48,15 +47,15 @@
 
 /* Especie — mismo peso visual que el resto */
 .species {
-  font-family: var(--font-title);
   color: var(--ink);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  padding: 3px 12px 3px 3px;
 }
 
 /* ── Card de CP ─────────────────────────────────────────────────────────────── */
-.cardCp {
+.cardCp, .cardSpecies {
   width: fit-content;
   display: inline-flex;
   align-items: center;
@@ -64,14 +63,32 @@
   padding: 3px 15px 3px 10px;
 }
 
+.cardSpecies {
+  gap: 0;
+  padding: 3px 2px 3px 10px;
+}
+
+.cardSpecies svg {
+  color: var(--ink-2);
+}
+
+.cardSpecies svg,
 .cpIcon {
-  width: 20px;
-  height: 20px;
+  width: var(--meta-icon-size);
+  height: var(--meta-icon-size);
+}
+
+.cpIcon {
   object-fit: contain;
 }
 
+.name,
+.species,
 .cpNum {
   font-family: var(--font-title);
+}
+
+.cpNum {
   font-size: 13px;
   font-weight: 900;
   color: var(--ink);

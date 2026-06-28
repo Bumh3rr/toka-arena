@@ -5,45 +5,33 @@ import { Button } from '@/shared/ui/Kit'
 import RenameModal from '@/shared/ui/modal/RenameModal'
 import StatsRow from '@/features/home/components/row/StatsRow'
 import AccSlot from '../AccSlot'
-import { RARITY_META } from '@/shared/constants/rarity'
-import type { Tokagotchi, Rarity } from '@/shared/domain/tokagotchi'
+import { RARITY_META, SPARKLE_COUNT, SPARKLE_POS } from '@/shared/constants/rarity'
+import type { Tokagotchi } from '@/shared/domain/tokagotchi'
 import type { ColAcc } from '../../types/collection.types'
 import type { EquippedAccessory } from '@/shared/domain/accessory'
 import styles from './TokaDetailSheet.module.css'
-import TokaIdentity from '@/shared/ui/TokaIdentity/TokaIdentity'
+import { TokaIdentity } from '@/shared/ui/TokaIdentity/TokaIdentity'
 import { IcFavorite, IcReady } from '@/shared/ui/Icons/Icons'
 import EvoPanel from '@/features/home/components/panel/EvoPanel'
 
-// ── Sparkles ────────────────────────────────────────────────────────────────
-const SPARKLE_POS: CSSProperties[] = [
-  { top: '14%', left: '16%' },
-  { top: '9%',  left: '50%' },
-  { top: '16%', right: '14%' },
-  { top: '52%', left: '8%' },
-  { top: '46%', right: '10%' },
-  { top: '74%', left: '20%' },
-  { top: '70%', right: '18%' },
-]
-const SPARKLE_COUNT: Record<Rarity, number> = { COMMON: 3, RARE: 4, EPIC: 5, LEGENDARY: 7 }
-
 // ── Nombres de accesorios para AccSlot ──────────────────────────────────────
 const ACC_DISPLAY_NAME: Record<string, string> = {
-  HELMET:     'Casco',
-  CROWN:      'Corona',
-  HAT:        'Sombrero',
+  HELMET: 'Casco',
+  CROWN: 'Corona',
+  HAT: 'Sombrero',
   SUPER_CAPE: 'Super Capa',
 }
 
 function toColAcc(ea: EquippedAccessory): ColAcc {
   return {
-    id:       ea.code,
-    name:     ACC_DISPLAY_NAME[ea.code] ?? ea.code,
-    slot:     ea.slot === 'HEAD' ? 'cabeza' : 'cuerpo',
-    owned:    1,
+    id: ea.code,
+    name: ACC_DISPLAY_NAME[ea.code] ?? ea.code,
+    slot: ea.slot === 'HEAD' ? 'cabeza' : 'cuerpo',
+    owned: 1,
     equipped: [],
-    locked:   false,
-    code:     ea.code,
-    image:    null,
+    locked: false,
+    code: ea.code,
+    image: null,
   }
 }
 
@@ -51,32 +39,40 @@ function toColAcc(ea: EquippedAccessory): ColAcc {
 interface TokaDetailSheetProps {
   tokagotchi: Tokagotchi
   isActive: boolean
+  serverTime: number
+  tf: number
   onBack: () => void
   onToggleFav: (id: string, fav: boolean) => void
   onActivate: (id: string) => void
+  onAscend: (tokaId: string) => Promise<'SUCCESS' | 'FAIL' | null>
+  onRename: (tokaId: string, newName: string) => Promise<void>
 }
 
 export default function TokaDetailSheet({
   tokagotchi,
   isActive,
+  serverTime,
+  tf,
   onBack,
   onToggleFav,
   onActivate,
+  onAscend,
+  onRename,
 }: TokaDetailSheetProps) {
   const [sheetExpanded, setSheetExpanded] = useState(true)
-  const [exiting, setExiting]           = useState(false)
-  const [isFav, setIsFav]               = useState(false)
-  const [renameOpen, setRenameOpen]     = useState(false)
+  const [exiting, setExiting] = useState(false)
+  const [isFav, setIsFav] = useState(false)
+  const [renameOpen, setRenameOpen] = useState(false)
 
   const overlayRef = useRef<HTMLDivElement>(null)
 
-  const meta     = RARITY_META[tokagotchi.rarity]
+  const meta = RARITY_META[tokagotchi.rarity]
   const sparkles = SPARKLE_POS.slice(0, SPARKLE_COUNT[tokagotchi.rarity])
 
   const headEquipped = tokagotchi.equipped.find((e) => e.slot === 'HEAD')
   const bodyEquipped = tokagotchi.equipped.find((e) => e.slot === 'BACK')
-  const headAcc      = headEquipped ? toColAcc(headEquipped) : undefined
-  const bodyAcc      = bodyEquipped ? toColAcc(bodyEquipped) : undefined
+  const headAcc = headEquipped ? toColAcc(headEquipped) : undefined
+  const bodyAcc = bodyEquipped ? toColAcc(bodyEquipped) : undefined
 
   const themeVars = { '--glow-soft': meta.soft } as CSSProperties
 
@@ -117,13 +113,13 @@ export default function TokaDetailSheet({
       <div className={styles.topbar}>
         <button
           type="button"
-          disabled
           className={`${styles.btn} ${isFav ? styles.favOn : ''}`}
           onClick={() => {
             const next = !isFav
             setIsFav(next)
             onToggleFav(tokagotchi.id, next)
           }}
+          disabled
           aria-label={isFav ? 'Quitar de favoritos' : 'Añadir a favoritos'}
         > <IcFavorite /></button>
       </div>
@@ -153,7 +149,7 @@ export default function TokaDetailSheet({
         </div>
       </div>
 
-      {/* SheetPanel: arranca expandido; arrastrar hacia abajo cierra con estilo */}
+      {/* SheetPanel */}
       <SheetPanel
         expanded={sheetExpanded}
         onExpandedChange={handleExpandedChange}
@@ -162,48 +158,64 @@ export default function TokaDetailSheet({
         topOffset={230}
       >
         {/* Identidad */}
-        <TokaIdentity cp={tokagotchi.cp} name={tokagotchi.name} rarity={tokagotchi.rarity} species={tokagotchi.species} onRename={() => setRenameOpen(true)} />
+        <TokaIdentity
+          cp={tokagotchi.cp}
+          name={tokagotchi.name}
+          rarity={tokagotchi.rarity}
+          species={tokagotchi.species}
+          onRename={() => setRenameOpen(true)}
+        />
 
         {/* Stats */}
-        <StatsRow stats={tokagotchi.stats} />
+        <SheetPanel.Separator title="Estadísticas">
+          <StatsRow stats={tokagotchi.stats} />
+        </SheetPanel.Separator>
 
         {/* Evolución */}
-        <EvoPanel 
-          serverTime={new Date().getTime()} 
-          nextEvolution={tokagotchi.nextEvolution} 
-          cp={tokagotchi.cp} tf={2727} 
-          onAscend={() => new Promise((resolve) => setTimeout(() => resolve('SUCCESS'), 1000))} />
+        <SheetPanel.Separator title="Evolución">
+          <EvoPanel
+            serverTime={serverTime}
+            nextEvolution={tokagotchi.nextEvolution}
+            cp={tokagotchi.cp}
+            tf={tf}
+            onAscend={() => onAscend(tokagotchi.id)}
+          />
+        </SheetPanel.Separator>
 
         {/* Slots de accesorios */}
-        <h3 className={styles.secHeader}>Accesorios equipados</h3>
-        <div className={styles.slots}>
-          <AccSlot label="Cabeza"  acc={headAcc} />
-          <AccSlot label="Cuerpo"  acc={bodyAcc} />
-          <AccSlot label="Cara"    future />
-          <AccSlot label="Espalda" future />
-        </div>
+        <SheetPanel.Separator title="Accesorios">
+          <div className={styles.slots}>
+            <AccSlot label="Cabeza" acc={headAcc} />
+            <AccSlot label="Cuerpo" acc={bodyAcc} />
+            <AccSlot label="Cuello" future />
+            <AccSlot label="Cara" future />
+          </div>
+        </SheetPanel.Separator>
 
         {/* Acción principal */}
-        <div className={styles.actions}>
-          {isActive ? (
-            <div className={styles.activeBadge}> <IcReady /> Tokagotchi activo</div>
-          ) : (
-            <Button
-              variant="green"
-              size="lg"
-              fullWidth
-              onClick={() => onActivate(tokagotchi.id)}
-            >
-              Activar como principal
-            </Button>
-          )}
-        </div>
+        <SheetPanel.Separator title="Acción principal">
+          <div className={styles.actions}>
+            {isActive ? (
+              <div className={styles.activeBadge}> <IcReady /> Tokagotchi activo</div>
+            ) : (
+              <Button
+                variant="green"
+                size="lg"
+                fullWidth
+                onClick={() => onActivate(tokagotchi.id)}
+              >
+                Activar como principal
+              </Button>
+            )}
+          </div>
+        </SheetPanel.Separator>
+
       </SheetPanel>
 
       {renameOpen && (
         <RenameModal
           currentName={tokagotchi.name}
-          onSave={async () => { setRenameOpen(false) }}
+          onSave={async (name) => { await onRename(tokagotchi.id, name); setRenameOpen(false) }}
           onClose={() => setRenameOpen(false)}
         />
       )}

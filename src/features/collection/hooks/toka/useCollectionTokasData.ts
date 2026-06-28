@@ -1,28 +1,34 @@
 import { useCallback } from 'react'
-import useSWR from 'swr'
+import useSWR, { useSWRConfig } from 'swr'
 import type { ColFilter, CollectionTokagotchiData, CollectionTokasState } from '../../types/collection.types'
 import { collectionKeys } from '../../swr/keys'
 import { playerApi } from '@/shared/player/api/player.api'
+import { tokagotchiApi } from '@/shared/api/tokagotchi.api'
 import { mapTokaDtoListToColRoster } from '../../mappers/toka/toka.dto-to-domain.mapper'
+import { mapEvolutionDTO, mapStatsDTO } from '@/shared/domain/mappers/tokagotchi.mapper'
+import { RARITY_META } from '@/shared/constants/rarity'
+import { getApiErrorMessage } from '@/shared/api/client'
+import { useToast } from '@/shared/hooks/useToast'
+import type { PlayerProfile } from '@/shared/player/data/player'
 
-const PAGE_SIZE = 20
+const PAGE_SIZE = 10
+
 export function useCollectionTokasData(page: number, filter: ColFilter) {
+  const { mutate: globalMutate } = useSWRConfig()
+  const { show, toast } = useToast()
+  const { data: playerProfile } = useSWR<PlayerProfile>('player', () => playerApi.getMe())
 
   const { data, error, mutate } = useSWR<CollectionTokagotchiData, Error>(
-    collectionKeys.tokas(page, PAGE_SIZE, filter),
+    playerProfile ? collectionKeys.tokas(page, PAGE_SIZE, filter) : null,
     async (): Promise<CollectionTokagotchiData> => {
-      const [paged, profile] = await Promise.all([
-        playerApi.getMyTokagotchis(page, PAGE_SIZE),
-        playerApi.getMe(),
-      ])
-
+      const paged = await playerApi.getMyTokagotchis(page, PAGE_SIZE)
       const roster = mapTokaDtoListToColRoster(paged.content)
-      const activeTokagotchi = profile.mainTokagotchi
 
       return {
-        serverTime: new Date().getTime(),
-        activeTokaId: activeTokagotchi?.id ?? null,
-        activeTokagotchi,
+        serverTime: playerProfile!.serverTime,
+        tf: playerProfile!.tf,
+        activeTokaId: playerProfile!.mainTokagotchi?.id ?? null,
+        activeTokagotchi: playerProfile!.mainTokagotchi ?? null,
         roster,
         pagination: {
           page: paged.page,
@@ -43,37 +49,100 @@ export function useCollectionTokasData(page: number, filter: ColFilter) {
       : { status: 'ready', data }
 
   const activate = useCallback(async (tokaId: string) => {
-    await mutate(
-      async (prev) => {
+    try {
+      await mutate(async (prev) => {
         const activeTokagotchi = await playerApi.setMyActiveTokagotchi(tokaId)
+        if (!prev) return prev
+        await globalMutate('player', (p: PlayerProfile | undefined) =>
+          p ? { ...p, mainTokagotchi: activeTokagotchi } : p, { revalidate: false }
+        )
+        return { ...prev, activeTokaId: tokaId, activeTokagotchi }
+      }, { revalidate: false })
+    } catch (err) {
+      const msg = getApiErrorMessage(err, 'No se pudo activar')
+      show(msg, { variant: 'danger' })
+    }
+  }, [mutate, globalMutate, show])
+
+  const setFavorite = useCallback(async (tokaId: string, fav: boolean) => {
+    try {
+    await mutate(async (prev) => {
+      // await favoritesApi.setFavorite(tokaId, fav)
+      return prev
+        ? { ...prev, roster: prev.roster.map((t) => (t.id === tokaId ? { ...t, fav } : t)) }
+        : prev
+    })
+    } catch (err) {
+      const msg = getApiErrorMessage(err, 'No se pudo actualizar favorito')
+      show(msg, { variant: 'danger' })
+    }
+  }, [mutate, show])
+
+  const ascend = useCallback(async (tokaId: string): Promise<'SUCCESS' | 'FAIL' | null> => {
+    try {
+      const res = await tokagotchiApi.ascend(tokaId)
+
+      const update = {
+        rarity: res.tokagotchi.rarity,
+        cp: res.tokagotchi.cp,
+        stats: mapStatsDTO(res.tokagotchi),
+        nextEvolution: mapEvolutionDTO(res.tokagotchi.nextEvolution),
+      }
+      await mutate((prev) => {
         if (!prev) return prev
         return {
           ...prev,
-          activeTokaId: tokaId,
-          activeTokagotchi,
+          roster: prev.roster.map((t) => (t.id === tokaId ? { ...t, ...update } : t)),
+          activeTokagotchi: prev.activeTokagotchi?.id === tokaId
+            ? { ...prev.activeTokagotchi, ...update }
+            : prev.activeTokagotchi,
         }
-      }
-    )
-  }, [mutate])
+      }, { revalidate: false })
 
-  const setFavorite = useCallback(async (tokaId: string, fav: boolean) => {
-    await mutate(
-      async (prev) => {
-        // await favoritesApi.setFavorite(tokaId, fav)
-        return prev
-          ? {
-            ...prev,
-            roster: prev.roster.map((t) => (t.id === tokaId ? { ...t, fav } : t)),
-          }
-          : prev
-      }
-    )
-  }, [mutate])
+      // Refresca TF del servidor y actualiza ambos cachés
+      const resMe = await playerApi.getMe()
+      await mutate((prev) => (prev ? { ...prev, tf: resMe.tf } : prev), { revalidate: false })
+      await globalMutate('player', resMe, { revalidate: false })
+
+      const rarityLabel = RARITY_META[res.tokagotchi.rarity].label
+      show(
+        res.result === 'SUCCESS' ? `¡Ascendió a ${rarityLabel}!` : 'La ascensión falló. Toca esperar :(',
+        { variant: res.result === 'SUCCESS' ? 'celebrity' : 'danger' },
+      )
+
+      return res.result
+    } catch (err) {
+      const msg = getApiErrorMessage(err, 'Ocurrió un error al ascender')
+      show(msg, { variant: 'danger' })
+      return null
+    }
+  }, [mutate, globalMutate, show])
+
+  const rename = useCallback(async (tokaId: string, newName: string) => {
+    try {
+      await tokagotchiApi.rename(tokaId, newName)
+      await mutate((prev) => {
+        if (!prev) return prev
+        return {
+          ...prev,
+          roster: prev.roster.map((t) => t.id === tokaId ? { ...t, name: newName } : t),
+          activeTokagotchi: prev.activeTokagotchi?.id === tokaId
+            ? { ...prev.activeTokagotchi, name: newName }
+            : prev.activeTokagotchi,
+        }
+      }, { revalidate: false })
+    } catch (err) {
+      show(getApiErrorMessage(err, 'No se pudo renombrar'), { variant: 'danger' })
+    }
+  }, [mutate, show])
 
   return {
     state,
     activate,
     setFavorite,
+    ascend,
+    rename,
     reload: () => mutate(),
+    toast,
   }
 }

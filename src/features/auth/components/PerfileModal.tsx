@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import BottomSheet from '@/shared/ui/BottomSheet/BottomSheet'
 import { IcCheck, IcCopy, IcPencil, IcPerson, IcMusic, IcHelp, IcDoc, IcInfo, IcSpeaker, IcChevR } from '@/shared/ui/Icons/Icons'
-import styles from './styles/PerfileModal.module.css'
+import styles from './PerfileModal.module.css'
 import { IconButton, Button, Toggle, Label, Toast } from '@/shared/ui/Kit'
 import DevPanel from '@/shared/dev/component/DevPanel'
 import { IS_DEV_MODE } from '@/shared/domain/debug_dev'
 import { musicManager } from '@/shared/hooks/music/musicManager'
-import { useSession } from '@/features/auth/hooks/useSession'
+import { usePlayer } from '@/shared/player/hooks/usePlayer'
 import PageError from '@/shared/ui/Error/Error'
 import RenameModal from '@/shared/ui/modal/RenameModal'
 import Loading from '@/shared/ui/Loading/Loading'
@@ -19,7 +19,7 @@ export default function PerfileModal({ onClose }: PerfileModalProps) {
     const [copied, setCopied] = useState(false)
     const [renameOpen, setRenameOpen] = useState(false)
     const [musicOn, setMusicOn] = useState(() => !musicManager.muted)
-    const { state, reload, renameUsername, toast } = useSession()
+    const { state, reload, renameUsername, toast } = usePlayer()
     const status = state.status
 
     if (status === 'loading') {

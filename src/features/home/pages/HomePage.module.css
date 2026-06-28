@@ -94,7 +94,7 @@
 /* ── Identidad (dentro del sheet) ────────────────────────────────────────── */
 .identity {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: space-between;
   padding: 0 4px;
 }

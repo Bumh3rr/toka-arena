@@ -1,8 +1,9 @@
-import type { PlayerProfileDto } from "../api/player.dto";
+import type { PlayerProfileDTO } from "../api/player.dto";
 import type { PlayerProfile } from "./player";
 import { mapTokagotchiDTO } from "../../domain/mappers/tokagotchi.mapper";
 
-export const mapPlayerProfileDTO = (d: PlayerProfileDto): PlayerProfile => ({
+export const mapPlayerProfileDTO = (d: PlayerProfileDTO): PlayerProfile => ({
+  serverTime: new Date(d.serverTime).getTime(),
   id: d.id,
   username: d.username,
   avatar: d.avatarUrl,

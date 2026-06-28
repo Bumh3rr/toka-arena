@@ -1,4 +1,4 @@
-import { IcPencil } from '@/shared/ui/Icons/Icons'
+import { IcPaw, IcPencil } from '@/shared/ui/Icons/Icons'
 import { Card, IconButton, Label } from '@/shared/ui/Kit'
 import RarityCard from '@/shared/ui/Cards/RarityCard/RarityCard'
 import type { Rarity, Species } from '@/shared/domain/tokagotchi'
@@ -13,8 +13,7 @@ interface TokaIdentityProps {
   onRename?: () => void
 }
 
-export default function TokaIdentity({ name, rarity, species, cp, onRename }: TokaIdentityProps) {
-  const label_specie = SPECIES_LABEL[species]
+function TokaIdentity({ name, rarity, species, cp, onRename }: TokaIdentityProps) {
   return (
     <div className={styles.root}>
       {/* Nombre + renombrar */}
@@ -25,15 +24,32 @@ export default function TokaIdentity({ name, rarity, species, cp, onRename }: To
 
       {/* Rareza · Especie · CP */}
       <div className={styles.metaRow}>
-        <Card variant='gold' className={styles.cardCp}>
-          <img src="/assets/ui/cp/cp_stars.png" alt="CP" className={styles.cpIcon} />
-          <span className={styles.cpNum}>{cp} <span className={styles.cpLabel}>cp</span></span>
-        </Card>
+        <RarityCard size='md' rarity={rarity} />
         <span className={styles.sep} aria-hidden="true" />
-        <RarityCard rarity={rarity} />
+        <CardSpecies species={species} />
         <span className={styles.sep} aria-hidden="true" />
-        <Label variant='cream' className={styles.species}>{label_specie}</Label>
+        <CardCp cp={cp} />
       </div>
     </div>
   )
 }
+function CardSpecies({ species }: { species: Species }) {
+  const label_specie = SPECIES_LABEL[species]
+  return (
+    <Card variant='warm' className={styles.cardSpecies}>
+      <IcPaw/>
+      <Label look='ghost' size='md'  className={styles.species}>{label_specie}</Label>
+    </Card>
+  )
+}
+
+function CardCp({ cp }: { cp: number }) {
+  return (
+    <Card variant='gold' className={styles.cardCp}>
+      <img src="/assets/ui/cp/cp_stars.png" alt="CP" className={styles.cpIcon} />
+      <span className={styles.cpNum}>{cp} <span className={styles.cpLabel}>cp</span></span>
+    </Card>
+  )
+}
+
+export { TokaIdentity, CardSpecies, CardCp } 

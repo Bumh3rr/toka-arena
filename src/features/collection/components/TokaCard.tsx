@@ -1,9 +1,10 @@
 import type { CSSProperties } from 'react'
 import { RARITY_META } from '@/shared/constants/rarity'
-import { COL_SPECIES_LABEL } from '../types/collection.types'
+import { SPECIES_LABEL } from '@/shared/constants/tokagotchi'
 import styles from './TokaCard.module.css'
 import type { Tokagotchi, Rarity } from '@/shared/domain/tokagotchi.ts'
 import { getImagenSrcByEspecie } from '@/shared/game/assets.ts'
+import { IcReady } from '@/shared/ui/Icons/Icons'
 
 // Color oscuro del info-band según rareza — crea la identidad cromática de cada card
 const BAND_BG: Record<Rarity, string> = {
@@ -53,13 +54,7 @@ export default function TokaCard({ toka, isActive, count, stacked, onClick }: To
         </div>
 
         {/* Badges de estado (top corners) */}
-        {isActive && (
-          <span className={styles.activeBadge} aria-label="Tokagotchi activo">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M5 13l4 4L19 7" />
-            </svg>
-          </span>
-        )}
+        {isActive && (<span className={styles.activeBadge} aria-label="Tokagotchi activo"><IcReady /></span> )}
         {toka.fav && (
           <span className={styles.favBadge} aria-label="Favorito">
             <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -74,7 +69,7 @@ export default function TokaCard({ toka, isActive, count, stacked, onClick }: To
           <div className={styles.metaRow}>
             <span className={styles.rarityDot} aria-hidden="true" />
             <span className={styles.rarityLabel}>{meta.label}</span>
-            <span className={styles.species}>{COL_SPECIES_LABEL[toka.species]}</span>
+            <span className={styles.species}>{SPECIES_LABEL[toka.species]}</span>
             <span className={styles.cp}>
               {toka.cp}<span className={styles.cpUnit}> CP</span>
             </span>

@@ -8,10 +8,11 @@ interface TokaGridProps {
   data: Tokagotchi[]
   filter: ColFilter
   group: boolean
+  tokagotchiIdActive?: string | null
   onSelect: (id: string) => void
 }
 
-export default function TokaGrid({ data, filter, group, onSelect }: TokaGridProps) {
+export default function TokaGrid({ data, filter, group, tokagotchiIdActive, onSelect }: TokaGridProps) {
   const filtered = useMemo(() => {
     let list = [...data]
     if (filter !== 'all') list = list.filter(t => t.rarity === filter)
@@ -41,7 +42,7 @@ export default function TokaGrid({ data, filter, group, onSelect }: TokaGridProp
         <TokaCard
           key={c.toka.id}
           toka={c.toka}
-          isActive
+          isActive={c.toka.id === tokagotchiIdActive}
           count={c.count}
           stacked={c.stacked}
           onClick={() => onSelect(c.toka.id)}

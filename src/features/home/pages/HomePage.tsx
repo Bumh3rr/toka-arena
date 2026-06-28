@@ -15,7 +15,7 @@ import TokagotchiCanvas from '@/shared/canvas/TokagotchiCanvas'
 import BackgroundCanvas from '@/shared/canvas/BackgroundCanvas'
 import PerfileModal from '../../auth/components/PerfileModal'
 import MissionFab from '../../missions/components/MissionFab'
-import TokaIdentity from '@/shared/ui/TokaIdentity/TokaIdentity'
+import { TokaIdentity } from '@/shared/ui/TokaIdentity/TokaIdentity'
 import BattlePassCard from '../components/BattlePassCard/BattlePassCard'
 import { CoinPillCard } from '../components/CoinPillCard/CoinPillCard'
 import HomeSkeleton from '../components/skeleton/HomeSkeleton'
@@ -35,7 +35,7 @@ const CONTAINER_VARS = {
 
 export default function HomePage() {
     const navigate = useNavigate()
-    const { hideBar, showBar } = useNavBar()
+    const { hideBar, showBar, hidden } = useNavBar()
     const { state, runAction, renameToka, ascend, reload, toast } = useHome()
 
     const [sheetExpanded, setSheetExpanded] = useState(false)
@@ -54,7 +54,10 @@ export default function HomePage() {
     const mainTokagotchi = player?.mainTokagotchi ?? null
 
     // Simulacion que redirecciona al apartado del pase de batalla, cambiar a /pase
-    const onNavegatePasePage = () => { navigate('/ui-kit', { replace: true }) }
+    const onNavigatePasePage = () => {
+        if (hidden) showBar()
+        navigate('/ui-kit', { replace: true })
+    }
 
     // Oculta/muestra la nav según el estado del sheet
     useEffect(() => {
@@ -108,10 +111,6 @@ export default function HomePage() {
 
     const tf = player?.tf ?? 0
     const username = player?.username ?? '...'
-
-    const handleClaim = () => {
-        // TODO: reclamar misión (endpoint pendiente)
-    }
 
     return (
         <div
@@ -172,7 +171,6 @@ export default function HomePage() {
                     cooldowns={cooldowns}
                     floaters={ui.floaters}
                     onUse={runAction}
-                    showHeader={false}
                 />
             </div>
 
@@ -197,15 +195,35 @@ export default function HomePage() {
                         size="md"
                         icon={<IcSwap />}
                         onClick={() => setCollectionOpen(true)}>
-                        Cambiar
                     </Button>
                 </div>
-                <StatsRow stats={mainTokagotchi.stats} />
-                <EvoPanel serverTime={data.player.serverTime} nextEvolution={mainTokagotchi.nextEvolution} cp={mainTokagotchi.cp} tf={tf} onAscend={ascend} />
+                <SheetPanel.Separator title="Estadísticas">
+                    <StatsRow stats={mainTokagotchi.stats} />
+                </SheetPanel.Separator>
+
+                <SheetPanel.Separator title="Cuidado">
+                    <CareRow
+                        cooldowns={cooldowns}
+                        floaters={ui.floaters}
+                        onUse={runAction}
+                    />
+                </SheetPanel.Separator>
+
+                <SheetPanel.Separator title="Evolución">
+                    <EvoPanel
+                        serverTime={data.player.serverTime} 
+                        nextEvolution={mainTokagotchi.nextEvolution} 
+                        cp={mainTokagotchi.cp} 
+                        tf={tf} 
+                        onAscend={ascend} 
+                    />
+                </SheetPanel.Separator>
+
             </SheetPanel>
 
+
             {/* Card de Pase de Batalla — la data sale de usePass (/pass) */}
-            <BattlePassCard onClick={onNavegatePasePage} top={90} />
+            <BattlePassCard onClick={onNavigatePasePage} top={90} />
 
             {/* FAB de Misiones */}
             <div className={styles.btnMissionFab}>
@@ -234,7 +252,7 @@ export default function HomePage() {
             {missionsOpen && (
                 <MissionsModal
                     missions={[]} // TODO: la lista de misiones viene de la feature missions (useMissions/endpoint), no de useHome
-                    onClaim={handleClaim}
+                    onClaim={() => { }}
                     onClose={() => setMissionsOpen(false)}
                 />
             )}

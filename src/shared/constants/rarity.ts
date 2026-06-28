@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import type { NextRarity, Rarity } from "../domain/tokagotchi";
 
 export interface RarityMeta {
@@ -43,3 +44,15 @@ export const NEXT_RARITY_META: Record<NextRarity, RarityMeta> = {
     order: 4,
   },
 };
+
+// ── Sparkles ────────────────────────────────────────────────────────────────
+export const SPARKLE_POS: CSSProperties[] = [
+  { top: '14%', left: '16%' },
+  { top: '9%',  left: '50%' },
+  { top: '16%', right: '14%' },
+  { top: '52%', left: '8%' },
+  { top: '46%', right: '10%' },
+  { top: '74%', left: '20%' },
+  { top: '70%', right: '18%' },
+]
+export const SPARKLE_COUNT: Record<Rarity, number> = { COMMON: 3, RARE: 4, EPIC: 5, LEGENDARY: 7 }

@@ -1,4 +1,3 @@
-//import type { PlayerProfile } from "@/shared/domain/player";
 import type { HomeData } from "../data/home.types";
 import type { CareActionDTO } from "../../../shared/api/dto/tokagotchi-responses.dto";
 import type { ActionCare } from "../data/home.types";

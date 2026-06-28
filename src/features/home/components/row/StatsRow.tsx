@@ -1,7 +1,6 @@
 import { IcBolt, IcShield, IcHeart } from '@/shared/ui/Icons/Icons'
 import type { Stats } from '@/shared/domain/tokagotchi'
 import styles from './styles/StatsRow.module.css'
-import { HeaderTitleLine } from '../CareSheet/CareSheet'
 import { Card } from '@/shared/ui/Kit'
 
 export default function StatsRow({ stats }: { stats: Stats }) {
@@ -14,9 +13,7 @@ export default function StatsRow({ stats }: { stats: Stats }) {
 
   return (
     <div>
-      <HeaderTitleLine title="Estadísticas" />
       <div className={styles.stats}>
-
         {LIST_STATS.map((s) => (
           <Card key={s.key} variant="cream" shadow='md' radius='lg' className={`${styles.stat} ${styles[s.key]}`}>
             <div className={styles.ic}>{s.icon}</div>

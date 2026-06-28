@@ -67,6 +67,7 @@ export interface CollectionData {
 
 export interface CollectionTokagotchiData {
   serverTime: number
+  tf: number
   activeTokaId: string | null
   activeTokagotchi: Tokagotchi | null
   roster: Tokagotchi[]
