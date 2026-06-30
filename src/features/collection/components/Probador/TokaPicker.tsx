@@ -43,7 +43,7 @@ export default function TokaPicker({ roster, activeTokaId, selectedTokaId, onSel
                 <span className={styles.featuredName}>{t.name}</span>
                 <RarityCard size='sm' rarity={t.rarity} />
                 <span className={styles.featuredMeta}>
-                  <img src="public/assets/ui/cp/cp.png" alt="" aria-hidden="true" className={styles.featuredCpIcon} /> {t.cp} { }
+                  <img src="/assets/ui/cp/cp.png" alt="" aria-hidden="true" className={styles.featuredCpIcon} /> {t.cp} { }
                   <IcClothes /> {t.equipped.length}
                 </span>
               </span>

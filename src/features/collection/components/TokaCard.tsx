@@ -94,7 +94,7 @@ export default function TokaCard({ toka, isActive, count, stacked, onClick }: To
           <div className={styles.metaRow}>
             <RarityCard rarity={toka.rarity} size="sm" />
             <span className={styles.cp}>
-              <img src="public/assets/ui/cp/cp.png" alt="" aria-hidden="true" className={styles.cpIcon} /> {toka.cp} <span className={styles.cpUnit}> CP</span>
+              <img src="/assets/ui/cp/cp.png" alt="" aria-hidden="true" className={styles.cpIcon} /> {toka.cp} <span className={styles.cpUnit}> CP</span>
             </span>
           </div>
         </div>

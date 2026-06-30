@@ -4,12 +4,12 @@ import { IcCheck, IcCopy, IcPencil, IcPerson, IcMusic, IcHelp, IcDoc, IcInfo, Ic
 import styles from './PerfileModal.module.css'
 import { IconButton, Button, Toggle, Label, Toast } from '@/shared/ui/Kit'
 import DevPanel from '@/shared/dev/component/DevPanel'
-import { IS_DEV_MODE } from '@/shared/domain/debug_dev'
 import { musicManager } from '@/shared/hooks/music/musicManager'
 import { usePlayer } from '@/shared/player/hooks/usePlayer'
 import PageError from '@/shared/ui/Error/Error'
 import RenameModal from '@/shared/ui/modal/RenameModal'
 import Loading from '@/shared/ui/Loading/Loading'
+const IS_ENABLED_PANEL_DEV = import.meta.env.VITE_ENABLE_PANEL_DEV_TOOLS === 'true'
 
 interface PerfileModalProps {
     onClose: () => void
@@ -38,7 +38,7 @@ export default function PerfileModal({ onClose }: PerfileModalProps) {
                 <div className={styles.container}>
                     <PageError message={state.error} onRetry={reload} />
                 </div>
-                {IS_DEV_MODE && <DevPanel />}
+                {IS_ENABLED_PANEL_DEV && <DevPanel />}
             </BottomSheet>
         )
     }
@@ -50,27 +50,27 @@ export default function PerfileModal({ onClose }: PerfileModalProps) {
     }
 
     const handleCopy = async () => {
-    const id = data.mainTokagotchi?.id
-    if (!id) return
+        const id = data.mainTokagotchi?.id
+        if (!id) return
 
-    try {
-        if (navigator.clipboard?.writeText) {
-            await navigator.clipboard.writeText(id)
-        } else {
-            const textarea = document.createElement('textarea')
-            textarea.value = id
-            textarea.style.position = 'fixed'
-            textarea.style.opacity = '0'
-            document.body.appendChild(textarea)
-            textarea.select()
-            document.execCommand('copy')
-            document.body.removeChild(textarea)
+        try {
+            if (navigator.clipboard?.writeText) {
+                await navigator.clipboard.writeText(id)
+            } else {
+                const textarea = document.createElement('textarea')
+                textarea.value = id
+                textarea.style.position = 'fixed'
+                textarea.style.opacity = '0'
+                document.body.appendChild(textarea)
+                textarea.select()
+                document.execCommand('copy')
+                document.body.removeChild(textarea)
+            }
+            setCopied(true)
+            setTimeout(() => setCopied(false), 1500)
+        } catch (err) {
+            console.error('Error al copiar:', err)
         }
-        setCopied(true)
-        setTimeout(() => setCopied(false), 1500)
-    } catch (err) {
-        console.error('Error al copiar:', err)
-    }
     }
 
     return (
@@ -79,7 +79,7 @@ export default function PerfileModal({ onClose }: PerfileModalProps) {
                 <ProfileScene apodo={data.username} id={data.mainTokagotchi?.id || ''} onRename={() => setRenameOpen(true)} onCopy={handleCopy} copied={copied} />
             </div>
             <Settings music={musicOn} sfx={false} version={'1.0.0'} onMusic={handleMusicToggle} onSfx={() => { }} />
-            {IS_DEV_MODE && <DevPanel />}
+            {IS_ENABLED_PANEL_DEV && <DevPanel />}
             {renameOpen && (
                 <RenameModal
                     currentName={data.username}

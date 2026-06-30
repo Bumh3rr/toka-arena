@@ -206,14 +206,6 @@ export default function HomePage() {
                     <StatsRow stats={mainTokagotchi.stats} />
                 </SheetPanel.Separator>
 
-                <SheetPanel.Separator title="Cuidado">
-                    <CareRow
-                        cooldowns={cooldowns}
-                        floaters={ui.floaters}
-                        onUse={runAction}
-                    />
-                </SheetPanel.Separator>
-
                 <SheetPanel.Separator title="Evolución">
                     <EvoPanel
                         serverTime={data.player.serverTime} 
