@@ -1,10 +1,11 @@
 import type { CSSProperties } from 'react'
 import { RARITY_META } from '@/shared/constants/rarity'
-import { SPECIES_LABEL } from '@/shared/constants/tokagotchi'
 import styles from './TokaCard.module.css'
 import type { Tokagotchi, Rarity } from '@/shared/domain/tokagotchi.ts'
-import { getImagenSrcByEspecie } from '@/shared/game/assets.ts'
+import { getImagenSrcByEspecie, getAccessoryImageSrc } from '@/shared/game/assets.ts'
 import { IcReady } from '@/shared/ui/Icons/Icons'
+import RarityCard from '@/shared/ui/Cards/RarityCard/RarityCard'
+import { CardSpecies } from '@/shared/ui/TokaIdentity/TokaIdentity'
 
 // Color oscuro del info-band según rareza — crea la identidad cromática de cada card
 const BAND_BG: Record<Rarity, string> = {
@@ -46,11 +47,35 @@ export default function TokaCard({ toka, isActive, count, stacked, onClick }: To
       <div className={styles.inner}>
         {/* Halo ambiental de rareza detrás del toka */}
         <div className={styles.rarityGlow} aria-hidden="true" />
+        <div className={styles.positionCardSpecies}>
+          <CardSpecies species={toka.species} />
+        </div>
 
         {/* Canvas + count badge */}
         <div className={styles.canvasWrap}>
           <img src={getImagenSrcByEspecie(toka.species)} alt={toka.name} style={{ width: 140, height: 120, objectFit: 'contain' }} />
           {stacked && <span className={styles.count}>×{count}</span>}
+
+          {toka.equipped.length > 0 && (
+            <div className={styles.accBadges} aria-label="Accesorios equipados">
+              {toka.equipped.map((acc, i) => {
+                const src = getAccessoryImageSrc(acc.type)
+                return (
+                  <div
+                    key={acc.slot}
+                    className={styles.accBadge}
+                    style={{ zIndex: toka.equipped.length - i }}
+                    aria-label={acc.type.toLowerCase().replace(/_/g, ' ')}
+                  >
+                    {src
+                      ? <img src={src} alt="" aria-hidden="true" className={styles.accBadgeImg} />
+                      : <span className={styles.accBadgeFallback} aria-hidden="true">{acc.slot[0]}</span>
+                    }
+                  </div>
+                )
+              })}
+            </div>
+          )}
         </div>
 
         {/* Badges de estado (top corners) */}
@@ -67,11 +92,9 @@ export default function TokaCard({ toka, isActive, count, stacked, onClick }: To
         <div className={styles.infoBand}>
           <span className={styles.nick}>{toka.name}</span>
           <div className={styles.metaRow}>
-            <span className={styles.rarityDot} aria-hidden="true" />
-            <span className={styles.rarityLabel}>{meta.label}</span>
-            <span className={styles.species}>{SPECIES_LABEL[toka.species]}</span>
+            <RarityCard rarity={toka.rarity} size="sm" />
             <span className={styles.cp}>
-              {toka.cp}<span className={styles.cpUnit}> CP</span>
+              <img src="public/assets/ui/cp/cp.png" alt="" aria-hidden="true" className={styles.cpIcon} /> {toka.cp} <span className={styles.cpUnit}> CP</span>
             </span>
           </div>
         </div>

@@ -2,7 +2,6 @@ import type { TokagotchiApi } from "./contracts";
 import api from "./client";
 import type { AscendResponseDTO, CareResponseDTO } from "./dto/tokagotchi-responses.dto";
 import type { TokagotchiDTO } from "./dto/tokagotchi.dto";
-import { AscendResponseDTOMock, CareResponseDTOMock, toka_activo } from "../mock/mockData";
 
 /**
  * Implementación del cliente HTTP para operaciones de Tokagotchi.
@@ -40,25 +39,14 @@ const tokagotchi: TokagotchiApi = {
     console.log("Peticion POST /tokagotchis/${_tokaId}/evolve sin body. Respuesta:", data);
     return data;
   },
-};
 
-export const tokagotchiMock: TokagotchiApi = {
-  async care(_tokaId, action) {
-    console.log("Mocked care called with:", _tokaId, action);
-    return CareResponseDTOMock();
-  },
-  async rename(tokaId: string, name: string): Promise<TokagotchiDTO> {
-    console.log("Mocked rename called with:", tokaId, name);
-    return Promise.resolve(toka_activo);
-  },
-  async ascend(tokaId: string): Promise<AscendResponseDTO> {
-    console.log("Mocked ascend called with:", tokaId);
-    return AscendResponseDTOMock();
+  /** GET /tokagotchis/{id} — detalle de un Tokagotchi propio. */
+  async getTokaById(_tokaId) {
+    const { data } = await api.get<TokagotchiDTO>(`tokagotchis/${_tokaId}`);
+    console.log("Peticion GET /tokagotchis/${_tokaId}. Respuesta:", data);
+    return data;
   }
-}
+};
 
 /** Cliente HTTP para operaciones de Tokagotchi. Exportado como singleton. */
 export const tokagotchiApi: TokagotchiApi = tokagotchi;
-
-
-

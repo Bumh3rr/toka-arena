@@ -8,6 +8,7 @@ import ColeccionPage from '@/features/collection/pages/CollectionPage'
 import TiendaPage from '@/features/shop/pages/ShopPage'
 import HomePage from '@/features/home/pages/HomePage'
 import UIKitPage from '@/features/devkit/pages/UIKitPage'
+import AccessoryTestPage from '@/features/accessory-test/pages/AccessoryTestPage'
 import SessionWatcher from '@/features/auth/components/SessionWatcher'
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
@@ -43,6 +44,7 @@ export default function App() {
           <Route path="/tienda" element={<TiendaPage />} />
           <Route path="/ui-kit" element={<UIKitPage />} />
           <Route path="/arena" element={<ArenaPage />} />
+          <Route path="/accessory" element={<AccessoryTestPage />} />
         </Route>
 
         <Route path="/" element={

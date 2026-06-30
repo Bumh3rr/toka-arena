@@ -51,6 +51,7 @@ export default function CollectionTokasSection() {
           onActivate={activate}
           onAscend={ascend}
           onRename={rename}
+          onEquipChange={reload}
         />
       )}
       {toast && <Toast {...toast} />}

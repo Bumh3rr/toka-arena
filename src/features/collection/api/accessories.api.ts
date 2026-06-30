@@ -1,22 +1,23 @@
-/** 
+import api from '@/shared/api/client'
+import type { AccessoryPageDTO } from '@/shared/api/dto/accessory.dto'
 
-import type { ColAcc } from '../types/collection.types'
-
-export interface AccessoriesApi {
-  getMyAccessories(): Promise<ColAcc[]>
-  equip(accessoryId: string, tokaId: string): Promise<void>
-  unequip(accessoryId: string, tokaId: string): Promise<void>
+export interface InventoryParams {
+  page?: number
+  size?: number
+  equipped?: boolean
 }
 
-export const accessoriesApi: AccessoriesApi = {
-  async getMyAccessories() {
-    return []
-  },
-  async equip(_accessoryId, _tokaId) {
-    return
-  },
-  async unequip(_accessoryId, _tokaId) {
-    return
-  },
+export const accessoriesApi = {
+  getInventory: (params: InventoryParams = {}): Promise<AccessoryPageDTO> =>
+    api
+      .get<AccessoryPageDTO>('/accessories', {
+        params: { size: 15, page: 0, ...params },
+      })
+      .then((r) => r.data),
+
+  equip: (tokagotchiId: string, accessoryId: string): Promise<void> =>
+    api.post('/accessories/equip', { tokagotchiId, accessoryId }).then(() => undefined),
+
+  unequip: (accessoryId: string): Promise<void> =>
+    api.post('/accessories/unequip', { accessoryId }).then(() => undefined),
 }
-*/

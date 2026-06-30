@@ -1,29 +1,7 @@
-import type { CareDTO, EquippedAccessoryDTO, EvolutionDTO, TokagotchiDTO } from "@/shared/api/dto/tokagotchi.dto";
-import type { EquippedAccessory } from "../accessory";
-import { getRenderBinding } from "@/shared/render/accessoryManifest";
+import type { CareDTO, EvolutionDTO, TokagotchiDTO } from "@/shared/api/dto/tokagotchi.dto";
 import type { CareTimestamps, Tokagotchi, Stats, Evolution } from "../tokagotchi";
 import { toMs } from "@/shared/utils/time";
-
-/**
- * Transforma DTOs de accesorios equipados a domain types.
- * - Busca renderBinding para cada accesorio
- * - Filtra si no existe binding y avisa en console
- * - Añade displayIndex del binding
- * @param dtos - Array de accesorios equipados del DTO
- * @returns Array de accesorios con renderBinding info
- */
-export function mapEquippedDTO(dtos: EquippedAccessoryDTO[]): EquippedAccessory[] {
-  return dtos.flatMap((dto) => {
-    const binding = getRenderBinding(dto.code);
-    if (!binding) {
-      console.warn(
-        `[accessories] sin binding de render para code="${dto.code}"`,
-      );
-      return [];
-    }
-    return [{ ...dto, displayIndex: binding.displayIndex }];
-  });
-}
+import { mapEquipped } from "./equipped.mapper";
 
 /**
  * Transforma cooldowns ISO 8601 a milisegundos.
@@ -65,7 +43,7 @@ export function mapTokagotchiDTO(dto: TokagotchiDTO): Tokagotchi {
     cp: dto.cp,
     stats: mapStatsDTO(dto),
     nextEvolution: mapEvolutionDTO(dto.nextEvolution),
-    equipped: dto.equipped ? mapEquippedDTO(dto.equipped) : [],
+    equipped: dto.equipped ? mapEquipped(dto.equipped) : [],
     careCooldown: mapCareDTO(dto.careCooldown),
   };
 }

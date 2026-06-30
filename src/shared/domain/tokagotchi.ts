@@ -1,4 +1,5 @@
 import type { EquippedAccessory } from "./accessory";
+export type { EquippedAccessory };
 
 // Rarezas disponibles
 export type Rarity = "COMMON" | "RARE" | "EPIC" | "LEGENDARY";

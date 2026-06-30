@@ -104,7 +104,10 @@ export default function HomePage() {
     if (state.status === 'loading') return <HomeSkeleton />
     if (state.status === 'error') return <PageError message={state.error} onRetry={reload} />
     // Sin toka: redirige a /unboxing (efecto de arriba); skeleton mientras navega
-    if (!mainTokagotchi) return <HomeSkeleton />
+    if (!mainTokagotchi){
+        navigate('/unboxing', { replace: true })
+        return null
+    }
 
     const { cooldowns, ui, data } = state
     const cpMeta = mainTokagotchi.nextEvolution?.cpRequired ?? 0
@@ -198,6 +201,7 @@ export default function HomePage() {
                         onClick={() => setCollectionOpen(true)}>
                     </Button>
                 </div>
+                
                 <SheetPanel.Separator title="Estadísticas">
                     <StatsRow stats={mainTokagotchi.stats} />
                 </SheetPanel.Separator>

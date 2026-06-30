@@ -239,9 +239,20 @@
 .evoCost   { font-size: 12px; font-weight: 700; color: var(--ink-2); }
 
 .slots {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
+  flex-direction: row;
   gap: 8px;
+  overflow-x: auto;
+  /* overflow-x: auto forces overflow-y: hidden per CSS spec; min-height
+     prevents the container from collapsing and clipping slot content */
+  min-height: 100px;
+  padding-bottom: 6px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.slots::-webkit-scrollbar {
+  display: none;
 }
 
 .actions {

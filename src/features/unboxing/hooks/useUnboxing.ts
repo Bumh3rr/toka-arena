@@ -3,7 +3,7 @@ import { useGiftSound } from "../../../shared/audio/hooks/useGiftSound";
 import { useRevealSound } from "../../../shared/audio/hooks/useRevealSound";
 import { useToast } from "@/shared/hooks/useToast";
 import { useNavigate } from "react-router-dom";
-import type { PlayerProfile } from "@/shared/domain/player";
+import type { PlayerProfile } from "@/shared/player/data/player";
 import { unboxingApi } from "../api/unboxing.api";
 import { mapPlayerProfileDTO } from "@/shared/player/data/player.mapper";
 import { mapTokagotchiDTO } from "@/shared/domain/mappers/tokagotchi.mapper";

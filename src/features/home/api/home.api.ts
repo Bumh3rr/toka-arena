@@ -1,6 +1,5 @@
 import type { HomeResponseDTO } from "@/features/home/api/dto/home.dto";
 import api from "@/shared/api/client";
-import { HomeResponseDTOMock } from "@/shared/mock/mockData";
 
 /**
  * Contrato para obtener datos de la pantalla Home.
@@ -18,12 +17,6 @@ export const home: HomeApi = {
     const { data } = await api.get<HomeResponseDTO>("/home");
     console.log("Peticion GET /home, Respuesta:", data);
     return data;
-  }
-};
-
-export const homeMock: HomeApi = {
-  async getHome() {
-    return HomeResponseDTOMock();
   }
 };
 

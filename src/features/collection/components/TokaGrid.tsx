@@ -40,7 +40,7 @@ export default function TokaGrid({ data, filter, group, tokagotchiIdActive, onSe
   }, [filtered, group])
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 10 }} role="list">
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10 }} role="list">
       {cards.map(c => (
         <TokaCard
           key={c.toka.id}

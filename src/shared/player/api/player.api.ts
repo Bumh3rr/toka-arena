@@ -2,8 +2,6 @@ import type { PlayerProfileDTO } from "./player.dto";
 import type { PlayerTokagotchisPageDTO } from "./player.dto";
 import api from "@/shared/api/client";
 import { mapPlayerProfileDTO } from "@/shared/player/data/player.mapper";
-import { PlayerProfileDTOMock, PlayerTokagotchisPageDTOMock, toka_activo } from "../../mock/mockData";
-import { mapTokagotchiDTO } from "../../domain/mappers/tokagotchi.mapper";
 import type { PlayerProfile } from "../data/player";
 import type { Tokagotchi } from "@/shared/domain/tokagotchi";
 
@@ -67,23 +65,5 @@ export const player: PlayerApi = {
   },
 };
 
-export const playerMock: PlayerApi = {
-  async getMe() {
-    console.log("Peticion GET /players/me, Respuesta: (mocked)");
-    return mapPlayerProfileDTO(PlayerProfileDTOMock());
-  },
-  async renamePlayerUsername(newUsername: string) {
-    console.log("Peticion PATCH /players/me/name con body:", { newUsername }, "Respuesta: (mocked)");
-    return mapPlayerProfileDTO(PlayerProfileDTOMock());
-  },
-  async getMyTokagotchis(page: number, size: number, filters?: { rarity?: string; species?: string }) {
-    console.log(`Peticion GET /players/me/tokagotchis?page=${page}&size=${size}`, filters ?? '', 'Respuesta: (mocked)');
-    return PlayerTokagotchisPageDTOMock()
-  },
-  async setMyActiveTokagotchi(tokagotchiId: string) {
-    console.log(`Peticion POST /players/me/active-tokagotchi con body: { tokagotchiId: ${tokagotchiId} }, Respuesta: (mocked)`);
-    return mapTokagotchiDTO(toka_activo);
-  },
-};
 
 export const playerApi: PlayerApi = player;

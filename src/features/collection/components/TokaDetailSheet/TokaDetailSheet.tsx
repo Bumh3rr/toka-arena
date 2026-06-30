@@ -1,4 +1,6 @@
 import { useState, useRef, type CSSProperties, type PointerEvent } from 'react'
+import type { AccessorySlot } from '@/shared/domain/accessory'
+import AccEquipSheet from '../AccEquipSheet/AccEquipSheet'
 import TokagotchiCanvas from '@/shared/canvas/TokagotchiCanvas'
 import SheetPanel from '@/shared/ui/SheetPanel/SheetPanel'
 import { Button } from '@/shared/ui/Kit'
@@ -7,35 +9,12 @@ import StatsRow from '@/features/home/components/row/StatsRow'
 import AccSlot from '../AccSlot'
 import { RARITY_META, SPARKLE_COUNT, SPARKLE_POS } from '@/shared/constants/rarity'
 import type { Tokagotchi } from '@/shared/domain/tokagotchi'
-import type { ColAcc } from '../../types/collection.types'
-import type { EquippedAccessory } from '@/shared/domain/accessory'
 import styles from './TokaDetailSheet.module.css'
 import { TokaIdentity } from '@/shared/ui/TokaIdentity/TokaIdentity'
 import { IcFavorite, IcReady } from '@/shared/ui/Icons/Icons'
 import EvoPanel from '@/features/home/components/panel/EvoPanel'
 
 const SLIDE_W = 176  // horizontal offset between carousel items (px)
-
-// ── Nombres de accesorios para AccSlot ──────────────────────────────────────
-const ACC_DISPLAY_NAME: Record<string, string> = {
-  HELMET: 'Casco',
-  CROWN: 'Corona',
-  HAT: 'Sombrero',
-  SUPER_CAPE: 'Super Capa',
-}
-
-function toColAcc(ea: EquippedAccessory): ColAcc {
-  return {
-    id: ea.code,
-    name: ACC_DISPLAY_NAME[ea.code] ?? ea.code,
-    slot: ea.slot === 'HEAD' ? 'cabeza' : 'cuerpo',
-    owned: 1,
-    equipped: [],
-    locked: false,
-    code: ea.code,
-    image: null,
-  }
-}
 
 // ── Props ────────────────────────────────────────────────────────────────────
 interface TokaDetailSheetProps {
@@ -48,6 +27,7 @@ interface TokaDetailSheetProps {
   onActivate: (id: string) => void
   onAscend: (tokaId: string) => Promise<'SUCCESS' | 'FAIL' | null>
   onRename: (tokaId: string, newName: string) => Promise<void>
+  onEquipChange: () => void
 }
 
 // ── Carrusel del hero ────────────────────────────────────────────────────────
@@ -153,12 +133,14 @@ export default function TokaDetailSheet({
   onActivate,
   onAscend,
   onRename,
+  onEquipChange,
 }: TokaDetailSheetProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [sheetExpanded, setSheetExpanded] = useState(true)
   const [exiting, setExiting] = useState(false)
   const [isFav, setIsFav] = useState(false)
   const [renameOpen, setRenameOpen] = useState(false)
+  const [activeSlot, setActiveSlot] = useState<AccessorySlot | null>(null)
 
   const overlayRef = useRef<HTMLDivElement>(null)
 
@@ -170,10 +152,7 @@ export default function TokaDetailSheet({
   const meta = RARITY_META[tokagotchi.rarity]
   const sparkles = SPARKLE_POS.slice(0, SPARKLE_COUNT[tokagotchi.rarity])
 
-  const headEquipped = tokagotchi.equipped.find((e) => e.slot === 'HEAD')
-  const bodyEquipped = tokagotchi.equipped.find((e) => e.slot === 'BACK')
-  const headAcc = headEquipped ? toColAcc(headEquipped) : undefined
-  const bodyAcc = bodyEquipped ? toColAcc(bodyEquipped) : undefined
+  const slotMap = Object.fromEntries(tokagotchi.equipped.map(e => [e.slot, e]))
 
   const themeVars = { '--glow-soft': meta.soft } as CSSProperties
 
@@ -292,10 +271,10 @@ export default function TokaDetailSheet({
 
         <SheetPanel.Separator title="Accesorios">
           <div className={styles.slots}>
-            <AccSlot label="Cabeza" acc={headAcc} />
-            <AccSlot label="Cuerpo" acc={bodyAcc} />
-            <AccSlot label="Cuello" future />
-            <AccSlot label="Cara" future />
+            <AccSlot label="Cabeza"  acc={slotMap['HEAD']} onClick={() => setActiveSlot('HEAD')} />
+            <AccSlot label="Cara"    acc={slotMap['FACE']} onClick={() => setActiveSlot('FACE')} />
+            <AccSlot label="Espalda" acc={slotMap['BACK']} onClick={() => setActiveSlot('BACK')} />
+            <AccSlot label="Cuello"  future />
           </div>
         </SheetPanel.Separator>
 
@@ -327,6 +306,16 @@ export default function TokaDetailSheet({
             setRenameOpen(false)
           }}
           onClose={() => setRenameOpen(false)}
+        />
+      )}
+
+      {activeSlot && (
+        <AccEquipSheet
+          slot={activeSlot}
+          tokaId={tokagotchi.id}
+          equippedAccId={slotMap[activeSlot]?.id}
+          onClose={() => setActiveSlot(null)}
+          onEquipChange={onEquipChange}
         />
       )}
     </div>

@@ -1,6 +1,5 @@
 import type { ConfigCare } from "../data/home.types"; 
-import type { Rarity, Species } from "@/shared/domain/tokagotchi";
-import type { Evolution } from "@/shared/domain/evolution";
+import type { Species } from "@/shared/domain/tokagotchi";
 import type { AbilityDTO } from "@/shared/api/dto/tokagotchi.dto";
 
 export const CONFIG_CARE: ConfigCare[] = [
@@ -29,33 +28,6 @@ export const CONFIG_CARE: ConfigCare[] = [
     animation: "bañar",
   },
 ];
-
-export const EVOLUCION: Partial<Record<Rarity, Evolution>> = {
-  COMMON: {
-    nextRarity: "RARE",
-    cpRequired: 100,
-    tfRequired: 10,
-    successChance: 40,
-    failCooldownHours: 12,
-    evolvedAvailableAt: null
-  },
-  RARE: {
-    nextRarity: "EPIC",
-    cpRequired: 300,
-    tfRequired: 25,
-    successChance: 30,
-    failCooldownHours: 24,
-    evolvedAvailableAt: null
-  },
-  EPIC: {
-    nextRarity: "LEGENDARY",
-    cpRequired: 600,
-    tfRequired: 50,
-    successChance: 20,
-    failCooldownHours: 48,
-    evolvedAvailableAt: null
-  },
-};
 
 export const SPECIES_ABILITIES: Record<Species, AbilityDTO[]> = {
   TOFU: [

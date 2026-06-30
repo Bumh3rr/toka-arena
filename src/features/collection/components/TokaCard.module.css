@@ -10,7 +10,9 @@
   align-items: stretch;
 }
 
-.stacked { padding-top: 9px; }
+.stacked {
+  padding-top: 9px;
+}
 
 /* ── Card face ─────────────────────────────────────────────────────────────── */
 .inner {
@@ -23,7 +25,7 @@
   background: linear-gradient(175deg, #FFFBF1 0%, #EED5A8 85%, #E0C08A 100%);
   box-shadow:
     0 0 20px var(--ring-soft),
-    0 0 6px  var(--ring-soft),
+    0 0 6px var(--ring-soft),
     inset 0 2px 0 rgba(255, 255, 255, .7),
     0 5px 0 var(--ring-soft);
   display: flex;
@@ -43,11 +45,10 @@
   top: -15%;
   left: -25%;
   right: -25%;
-  height: 85%;
+  height: 100%;
   background: radial-gradient(ellipse at 50% 60%,
-    var(--ring-soft) 0%,
-    transparent 65%
-  );
+      var(--ring-soft) 0%,
+      transparent 65%);
   pointer-events: none;
   z-index: 0;
 }
@@ -85,10 +86,9 @@
   right: 12%;
   height: 1px;
   background: linear-gradient(90deg,
-    transparent 0%,
-    var(--ring) 50%,
-    transparent 100%
-  );
+      transparent 0%,
+      var(--ring) 50%,
+      transparent 100%);
   opacity: 0.5;
 }
 
@@ -106,17 +106,8 @@
 .metaRow {
   display: flex;
   align-items: center;
+  justify-content: space-around;
   gap: 4px;
-}
-
-/* Punto glowing de rareza */
-.rarityDot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--ring);
-  box-shadow: 0 0 5px var(--ring), 0 0 10px var(--ring-soft);
-  flex: none;
 }
 
 .rarityLabel {
@@ -171,7 +162,12 @@
   justify-content: center;
   box-shadow: 0 2px 6px rgba(0, 0, 0, .35);
 }
-.activeBadge svg { width: 11px; height: 11px; stroke: #fff; }
+
+.activeBadge svg {
+  width: 11px;
+  height: 11px;
+  stroke: #fff;
+}
 
 .favBadge {
   position: absolute;
@@ -183,7 +179,53 @@
   color: #F7B92C;
   filter: drop-shadow(0 1px 3px rgba(0, 0, 0, .55));
 }
-.favBadge svg { width: 20px; height: 20px; }
+
+.favBadge svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* ── Accessory badges ──────────────────────────────────────────────────────── */
+.accBadges {
+  position: absolute;
+  bottom: 6px;
+  left: 6px;
+  display: flex;
+  align-items: center;
+  z-index: 2;
+}
+
+.accBadge {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(10, 5, 2, .82);
+  border: 1.5px solid rgba(255, 255, 255, .22);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.accBadge+.accBadge {
+  margin-left: -8px;
+}
+
+.accBadgeImg {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.accBadgeFallback {
+  font-family: var(--font-title);
+  font-size: 9px;
+  font-weight: 800;
+  color: var(--ring);
+  line-height: 1;
+  user-select: none;
+}
 
 /* Badge de cantidad en modo agrupado */
 .count {
@@ -202,6 +244,18 @@
   backdrop-filter: blur(4px);
 }
 
+.cpIcon {
+  width: 20px;
+  height: 20px;
+  vertical-align: text-bottom;
+}
+
+.positionCardSpecies{
+  position: absolute;
+  top: 6px;
+  right: 20px;
+}
+
 /* ── Sombras apiladas ──────────────────────────────────────────────────────── */
 .shadow {
   position: absolute;
@@ -212,5 +266,16 @@
   border: 2px solid rgba(74, 40, 0, .18);
   background: rgba(255, 248, 237, .55);
 }
-.s1 { top: 4px; transform: translateX(-50%);            z-index: 0; }
-.s2 { top: 0;   transform: translateX(-50%) scale(.93); z-index: -1; opacity: .5; }
+
+.s1 {
+  top: 4px;
+  transform: translateX(-50%);
+  z-index: 0;
+}
+
+.s2 {
+  top: 0;
+  transform: translateX(-50%) scale(.93);
+  z-index: -1;
+  opacity: .5;
+}

@@ -1,11 +1,10 @@
+import type { AccessorySlotDTO } from "./accessory.dto";
+
 /** Niveles de rareza posibles de un Tokagotchi, de menor a mayor. */
 export type RarityDTO = "COMMON" | "RARE" | "EPIC" | "LEGENDARY";
 
 /** Especies disponibles de Tokagotchi. */
 export type SpeciesDTO = "TOFU" | "MOCHI" | "HANA";
-
-/** Ranuras de accesorio que puede ocupar un ítem equipado. */
-export type AccessorySlotDTO = "HEAD" | "FACE" | "NECK" | "BACK";
 
 export type NextRarityDTO = RarityDTO | "MAX";
 
@@ -30,10 +29,11 @@ export interface EvolutionDTO {
 
 /** Accesorio equipado actualmente en un Tokagotchi. */
 export interface EquippedAccessoryDTO {
+  id: string;
   /** Ruta al manifiesto de accesorios. */
   /** /src/assets/dragonbones/accessories.manifest.json */
   /** Código interno que identifica el asset del accesorio. */
-  code: string;
+  type: string;
   /** Ranura que ocupa el accesorio. */
   slot: AccessorySlotDTO;
 }

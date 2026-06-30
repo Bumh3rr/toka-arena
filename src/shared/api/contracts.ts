@@ -28,4 +28,11 @@ export interface TokagotchiApi {
    * @returns Resultado (SUCCESS/FAIL), nueva rareza, stats y TF consumido
    */
   ascend(tokaId: string): Promise<AscendResponseDTO>;
+
+  /**
+   * Obtiene los datos de un tokagotchi por su ID
+   * @param tokaId - ID del tokagotchi
+   * @returns Datos del tokagotchi
+   */
+  getTokaById(tokaId: string): Promise<TokagotchiDTO>;
 }
