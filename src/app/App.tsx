@@ -12,12 +12,9 @@ import AccessoryTestPage from '@/features/accessory-test/pages/AccessoryTestPage
 import SessionWatcher from '@/features/auth/components/SessionWatcher'
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
-  /** 
   return tokenStore.exists()
     ? <>{children}</>
     : <Navigate to="/login" replace />
-*/
-  return <>{children}</>
 }
 
 export default function App() {

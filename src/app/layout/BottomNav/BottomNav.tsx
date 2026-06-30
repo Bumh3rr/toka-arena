@@ -6,7 +6,7 @@ import { IcGrid, IcPase, IcShop, IcArena, IcPaw } from '../../../shared/ui/Icons
 import { useNavBar } from '../../../shared/hooks/useNavBar'
 
 const LEFT_ITEMS = [
-  { label: 'Tienda', path: '/tienda', icon: <IcShop /> },
+  { label: 'Tienda', path: '/accessory', icon: <IcShop /> },
   { label: 'Colección', path: '/coleccion', icon: <IcGrid /> },
 ]
 const RIGHT_ITEMS = [
