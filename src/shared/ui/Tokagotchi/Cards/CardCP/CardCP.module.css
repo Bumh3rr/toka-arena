@@ -1,0 +1,29 @@
+/* ── Card de CP ───────────────────────────────────────────────────────────── */
+.cardCp {
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 15px 3px 10px;
+}
+
+.cpIcon {
+  width: 20px;
+  height: 20px;
+}
+.cpNum, .cpLabel{
+  font-family: var(--font-title);
+  line-height: 1;
+}
+
+.cpNum{
+  font-size: 13px;
+  font-weight: 900;
+  color: var(--ink);
+}
+
+.cpLabel{
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ink-2);
+}

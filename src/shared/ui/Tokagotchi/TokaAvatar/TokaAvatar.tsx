@@ -1,5 +1,5 @@
-import { getImagenSrcByEspecie } from '@/shared/game/assets'
-import type { Tokagotchi } from '../../domain/tokagotchi' 
+import { getSpeciesImageSrc } from '@/shared/game/assets'
+import type { Tokagotchi } from '../../../domain/tokagotchi' 
 import { RARITY_META } from '@/shared/constants/rarity'
 import styles from './TokaAvatar.module.css'
 
@@ -10,7 +10,7 @@ interface TokaAvatarProps {
 }
 
 export default function TokaAvatar({ tokagotchi, size = 54, isActive = false }: TokaAvatarProps) {
-  const imgSrc = getImagenSrcByEspecie(tokagotchi.species)
+  const imgSrc = getSpeciesImageSrc(tokagotchi.species)
   const rar = RARITY_META[tokagotchi.rarity]
   return (
     <div

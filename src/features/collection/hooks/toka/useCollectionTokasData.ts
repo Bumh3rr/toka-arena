@@ -4,8 +4,8 @@ import type { ColFilter, CollectionTokagotchiData, CollectionTokasState } from '
 import { collectionKeys } from '../../swr/keys'
 import { playerApi } from '@/shared/player/api/player.api'
 import { tokagotchiApi } from '@/shared/api/tokagotchi.api'
-import { mapTokaDtoListToColRoster } from '../../mappers/toka/toka.dto-to-domain.mapper'
-import { mapEvolutionDTO, mapStatsDTO } from '@/shared/domain/mappers/tokagotchi.mapper'
+import { mapTokaDtoListToColRoster } from '../../mappers/toka.mapper'
+import { mapTokagotchiDTO } from '@/shared/domain/mappers/tokagotchi.mapper'
 import { RARITY_META } from '@/shared/constants/rarity'
 import { getApiErrorMessage } from '@/shared/api/client'
 import { useToast } from '@/shared/hooks/useToast'
@@ -70,9 +70,7 @@ export function useCollectionTokasData(page: number, filter: ColFilter) {
     try {
     await mutate(async (prev) => {
       // await favoritesApi.setFavorite(tokaId, fav)
-      return prev
-        ? { ...prev, roster: prev.roster.map((t) => (t.id === tokaId ? { ...t, fav } : t)) }
-        : prev
+      return prev ? { ...prev, roster: prev.roster.map((t) => (t.id === tokaId ? { ...t, fav } : t)) } : prev
     })
     } catch (err) {
       const msg = getApiErrorMessage(err, 'No se pudo actualizar favorito')
@@ -84,20 +82,13 @@ export function useCollectionTokasData(page: number, filter: ColFilter) {
     try {
       const res = await tokagotchiApi.ascend(tokaId)
 
-      const update = {
-        rarity: res.tokagotchi.rarity,
-        cp: res.tokagotchi.cp,
-        stats: mapStatsDTO(res.tokagotchi),
-        nextEvolution: mapEvolutionDTO(res.tokagotchi.nextEvolution),
-      }
+      const update = mapTokagotchiDTO(res.tokagotchi)
       await mutate((prev) => {
         if (!prev) return prev
         return {
           ...prev,
           roster: prev.roster.map((t) => (t.id === tokaId ? { ...t, ...update } : t)),
-          activeTokagotchi: prev.activeTokagotchi?.id === tokaId
-            ? { ...prev.activeTokagotchi, ...update }
-            : prev.activeTokagotchi,
+          activeTokagotchi: prev.activeTokagotchi?.id === tokaId ? { ...prev.activeTokagotchi, ...update } : prev.activeTokagotchi,
         }
       }, { revalidate: false })
 
@@ -139,7 +130,9 @@ export function useCollectionTokasData(page: number, filter: ColFilter) {
   }, [mutate, show])
 
   return {
-    state,
+    isLoading: !data && !error,
+    error: state.status === 'error' ? state.error : null,
+    data: state.status === 'ready' ? state.data : null,
     activate,
     setFavorite,
     ascend,

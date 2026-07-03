@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
-import BottomSheet from '@/shared/ui/BottomSheet/BottomSheet'
-import TokaAvatar from '@/shared/ui/TokaAvatar/TokaAvatar'
+import BottomSheet from '@/shared/ui/Sheet/BottomSheet/BottomSheet'
+import TokaAvatar from '@/shared/ui/Tokagotchi/TokaAvatar/TokaAvatar'
 import Loading from '@/shared/ui/Loading/Loading'
 import { IcCheck, IcChevronDown } from '@/shared/ui/Icons/Icons'
 import { RARITY_META } from '@/shared/constants/rarity'

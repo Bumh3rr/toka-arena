@@ -1,15 +1,7 @@
 import type { Rarity, Tokagotchi } from '@/shared/domain/tokagotchi'
 
-
 export type ColTab = 'toka' | 'acc' | 'reactions'
 export type ColFilter = 'all' | Rarity | 'fav'
-
-export interface ColAbility {
-  name: string
-  nrg: number
-  desc: string
-  signature: boolean
-}
 
 export interface CollectionTokagotchiData {
   serverTime: number

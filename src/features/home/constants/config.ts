@@ -8,7 +8,7 @@ export const CONFIG_CARE: ConfigCare[] = [
     label: "Alimentar",
     cp: 5,
     cooldownSeg: 600,
-    img: "/assets/ui/btn_alimentar.png",
+    img: "/assets/ui/care/feed.png",
     animation: "comer"
   },
   {
@@ -16,7 +16,7 @@ export const CONFIG_CARE: ConfigCare[] = [
     label: "Jugar",
     cp: 8,
     cooldownSeg: 1200,
-    img: "/assets/ui/btn_jugar.png",
+    img: "/assets/ui/care/play.png",
     animation: "jugar",
   },
   {
@@ -24,7 +24,7 @@ export const CONFIG_CARE: ConfigCare[] = [
     label: "Bañar",
     cp: 4,
     cooldownSeg: 1800,
-    img: "/assets/ui/btn_ducha.png",
+    img: "/assets/ui/care/bathe.png",
     animation: "bañar",
   },
 ];

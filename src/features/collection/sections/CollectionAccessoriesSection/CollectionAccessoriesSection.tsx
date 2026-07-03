@@ -1,17 +1,13 @@
 import PageError from '@/shared/ui/Error/Error'
 import Probador from '../../components/Probador/Probador'
 import { useCollectionAccessoriesData } from '../../hooks/accessories/useCollectionAccessoriesData'
-import styles from '../../pages/CollectionPage.module.css'
+import Loading from '@/shared/ui/Loading/Loading'
 
 export default function CollectionAccessoriesSection() {
   const { roster, activeTokaId, isLoading, error, reload } = useCollectionAccessoriesData()
 
   if (isLoading) {
-    return (
-      <div className={styles.loading}>
-        <span className={styles.loadingText}>Cargando coleccion...</span>
-      </div>
-    )
+    return <Loading fullscreen text='Cargando colección...' /> 
   }
 
   if (error) {

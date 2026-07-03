@@ -4,7 +4,6 @@
   flex-direction: column;
   gap: 8px;
   min-width: 0;
-  --meta-icon-size: 20px;
 }
 
 /* ── Nombre + botón ─────────────────────────────────────────────────────────── */
@@ -15,6 +14,7 @@
 }
 
 .name {
+  font-family: var(--font-title);  
   font-size: 25px;
   font-weight: 900;
   line-height: .95;
@@ -52,53 +52,4 @@
   overflow: hidden;
   text-overflow: ellipsis;
   padding: 3px 12px 3px 3px;
-}
-
-/* ── Card de CP ─────────────────────────────────────────────────────────────── */
-.cardCp, .cardSpecies {
-  width: fit-content;
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  padding: 3px 15px 3px 10px;
-}
-
-.cardSpecies {
-  gap: 0;
-  padding: 3px 2px 3px 10px;
-}
-
-.cardSpecies svg {
-  color: var(--ink-2);
-}
-
-.cardSpecies svg,
-.cpIcon {
-  width: var(--meta-icon-size);
-  height: var(--meta-icon-size);
-}
-
-.cpIcon {
-  object-fit: contain;
-}
-
-.name,
-.species,
-.cpNum {
-  font-family: var(--font-title);
-}
-
-.cpNum {
-  font-size: 13px;
-  font-weight: 900;
-  color: var(--ink);
-  line-height: 1;
-}
-
-.cpLabel {
-  font-family: var(--font-title);
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--ink-2);
-  line-height: 1;
 }

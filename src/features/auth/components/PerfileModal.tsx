@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import BottomSheet from '@/shared/ui/BottomSheet/BottomSheet'
+import BottomSheet from '@/shared/ui/Sheet/BottomSheet/BottomSheet'
 import { IcCheck, IcCopy, IcPencil, IcPerson, IcMusic, IcHelp, IcDoc, IcInfo, IcSpeaker, IcChevR } from '@/shared/ui/Icons/Icons'
 import styles from './PerfileModal.module.css'
 import { IconButton, Button, Toggle, Label, Toast } from '@/shared/ui/Kit'

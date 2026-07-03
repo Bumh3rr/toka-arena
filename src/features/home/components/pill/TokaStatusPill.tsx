@@ -1,6 +1,6 @@
 import type { Rarity } from '@/shared/domain/tokagotchi'
 import { IcChevUp } from '@/shared/ui/Icons/Icons'
-import RarityCard from '@/shared/ui/Cards/RarityCard/RarityCard'
+import CardRarity from '@/shared/ui/Tokagotchi/Cards/CardRarity/CardRarity'
 import styles from './TokaStatusPill.module.css'
 
 interface TokaStatusPillProps {
@@ -18,7 +18,7 @@ export default function TokaStatusPill({ nombre, rareza, cp, cpMeta, onOpen }: T
     <button className={styles.statusPill} onClick={onOpen} aria-label="Ver detalles del tokagotchi">
       <div className={styles.statusTop}>
         <span className={styles.statusNm}>{nombre}</span>
-        <RarityCard rarity={rareza} size="sm" />
+        <CardRarity rarity={rareza} size="sm" />
         <span className={styles.statusChev}><IcChevUp /></span>
       </div>
       <div className={styles.statusBottom}>

@@ -1,4 +1,4 @@
-import styles from './RarityCard.module.css'
+import styles from './CardRarity.module.css'
 import type { Rarity } from '@/shared/domain/tokagotchi'
 import { RARITY_META } from '@/shared/constants/rarity'
 
@@ -10,7 +10,7 @@ interface Props {
   customStyles?: React.CSSProperties
 }
 
-export default function RarityCard({ rarity, size = 'md', customStyles }: Props) {
+export default function CardRarity({ rarity, size = 'md', customStyles }: Props) {
   const { label, ring } = RARITY_META[rarity]
   const isLegendary = rarity === 'LEGENDARY'
   return (

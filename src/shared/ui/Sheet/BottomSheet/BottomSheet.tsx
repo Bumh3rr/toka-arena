@@ -1,5 +1,5 @@
-import { IconButton } from '../Kit'
-import { IcX } from '../Icons/Icons'
+import { IconButton } from '../../Kit'
+import { IcX } from '../../Icons/Icons'
 import styles from './BottomSheet.module.css'
 
 interface BottomSheetProps {

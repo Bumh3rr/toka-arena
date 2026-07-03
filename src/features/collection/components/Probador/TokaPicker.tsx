@@ -1,10 +1,10 @@
 import type { CSSProperties } from 'react'
 import type { Tokagotchi } from '@/shared/domain/tokagotchi'
-import { getImagenSrcByEspecie, getAccessoryImageSrc } from '@/shared/game/assets'
+import { getSpeciesImageSrc, getAccessoryImageSrc } from '@/shared/game/assets'
 import { RARITY_META } from '@/shared/constants/rarity'
 import { IcClothes, IcReady } from '@/shared/ui/Icons/Icons'
 import styles from './TokaPicker.module.css'
-import RarityCard from '@/shared/ui/Cards/RarityCard/RarityCard'
+import CardRarity from '@/shared/ui/Tokagotchi/Cards/CardRarity/CardRarity'
 
 interface TokaPickerProps {
   roster: Tokagotchi[]
@@ -36,12 +36,12 @@ export default function TokaPicker({ roster, activeTokaId, selectedTokaId, onSel
             >
               <span className={styles.wearing}>Vistiendo</span>
               <span className={styles.featuredThumb}>
-                <img src={getImagenSrcByEspecie(t.species)} alt="" aria-hidden="true" className={styles.featuredImg} />
+                <img src={getSpeciesImageSrc(t.species)} alt="" aria-hidden="true" className={styles.featuredImg} />
                 {isActive && <span className={styles.activeDot} aria-hidden="true"><IcReady /></span>}
               </span>
               <span className={styles.featuredInfo}>
                 <span className={styles.featuredName}>{t.name}</span>
-                <RarityCard size='sm' rarity={t.rarity} />
+                <CardRarity size='sm' rarity={t.rarity} />
                 <span className={styles.featuredMeta}>
                   <img src="/assets/ui/cp/cp.png" alt="" aria-hidden="true" className={styles.featuredCpIcon} /> {t.cp} { }
                   <IcClothes /> {t.equipped.length}
@@ -64,7 +64,7 @@ export default function TokaPicker({ roster, activeTokaId, selectedTokaId, onSel
             onClick={() => onSelect(t.id)}
           >
             <span className={styles.thumbWrap}>
-              <img src={getImagenSrcByEspecie(t.species)} alt="" aria-hidden="true" className={styles.thumb} />
+              <img src={getSpeciesImageSrc(t.species)} alt="" aria-hidden="true" className={styles.thumb} />
               {t.equipped.length > 0 && (
                 <span className={styles.badges} aria-hidden="true">
                   {t.equipped.slice(0, 3).map((acc) => {

@@ -2,7 +2,7 @@ import useSWR from 'swr'
 import type { Tokagotchi } from '@/shared/domain/tokagotchi'
 import { collectionKeys } from '../../swr/keys'
 import { playerApi } from '@/shared/player/api/player.api'
-import { mapTokaDtoListToColRoster } from '../../mappers/toka/toka.dto-to-domain.mapper'
+import { mapTokaDtoListToColRoster } from '../../mappers/toka.mapper'
 
 const PAGE_SIZE = 100
 

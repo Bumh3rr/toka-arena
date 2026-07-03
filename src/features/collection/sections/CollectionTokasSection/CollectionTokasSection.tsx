@@ -12,7 +12,7 @@ import { Toast } from '@/shared/ui/Kit'
 
 export default function CollectionTokasSection() {
   const ui = useCollectionTokasUi()
-  const { state, activate, setFavorite, ascend, rename, reload, toast } = useCollectionTokasData(ui.page, ui.filter)
+  const { data, isLoading, error, activate, setFavorite, ascend, rename, reload, toast } = useCollectionTokasData(ui.page, ui.filter)
   const { hideBar, showBar } = useNavBar()
 
   useEffect(() => {
@@ -21,19 +21,18 @@ export default function CollectionTokasSection() {
     return () => showBar()
   }, [ui.detailGroupIds, hideBar, showBar])
 
-  if (state.status === 'error') {
-    return <PageError message={state.error} onRetry={reload} />
+  if (isLoading) {
+    return <Loading fullscreen text='Cargando colección...' />
   }
 
-  const { data } = state.status === 'ready' ? state : { data: null }
-  if (!data) {
-    return <Loading fullscreen text='Cargando colección...' />
+  if (error) {
+    return <PageError message={error} onRetry={reload} />
   }
 
   // Resolve fresh toka objects from roster using stored IDs
   const detailGroup = ui.detailGroupIds
     ? ui.detailGroupIds.flatMap(id => {
-        const t = data.roster.find(t => t.id === id)
+        const t = data!.roster.find(t => t.id === id)
         return t ? [t] : []
       })
     : null
@@ -43,9 +42,9 @@ export default function CollectionTokasSection() {
       {detailGroup && detailGroup.length > 0 && (
         <TokaDetailSheet
           tokagotchiGroup={detailGroup}
-          activeTokaId={data.activeTokaId}
-          serverTime={data.serverTime}
-          tf={data.tf}
+          activeTokaId={data!.activeTokaId}
+          serverTime={data!.serverTime}
+          tf={data!.tf}
           onBack={ui.closeDetail}
           onToggleFav={setFavorite}
           onActivate={activate}
@@ -64,10 +63,10 @@ export default function CollectionTokasSection() {
       />
 
       <TokaGrid
-        data={data.roster}
+        data={data!.roster}
         filter={ui.filter}
         group={ui.group}
-        tokagotchiIdActive={data.activeTokaId}
+        tokagotchiIdActive={data!.activeTokaId}
         onSelect={ui.openDetail}
       />
 
@@ -75,15 +74,15 @@ export default function CollectionTokasSection() {
         <button
           className={styles.pageBtn}
           onClick={() => ui.setPage((prev) => Math.max(0, prev - 1))}
-          disabled={!data.pagination.hasPrevious}
+          disabled={!data!.pagination.hasPrevious}
         >Anterior</button>
         <span className={styles.pageInfo}>
-          Pagina {data.pagination.page + 1} de {Math.max(1, data.pagination.totalPages)}
+          Pagina {data!.pagination.page + 1} de {Math.max(1, data!.pagination.totalPages)}
         </span>
         <button
           className={styles.pageBtn}
           onClick={() => ui.setPage((prev) => prev + 1)}
-          disabled={!data.pagination.hasNext}
+          disabled={!data!.pagination.hasNext}
         >
           Siguiente
         </button>

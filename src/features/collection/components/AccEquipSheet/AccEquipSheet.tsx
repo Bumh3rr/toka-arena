@@ -1,4 +1,4 @@
-import BottomSheet from '@/shared/ui/BottomSheet/BottomSheet'
+import BottomSheet from '@/shared/ui/Sheet/BottomSheet/BottomSheet'
 import { Button, Card, Label, Toast } from '@/shared/ui/Kit'
 import { getAccessoryImageSrc } from '@/shared/game/assets'
 import { getApiErrorMessage } from '@/shared/api/client'
