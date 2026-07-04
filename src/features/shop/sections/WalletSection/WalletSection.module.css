@@ -1,0 +1,30 @@
+.packs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.hscroll {
+  display: flex;
+  gap: 11px;
+  overflow-x: auto;
+  padding: 2px 0 6px;
+  margin-top: 10px;
+  scrollbar-width: none;
+  /* Ítem flex directo de FeatureScreen .content: con overflow, su min-height
+     automático es 0 y se colapsaría verticalmente. flex:none lo evita. */
+  flex: none;
+}
+
+.hscroll::-webkit-scrollbar {
+  display: none;
+}
+
+.legal {
+  text-align: center;
+  font-size: 11px;
+  color: rgba(255, 248, 237, .6);
+  margin: 12px 8px 0;
+  line-height: 1.4;
+}

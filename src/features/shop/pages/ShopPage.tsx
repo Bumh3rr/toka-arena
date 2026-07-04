@@ -1,34 +1,21 @@
 import { useState } from 'react'
-import Tabs from '@/shared/ui/Tabs'
 import type { ShopTab } from '../types/shop.types'
-import styles from './ShopPage.module.css'
+import FeatureScreen from '@/shared/ui/Screen/FeatureScreen'
+import ShopTabs from '../components/ShopTabs'
+import StoreSection from '../sections/StoreSection/StoreSection'
+import WalletSection from '../sections/WalletSection/WalletSection'
 
 export default function ShopPage() {
   const [tab, setTab] = useState<ShopTab>('store')
 
   return (
-    <div className={styles.screen}>
-      <div className={styles.background} />
-
-      <div className={styles.topbar}>
-        <span className={styles.title}>Tienda</span>
-      </div>
-
-      <Tabs
-        ariaLabel="Pestañas de la tienda"
-        value={tab}
-        onChange={setTab}
-        items={[
-          { value: 'store', label: 'Tienda' },
-          { value: 'wallet', label: 'Billetera' },
-        ]}
-      />
-
-      <div className={styles.scroll}>
-        {tab === 'store' && <div>Contenido</div>}
-        {tab === 'wallet' && <div>Contenido de la billetera</div>}
-      </div>
-    </div>
+    <FeatureScreen
+      title="Tienda"
+      backgroundImage="/assets/backgrounds/bg_shop.png"
+      tabs={<ShopTabs tab={tab} onSetTab={setTab} />}
+    >
+      {tab === 'store' && <StoreSection />}
+      {tab === 'wallet' && <WalletSection />}
+    </FeatureScreen>
   )
-
 }

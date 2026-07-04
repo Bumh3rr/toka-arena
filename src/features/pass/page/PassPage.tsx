@@ -1,11 +1,11 @@
 import FeatureScreen from '@/shared/ui/Screen'
 
-export default function ArenaPage() {
+export default function PassPage() {
 
   return (
     <FeatureScreen
-      title="Arena"
-      backgroundImage="/assets/backgrounds/bg_arena.png"
+      title="Pase de Batalla"
+      backgroundImage="/assets/backgrounds/bg_login.png"
     >
       <div></div>
     </FeatureScreen>

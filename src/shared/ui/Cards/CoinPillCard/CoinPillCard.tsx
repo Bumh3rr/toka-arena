@@ -11,6 +11,7 @@ function CoinPillCard({ tf, onClick }: CoinPillCardProps) {
     const [dump, setDump] = useState(false)
     return (
         <Button
+            className={styles.coinPillCard}
             radius="pill"
             onClick={() => {
                 if (dump) return
@@ -20,7 +21,7 @@ function CoinPillCard({ tf, onClick }: CoinPillCardProps) {
             }}
         >
             <img src="/assets/ui/tf/tf.svg" alt="TF" className={`${styles.imgCoin} ${dump ? styles.dump : ''}`} />
-            <span>{tf}</span>
+            <span className={styles.tfValue}>{tf}</span>
             <span className={styles.tf}>TF</span>
         </Button>
     )

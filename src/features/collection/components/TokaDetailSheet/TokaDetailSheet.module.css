@@ -2,7 +2,7 @@
 .overlay {
   position: fixed;
   inset: 0;
-  z-index: 100;
+  z-index: 99999999;
   overflow: hidden;
   animation: enterUp .28s cubic-bezier(.2, .8, .3, 1) both;
 }

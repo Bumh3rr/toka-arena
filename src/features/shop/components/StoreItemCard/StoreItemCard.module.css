@@ -1,0 +1,80 @@
+.imgwrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1.35;
+  border-radius: 12px;
+  background: #fff5e0;
+  border: 1.5px solid var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.img {
+  width: 78%;
+  height: 78%;
+  object-fit: contain;
+}
+
+.glyph {
+  width: 42px;
+  height: 42px;
+  color: var(--ink-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.glyph svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.slot {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+}
+
+.soonBadge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+}
+
+.name {
+  font-family: var(--font-title);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.15;
+  min-height: 30px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.price {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-title);
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.tfIcon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Estado "próximamente" */
+.soon {
+  opacity: .7;
+  border-style: dashed;
+}

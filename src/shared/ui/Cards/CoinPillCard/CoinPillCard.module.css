@@ -1,9 +1,12 @@
+.coinPillCard{
+    padding: 5px 10px;
+}
+
 .imgCoin {
     width: 23px;
     height: 23px;
     display: block;
     filter: drop-shadow(0 1px 0 rgba(74, 40, 0, .25));
-
 }
 
 .tf {
@@ -12,7 +15,8 @@
     opacity: .7;
     margin-left: 1px;
 }
-span {
+
+.tfValue {
     font-size: 14px;
     font-weight: 600;
     margin-left: 4px;

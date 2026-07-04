@@ -11,7 +11,7 @@ const LEFT_ITEMS = [
 ]
 const RIGHT_ITEMS = [
   { label: 'Arena', path: '/arena', icon: <IcArena /> },
-  { label: 'Pase', path: '/ui-kit', icon: <IcPase /> },
+  { label: 'Pase', path: '/pass', icon: <IcPase /> },
 ]
 
 type NavItem = { label: string; path: string; icon: React.ReactNode }

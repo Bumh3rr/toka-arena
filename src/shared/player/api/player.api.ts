@@ -31,7 +31,7 @@ export interface PlayerApi {
   getMyTokagotchis(
     page: number,
     size: number,
-    filters?: { rarity?: string; species?: string },
+    filters?: { rarity?: string; species?: string; sort?: string },
   ): Promise<PlayerTokagotchisPageDTO>;
 
   /**
@@ -52,7 +52,7 @@ export const player: PlayerApi = {
     console.log("Peticion PATCH /players/me/name con body:", body, "Respuesta:", data);
     return mapPlayerProfileDTO(data);
   },
-  async getMyTokagotchis(page: number, size: number, filters?: { rarity?: string; species?: string }) {
+  async getMyTokagotchis(page: number, size: number, filters?: { rarity?: string; species?: string; sort?: string }) {
     const { data } = await api.get<PlayerTokagotchisPageDTO>('/players/me/tokagotchis', { params: { page, size, ...filters } })
     //await new Promise((resolve) => setTimeout(resolve, 3000)) // Simulando retraso de 1 segundo
     console.log(`Peticion GET /players/me/tokagotchis?page=${page}&size=${size}, Respuesta:`, data)
