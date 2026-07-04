@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { createPortal } from 'react-dom'
+import Portal from '@/shared/ui/Portal/Portal'
 import BottomSheet from '@/shared/ui/Sheet/BottomSheet/BottomSheet'
 import { Button, Label, IconButton } from '@/shared/ui/Kit'
 import { IcDice } from '@/shared/ui/Icons/Icons'
@@ -52,10 +52,7 @@ export default function BuyConfirmSheet({ item, tf, buying, onConfirm, onClose }
 
   const canPreview = previewAcc.length > 0
 
-  // Portal a <body>: saca el BottomSheet del contenedor con scroll (FeatureScreen
-  // .content) y de su stacking context, para que quede anclado al viewport y por
-  // encima del BottomNav. No modifica el BottomSheet compartido.
-  return createPortal(
+  const sheet = (
     <BottomSheet title="Confirmar compra" onClose={onClose}>
       <div className={styles.body}>
         {canPreview ? (
@@ -137,7 +134,10 @@ export default function BuyConfirmSheet({ item, tf, buying, onConfirm, onClose }
           Cancelar
         </Button>
       </div>
-    </BottomSheet>,
-    document.body,
+    </BottomSheet>
   )
+
+  // Portal a <body>: saca el sheet del scroll y del stacking context de
+  // FeatureScreen para anclarlo al viewport y por encima del BottomNav (ver Portal).
+  return <Portal>{sheet}</Portal>
 }

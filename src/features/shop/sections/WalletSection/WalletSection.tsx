@@ -31,8 +31,10 @@ export default function WalletSection() {
         ))}
       </div>
 
+      {/** 
       <p className={styles.legal}>Compras procesadas vía Toka Pay. TF no reembolsables.</p>
-
+      */}
+      
       {toast && <Toast {...toast} />}
     </>
   )

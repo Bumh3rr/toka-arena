@@ -57,5 +57,5 @@ export const TF_PACKS: TfPack[] = [
 export const SPECIAL_PACKS: SpecialPack[] = [
   { id: 'sp1', name: 'Evolution Support', desc: '500 TF + 1 Evolution Shield', mxn: 129, tone: 'legend' },
   { id: 'sp2', name: 'Weekly Booster', desc: '150 TF + 1 CP Booster', mxn: 49, tone: 'legend' },
-  { id: 'sp3', name: 'Monthly Cosmetic', desc: 'Accesorio Legendario + 200 TF', mxn: 199, tone: 'purple' },
+  { id: 'sp3', name: 'Monthly Cosmetic', desc: 'Huevo Epico + 200 TF', mxn: 199, tone: 'purple' },
 ]

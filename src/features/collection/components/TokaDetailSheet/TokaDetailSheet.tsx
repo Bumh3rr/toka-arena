@@ -1,5 +1,5 @@
 import { useState, useRef, type CSSProperties, type PointerEvent } from 'react'
-import { createPortal } from 'react-dom'
+import Portal from '@/shared/ui/Portal/Portal'
 import type { AccessorySlot } from '@/shared/domain/accessory'
 import AccEquipSheet from '../AccEquipSheet/AccEquipSheet'
 import TokagotchiCanvas from '@/shared/canvas/TokagotchiCanvas'
@@ -177,11 +177,7 @@ export default function TokaDetailSheet({
     }
   }
 
-  // Portal a <body>: el overlay es full-screen (position: fixed), pero al vivir
-  // dentro de FeatureScreen `.content` (overflow-y: auto), iOS WebKit posiciona
-  // el fixed relativo al contenido scrolleado y se desplaza al haber scroll
-  // (muchos tokas). Renderizarlo en <body> lo ancla al viewport siempre.
-  return createPortal(
+  const overlay = (
     <div
       ref={overlayRef}
       className={`${styles.overlay}${exiting ? ` ${styles.exiting}` : ''}`}
@@ -323,7 +319,10 @@ export default function TokaDetailSheet({
           onEquipChange={onEquipChange}
         />
       )}
-    </div>,
-    document.body,
+    </div>
   )
+
+  // Portal a <body>: saca el overlay del scroll de FeatureScreen .content, que en
+  // iOS WebKit desplaza el position:fixed con el scroll (ver Portal).
+  return <Portal>{overlay}</Portal>
 }

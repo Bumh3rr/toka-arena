@@ -29,7 +29,7 @@ interface UseBuyItemResult {
 /** Trae el Tokagotchi más reciente del jugador (el recién creado por el huevo). Best-effort. */
 async function fetchNewestToka(): Promise<Tokagotchi | undefined> {
   try {
-    const page = await playerApi.getMyTokagotchis(0, 1, { sort: 'createdAt,desc' })
+    const page = await playerApi.getMyTokagotchis(0, 1)
     const dto = page.content[0]
     return dto ? mapTokagotchiDTO(dto) : undefined
   } catch {
