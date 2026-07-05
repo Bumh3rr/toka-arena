@@ -1,6 +1,6 @@
-import type { EquippedAccessory, AccessorySlot } from "@/shared/domain/accessory";
+import type { EquippedAccessory } from "@/shared/domain/accessory";
 
-const ALL_SLOTS: AccessorySlot[] = ["HEAD", "FACE", "NECK", "BACK"];
+const ALL_SLOTS = ["HEAD", "HEAD1", "FACE", "NECK", "BACK"];
 
 // armature: instancia DragonBones (window global). Ajusta los nombres de slot
 // si en tu armature no se llaman igual que el slot de negocio.
@@ -17,7 +17,7 @@ export function applyAccessories(armature: any, equipped?: EquippedAccessory[]) 
 
   // 2) pintar los equipados
   for (const acc of equipped) {
-    const dbSlot = armature.armature.getSlot(acc.slot);
+    const dbSlot = armature.armature.getSlot(acc.nameSlot);
     if (dbSlot) dbSlot.displayIndex = acc.displayIndex;
   }
 }

@@ -1,14 +1,14 @@
 {
-  "HELMET":       { "displayIndex": 0 },
-  "CROWN":        { "displayIndex": 1 },
-  "HAT":          { "displayIndex": 2 },
-  "CHEFS_HAT": { "displayIndex": 3 },
-  "MARTIAN_EARS": { "displayIndex": 4 },
+  "HELMET":       { "nameSlot": "HEAD1", "displayIndex": 0 },
+  "CROWN":        { "nameSlot": "HEAD", "displayIndex": 0 },
+  "HAT":          { "nameSlot": "HEAD", "displayIndex": 1 },
+  "CHEFS_HAT": { "nameSlot": "HEAD", "displayIndex": 2 },
+  "MARTIAN_EARS": { "nameSlot": "HEAD", "displayIndex": 3 },
   
-  "HERO_CAPE": { "displayIndex": 0 },
+  "HERO_CAPE": { "nameSlot": "BACK", "displayIndex": 0 },
   
-  "GLASSES": { "displayIndex": 0 },
-  "MOUSTACHE": { "displayIndex": 1 },
-  "PATCH": { "displayIndex": 2 }
+  "GLASSES": { "nameSlot": "FACE", "displayIndex": 0 },
+  "MOUSTACHE": { "nameSlot": "FACE", "displayIndex": 1 },
+  "PATCH": { "nameSlot": "FACE", "displayIndex": 2 }
 
 }

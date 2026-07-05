@@ -9,6 +9,6 @@ export function mapEquipped(dtos: EquippedAccessoryDTO[]): EquippedAccessory[] {
       console.warn(`[accessories] sin binding de render para code="${dto.type}"`);
       return [];
     }
-    return [{ ...dto, displayIndex: binding.displayIndex }];
+    return [{ ...dto, nameSlot: binding.nameSlot, displayIndex: binding.displayIndex }];
   });
 }

@@ -25,6 +25,9 @@ export interface EquippedAccessory {
   type: string
   /** Ranura que ocupa el accesorio. */
   slot: AccessorySlot
+
+  /** Nombre de la ranura en el esqueleto de DragonBones. */
+  nameSlot: string
   /** Índice de renderizado (opcional, se asigna al mapear). */
   displayIndex?: number
 }
