@@ -1,5 +1,5 @@
 import type { EquippedAccessory } from '@/shared/domain/accessory'
-import { getAccessoryImageSrc } from '@/shared/game/assets'
+import { getAccessoryImagePngSrc } from '@/shared/game/assets'
 import { getAccessoryDisplayName } from '@/shared/constants/accessory'
 import styles from './AccSlot.module.css'
 
@@ -13,7 +13,7 @@ interface AccSlotProps {
 
 export default function AccSlot({ label, acc, future = false, selected = false, onClick }: AccSlotProps) {
   const name   = acc ? getAccessoryDisplayName(acc.type) : null
-  const imgSrc = acc ? getAccessoryImageSrc(acc.type) : null
+  const imgSrc = acc ? getAccessoryImagePngSrc(acc.type) : null
 
   const inner = (
     <>

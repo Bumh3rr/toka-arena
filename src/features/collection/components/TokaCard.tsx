@@ -2,7 +2,7 @@ import type { CSSProperties } from 'react'
 import { RARITY_META } from '@/shared/constants/rarity'
 import styles from './TokaCard.module.css'
 import type { Tokagotchi, Rarity } from '@/shared/domain/tokagotchi.ts'
-import { getSpeciesImageSrc, getAccessoryImageSrc } from '@/shared/game/assets.ts'
+import { getSpeciesImageSrc, getAccessoryImagePngSrc } from '@/shared/game/assets.ts'
 import { IcReady } from '@/shared/ui/Icons/Icons'
 import CardRarity from '@/shared/ui/Tokagotchi/Cards/CardRarity/CardRarity'
 import CardSpecies from '@/shared/ui/Tokagotchi/Cards/CardSpecies/CardSpecies'
@@ -59,7 +59,7 @@ export default function TokaCard({ toka, isActive, count, stacked, onClick }: To
           {toka.equipped.length > 0 && (
             <div className={styles.accBadges} aria-label="Accesorios equipados">
               {toka.equipped.map((acc, i) => {
-                const src = getAccessoryImageSrc(acc.type)
+                const src = getAccessoryImagePngSrc(acc.type)
                 return (
                   <div
                     key={acc.slot}

@@ -1,5 +1,5 @@
 import { Card, Button, Label } from '@/shared/ui/Kit'
-import { getAccessoryImageSrc } from '@/shared/game/assets'
+import { getAccessoryImageSvgSrc } from '@/shared/game/assets'
 import { getSlotLabel } from '@/shared/constants/accessory'
 import type { AccessorySlot } from '@/shared/domain/accessory'
 import type { StoreItemDTO } from '../../api/dto/shop.dto'
@@ -16,7 +16,7 @@ interface StoreItemCardProps {
 
 export default function StoreItemCard({ item, availability, onBuy }: StoreItemCardProps) {
   const soon = availability === 'soon'
-  const imgSrc = item.accessoryType ? getAccessoryImageSrc(item.accessoryType) : null
+  const imgSrc = item.accessoryType ? getAccessoryImageSvgSrc(item.accessoryType) : null
 
   return (
     <Card variant="cream" padding="sm" shadow="md" className={soon ? styles.soon : ''}>

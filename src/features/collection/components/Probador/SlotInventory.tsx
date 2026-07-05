@@ -1,5 +1,5 @@
 import type { AccGroup } from '../../lib/accessoryGroups'
-import { getAccessoryImageSrc } from '@/shared/game/assets'
+import { getAccessoryImagePngSrc } from '@/shared/game/assets'
 import { Label } from '@/shared/ui/Kit'
 import styles from './SlotInventory.module.css'
 
@@ -66,7 +66,7 @@ export default function SlotInventory({
           const free = g.available[0] ?? null
           const onlyElsewhere = !isEquippedHere && !free
           const total = (isEquippedHere ? 1 : 0) + g.available.length + g.elsewhereCount
-          const src = getAccessoryImageSrc(g.type)
+          const src = getAccessoryImagePngSrc(g.type)
           const actId = isEquippedHere ? g.equippedHere!.id! : free?.id ?? null
           const isThisActing = actId !== null && actionLoading === actId
 

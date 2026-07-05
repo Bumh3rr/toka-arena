@@ -1,6 +1,6 @@
 import BottomSheet from '@/shared/ui/Sheet/BottomSheet/BottomSheet'
 import { Button, Card, Label, Toast } from '@/shared/ui/Kit'
-import { getAccessoryImageSrc } from '@/shared/game/assets'
+import { getAccessoryImagePngSrc } from '@/shared/game/assets'
 import { getApiErrorMessage } from '@/shared/api/client'
 import { useToast } from '@/shared/hooks/useToast'
 import type { AccessorySlot } from '@/shared/domain/accessory'
@@ -85,7 +85,7 @@ export default function AccEquipSheet({
             const hasAvailable   = g.available.length > 0
             const onlyElsewhere  = !isEquippedHere && !hasAvailable
             const total          = (isEquippedHere ? 1 : 0) + g.available.length + g.elsewhereCount
-            const imgSrc         = getAccessoryImageSrc(g.type)
+            const imgSrc         = getAccessoryImagePngSrc(g.type)
 
             const actingId = isEquippedHere
               ? g.equippedHere!.id

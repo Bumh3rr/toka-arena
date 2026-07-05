@@ -4,7 +4,7 @@ import BottomSheet from '@/shared/ui/Sheet/BottomSheet/BottomSheet'
 import { Button, Label, IconButton } from '@/shared/ui/Kit'
 import { IcDice } from '@/shared/ui/Icons/Icons'
 import TokagotchiCanvas from '@/shared/canvas/TokagotchiCanvas'
-import { getAccessoryImageSrc } from '@/shared/game/assets'
+import { getAccessoryImagePngSrc } from '@/shared/game/assets'
 import { getSlotLabel } from '@/shared/constants/accessory'
 import { getRenderBinding } from '@/shared/render/accessoryManifest'
 import type { AccessorySlot, EquippedAccessory } from '@/shared/domain/accessory'
@@ -33,7 +33,7 @@ export default function BuyConfirmSheet({ item, tf, buying, onConfirm, onClose }
 
   const enough = tf >= item.priceInTokaFeed
   const remaining = Math.max(0, tf - item.priceInTokaFeed)
-  const imgSrc = item.accessoryType ? getAccessoryImageSrc(item.accessoryType) : null
+  const imgSrc = item.accessoryType ? getAccessoryImagePngSrc(item.accessoryType) : null
 
   // Accesorio para vestir al Tokagotchi de la vista previa (solo si es renderizable).
   const previewAcc = useMemo<EquippedAccessory[]>(() => {

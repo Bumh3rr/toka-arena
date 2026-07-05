@@ -58,6 +58,7 @@ export default function StoreSection() {
             className={`${styles.chip} ${filter === c.key ? styles.chipOn : ''}`}
             onClick={() => setFilter(c.key)}
           >
+            
             {c.label}
           </button>
         ))}

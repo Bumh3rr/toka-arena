@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react'
 import type { Tokagotchi } from '@/shared/domain/tokagotchi'
-import { getSpeciesImageSrc, getAccessoryImageSrc } from '@/shared/game/assets'
+import { getSpeciesImageSrc, getAccessoryImagePngSrc } from '@/shared/game/assets'
 import { RARITY_META } from '@/shared/constants/rarity'
 import { IcClothes, IcReady } from '@/shared/ui/Icons/Icons'
 import styles from './TokaPicker.module.css'
@@ -68,7 +68,7 @@ export default function TokaPicker({ roster, activeTokaId, selectedTokaId, onSel
               {t.equipped.length > 0 && (
                 <span className={styles.badges} aria-hidden="true">
                   {t.equipped.slice(0, 3).map((acc) => {
-                    const src = getAccessoryImageSrc(acc.type)
+                    const src = getAccessoryImagePngSrc(acc.type)
                     return (
                       <span key={acc.slot} className={styles.badge}>
                         {src
