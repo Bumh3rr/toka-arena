@@ -1,5 +1,6 @@
 {
   "HELMET":       { "nameSlot": "HEAD1", "displayIndex": 0 },
+  
   "CROWN":        { "nameSlot": "HEAD", "displayIndex": 0 },
   "HAT":          { "nameSlot": "HEAD", "displayIndex": 1 },
   "CHEFS_HAT": { "nameSlot": "HEAD", "displayIndex": 2 },
