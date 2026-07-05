@@ -46,6 +46,7 @@ export default function BuyConfirmSheet({ item, tf, buying, onConfirm, onClose }
         type: item.accessoryType,
         slot: (item.slot ?? 'HEAD') as AccessorySlot,
         displayIndex: binding.displayIndex,
+        nameSlot: binding.nameSlot ?? 'unknown',
       },
     ]
   }, [item.accessoryType, item.slot])

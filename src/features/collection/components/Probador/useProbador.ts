@@ -17,11 +17,13 @@ interface UseProbadorArgs {
 
 /** Convierte un ítem del inventario en el formato que consume el canvas. */
 function toEquipped(dto: AccessoryDTO): EquippedAccessory {
+  const renderBinding = getRenderBinding(dto.type)
   return {
     id: dto.id as string,
     type: dto.type,
     slot: dto.slot as AccessorySlot,
-    displayIndex: getRenderBinding(dto.type)?.displayIndex,
+    displayIndex: renderBinding?.displayIndex,
+    nameSlot: renderBinding?.nameSlot ?? 'unknown',
   }
 }
 
