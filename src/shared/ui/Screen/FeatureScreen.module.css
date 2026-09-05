@@ -28,7 +28,7 @@
   pointer-events: none;
   background-size: cover;
   background-position: center top;
-  filter: brightness(0.72) blur(2px);
+  filter: brightness(0.82) blur(1px);
 }
 
 .topbar {

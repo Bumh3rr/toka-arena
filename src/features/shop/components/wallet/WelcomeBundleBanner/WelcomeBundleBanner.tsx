@@ -1,5 +1,5 @@
 import { Button, Label } from '@/shared/ui/Kit'
-import { WELCOME_BUNDLE } from '../../../lib/walletPacks'
+import { WELCOME_BUNDLE } from '@/features/shop/lib/walletPacks'
 import styles from './WelcomeBundleBanner.module.css'
 
 interface WelcomeBundleBannerProps {

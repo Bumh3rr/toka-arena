@@ -1,6 +1,6 @@
 import { Card, Button, type ColorVariant } from '@/shared/ui/Kit'
-import type { SpecialPack } from '../../../lib/walletPacks'
 import styles from './SpecialPackCard.module.css'
+import type { SpecialPack } from '@/features/shop/lib/walletPacks'
 
 const TONE_VARIANT: Record<SpecialPack['tone'], ColorVariant> = {
   legend: 'legend',

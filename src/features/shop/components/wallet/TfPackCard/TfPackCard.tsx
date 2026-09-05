@@ -9,6 +9,16 @@ interface TfPackCardProps {
 }
 
 export default function TfPackCard({ pack, onBuy }: TfPackCardProps) {
+  
+  let srcTf = "tf.svg" 
+  if (pack.tf > 50 && pack.tf <= 1000) {
+    srcTf = "stack_tf.svg"
+  } else if (pack.tf > 1000 && pack.tf <= 5000) {
+    srcTf = "bg_tf.svg"
+  } else if (pack.tf > 5000) {
+    srcTf = "box_tf.svg"
+  }
+
   return (
     <div className={`${styles.pack} ${pack.popular ? styles.popular : ''}`}>
       {pack.popular && <span className={styles.popBadge}>MÁS POPULAR</span>}
@@ -16,7 +26,7 @@ export default function TfPackCard({ pack, onBuy }: TfPackCardProps) {
       <div className={styles.info}>
         <div className={styles.name}>{pack.name}</div>
         <div className={styles.tf}>
-          <img src="/assets/ui/tf/tf.svg" alt="" aria-hidden="true" className={styles.tfIcon} />
+          <img src={`/assets/ui/tf/${srcTf}`} alt="" aria-hidden="true" className={styles.tfIcon} />
           {formatTF(pack.tf)} TF
         </div>
         {pack.bonus > 0 && (
