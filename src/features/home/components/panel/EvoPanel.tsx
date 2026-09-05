@@ -1,12 +1,26 @@
-import { useState, useEffect, useRef, useCallback, useMemo, memo } from 'react'
+import { useState, useEffect, useRef, useCallback, useMemo, memo, type CSSProperties } from 'react'
 import { IcCrown, IcLock, IcClock } from '@/shared/ui/Icons/Icons'
 import styles from './styles/EvoPanel.module.css'
-import { HeaderTitleLine } from '../CareSheet/CareSheet'
-import type { Evolution } from '@/shared/domain/evolution'
-import { RARITY_META } from '@/shared/constants/rarity'
+import type { Evolution } from '@/shared/domain/tokagotchi'
+import { NEXT_RARITY_META } from '@/shared/constants/rarity'
+
+// ── Auras por rareza destino ─────────────────────────────────────────────────
+interface AuraStyle {
+  main: string; edge: string; crown: string
+  legend: string; legendEdge: string; glow: string
+}
+
+const AURA_MAP: Record<string, AuraStyle> = {
+  RARE: { main: '#2FB7A6', edge: '#1E9384', crown: '#38C9B4', legend: '#2FB7A6', legendEdge: '#1E9384', glow: 'rgba(47,183,166,.55)' },
+  EPIC: { main: '#9D74D6', edge: '#7B51B6', crown: '#F6C037', legend: '#F6A937', legendEdge: '#D9852A', glow: 'rgba(157,116,214,.55)' },
+  LEGENDARY: { main: '#EBA834', edge: '#C6841F', crown: '#FFD24D', legend: '#F0A92E', legendEdge: '#CE851E', glow: 'rgba(235,168,52,.60)' },
+}
+const DEFAULT_AURA: AuraStyle = {
+  main: '#FFD700', edge: '#C6841F', crown: '#FFE39A', legend: '#F0A92E', legendEdge: '#CE851E', glow: 'rgba(255,215,0,.40)',
+}
 
 interface EvoPanelProps {
-  nextEvolution: Evolution | null
+  nextEvolution: Evolution
   cp: number
   tf: number
   serverTime: number
@@ -95,7 +109,9 @@ const CpProgressBar = memo(({ cp, required }: { cp: number; required: number }) 
     <div className={styles.cpbarWrap}>
       <div className={styles.cpbarTop}>
         <span className={styles.cpLabel}>Puntos de Crianza</span>
-        <span className={styles.cpVal}><b>{cp}</b> / {required} CP</span>
+        <span className={styles.cpVal}>
+          <b>{cp}</b> / {required} <img src="/assets/ui/cp/cp_stars.png" alt="CP" className={styles.iconCp} /><span className={styles.cpLabel}>cp</span>
+        </span>
       </div>
       <div className={styles.cpbar}>
         <div className={styles.fill} style={{ width: `${pct}%` }} />
@@ -115,7 +131,7 @@ const EvoAttributes = memo(
       <div className={styles.attr}>
         <span className={styles.attrK}>Costo</span>
         <span className={styles.attrV}>
-          <img src="/assets/ui/moneda_tf.svg" alt="TF" width={15} height={15} />
+          <img src="/assets/ui/tf/tf.svg" alt="TF" width={15} height={15} />
           {evo.tfRequired}
         </span>
       </div>
@@ -163,7 +179,7 @@ const EvoActionButton = memo(
       return (
         <div className={styles.evoBtn}>
           <span className={styles.lockIcon}><IcLock /></span>
-          Faltan {missingCp} CP
+          Faltan {missingCp} <img src="/assets/ui/cp/cp.png" alt="CP" className={`${styles.iconEnough} ${styles.iconLock}`} /> <span className={styles.cpLabel}>cp</span>
         </div>
       )
     }
@@ -171,7 +187,7 @@ const EvoActionButton = memo(
       return (
         <div className={styles.evoBtn}>
           <span className={styles.lockIcon}><IcLock /></span>
-          Faltan {missingTf} TF
+          Faltan {missingTf} <img src="/assets/ui/tf/tf.svg" alt="TF" className={`${styles.iconEnough} ${styles.iconLock}`} /> <span className={styles.tfLabel}>tf</span>
         </div>
       )
     }
@@ -209,7 +225,7 @@ const EvoAvailable = memo(({ evo, cp, tf, pending, cooldownLeftMs, onAscend }: E
         <div className={styles.evoCrown}><IcCrown /></div>
         <div className={styles.evoTitles}>
           <div className={styles.k}>Evolución</div>
-          <div className={styles.t}>Ascender a {RARITY_META[evo.nextRarity].label}</div>
+          <div className={styles.t}>Ascender a {NEXT_RARITY_META[evo.nextRarity].label}</div>
         </div>
       </div>
 
@@ -262,16 +278,25 @@ export default function EvoPanel({ nextEvolution, cp, tf, serverTime, onAscend }
     }
   }, [pending, onAscend])
 
+  const aura = AURA_MAP[nextEvolution?.nextRarity ?? ''] ?? DEFAULT_AURA
+  const auraVars = {
+    '--aura-main': aura.main,
+    '--aura-edge': aura.edge,
+    '--aura-crown': aura.crown,
+    '--aura-legend': aura.legend,
+    '--aura-legend-edge': aura.legendEdge,
+    '--aura-glow': aura.glow,
+  } as CSSProperties
+
   return (
     <div>
-      <HeaderTitleLine title="Evolución" />
-
       <div
         className={`${styles.evo} ${!nextEvolution ? styles.maxed : ''} ${ready ? styles.ready : ''} ${flash === 'FAIL' ? styles.shake : ''}`}
+        style={auraVars}
       >
         <EvoFlash flash={flash} />
 
-        {!nextEvolution ? (
+        {nextEvolution.nextRarity === 'MAX' ? (
           <MaxedEvo />
         ) : (
           <EvoAvailable

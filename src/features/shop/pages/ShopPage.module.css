@@ -1,346 +1,102 @@
-.container {
+.screen {
   position: relative;
-  width: 100%;
+  z-index: 1;
   height: 100%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  background: transparent;
+}
+
+/* Velo oscuro sobre el fondo — mejora el contraste de todo el contenido */
+.screen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg,
+    rgba(20, 10, 4, .52) 0%,
+    rgba(20, 10, 4, .38) 40%,
+    rgba(20, 10, 4, .20) 100%
+  );
 }
 
 .background {
   position: absolute;
   inset: 0;
-  background-image: url('/assets/backgrounds/bg_store.png');
+  z-index: -1;
+  pointer-events: none;
+  background-image: url('/assets/backgrounds/bg_shop.png');
   background-size: cover;
   background-position: center top;
-  z-index: 0;
-  opacity: 0.9;
+  filter: brightness(0.72) blur(2px);
 }
 
-/* ── Header ── */
-.header {
-  position: relative;
-  z-index: 2;
+.topbar {
+  flex: none;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 16px 20px 0;
+  gap: 12px;
+  padding: 22px 20px 0;
+  position: relative;
+  z-index: 1;
 }
 
 .title {
-  font-family: var(--font-title);
-  font-size: 32px;
-  font-weight: 600;
-  color: #ffffff;
-  text-shadow: 2px 2px 0px #3D2B1F, -1px -1px 0px #3D2B1F, 0 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.tfBadge {
-  background: #1A1A1A;
-  border: 2px solid #5C3D1E;
-  border-radius: 20px;
-  padding: 6px 16px;
-}
-
-.tfAmount {
-  font-family: var(--font-title);
-  font-size: 16px;
-  font-weight: 600;
-  color: #F5DFA0;
-}
-
-/* ── Pestañas ── */
-.tabs {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  gap: 8px;
-  padding: 12px 16px 0;
-}
-
-.tab {
   flex: 1;
-  padding: 10px;
   font-family: var(--font-title);
-  font-size: 15px;
-  font-weight: 600;
-  color: #FFF8E7;
-  background: rgba(61, 43, 31);
-  border: 2px solid #5C3D1E;
-  border-radius: 14px;
-  cursor: pointer;
-  transition: all 0.15s ease;
+  font-size: 22px;
+  font-weight: 700;
+  color: #FFF8ED;
 }
 
-.tabActive {
-  background: #F97316;
-  border-color: #3D2B1F;
-  color: #ffffff;
-}
-
-/* ── Scroll ── */
 .scroll {
-  position: relative;
-  z-index: 1;
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 12px 16px 0;
+  padding: 12px 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
   scrollbar-width: none;
-}
-
-.scroll::-webkit-scrollbar { display: none; }
-
-.tabContent {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.hint {
-  font-family: var(--font-body);
-  font-size: 13px;
-  font-weight: 700;
-  color: #FFF8E7;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
-  background: rgba(44, 26, 14, 0.78);
-  border: 1.5px solid rgba(92, 61, 30, 0.9);
-  border-radius: 12px;
-  padding: 8px 12px;
-  align-self: flex-start;
-}
-
-/* ── Grid items TF ── */
-.itemGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.itemCard {
-  background: rgba(255, 248, 231, 0.93);
-  border: 2.5px solid #3D2B1F;
-  border-radius: 16px;
-  padding: 12px 8px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
   position: relative;
+  z-index: 1;
 }
 
-.rarezaBadge {
-  font-family: var(--font-body);
-  font-size: 10px;
-  font-weight: 700;
+.scroll::-webkit-scrollbar {
+  display: none;
 }
 
-.itemImgWrapper {
-  width: 80px;
-  height: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(107, 158, 69, 0.1);
-  border-radius: 12px;
-  border: 1.5px solid rgba(61, 43, 31, 0.2);
-}
-
-.itemImg {
-  width: 64px;
-  height: 64px;
-  object-fit: contain;
-}
-
-.itemNombre {
-  font-family: var(--font-title);
-  font-size: 15px;
-  font-weight: 600;
-  color: #3D2B1F;
-}
-
-.itemSlot {
-  font-family: var(--font-body);
-  font-size: 10px;
-  font-weight: 700;
-  color: #ffffff;
-  padding: 2px 10px;
-  border-radius: 8px;
-}
-
-.buyBtn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: #F97316;
-  border: 2px solid #3D2B1F;
-  border-radius: 10px;
-  padding: 6px 14px;
-  cursor: pointer;
-  font-family: var(--font-title);
-  font-size: 14px;
-  font-weight: 600;
-  color: #ffffff;
-  width: 100%;
-  justify-content: center;
-  transition: transform 0.1s ease;
-}
-
-.buyBtn:active { transform: scale(0.95); }
-
-/* ── Lista paquetes Wallet ── */
-.paquetesList {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.paqueteCard {
-  background: rgba(255, 248, 231, 0.99);
-  border: 2.5px solid #3D2B1F;
-  border-radius: 16px;
-  padding: 14px 16px;
+.pagination {
+  margin-top: 8px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  position: relative;
+  gap: 10px;
 }
 
-.paqueteDestacado {
-  border-color: #F97316;
-  border-width: 3px;
-  box-shadow: 0 0 14px rgba(249, 115, 22, 0.35);
-}
-
-.destacadoBadge {
-  position: absolute;
-  top: -10px;
-  left: 16px;
-  background: #F97316;
-  color: #ffffff;
-  font-family: var(--font-body);
-  font-size: 10px;
-  font-weight: 700;
-  padding: 2px 10px;
-  border-radius: 8px;
-  border: 1.5px solid #3D2B1F;
-}
-
-.paqueteLeft {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.paqueteTF {
+.pageBtn {
   font-family: var(--font-title);
-  font-size: 36px;
-  font-weight: 600;
-  color: #3D2B1F;
-  line-height: 1;
-}
-
-.paqueteTFLabel {
-  font-family: var(--font-body);
   font-size: 13px;
   font-weight: 700;
-  color: #8C6B4A;
-}
-
-.paqueteBonus {
-  font-family: var(--font-body);
-  font-size: 11px;
-  font-weight: 700;
-  margin-top: 4px;
-}
-
-.paqueteRight {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 4px;
-}
-
-.paquetePrecio {
-  font-family: var(--font-title);
-  font-size: 24px;
-  font-weight: 600;
-  color: #3D2B1F;
-}
-
-.paquetePorTF {
-  font-family: var(--font-body);
-  font-size: 11px;
-  color: #8C6B4A;
-  font-weight: 600;
-}
-
-.walletBtn {
-  background: #2C1A0E;
-  border: 2px solid #3D2B1F;
-  border-radius: 10px;
-  padding: 8px 20px;
-  font-family: var(--font-title);
-  font-size: 14px;
-  font-weight: 600;
-  color: #F5DFA0;
+  color: var(--ink);
+  background: linear-gradient(180deg, #ffe7a6, var(--gold));
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding: 8px 14px;
   cursor: pointer;
-  transition: transform 0.1s ease;
 }
 
-.walletBtn:active { transform: scale(0.95); }
-
-.itemExito {
-  border-color: #43A047;
-  box-shadow: 0 0 14px rgba(67, 160, 71, 0.4);
-  animation: exitoPulse 0.5s ease;
-}
-
-@keyframes exitoPulse {
-  0%   { transform: scale(1); }
-  50%  { transform: scale(1.04); }
-  100% { transform: scale(1); }
-}
-
-.imgExito {
-  animation: imgBounce 0.4s ease;
-}
-
-@keyframes imgBounce {
-  0%   { transform: translateY(0); }
-  40%  { transform: translateY(-8px); }
-  100% { transform: translateY(0); }
-}
-
-.itemBloqueado {
-  opacity: 0.65;
-}
-
-.buyBtnDisabled {
-  background: #8C6B4A;
+.pageBtn:disabled {
+  opacity: 0.45;
   cursor: not-allowed;
-  opacity: 0.7;
 }
 
-.sinFondos {
-  font-family: var(--font-body);
-  font-size: 10px;
-  color: #C62828;
-  font-weight: 700;
-}
-
-.emptyState {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 40px 20px;
-}
-
-.emptyText {
+.pageInfo {
   font-family: var(--font-title);
-  font-size: 16px;
-  color: #FFF8E7;
-  text-shadow: 1px 1px 0px #3D2B1F;
-  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff8ed;
 }

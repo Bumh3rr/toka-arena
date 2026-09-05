@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import BottomSheet from '@/shared/ui/BottomSheet/BottomSheet'
+import BottomSheet from '@/shared/ui/Sheet/BottomSheet/BottomSheet'
 import styles from './styles/RenameModal.module.css'
 import { Button } from '@/shared/ui/Kit'
 

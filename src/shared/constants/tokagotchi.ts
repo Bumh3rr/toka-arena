@@ -1,4 +1,4 @@
-import type { Species } from "../domain/tokagotchi"
+import type {  Species } from "../domain/tokagotchi"
 
 export const SPECIES_LABEL: Record<Species, string> = {
   TOFU: 'Tofu',

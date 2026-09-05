@@ -1,4 +1,3 @@
-//import type { PlayerProfile } from "@/shared/domain/player";
 import type { HomeData } from "../data/home.types";
 import type { CareActionDTO } from "../../../shared/api/dto/tokagotchi-responses.dto";
 import type { ActionCare } from "../data/home.types";
@@ -13,7 +12,7 @@ import { CONFIG_CARE } from "../constants/config";
 import { RARITY_META } from '@/shared/constants/rarity'
 import { mapHomeResponseDTO } from "../data/home.mapper";
 import { getApiErrorMessage } from "@/shared/api/client";
-import { sessionApi } from "@/shared/api/me.api";
+import { playerApi } from "@/shared/player/api/player.api";
 
 // ── reloj del servidor (usa el serverTime para corregir desfase de reloj) ──
 let clockOffset = 0;
@@ -163,7 +162,7 @@ export function useHome() {
       }
 
       // 3) Obtener TF actualizado mediante /me
-      const resMe = await sessionApi.getMe();
+      const resMe = await playerApi.getMe();
       await mutate((prev) => (prev ? { ...prev, player: { ...prev.player, tf: resMe.tf } } : prev), { revalidate: false });
 
       return res.result;

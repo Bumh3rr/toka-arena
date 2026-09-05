@@ -3,10 +3,10 @@ import { useGiftSound } from "../../../shared/audio/hooks/useGiftSound";
 import { useRevealSound } from "../../../shared/audio/hooks/useRevealSound";
 import { useToast } from "@/shared/hooks/useToast";
 import { useNavigate } from "react-router-dom";
-import type { PlayerProfile } from "@/shared/domain/player";
+import type { PlayerProfile } from "@/shared/player/data/player";
 import { unboxingApi } from "../api/unboxing.api";
-import { mapPlayerProfileDTO } from "@/shared/domain/mappers/player.mapper";
-import { mapMainTokagotchiDTO } from "@/shared/domain/mappers/tokagotchi.mapper";
+import { mapPlayerProfileDTO } from "@/shared/player/data/player.mapper";
+import { mapTokagotchiDTO } from "@/shared/domain/mappers/tokagotchi.mapper";
 
 export type UnboxingPhase = "reveal" | "breaking" | "result";
 export type GiftFase = "idle" | "shaking" | "exploding";
@@ -61,7 +61,7 @@ export function useUnboxing() {
     if (!result || !result.mainTokagotchi) return;
     try {
       const updated = await unboxingApi.rename(result.mainTokagotchi.id , name);
-      const mainTokagotchi = mapMainTokagotchiDTO(updated);
+      const mainTokagotchi = mapTokagotchiDTO(updated);
       setResult(prev => prev ? ({ ...prev, mainTokagotchi }) : prev);
 
       show("¡Nombre guardado!", { variant: "celebrity" });

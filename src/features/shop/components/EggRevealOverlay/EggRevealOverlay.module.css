@@ -1,0 +1,123 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 50% 38%, #3a2a12 0%, #1a1206 72%);
+  animation: fade .25s ease;
+}
+
+.stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.title {
+  font-family: var(--font-title);
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff8ed;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, .5);
+  text-align: center;
+}
+
+/* ── Huevo (botón) ─────────────────────────────────────────────────────────── */
+.eggWrap {
+  position: relative;
+  width: 190px;
+  height: 190px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  appearance: none;
+}
+
+.eggWrap:disabled {
+  cursor: default;
+}
+
+.glow {
+  position: absolute;
+  width: 80%;
+  height: 80%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 214, 120, .55) 0%, transparent 66%);
+  filter: blur(4px);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.egg {
+  position: relative;
+  z-index: 1;
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, .4));
+}
+
+.idle .egg {
+  animation: bob 2.2s ease-in-out infinite;
+}
+
+.breaking .egg {
+  animation: shake .12s linear infinite;
+}
+
+.hint {
+  font-family: var(--font-title);
+  font-size: 14px;
+  font-weight: 700;
+  color: rgba(255, 248, 237, .8);
+  animation: blink 1.4s ease-in-out infinite;
+}
+
+.flash {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  pointer-events: none;
+  animation: flash 1.5s ease-in forwards;
+}
+
+/* ── Keyframes ─────────────────────────────────────────────────────────────── */
+@keyframes fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-10px) rotate(3deg); }
+}
+
+@keyframes shake {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(-4px, 1px) rotate(-6deg); }
+  50% { transform: translate(4px, -1px) rotate(6deg); }
+  75% { transform: translate(-3px, 2px) rotate(-4deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: .55; transform: scale(1); }
+  50% { opacity: .9; transform: scale(1.08); }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: .55; }
+  50% { opacity: 1; }
+}
+
+@keyframes flash {
+  0%, 68% { opacity: 0; }
+  86% { opacity: 1; }
+  100% { opacity: .95; }
+}

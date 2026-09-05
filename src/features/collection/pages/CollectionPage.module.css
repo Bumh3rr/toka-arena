@@ -7,7 +7,21 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: linear-gradient(180deg, #FFF8ED 0%, var(--cream) 100%);
+  background: transparent;
+}
+
+/* Velo oscuro sobre el fondo — mejora el contraste de todo el contenido */
+.screen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg,
+    rgba(20, 10, 4, .52) 0%,
+    rgba(20, 10, 4, .38) 40%,
+    rgba(20, 10, 4, .20) 100%
+  );
 }
 
 .background {
@@ -18,7 +32,7 @@
   background-image: url('/assets/backgrounds/bg_coleccion.png');
   background-size: cover;
   background-position: center top;
-  filter: brightness(0.9) blur(2px);
+  filter: brightness(0.72) blur(2px);
 }
 
 .topbar {
@@ -26,7 +40,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 16px 20px 0;
+  padding: 22px 20px 0;
   position: relative;
   z-index: 1;
 }
@@ -36,7 +50,7 @@
   font-family: var(--font-title);
   font-size: 22px;
   font-weight: 700;
-  color: #FFF8ED
+  color: #FFF8ED;
 }
 
 .scroll {
@@ -57,46 +71,34 @@
   display: none;
 }
 
-.loading,
-.errorWrap {
-  flex: 1;
+.pagination {
+  margin-top: 8px;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 16px;
-  position: relative;
-  z-index: 1;
+  justify-content: space-between;
+  gap: 10px;
 }
 
-.loadingText {
+.pageBtn {
   font-family: var(--font-title);
-  font-size: 18px;
-  color: var(--ink-2);
-}
-
-.errorMsg {
-  font-family: var(--font-title);
-  font-size: 16px;
-  color: var(--ink);
-  text-align: center;
-  padding: 0 24px;
-}
-
-.retryBtn {
-  font-family: var(--font-title);
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--ink);
-  padding: 10px 28px;
-  border: 2.5px solid var(--ink);
-  border-radius: 99px;
-  background: linear-gradient(180deg, #FFE7A6, var(--gold));
-  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, .6), 0 3px 0 var(--gold-edge);
+  background: linear-gradient(180deg, #ffe7a6, var(--gold));
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding: 8px 14px;
   cursor: pointer;
 }
 
-.retryBtn:active {
-  transform: translateY(2px);
-  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, .6);
+.pageBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.pageInfo {
+  font-family: var(--font-title);
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff8ed;
 }

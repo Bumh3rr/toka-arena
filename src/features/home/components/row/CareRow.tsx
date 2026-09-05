@@ -3,7 +3,7 @@ import { CONFIG_CARE } from '../../constants/config'
 import type { ActionCare } from '../../data/home.types'
 import type { Cooldowns, Floaters } from '../../hooks/useHome'
 import styles from './styles/CareRow.module.css'
-import { HeaderTitleLine } from '../CareSheet/CareSheet'
+import CpWidget from '../../../../shared/ui/CpWidget/CpWidget'
 
 const fmt = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`
 
@@ -24,13 +24,12 @@ function CareBtn({ accion, cooldown, floater, onUse }: CareBtnProps) {
       disabled={cool}
       onClick={() => !cool && onUse(accion)}
     >
-      {!cool && (
-        <span className={styles.badge}>
-          <span className={styles.dot} />+{cfg.cp} CP
-        </span>
-      )}
       {floater !== undefined && (
-        <span className={styles.floater} key={floater}>+{cfg.cp} CP</span>
+        <span className={styles.floater} key={floater}>
+          <span className={styles.containerCp}>
+            <CpWidget size={35} /> +{cfg.cp}
+          </span>
+        </span>
       )}
       <div className={styles.face}>
         <img
@@ -52,24 +51,20 @@ interface CareRowProps {
   cooldowns: Cooldowns
   floaters: Floaters
   onUse: (a: ActionCare) => void
-  showHeader?: boolean
 }
 
-export default function CareRow({ cooldowns, floaters, onUse, showHeader = true }: CareRowProps) {
+export default function CareRow({ cooldowns, floaters, onUse }: CareRowProps) {
   return (
-    <div>
-      {showHeader && <HeaderTitleLine title="Cuidado" />}
-      <div className={styles.grid}>
-        {CONFIG_CARE.map(cfg => (
-          <CareBtn
-            key={cfg.key}
-            accion={cfg.key}
-            cooldown={cooldowns[cfg.key]}
-            floater={floaters[cfg.key]}
-            onUse={onUse}
-          />
-        ))}
-      </div>
+    <div className={styles.grid}>
+      {CONFIG_CARE.map(cfg => (
+        <CareBtn
+          key={cfg.key}
+          accion={cfg.key}
+          cooldown={cooldowns[cfg.key]}
+          floater={floaters[cfg.key]}
+          onUse={onUse}
+        />
+      ))}
     </div>
   )
 }

@@ -93,6 +93,7 @@ export function createTokagotchiScene(cfg: TokagotchiConfig): ITokagotchiScene {
       if (!armature) return
       armature.animation.timeScale = p ? 0 : 1
     }
+
   }
 
   return new Scene() as unknown as ITokagotchiScene

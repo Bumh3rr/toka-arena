@@ -1,6 +1,6 @@
-import type { HomeResponseDTO } from "@/shared/api/dto/home.dto";
+import type { HomeResponseDTO } from "@/features/home/api/dto/home.dto";
 import type { HomeData } from "./home.types";
-import { mapPlayerHomeDTO } from "@/shared/domain/mappers/home.mapper";
+import { mapPlayerProfileDTO } from "@/shared/player/data/player.mapper";
 
 /**
  * Envuelve mappers compartidos para convertir HomeResponseDTO a HomeData.
@@ -13,6 +13,6 @@ export function mapHomeResponseDTO(dto: HomeResponseDTO): HomeData {
     missions: {
       claimable: 1
     },
-    player: mapPlayerHomeDTO(dto.player),
+    player: mapPlayerProfileDTO(dto.player),
   };
 }

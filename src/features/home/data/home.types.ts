@@ -1,5 +1,5 @@
 import type { AnimationTokagotchi } from "@/shared/domain/tokagotchi";
-import type { PlayerProfileHome } from "@/shared/domain/home";
+import type { PlayerProfile } from "@/shared/player/data/player";
 
 /**
  * Tipos de acciones de cuidado disponibles para el tokagotchi.
@@ -36,5 +36,5 @@ export interface HomeData {
   /** Misiones disponibles para el jugador */
   missions: { claimable: number };
   /** Perfil del jugador con tokagotchi activo */
-  player: PlayerProfileHome;
+  player: PlayerProfile;
 }

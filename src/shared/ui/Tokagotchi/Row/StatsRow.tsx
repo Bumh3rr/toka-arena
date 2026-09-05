@@ -1,0 +1,29 @@
+import { IcBolt, IcShield, IcHeart } from '@/shared/ui/Icons/Icons'
+import type { Stats } from '@/shared/domain/tokagotchi'
+import styles from './styles/StatsRow.module.css'
+import { Card } from '@/shared/ui/Kit'
+
+export default function StatsRow({ stats }: { stats: Stats }) {
+
+  const LIST_STATS = [
+    { key: 'atk', label: 'Ataque', value: stats.atk, icon: <IcBolt /> },
+    { key: 'def', label: 'Defensa', value: stats.def, icon: <IcShield /> },
+    { key: 'hp', label: 'HP', value: stats.hp, icon: <IcHeart /> },
+  ]
+
+  return (
+    <div>
+      <div className={styles.stats}>
+        {LIST_STATS.map((s) => (
+          <Card key={s.key} variant="cream" shadow='md' radius='lg' className={`${styles.stat} ${styles[s.key]}`}>
+            <div className={styles.ic}>{s.icon}</div>
+            <div className={styles.txt}>
+              <span className={styles.lab}>{s.label}</span>
+              <span className={styles.val}>{s.value}</span>
+            </div>
+          </Card>
+        ))}
+      </div>
+    </div>
+  )
+}

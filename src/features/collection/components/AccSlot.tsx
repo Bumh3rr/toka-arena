@@ -1,21 +1,27 @@
-// src/features/collection/components/AccSlot.tsx
-import type { ColAcc } from '../types/collection.types'
+import type { EquippedAccessory } from '@/shared/domain/accessory'
+import { getAccessoryImagePngSrc } from '@/shared/game/assets'
+import { getAccessoryDisplayName } from '@/shared/constants/accessory'
 import styles from './AccSlot.module.css'
 
 interface AccSlotProps {
   label: string
-  acc?: ColAcc | undefined
+  acc?: EquippedAccessory
   future?: boolean
+  selected?: boolean
+  onClick?: () => void
 }
 
-export default function AccSlot({ label, acc, future = false }: AccSlotProps) {
-  return (
-    <div className={`${styles.slot} ${future ? styles.future : ''} ${acc ? styles.filled : ''}`}>
+export default function AccSlot({ label, acc, future = false, selected = false, onClick }: AccSlotProps) {
+  const name   = acc ? getAccessoryDisplayName(acc.type) : null
+  const imgSrc = acc ? getAccessoryImagePngSrc(acc.type) : null
+
+  const inner = (
+    <>
       <div className={styles.thumb}>
-        {acc ? (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <circle cx="12" cy="8" r="5"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
-          </svg>
+        {acc && imgSrc ? (
+          <img src={imgSrc} alt="" aria-hidden="true" className={styles.thumbImg} />
+        ) : acc ? (
+          <span className={styles.thumbFallback} aria-hidden="true">{acc.slot[0]}</span>
         ) : future ? (
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <rect x="5" y="11" width="14" height="10" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>
@@ -27,8 +33,27 @@ export default function AccSlot({ label, acc, future = false }: AccSlotProps) {
         )}
       </div>
       <span className={styles.label}>{label}</span>
-      {acc && <span className={styles.name}>{acc.name}</span>}
+      {name   && <span className={styles.name}>{name}</span>}
       {future && <span className={styles.soon}>Próx.</span>}
-    </div>
+    </>
+  )
+
+  if (future) {
+    return (
+      <div className={`${styles.slot} ${styles.future}`}>
+        {inner}
+      </div>
+    )
+  }
+
+  return (
+    <button
+      type="button"
+      className={`${styles.slot} ${acc ? styles.filled : ''} ${selected ? styles.selected : ''}`}
+      aria-pressed={selected}
+      onClick={onClick}
+    >
+      {inner}
+    </button>
   )
 }

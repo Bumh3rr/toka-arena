@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { TokagotchiGame } from '../game/tokagotchi/TokagotchiGame'
 import type { TokagotchiConfig } from '../game/tokagotchi/types'
 import type { Species, Assets, AnimationTokagotchi } from '../domain/tokagotchi'
-import { getAssetsBySpecies } from '../game/assets'
+import { getSpeciesAssets } from '../game/assets'
 import type { EquippedAccessory } from '../domain/accessory'
 
 /**
@@ -71,7 +71,7 @@ export default function TokagotchiCanvas({
   const pausedRef = useRef(paused)
 
   if (!assets) {
-    assets = getAssetsBySpecies(species)
+    assets = getSpeciesAssets(species)
   }
 
   // ── Crear / destruir (una sola vez al montar/desmontar) ───────────────────
@@ -80,7 +80,7 @@ export default function TokagotchiCanvas({
     if (!(window as any).Phaser || !(window as any).dragonBones) return
 
     const cfg: TokagotchiConfig = {
-      width, height, assets, animacionActual,accessories, reverse,
+      width, height, assets, animacionActual,accessories, reverse
     }
 
     gameRef.current = new TokagotchiGame(containerRef.current, cfg)

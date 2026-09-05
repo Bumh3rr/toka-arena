@@ -2,24 +2,25 @@ import { useState, useRef, useEffect, type CSSProperties } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useHome } from '../hooks/useHome'
 import { useNavBar } from '@/shared/hooks/useNavBar'
-import { IcSwap, IcPencil, IcPerson } from '@/shared/ui/Icons/Icons'
+import { IcSwap, IcPerson } from '@/shared/ui/Icons/Icons'
 import { Button, Label, IconButton, Toast } from '@/shared/ui/Kit'
-import StatsRow from '../components/row/StatsRow'
+import StatsRow from '@/shared/ui/Tokagotchi/Row/StatsRow'
 import EvoPanel from '../components/panel/EvoPanel'
 import CareRow from '../components/row/CareRow'
 import RenameModal from '../../../shared/ui/modal/RenameModal'
 import MissionsModal from '../../missions/components/MissionsModal'
-//import CollectionModal from '../../../shared/ui/modal/CollectionModal'
+import CollectionModal from '../components/modals/CollectionModal/CollectionModal'
 import TokaStatusPill from '../components/pill/TokaStatusPill'
 import TokagotchiCanvas from '@/shared/canvas/TokagotchiCanvas'
 import BackgroundCanvas from '@/shared/canvas/BackgroundCanvas'
-import PerfileModal from '../../../shared/ui/modal/PerfileModal'
+import PerfileModal from '../../auth/components/PerfileModal'
 import MissionFab from '../../missions/components/MissionFab'
-import RarityCard from '@/shared/ui/RarityCard/RarityCard'
+import TokaIdentity from '@/shared/ui/Tokagotchi/TokaIdentity/TokaIdentity'
 import BattlePassCard from '../components/BattlePassCard/BattlePassCard'
-import { CoinPillCard } from '../components/CoinPillCard/CoinPillCard'
+import { CoinPillCard } from '../../../shared/ui/Cards/CoinPillCard/CoinPillCard'
 import HomeSkeleton from '../components/skeleton/HomeSkeleton'
 import PageError from '../../../shared/ui/Error/Error'
+import SheetPanel from '@/shared/ui/Sheet/SheetPanel/SheetPanel'
 import styles from './HomePage.module.css'
 
 // ── Geometría del Tokzagotchi flotante ──────────────────────────────────────────
@@ -34,7 +35,7 @@ const CONTAINER_VARS = {
 
 export default function HomePage() {
     const navigate = useNavigate()
-    const { hideBar, showBar } = useNavBar()
+    const { hideBar, showBar, hidden } = useNavBar()
     const { state, runAction, renameToka, ascend, reload, toast } = useHome()
 
     const [sheetExpanded, setSheetExpanded] = useState(false)
@@ -42,10 +43,9 @@ export default function HomePage() {
     const [perfileOpen, setPerfileOpen] = useState(false)
     const [renameOpen, setRenameOpen] = useState(false)
     const [missionsOpen, setMissionsOpen] = useState(false)
-    //const [collectionOpen, setCollectionOpen] = useState(false)
+    const [collectionOpen, setCollectionOpen] = useState(false)
 
     const containerRef = useRef<HTMLDivElement>(null)
-    const sheetRef = useRef<HTMLDivElement>(null)
     const floatingRef = useRef<HTMLDivElement>(null)
     const tokaWrapRef = useRef<HTMLDivElement>(null)
 
@@ -54,7 +54,10 @@ export default function HomePage() {
     const mainTokagotchi = player?.mainTokagotchi ?? null
 
     // Simulacion que redirecciona al apartado del pase de batalla, cambiar a /pase
-    const onNavegatePasePage = () => { navigate('/ui-kit', { replace: true }) }
+    const onNavigatePasePage = () => {
+        if (hidden) showBar()
+        navigate('/ui-kit', { replace: true })
+    }
 
     // Oculta/muestra la nav según el estado del sheet
     useEffect(() => {
@@ -76,69 +79,41 @@ export default function HomePage() {
         return () => ro.disconnect()
     }, [ready])
 
-    // ── Drag desde el handle del sheet ──────────────────────────────────────────
-    const onGrabDown = (e: React.PointerEvent<HTMLDivElement>) => {
-        const sheetEl = sheetRef.current
-        const container = containerRef.current
+    // ── Sincronización live con el drag del SheetPanel ──────────────────────────
+    const handleSheetDragProgress = (progress: number) => {
+        // progress: 0 = expandido · 1 = colapsado
         const floatingEl = floatingRef.current
         const tokaEl = tokaWrapRef.current
-        if (!sheetEl || !container) return
-
-        const startY = e.clientY
-        const startExpanded = sheetExpanded
-        const startPct = startExpanded ? 0 : 100   // 0 = expandido · 100 = colapsado
-        const shH = sheetEl.offsetHeight
         const collapsedTop = floatingEl ? floatingEl.offsetTop - TOKA_H + TOKA_OVERLAP : 0
-        let livePct = startPct
-        let moved = 0
-
-        setDragging(true)
-        e.currentTarget.setPointerCapture(e.pointerId)
-
-        const onMove = (ev: PointerEvent) => {
-            const dy = ev.clientY - startY
-            moved = Math.max(moved, Math.abs(dy))
-            livePct = Math.max(0, Math.min(100, startPct + (dy / shH) * 100))
-
-            sheetEl.style.transform = `translateY(${livePct}%)`
-            if (tokaEl) {
-                const top = TOKA_TOP_EXPANDED + (collapsedTop - TOKA_TOP_EXPANDED) * livePct / 100
-                tokaEl.style.top = `${top}px`
-            }
-            if (floatingEl) floatingEl.style.opacity = `${livePct / 100}`
+        if (tokaEl) {
+            const top = TOKA_TOP_EXPANDED + (collapsedTop - TOKA_TOP_EXPANDED) * progress
+            tokaEl.style.top = `${top}px`
         }
+        if (floatingEl) floatingEl.style.opacity = `${progress}`
+    }
 
-        const onUp = () => {
-            window.removeEventListener('pointermove', onMove)
-            window.removeEventListener('pointerup', onUp)
-            sheetEl.style.transform = ''
-            if (tokaEl) tokaEl.style.top = ''
-            if (floatingEl) floatingEl.style.opacity = ''
-            setDragging(false)
-            const next = moved < 6 ? !startExpanded : livePct < 50
-            setSheetExpanded(next)
+    const handleSheetDragging = (isDragging: boolean) => {
+        setDragging(isDragging)
+        if (!isDragging) {
+            if (tokaWrapRef.current) tokaWrapRef.current.style.top = ''
+            if (floatingRef.current) floatingRef.current.style.opacity = ''
         }
-
-        window.addEventListener('pointermove', onMove)
-        window.addEventListener('pointerup', onUp)
-        e.preventDefault()
     }
 
     // ── Estados de la pantalla ──────────────────────────────────────────────────
     if (state.status === 'loading') return <HomeSkeleton />
     if (state.status === 'error') return <PageError message={state.error} onRetry={reload} />
     // Sin toka: redirige a /unboxing (efecto de arriba); skeleton mientras navega
-    if (!mainTokagotchi) return <HomeSkeleton />
+    if (!mainTokagotchi){
+        navigate('/unboxing', { replace: true })
+        return null
+    }
 
     const { cooldowns, ui, data } = state
     const cpMeta = mainTokagotchi.nextEvolution?.cpRequired ?? 0
 
     const tf = player?.tf ?? 0
     const username = player?.username ?? '...'
-
-    const handleClaim = () => {
-        // TODO: reclamar misión (endpoint pendiente)
-    }
 
     return (
         <div
@@ -174,6 +149,7 @@ export default function HomePage() {
                 className={`${styles.tokaWrap} ${sheetExpanded ? styles.tokaWrapExpanded : ''}`}
             >
                 <TokagotchiCanvas
+                    key={mainTokagotchi.species}
                     animacionActual={ui.animation}
                     species={mainTokagotchi.species}
                     accessories={mainTokagotchi.equipped}
@@ -199,54 +175,52 @@ export default function HomePage() {
                     cooldowns={cooldowns}
                     floaters={ui.floaters}
                     onUse={runAction}
-                    showHeader={false}
                 />
             </div>
 
             {/* Sheet panel */}
-            <div
-                ref={sheetRef}
-                className={`${styles.sheetPanel} ${sheetExpanded ? styles.sheetPanelExpanded : ''}`}
+            <SheetPanel
+                expanded={sheetExpanded}
+                onExpandedChange={setSheetExpanded}
+                onDragging={handleSheetDragging}
+                onDragProgress={handleSheetDragProgress}
+                topOffset={240}
             >
-                <div className={styles.sheetHandle} onPointerDown={onGrabDown}>
-                    <div className={styles.sheetGrab} />
+                <div className={styles.identity}>
+                    <TokaIdentity
+                        name={mainTokagotchi.name}
+                        rarity={mainTokagotchi.rarity}
+                        species={mainTokagotchi.species}
+                        cp={mainTokagotchi.cp}
+                        onRename={() => setRenameOpen(true)}
+                    />
+                    <Button
+                        variant="warm"
+                        size="md"
+                        icon={<IcSwap />}
+                        onClick={() => setCollectionOpen(true)}>
+                    </Button>
                 </div>
-
-                <div className={styles.sheetScroll}>
-                    <div className={styles.identity}>
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                            <div className={styles.nmWrapper}>
-                                <div className={styles.nm}>{mainTokagotchi.name}</div>
-                                <IconButton
-                                    shape='sm'
-                                    size={28}
-                                    onClick={() => setRenameOpen(true)}
-                                    aria-label="Renombrar"
-                                >
-                                    <IcPencil />
-                                </IconButton>
-                            </div>
-                            <div className={styles.nmRow}>
-                                <div className={styles.sub}>
-                                    <RarityCard rarity={mainTokagotchi.rarity} />
-                                    <span>|</span>
-                                    <Label variant="warm" look="soft" size="sm">{mainTokagotchi.species}</Label>
-                                </div>
-                                <Button
-                                    variant="warm"
-                                    size="md"
-                                    icon={<IcSwap />}
-                                    onClick={() => {{/** setCollectionOpen(true) */}}}>Cambiar</Button>
-                            </div>
-                        </div>
-                    </div>
+                
+                <SheetPanel.Separator title="Estadísticas">
                     <StatsRow stats={mainTokagotchi.stats} />
-                    <EvoPanel serverTime={data.player.serverTime} nextEvolution={mainTokagotchi.nextEvolution} cp={mainTokagotchi.cp} tf={tf} onAscend={ascend} />
-                </div>
-            </div>
+                </SheetPanel.Separator>
+
+                <SheetPanel.Separator title="Evolución">
+                    <EvoPanel
+                        serverTime={data.player.serverTime} 
+                        nextEvolution={mainTokagotchi.nextEvolution} 
+                        cp={mainTokagotchi.cp} 
+                        tf={tf} 
+                        onAscend={ascend} 
+                    />
+                </SheetPanel.Separator>
+
+            </SheetPanel>
+
 
             {/* Card de Pase de Batalla — la data sale de usePass (/pass) */}
-            <BattlePassCard onClick={onNavegatePasePage} top={90} />
+            <BattlePassCard onClick={onNavigatePasePage} top={90} />
 
             {/* FAB de Misiones */}
             <div className={styles.btnMissionFab}>
@@ -275,20 +249,15 @@ export default function HomePage() {
             {missionsOpen && (
                 <MissionsModal
                     missions={[]} // TODO: la lista de misiones viene de la feature missions (useMissions/endpoint), no de useHome
-                    onClaim={handleClaim}
+                    onClaim={() => { }}
                     onClose={() => setMissionsOpen(false)}
                 />
             )}
-            {/** 
             {collectionOpen && (
                 <CollectionModal
-                    roster={[]} // TODO: el roster viene de la feature collection (useCollection/endpoint)
-                    activeId={mainTokagotchi.id}
-                    onActivate={() => setCollectionOpen(false)}
                     onClose={() => setCollectionOpen(false)}
                 />
             )}
-                */}
         </div>
     )
 }

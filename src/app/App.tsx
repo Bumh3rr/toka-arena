@@ -1,22 +1,20 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { tokenStore } from '@/shared/session/store/token.store'
-import SessionWatcher from '@/shared/session/components/SessionWatcher'
+import { tokenStore } from '@/shared/player/lib/token.store'
 import AppLayout from './layout/AppLayout/AppLayout'
 import LoginPage from '@/features/auth/pages/LoginPage'
 import UnboxingPage from '@/features/unboxing/pages/UnboxingPage'
 import ArenaPage from '@/features/arena/pages/ArenaPage'
 import ColeccionPage from '@/features/collection/pages/CollectionPage'
-import TiendaPage from '@/features/shop/pages/ShopPage'
+import ShopPage from '@/features/shop/pages/ShopPage'
 import HomePage from '@/features/home/pages/HomePage'
 import UIKitPage from '@/features/devkit/pages/UIKitPage'
+import SessionWatcher from '@/features/auth/components/SessionWatcher'
+import PassPage from '@/features/pass/page/PassPage'
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
-  /** 
   return tokenStore.exists()
     ? <>{children}</>
     : <Navigate to="/login" replace />
-*/
-  return <>{children}</>
 }
 
 export default function App() {
@@ -39,10 +37,11 @@ export default function App() {
           </PrivateRoute>
         }>
           <Route path="/home" element={<HomePage />} />
-          <Route path="/coleccion" element={<ColeccionPage />} />
-          <Route path="/tienda" element={<TiendaPage />} />
+          <Route path="/collection" element={<ColeccionPage />} />
+          <Route path="/shop" element={<ShopPage />} />
           <Route path="/ui-kit" element={<UIKitPage />} />
           <Route path="/arena" element={<ArenaPage />} />
+          <Route path="/pass" element={<PassPage />} />
         </Route>
 
         <Route path="/" element={

@@ -151,15 +151,40 @@ export function IcStar() {
 }
 export function IcSearch() {
   return (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" aria-hidden="true">
-    <circle cx="10.5" cy="10.5" r="6" />
-    <path d="M15 15l4.5 4.5" />
-  </svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" aria-hidden="true">
+      <circle cx="10.5" cy="10.5" r="6" />
+      <path d="M15 15l4.5 4.5" />
+    </svg>
+  )
+}
+
+export function IcFavorite() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 3l2.3 6.2 6.5 0-5.2 4.1 1.9 6.3L12 15.8l-5.5 3.8 1.9-6.3-5.2-4.1 6.5 0z" fill="currentColor" />
+    </svg>
+  )
+}
+
+export function IcReady() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M5 13l4 4L19 7" />
+    </svg>
   )
 }
 
 export function IcChevUp() {
   return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"><path d="M6 14.5l6-6 6 6" /></svg>;
+}
+
+export function IcClothes() {
+  return (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 12 12">
+    <path d="M0 0h12v12H0z" fill="none" />
+    <path fill="currentColor" d="M5.999 3a.5.5 0 0 0-.433.25a.5.5 0 0 1-.866-.5a1.5 1.5 0 1 1 2.361 1.81l-.126.124a3 3 0 0 0-.303.323c-.108.138-.133.223-.133.28c0 .104.057.2.148.25l3.691 2.051A1.287 1.287 0 0 1 9.713 10H2.287a1.287 1.287 0 0 1-.626-2.412l2.596-1.445a.5.5 0 1 1 .486.874L2.148 8.462a.287.287 0 0 0 .14.538h7.425a.287.287 0 0 0 .14-.538L6.16 6.412a1.29 1.29 0 0 1-.66-1.125c0-.378.175-.679.345-.896c.13-.167.294-.327.421-.451l.088-.087A.5.5 0 0 0 6 3" />
+  </svg>
+  )
 }
 
 export function IcTrophy() { return <svg viewBox="0 0 24 24" fill="none" stroke="#4A2800" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 4h10v4a5 5 0 0 1-10 0V4z" /><path d="M7 6H4.5v1.5A3 3 0 0 0 7 10.5M17 6h2.5v1.5A3 3 0 0 1 17 10.5M9.5 14.5h5M8.5 19.5h7M12 14.5v5" /></svg>; }
@@ -172,6 +197,7 @@ export function IcDoc() { return <svg viewBox="0 0 24 24" fill="none" stroke="cu
 export function IcChevR() { return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round"><path d="M9 5l7 7-7 7" /></svg>; }
 export function IcTerminal() { return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5" /><path d="M7 9l3 3-3 3M12.5 15h4" /></svg>; }
 export function IcInfo() { return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9" /><path d="M12 11v5" /><circle cx="12" cy="7.6" r=".5" /></svg>; }
+export function IcImage(){return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="8.5" cy="9.5" r="2"/><path d="M21 16l-5-5-8 8"/></svg>;}
 
 
 /**
@@ -182,4 +208,4 @@ export function IcHome() { return (<svg viewBox="0 0 24 24" fill="none" stroke="
 export function IcGrid() { return (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round"><rect x="3.6" y="3.6" width="7" height="7" rx="2" /><rect x="13.4" y="3.6" width="7" height="7" rx="2" /><rect x="3.6" y="13.4" width="7" height="7" rx="2" /><rect x="13.4" y="13.4" width="7" height="7" rx="2" /></svg>); }
 export function IcShop() { return (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round"><path d="M5.2 8h13.6l-1 11.2a1.5 1.5 0 0 1-1.5 1.4H7.7a1.5 1.5 0 0 1-1.5-1.4L5.2 8z" /><path d="M8.6 8V6.4a3.4 3.4 0 0 1 6.8 0V8" /></svg>); }
 export function IcArena() { return (<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 19.2L3.8 21m.9-7.2l.9 3.6m0 0l3.6.9m-3.6-.9l-2.7 2.7M16.4 3.9l-9 9l.45 2.25l2.25.45l9-9L20 3z" /><path d="M22 19.2L20.2 21m-.9-7.2l-.9 3.6m0 0l2.7 2.7m-2.7-2.7l-1.8.45l-1.8.45M9.3 11L4.9 6.6L4 3l3.6.9L12 8.3m.1 5.5l1.8 1.8l2.25-.45l.45-2.25l-1.8-1.8" /></svg>); }
-export function IcPaw() { return (<svg viewBox="0 0 24 24" fill="#fff" stroke="none"> <ellipse cx="6.6" cy="9" rx="2" ry="2.6" /><ellipse cx="11.4" cy="6.9" rx="2.1" ry="2.9" /> <ellipse cx="16.4" cy="8.2" rx="2" ry="2.6" /> <path d="M11.5 11.4c-3 0-5.1 2.1-5.1 4.4 0 2 1.7 2.9 3 2.9 1.1 0 1.5-.4 2.1-.4s1 .4 2.1.4c1.3 0 3-.9 3-2.9 0-2.3-2.1-4.4-5.1-4.4z" /></svg>); }
+export function IcPaw() { return (<svg className="iconPaw" viewBox="0 0 24 24" fill="currentColor" stroke="none"> <ellipse cx="6.6" cy="9" rx="2" ry="2.6" /><ellipse cx="11.4" cy="6.9" rx="2.1" ry="2.9" /> <ellipse cx="16.4" cy="8.2" rx="2" ry="2.6" /> <path d="M11.5 11.4c-3 0-5.1 2.1-5.1 4.4 0 2 1.7 2.9 3 2.9 1.1 0 1.5-.4 2.1-.4s1 .4 2.1.4c1.3 0 3-.9 3-2.9 0-2.3-2.1-4.4-5.1-4.4z" /></svg>); }

@@ -3,4 +3,5 @@
 .env.local
 docs/*
 dev/*
+dist/*
 resources_dev/*

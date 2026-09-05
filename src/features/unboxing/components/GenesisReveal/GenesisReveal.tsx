@@ -4,7 +4,7 @@ import { Button } from '@/shared/ui/Kit'
 import { IcPencil } from '@/shared/ui/Icons/Icons'
 import RenameModal from '@/shared/ui/modal/RenameModal'
 import { RARITY_META } from '@/shared/constants/rarity'
-import type { MainTokagotchi, Rarity } from '@/shared/domain/tokagotchi'
+import type { Tokagotchi, Rarity } from '@/shared/domain/tokagotchi'
 import styles from './GenesisReveal.module.css'
 import { FLAVOR, SPECIES_LABEL } from '@/shared/constants/tokagotchi'
 
@@ -22,12 +22,23 @@ const SPARKLE_POS: CSSProperties[] = [
 const SPARKLE_COUNT: Record<Rarity, number> = { COMMON: 4, RARE: 5, EPIC: 6, LEGENDARY: 7 }
 
 interface GenesisRevealProps {
-  tokagotchi: MainTokagotchi
+  tokagotchi: Tokagotchi
   onStart: () => void
   onRename: (newName: string) => void
+  /** Copy personalizable (defaults = flujo génesis). */
+  title?: string
+  subtitle?: string
+  ctaLabel?: string
 }
 
-export default function GenesisReveal({ tokagotchi, onStart, onRename }: GenesisRevealProps) {
+export default function GenesisReveal({
+  tokagotchi,
+  onStart,
+  onRename,
+  title = '¡Es tuyo!',
+  subtitle = 'Tu primer compañero de aventura',
+  ctaLabel = '¡Comenzar la aventura!',
+}: GenesisRevealProps) {
   const [renameOpen, setRenameOpen] = useState(false)
   const meta = RARITY_META[tokagotchi.rarity]
   const isLegendary = tokagotchi.rarity === 'LEGENDARY'
@@ -44,8 +55,8 @@ export default function GenesisReveal({ tokagotchi, onStart, onRename }: Genesis
       <div className={styles.content}>
         {/* 1. Título */}
         <header className={`${styles.header} ${styles.enter}`} style={{ animationDelay: '0s' }}>
-          <h1 className={styles.title}>¡Es tuyo!</h1>
-          <p className={styles.subtitle}>Tu primer compañero de aventura</p>
+          <h1 className={styles.title}>{title}</h1>
+          <p className={styles.subtitle}>{subtitle}</p>
         </header>
 
         {/* 2. Héroe */}
@@ -92,7 +103,7 @@ export default function GenesisReveal({ tokagotchi, onStart, onRename }: Genesis
         {/* 5. CTA */}
         <div className={`${styles.cta} ${styles.enter}`} style={{ animationDelay: '1.1s' }}>
           <Button  variant="cream" size="lg" fullWidth onClick={onStart}>
-            ¡Comenzar la aventura!
+            {ctaLabel}
           </Button>
         </div>
       </div>

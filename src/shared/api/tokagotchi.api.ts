@@ -1,7 +1,7 @@
 import type { TokagotchiApi } from "./contracts";
 import api from "./client";
 import type { AscendResponseDTO, CareResponseDTO } from "./dto/tokagotchi-responses.dto";
-import type { MainTokagotchiDTO } from "./dto/tokagotchi.dto";
+import type { TokagotchiDTO } from "./dto/tokagotchi.dto";
 
 /**
  * Implementación del cliente HTTP para operaciones de Tokagotchi.
@@ -25,7 +25,7 @@ const tokagotchi: TokagotchiApi = {
    */
   async rename(_tokaId, newName) {
     const body = { newTokagotchiName: newName };
-    const { data } = await api.patch<MainTokagotchiDTO>(`tokagotchis/${_tokaId}/name`, body);
+    const { data } = await api.patch<TokagotchiDTO>(`tokagotchis/${_tokaId}/name`, body);
     console.log("Peticion PATCH /tokagotchis/${_tokaId}/name con body:", body, "Respuesta:", data);
     return data;
   },
@@ -39,6 +39,13 @@ const tokagotchi: TokagotchiApi = {
     console.log("Peticion POST /tokagotchis/${_tokaId}/evolve sin body. Respuesta:", data);
     return data;
   },
+
+  /** GET /tokagotchis/{id} — detalle de un Tokagotchi propio. */
+  async getTokaById(_tokaId) {
+    const { data } = await api.get<TokagotchiDTO>(`tokagotchis/${_tokaId}`);
+    console.log("Peticion GET /tokagotchis/${_tokaId}. Respuesta:", data);
+    return data;
+  }
 };
 
 /** Cliente HTTP para operaciones de Tokagotchi. Exportado como singleton. */

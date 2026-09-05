@@ -1,0 +1,42 @@
+.coinPillCard{
+    padding: 5px 10px;
+}
+
+.imgCoin {
+    width: 23px;
+    height: 23px;
+    display: block;
+    filter: drop-shadow(0 1px 0 rgba(74, 40, 0, .25));
+}
+
+.tf {
+    font-size: 11px;
+    font-weight: 600;
+    opacity: .7;
+    margin-left: 1px;
+}
+
+.tfValue {
+    font-size: 14px;
+    font-weight: 600;
+    margin-left: 4px;
+}
+
+.imgCoin.dump {
+    animation: bump .4s ease;
+}
+
+/* Animación de rebote para el ícono de moneda */
+@keyframes bump {
+    0% {
+        transform: scale(1);
+    }
+
+    40% {
+        transform: scale(1.22);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}

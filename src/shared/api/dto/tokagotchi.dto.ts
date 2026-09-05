@@ -1,11 +1,12 @@
+import type { AccessorySlotDTO } from "./accessory.dto";
+
 /** Niveles de rareza posibles de un Tokagotchi, de menor a mayor. */
 export type RarityDTO = "COMMON" | "RARE" | "EPIC" | "LEGENDARY";
 
 /** Especies disponibles de Tokagotchi. */
 export type SpeciesDTO = "TOFU" | "MOCHI" | "HANA";
 
-/** Ranuras de accesorio que puede ocupar un ítem equipado. */
-export type AccessorySlotDTO = "HEAD" | "FACE" | "NECK" | "BACK";
+export type NextRarityDTO = RarityDTO | "MAX";
 
 /**
  * Datos de la próxima evolución disponible para un Tokagotchi.
@@ -13,7 +14,7 @@ export type AccessorySlotDTO = "HEAD" | "FACE" | "NECK" | "BACK";
  */
 export interface EvolutionDTO {
   /** Rareza que alcanzará el Tokagotchi si la evolución es exitosa. */
-  nextRarity: RarityDTO;
+  nextRarity: NextRarityDTO;
   /** CP mínimos requeridos para intentar la evolución. */
   cpRequired: number;
   /** Costo en TF (TokaFeed) para iniciar la evolución. */
@@ -28,10 +29,11 @@ export interface EvolutionDTO {
 
 /** Accesorio equipado actualmente en un Tokagotchi. */
 export interface EquippedAccessoryDTO {
+  id: string;
   /** Ruta al manifiesto de accesorios. */
   /** /src/assets/dragonbones/accessories.manifest.json */
   /** Código interno que identifica el asset del accesorio. */
-  code: string;
+  type: string;
   /** Ranura que ocupa el accesorio. */
   slot: AccessorySlotDTO;
 }
@@ -80,7 +82,7 @@ export interface AbilityDTO {
  * Tokagotchi activo del jugador con todos sus datos de combate,
  * accesorios, estadísticas, evolución y cooldowns de cuidado.
  */
-export interface MainTokagotchiDTO {
+export interface TokagotchiDTO {
   id: string;
   name: string;
   species: SpeciesDTO;
@@ -89,7 +91,7 @@ export interface MainTokagotchiDTO {
   hp: number;
   atk: number;
   def: number;
-  nextEvolution: EvolutionDTO | null;
+  nextEvolution: EvolutionDTO;
   equipped: EquippedAccessoryDTO[] | null;
   careCooldown: CareDTO;
 }
