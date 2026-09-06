@@ -19,6 +19,13 @@ export interface PlayerProfileDTO {
   genesisClaimed: boolean;
   /** Tokagotchi activo del jugador, o null si aún no tiene ninguno. */
   mainTokagotchi: TokagotchiDTO | null;
+  /** Puntos de estamina de combate disponibles. El backend recalcula la
+   *  regeneración pasiva en cada lectura de este endpoint. */
+  currentStamina: number;
+  /** Recargas de estamina compradas hoy. El backend permite 2. */
+  dailyStaminaRefillsCount: number;
+  /** Desde cuándo cuenta la regeneración del siguiente punto. */
+  lastStaminaUpdate: string;
 }
 
 export type PlayerTokagotchisPageDTO = PaginatedResponseDTO<TokagotchiDTO>

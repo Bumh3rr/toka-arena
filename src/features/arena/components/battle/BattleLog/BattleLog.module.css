@@ -1,0 +1,29 @@
+/*
+ * Alto fijo para dos líneas: si la tarjeta creciera con el texto, el ruedo se
+ * encogería en cada golpe y la pantalla temblaría entre turnos.
+ */
+.card {
+  width: 100%;
+  height: 52px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1px;
+  overflow: hidden;
+}
+
+.line {
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--ink-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Lo último que pasó pesa más que lo anterior */
+.latest {
+  color: var(--ink);
+  font-weight: 700;
+}

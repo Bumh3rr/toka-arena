@@ -1,0 +1,22 @@
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+/* La cifra va en un disco, para que no se lea como parte del nombre */
+.amount {
+  display: inline-grid;
+  place-items: center;
+  min-width: 15px;
+  height: 15px;
+  margin-left: 5px;
+  padding: 0 3px;
+  border-radius: var(--r-pill);
+  background: currentColor;
+  color: var(--cream);
+  font-size: 9px;
+  font-weight: 800;
+  /* `currentColor` de fondo con el texto en crema: hereda el tono del chip */
+  mix-blend-mode: normal;
+}

@@ -95,7 +95,7 @@ export default function StoreSection() {
       {isGroupVisible(filter, 'specials') && groups.specials.length > 0 && (
         <section>
           <SectionSign {...SECTION_SIGNS.specials} />
-          <div className={styles.hscroll}>
+          <div className={styles.specialList}>
             {groups.specials.map((item) => (
               <SpecialCard key={item.id} item={item} onBuy={setSelected} enableBuy={false} />
             ))}
@@ -106,7 +106,7 @@ export default function StoreSection() {
     
         <section>
           <SectionSign {...SECTION_SIGNS.potions} />
-          <div className={styles.hscroll}>
+          <div className={styles.specialList}>
           </div>
         </section>
 

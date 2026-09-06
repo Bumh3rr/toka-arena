@@ -1,0 +1,45 @@
+.banner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  text-align: center;
+  animation: verdictIn .5s cubic-bezier(.2, .9, .3, 1.15) both;
+}
+
+/*
+ * Palabra de display: el trazo va por fuera del relleno con `paint-order`, sin
+ * el cual el contorno se come la letra a este grosor.
+ */
+.title {
+  font-family: var(--font-title);
+  font-size: 44px;
+  font-weight: 600;
+  line-height: 1.05;
+  color: var(--verdict-glow);
+  -webkit-text-stroke: 6px var(--ink);
+  paint-order: stroke fill;
+  text-shadow: 0 4px 0 rgba(0, 0, 0, .3);
+}
+
+.subtitle {
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--cream);
+}
+
+.meta {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 251, 241, .6);
+}
+
+@keyframes verdictIn {
+  0%   { opacity: 0; transform: translateY(-14px) scale(.9); }
+  100% { opacity: 1; transform: translateY(0)     scale(1);  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .banner { animation: none; }
+}

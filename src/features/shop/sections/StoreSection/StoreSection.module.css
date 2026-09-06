@@ -49,19 +49,17 @@
 .eggGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  gap: 9px;
   margin-top: 10px;
 }
 
-.hscroll {
+/*
+ * Los especiales van en columna, no en scroll horizontal: son dos ítems y las
+ * tarjetas de 250px obligaban a desplazar para ver el segundo.
+ */
+.specialList {
   display: flex;
-  gap: 11px;
-  overflow-x: auto;
-  padding: 2px 0 6px;
+  flex-direction: column;
+  gap: 9px;
   margin-top: 10px;
-  scrollbar-width: none;
-}
-
-.hscroll::-webkit-scrollbar {
-  display: none;
 }

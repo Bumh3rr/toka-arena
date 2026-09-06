@@ -17,8 +17,9 @@ import StatusMessageCard from '../../components/StatusMessageCard/StatusMessageC
 import FloorCountdown from '../../components/FloorCountdown/FloorCountdown'
 import GlyphMedallion from '../../components/GlyphMedallion/GlyphMedallion'
 import { useMatchmaking } from '../../hooks/useMatchmaking'
-import { matchmakingMock } from '../../lib/matchmakingMock'
+import { createMatchmakingDriver } from '../../lib/matchmakingDriver'
 import { getPortrait, portraitKey, setPortrait } from '../../lib/tokaPortrait'
+import { useArenaSocket } from '@/shared/ws/arenaSocketContext'
 import { ARENA_MODES } from '../../constants/modes'
 import type { ArenaMode, MatchFighter, MatchFound } from '../../types/arena.types'
 import type { Tokagotchi } from '@/shared/domain/tokagotchi'
@@ -59,6 +60,7 @@ export default function MatchmakingSection({
 
   const tokagotchi =
     playerState.status === 'ready' ? playerState.data.mainTokagotchi : null
+  const playerId = playerState.status === 'ready' ? playerState.data.id : null
 
   if (playerState.status === 'loading') {
     return <Loading fullscreen text="Entrando a la cola..." />
@@ -66,7 +68,7 @@ export default function MatchmakingSection({
   if (playerState.status === 'error') {
     return <PageError message={playerState.error} onRetry={reload} />
   }
-  if (!tokagotchi) {
+  if (!tokagotchi || !playerId) {
     return (
       <PageError
         message="Necesitas un Tokagotchi para entrar a la arena."
@@ -78,6 +80,7 @@ export default function MatchmakingSection({
   return (
     <Searching
       tokagotchi={tokagotchi}
+      playerId={playerId}
       mode={mode}
       onExit={onExit}
       onBattleStart={onBattleStart}
@@ -93,10 +96,25 @@ export default function MatchmakingSection({
  */
 function Searching({
   tokagotchi,
+  playerId,
   mode,
   onExit,
   onBattleStart,
-}: { tokagotchi: Tokagotchi } & MatchmakingSectionProps) {
+}: { tokagotchi: Tokagotchi; playerId: string } & MatchmakingSectionProps) {
+  const { subscribe, online } = useArenaSocket()
+
+  /*
+   * El driver se rehace cuando cambia la conexión, y eso es deliberado: el
+   * backend saca de la cola a quien pierde el WebSocket
+   * (`MatchmakingDisconnectListener`), así que al reconectar hay que volver a
+   * encolarse. Rehacerlo dispara de nuevo la búsqueda por sí solo.
+   */
+  const driver = useMemo(
+    () => createMatchmakingDriver({ myPlayerId: playerId, subscribe }),
+    // `online` no se usa dentro, pero su cambio es la señal de re-encolar
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [playerId, subscribe, online],
+  )
   // Nuestro lado del emparejamiento: el hook lo compone con el del rival
   const me: MatchFighter = useMemo(
     () => ({
@@ -132,7 +150,7 @@ function Searching({
 
   const theme = ARENA_MODES[mode]
 
-  const { state, retry } = useMatchmaking({ me, driver: matchmakingMock, onBattleStart })
+  const { state, retry } = useMatchmaking({ me, driver, onBattleStart })
 
   return (
     <section className={styles.section}>

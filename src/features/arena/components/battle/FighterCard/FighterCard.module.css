@@ -1,0 +1,102 @@
+.card {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  transition: box-shadow .3s ease;
+}
+
+/* Con la vida en rojo la ficha entera avisa, no solo la barra */
+.critical {
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, .6),
+    0 3px 0 var(--card-edge),
+    0 0 0 2px rgba(232, 84, 84, .55);
+}
+
+.body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.identity {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+}
+
+.dot {
+  flex: none;
+  align-self: center;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(74, 40, 0, .35);
+}
+
+.dotMe    { background: var(--purple); }
+.dotRival { background: var(--blue);   }
+
+.name {
+  font-family: var(--font-title);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.caption {
+  flex: 1;
+  min-width: 0;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--ink-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Medidores ────────────────────────────────────────────────────────────── */
+
+.gauge {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+/*
+ * `ProgressBar` no trae `flex` propio: dentro de una fila flexible se encoge
+ * a su contenido, que es cero, y la barra desaparece.
+ */
+.bar {
+  flex: 1;
+  min-width: 0;
+}
+
+.tag {
+  flex: none;
+  width: 26px;
+  font-size: 9.5px;
+  font-weight: 800;
+  color: var(--ink-3);
+  letter-spacing: .4px;
+}
+
+/* Ancho fijo para que las dos cifras queden en columna y no bailen */
+.value {
+  flex: none;
+  min-width: 48px;
+  text-align: right;
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--ink-2);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card { transition: none; }
+}

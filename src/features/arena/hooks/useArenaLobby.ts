@@ -1,8 +1,8 @@
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 import { usePlayer } from "@/shared/player/hooks/usePlayer";
 import type { Tokagotchi } from "@/shared/domain/tokagotchi";
 import { ARENA_MODES } from "../constants/modes";
-import { getArenaMock } from "../lib/arenaMock";
+import { readStamina } from "../lib/stamina";
 import { STAMINA_PER_BATTLE } from "../types/arena.types";
 import type { ArenaLobbyData, ArenaMode, ArenaModeTheme } from "../types/arena.types";
 
@@ -36,9 +36,9 @@ interface UseArenaLobbyResult {
 /**
  * Estado del lobby de arena.
  *
- * El jugador y su tokagotchi salen de la API real (`usePlayer`, clave SWR
- * compartida `'player'`). La estamina, el historial y las pociones equipadas
- * todavía no tienen backend y salen de `arenaMock`.
+ * Todo sale de la API real: el jugador, su tokagotchi y su estamina de
+ * `usePlayer` (clave SWR compartida `'player'`); el historial y las pociones
+ * equipadas los piden sus propios paneles cuando se abren.
  *
  * Cuando la API de batallas exista, este archivo es el único que cambia:
  * la forma de `ArenaLobbyData` ya es la del contrato final.
@@ -50,16 +50,11 @@ interface UseArenaLobbyResult {
 export function useArenaLobby(mode: ArenaMode): UseArenaLobbyResult {
   const { state: playerState, reload } = usePlayer();
 
-  // TODO: sustituir por el endpoint de arena cuando el backend esté listo.
-  // Se calcula una sola vez al montar: si se recalculara en cada render, el
-  // `nextRefillAt` se movería con el reloj y la cuenta atrás nunca avanzaría.
-  const arena = useMemo(() => getArenaMock(), []);
-
   const theme = ARENA_MODES[mode];
 
   // Sin memo a propósito: `usePlayer` devuelve un estado nuevo en cada render,
   // así que memoizar solo añadiría comparaciones sin evitar ningún trabajo.
-  const state = buildState(playerState, arena, theme);
+  const state = buildState(playerState, theme);
 
   const handleReload = useCallback(() => {
     void reload();
@@ -70,7 +65,6 @@ export function useArenaLobby(mode: ArenaMode): UseArenaLobbyResult {
 
 function buildState(
   playerState: ReturnType<typeof usePlayer>["state"],
-  arena: ArenaLobbyData,
   theme: ArenaModeTheme,
 ): ArenaLobbyState {
   if (playerState.status === "loading") return { status: "loading" };
@@ -79,13 +73,14 @@ function buildState(
   const { username, tf, mainTokagotchi } = playerState.data;
   if (!mainTokagotchi) return { status: "empty" };
 
-  const hasStamina = arena.stamina.current >= STAMINA_PER_BATTLE;
+  const stamina = readStamina(playerState.data);
+  const hasStamina = stamina.current >= STAMINA_PER_BATTLE;
 
   return {
     status: "ready",
     data: {
       player: { username, tf, tokagotchi: mainTokagotchi },
-      arena,
+      arena: { stamina },
       theme,
       hasStamina,
       canBattle: hasStamina && theme.enabled,

@@ -123,12 +123,20 @@
 
 /* ── Próximamente ─────────────────────────────────────────────────────────── */
 
+/*
+ * Sin `opacity`: atenuaría la tarjeta entera y se transparentaría el fondo de
+ * la tienda. Se apaga el contenido, no el marco.
+ */
 .soon {
-  opacity: .62;
   border-style: dashed;
+  border-color: rgba(74, 40, 0, .55);
   cursor: not-allowed;
 }
 
 .soon .window {
-  filter: grayscale(.45);
+  filter: grayscale(.5) brightness(.88);
+}
+
+.soon .name {
+  color: var(--ink-3);
 }

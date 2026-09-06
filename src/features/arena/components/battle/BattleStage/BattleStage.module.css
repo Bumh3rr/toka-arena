@@ -1,0 +1,132 @@
+/*
+ * Envoltorio sin recorte: sostiene el ruedo y la placa de turno, que se apoya
+ * en su borde inferior y quedaría cortada dentro del `overflow: hidden`.
+ */
+.wrap {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
+.stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  border-radius: var(--r-lg);
+  border: var(--ol-thin) solid var(--ink);
+  background-size: cover;
+  background-position: center 80%;
+  overflow: hidden;
+  box-shadow: inset 0 0 22px rgba(30, 10, 0, .38);
+}
+
+/* Contador de turno y aviso de fatiga */
+.hud {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  z-index: 2;
+  display: flex;
+  gap: 6px;
+}
+
+/* ── Combatientes ─────────────────────────────────────────────────────────── */
+
+/*
+ * Los dos se anclan por la BASE, no por arriba: así se apoyan en el suelo del
+ * ruedo pase lo que pase con su altura. El rival va más atrás y más chico, que
+ * es lo que da la profundidad sin necesitar un fondo con perspectiva propia.
+ */
+.slot {
+  position: absolute;
+  display: grid;
+  place-items: end center;
+  pointer-events: none;
+}
+
+.slotMe {
+  left: 0;
+  bottom: 2%;
+}
+
+.slotRival {
+  right: 4px;
+  bottom: 30%;
+}
+
+/* ── Números flotantes ────────────────────────────────────────────────────── */
+
+.flashes {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 3;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+/*
+ * Cifra de display: el trazo va por fuera del relleno con `paint-order`, que
+ * es lo que evita que el contorno se coma el número a este grosor.
+ */
+.flash {
+  display: block;
+  font-family: var(--font-title);
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1;
+  -webkit-text-stroke: 4px var(--cream);
+  paint-order: stroke fill;
+  animation: flashRise .9s cubic-bezier(.2, .8, .3, 1) both;
+}
+
+.flashDamage { color: #E23B3B; }
+.flashHeal   { color: var(--green); }
+
+/* ── Rótulo de turno ──────────────────────────────────────────────────────── */
+
+/*
+ * Cabalga el borde inferior del ruedo, como una placa clavada en la arena.
+ */
+.turn {
+  position: absolute;
+  bottom: -13px;
+  left: 50%;
+  z-index: 2;
+  transform: translateX(-50%);
+  max-width: 84%;
+  padding: 6px 18px;
+  border-radius: var(--r-pill);
+  border: var(--ol-thin) solid var(--ink);
+  background: linear-gradient(180deg, #FFFDF6, var(--cream));
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-shadow: 0 3px 0 var(--edge-cream);
+}
+
+/* En tu turno la placa se enciende: es la señal de que toca decidir */
+.turnMine {
+  background: linear-gradient(180deg, #FFD15A, var(--legend));
+  color: #fff;
+  text-shadow: 0 1.5px 0 rgba(74, 40, 0, .3);
+  box-shadow: 0 3px 0 var(--legend-edge);
+}
+
+@keyframes flashRise {
+  0%   { opacity: 0; transform: translateY(14px)  scale(.7); }
+  22%  { opacity: 1; transform: translateY(0)     scale(1.1); }
+  40%  {             transform: translateY(-4px)  scale(1);  }
+  100% { opacity: 0; transform: translateY(-40px) scale(.95); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flash { animation: none; }
+}

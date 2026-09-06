@@ -1,0 +1,64 @@
+.section {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+/*
+ * El fondo del modo se oscurece: durante el combate el escenario que importa
+ * es el del ruedo, y si el marco compite el ojo no sabe dónde mirar.
+ */
+.scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    linear-gradient(180deg, rgba(28, 12, 4, .78), rgba(20, 8, 2, .9));
+  pointer-events: none;
+}
+
+/*
+ * Aviso de vida crítica.
+ *
+ * Va con degradado radial y no con `box-shadow: inset`: la sombra difumina
+ * hacia dentro y acababa tiñendo las fichas y el relato, que es justo lo que
+ * el jugador necesita leer cuando le queda poca vida. Así el rojo se queda en
+ * el marco y el centro sigue limpio.
+ */
+.vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 78% 62% at center,
+    transparent 58%,
+    rgba(190, 34, 34, .34) 84%,
+    rgba(160, 22, 22, .62) 100%
+  );
+  animation: criticalPulse 1.6s ease-in-out infinite;
+}
+
+/*
+ * Todo cabe sin scroll: solo el ruedo (`BattleStage`, con `flex: 1`) cede
+ * altura. Fichas, relato y acciones miden lo que miden, así que en una
+ * pantalla corta se encoge el escenario y no desaparece ningún botón.
+ */
+.content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 12px 14px;
+}
+
+@keyframes criticalPulse {
+  0%, 100% { opacity: .55; }
+  50%      { opacity: 1;   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vignette { animation: none; opacity: .7; }
+}

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { IconButton, Label, Toast } from '@/shared/ui/Kit'
-import { IcPerson, IcClock, IcClothes } from '@/shared/ui/Icons/Icons'
+import { IcPerson } from '@/shared/ui/Icons/Icons'
 import { CoinPillCard } from '@/shared/ui/Cards/CoinPillCard/CoinPillCard'
 import SheetPanel from '@/shared/ui/Sheet/SheetPanel/SheetPanel'
 import CollectionModal from '@/shared/ui/modal/CollectionModal/CollectionModal'
@@ -17,10 +17,13 @@ import NoStaminaBanner from '../../components/NoStaminaBanner/NoStaminaBanner'
 import LobbyActionBar from '../../components/LobbyActionBar/LobbyActionBar'
 import ModePanel from '../../components/panels/ModePanel/ModePanel'
 import TokaPanel from '../../components/panels/TokaPanel/TokaPanel'
-import PanelPlaceholder from '../../components/panels/PanelPlaceholder/PanelPlaceholder'
+import PotionPanel from '../../components/panels/PotionPanel/PotionPanel'
+import HistoryPanel from '../../components/panels/HistoryPanel/HistoryPanel'
 import ArenaBackdrop from '../../components/ArenaBackdrop/ArenaBackdrop'
 import { useArenaLobby } from '../../hooks/useArenaLobby'
 import { useArenaPanel } from '../../hooks/useArenaPanel'
+import { useStaminaRefill } from '../../hooks/useStaminaRefill'
+import { usePotionLoadout } from '../../hooks/usePotionLoadout'
 import type { ArenaMode } from '../../types/arena.types'
 import styles from './LobbySection.module.css'
 
@@ -48,6 +51,8 @@ export default function LobbySection({
 }: LobbySectionProps) {
   const { state, reload } = useArenaLobby(mode)
   const { panel, open, expanded, setExpanded } = useArenaPanel()
+  const { refillStamina } = useStaminaRefill()
+  const { slots: potionSlots } = usePotionLoadout()
   const { toast, show } = useToast()
 
   const [profileOpen, setProfileOpen] = useState(false)
@@ -65,7 +70,10 @@ export default function LobbySection({
   // donde estaba, ya con el tokagotchi nuevo (la caché 'player' se revalida).
   const handleChangeToka = () => setCollectionOpen(true)
 
-  const handleRefill = () => show('Recarga de estamina — próximamente', { variant: 'info' })
+  const handleRefill = async () => {
+    const message = await refillStamina()
+    show(message.text, { variant: message.ok ? 'info' : 'danger' })
+  }
 
   return (
     <section className={styles.section}>
@@ -91,7 +99,7 @@ export default function LobbySection({
       {/* Estamina e historial, anclados a los bordes */}
       <div className={styles.edgeRow}>
         <StaminaCard stamina={arena.stamina} />
-        <RecordCard record={arena.record} onOpenHistory={() => open('history')} />
+        <RecordCard onOpenHistory={() => open('history')} />
       </div>
 
       <ArenaStage
@@ -104,7 +112,7 @@ export default function LobbySection({
       {/* Controles */}
       <footer className={`${styles.controls} ${expanded ? styles.controlsHidden : ''}`}>
         <div className={styles.trayRow}>
-          <PotionTray slots={arena.potions} onOpen={() => open('potions')} />
+          <PotionTray slots={potionSlots} onOpen={() => open('potions')} />
         </div>
 
         {!hasStamina && (
@@ -133,20 +141,8 @@ export default function LobbySection({
         {panel === 'mode' && (
           <ModePanel selected={mode} onSelect={onModeChange} />
         )}
-        {panel === 'potions' && (
-          <PanelPlaceholder
-            title="Pociones"
-            description="Aquí vas a equipar las tres pociones que tu Tokagotchi lleva al combate."
-            icon={<IcClothes />}
-          />
-        )}
-        {panel === 'history' && (
-          <PanelPlaceholder
-            title="Historial"
-            description="Aquí vas a revisar tus combates anteriores, rival por rival."
-            icon={<IcClock />}
-          />
-        )}
+        {panel === 'potions' && <PotionPanel />}
+        {panel === 'history' && <HistoryPanel />}
       </SheetPanel>
 
       {toast && <Toast {...toast} />}

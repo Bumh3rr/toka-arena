@@ -1,0 +1,77 @@
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 9px 10px 10px;
+  border-radius: var(--r);
+  border: var(--ol-thin) solid var(--ink);
+  background: linear-gradient(180deg, #FFFDF6, var(--cream));
+  text-align: left;
+  font-family: var(--font-body);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, .7),
+    0 3px 0 var(--edge-cream);
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+
+.card:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, .7), 0 0 0 var(--edge-cream);
+}
+
+/* La jugada de la especie: la de 60 NRG se ve distinta al resto */
+.signature {
+  background: linear-gradient(180deg, #B994E8, var(--purple));
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, .35),
+    0 3px 0 var(--purple-edge);
+}
+
+.signature .name   { color: #fff; text-shadow: 0 1px 0 rgba(50, 0, 80, .3); }
+.signature .effect { color: rgba(255, 255, 255, .82); }
+
+.off {
+  opacity: .45;
+  box-shadow: none;
+}
+
+.badge {
+  position: absolute;
+  top: -9px;
+  right: 8px;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.name {
+  font-family: var(--font-title);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.effect {
+  font-size: 10.5px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--ink-3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card { transition: none; }
+}

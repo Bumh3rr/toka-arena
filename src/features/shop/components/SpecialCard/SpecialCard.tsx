@@ -1,8 +1,21 @@
-import { Card, Button } from '@/shared/ui/Kit'
-import { IcImage} from '@/shared/ui/Icons/Icons'
+import type { CSSProperties } from 'react'
+import { Label } from '@/shared/ui/Kit'
 import type { StoreItemDTO } from '../../api/dto/shop.dto'
 import { formatTF } from '../../lib/formatTF'
+import ItemGlyph from '../ItemGlyph'
 import styles from './SpecialCard.module.css'
+
+/**
+ * Acento del medallón por tipo.
+ *
+ * Son los colores propios de los iconos del UIKit — el escudo nace verde y el
+ * rayo naranja, los mismos que usa StatsRow para DEF y ATK. Con un tinte
+ * distinto, el halo y el icono se peleaban.
+ */
+const TONE: Record<string, string> = {
+  EVOLUTION_SHIELD: 'var(--green)',
+  BOOSTER: '#F08A4B',
+}
 
 interface SpecialCardProps {
   item: StoreItemDTO
@@ -10,30 +23,57 @@ interface SpecialCardProps {
   enableBuy?: boolean
 }
 
+/**
+ * Ítem especial de la tienda.
+ *
+ * A diferencia de accesorios y huevos, estos no tienen ilustración: el peso lo
+ * llevan el icono, el nombre y la descripción. Por eso la tarjeta va a lo ancho
+ * en vez de en rejilla — la descripción necesita renglón, y con dos ítems un
+ * scroll horizontal obligaba a desplazar para ver el segundo.
+ *
+ * El medallón conserva el pozo oscuro del resto de la tienda para que la
+ * sección no se sienta de otro juego. El icono sale de `ItemGlyph` (rayo para
+ * el booster, escudo para el shield): con un icono genérico en ambos, las dos
+ * tarjetas quedaban indistinguibles salvo por el texto.
+ */
 export default function SpecialCard({ item, onBuy, enableBuy = true }: SpecialCardProps) {
-  const isShield = item.itemType === 'EVOLUTION_SHIELD'
+  const tone = TONE[item.itemType] ?? 'var(--gold)'
 
   return (
-    <Card variant="cream" padding="sm" shadow="md" className={styles.card}>
-      <div className={styles.top}>
-        <span className={`${styles.medallion} ${isShield ? styles.toneShield : styles.toneBooster}`} aria-hidden="true">
-          {isShield ? <IcImage /> : <IcImage />}
+    <button
+      type="button"
+      className={`${styles.card} ${enableBuy ? '' : styles.soon}`}
+      style={{ '--tone': tone } as CSSProperties}
+      disabled={!enableBuy}
+      onClick={() => onBuy(item)}
+      aria-label={
+        enableBuy
+          ? `Comprar ${item.displayName} por ${formatTF(item.priceInTokaFeed)} TF`
+          : `${item.displayName} — próximamente`
+      }
+    >
+      <span className={styles.well}>
+        <span className={styles.glow} aria-hidden="true" />
+        <span className={styles.glyph} aria-hidden="true">
+          <ItemGlyph itemType={item.itemType} />
         </span>
-        <div className={styles.info}>
-          <div className={styles.name}>{item.displayName}</div>
-          <div className={styles.desc}>{item.description}</div>
-        </div>
-      </div>
+      </span>
 
-      <div className={styles.bottom}>
-        <div className={styles.price}>
-          <img src="/assets/ui/tf/tf.svg" alt="" aria-hidden="true" className={styles.tfIcon} />
-          {formatTF(item.priceInTokaFeed)} TF
-        </div>
-        <Button variant="green" size="sm" onClick={() => onBuy(item)} disabled={!enableBuy}>
-          Comprar
-        </Button>
-      </div>
-    </Card>
+      <span className={styles.info}>
+        <span className={styles.name}>{item.displayName}</span>
+        <span className={styles.desc}>{item.description}</span>
+
+        <span className={styles.price}>
+          <img src="/assets/ui/tf/tf.svg" alt="" aria-hidden="true" className={styles.coin} />
+          <span className={styles.priceValue}>{formatTF(item.priceInTokaFeed)}</span>
+        </span>
+      </span>
+
+      {!enableBuy && (
+        <span className={styles.soonBadge}>
+          <Label size="xs" variant="warm" look="solid">Próx.</Label>
+        </span>
+      )}
+    </button>
   )
 }

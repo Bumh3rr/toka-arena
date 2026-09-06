@@ -59,22 +59,32 @@ export interface ArenaModeTheme {
 
 // ── Pociones ────────────────────────────────────────────────────────────────
 
+/**
+ * Pociones de combate. Los identificadores son los de `PotionType` del
+ * backend, literales: viajan tal cual en `POST /potions/equip` y en la acción
+ * `POTION` del WebSocket, así que no admiten sinónimos.
+ */
 export type PotionId =
-  | "LESSER_HEALING"
-  | "GREATER_HEALING"
-  | "FURY_ELIXIR"
-  | "IRON_SHIELD"
+  | "MINOR_HEALTH"
+  | "MAJOR_HEALTH"
   | "ENERGY_BREW"
-  | "PURIFICATION_TONIC";
+  | "PURIFICATION_TONIC"
+  | "WRATH_ELIXIR"
+  | "IRON_SHIELD";
 
 export interface Potion {
   id: PotionId;
+  /** Nombre tal como lo escribe el backend (`PotionType.displayName`). */
   name: string;
-  /** Efecto en una línea, para el slot y el futuro panel de pociones. */
+  /** Efecto en una línea, para el slot y la hoja de pociones del combate. */
   description: string;
   image: string;
   /** Color del anillo del slot. */
   tint: string;
+  /** Precio en TF, de `PotionType`. */
+  price: number;
+  /** Tope de unidades que se pueden llevar de esta poción a un combate. */
+  limitPerBattle: number;
 }
 
 /** Una de las tres ranuras de poción que el jugador lleva al combate. */
@@ -94,36 +104,21 @@ export interface Stamina {
   fullRefillCostTF: number;
 }
 
-export interface BattleRecord {
-  wins: number;
-  losses: number;
-}
-
-/** Datos de arena que hoy salen del mock y mañana saldrán del backend. */
+/**
+ * Datos del lobby.
+ *
+ * Se quedó solo con la estamina: el historial y las pociones equipadas los
+ * piden sus propias vistas cuando hacen falta, en vez de viajar todos juntos
+ * en un paquete que el lobby tendría que recomponer.
+ */
 export interface ArenaLobbyData {
   stamina: Stamina;
-  record: BattleRecord;
-  potions: PotionSlot[];
 }
 
 /** Costo en estamina de entrar a un combate. */
 export const STAMINA_PER_BATTLE = 1;
 
 // ── Búsqueda de rival y volado de iniciativa ────────────────────────────────
-
-/**
- * Fases de la sección de búsqueda.
- *
- * `FLIGHT` cubre el giro y la caída de la moneda: es un solo vuelo animado, y
- * el rótulo cambia con la bandera `landing` del estado.
- */
-export type MatchmakingPhase =
-  | "SEARCHING"
-  | "FOUND"
-  | "FLIGHT"
-  | "RESULT"
-  | "EMPTY"
-  | "ERROR";
 
 /**
  * Un combatiente tal como se presenta antes de la batalla.
@@ -169,9 +164,9 @@ export interface SearchHandle {
 /**
  * Fuente de emparejamientos.
  *
- * Hoy la implementa `matchmakingMock`; mañana la implementará el cliente STOMP
- * (`POST /matchmaking/queue` + `/user/queue/match-found`). Es el único archivo
- * que cambia: ninguna vista de la sección conoce el transporte.
+ * La implementa `matchmakingDriver` sobre `POST /matchmaking/queue` y el canal
+ * `/user/queue/match-found`. La interfaz existe para que ninguna vista de la
+ * sección conozca el transporte: cambiarlo es cambiar un archivo.
  */
 export interface MatchmakingDriver {
   search(callbacks: {
@@ -180,4 +175,155 @@ export interface MatchmakingDriver {
     /** Se llama una sola vez por búsqueda. */
     onOutcome: (outcome: MatchmakingOutcome) => void;
   }): SearchHandle;
+}
+
+// ── Escenario de batalla ────────────────────────────────────────────────────
+
+/** Habilidades de combate. Son los valores de `SkillType` del backend. */
+export type SkillId =
+  | "BITE"
+  | "ROAR"
+  | "GUARD"
+  | "LOYALTY"
+  | "CLAW"
+  | "AGILITY"
+  | "WEAKEN"
+  | "FRENZY"
+  | "TACKLE"
+  | "BARK_SHIELD"
+  | "REGENERATION"
+  | "ANCESTRAL_FOREST";
+
+export interface Skill {
+  id: SkillId;
+  species: Species;
+  /** Nombre visible. Lo pone el front: el backend no tiene uno en español. */
+  label: string;
+  energyCost: number;
+  /** Qué hace, en una línea, para la tarjeta. */
+  effect: string;
+  /** Las de 60 NRG. Se marcan aparte porque son la jugada de la especie. */
+  isSignature: boolean;
+}
+
+/** Lo que un jugador puede hacer en su turno. */
+export type BattleAction =
+  | { type: "SKILL"; skill: SkillId }
+  | { type: "POTION"; potion: PotionId }
+  | { type: "REST" };
+
+/** Momentos de la batalla que anuncia el servidor. */
+export type BattleEventType =
+  | "INICIO_BATALLA"
+  | "ACCION"
+  | "TIMEOUT"
+  | "FIN_DE_BATALLA"
+  | "ESTADO_ACTUAL";
+
+/**
+ * Un estado alterado o un buff activo, ya resuelto para pintarlo.
+ *
+ * El servidor manda un contador por efecto (`burnTurns`, `roarAtkBuffTurns`…);
+ * `lib/battleStatus` los recoge en esta lista para que las vistas no tengan
+ * que conocer los doce campos.
+ */
+export interface StatusEffect {
+  id: string;
+  label: string;
+  /** Turnos que le quedan, o el HP restante en el caso del escudo de HANA. */
+  amount: number;
+  /** Si perjudica a quien lo lleva. Cambia el color de la etiqueta. */
+  harmful: boolean;
+}
+
+/** Estado de un combatiente. Espejo de `FighterStateResponse`. */
+export interface BattleFighter {
+  playerId: string;
+  /** Nombre del Tokagotchi, que es como lo nombra la narrativa del servidor. */
+  name: string;
+  species: Species;
+  currentHp: number;
+  maxHp: number;
+  /** 0–100. */
+  currentEnergy: number;
+  currentSpd: number;
+  /** Pociones que le quedan en este combate, por tipo. */
+  potions: Partial<Record<PotionId, number>>;
+  status: StatusEffect[];
+}
+
+/**
+ * Estado completo de la batalla. Cada mensaje del servidor lo trae íntegro, no
+ * como delta, así que se reemplaza entero sin mezclar nada.
+ */
+export interface BattleState {
+  eventType: BattleEventType;
+  battleId: string;
+  /** Contador global. Desde el 15 empieza la fatiga; desde el 20 se duplica. */
+  currentTurn: number;
+  /** Quién puede actuar ahora. */
+  activePlayerId: string;
+  /** Unix ms. Al vencer, el servidor fuerza `REST` por su cuenta. */
+  turnDeadlineMilli: number;
+  /** Narrativa del último evento, ya redactada por el servidor. */
+  lastActionDescription: string;
+  fighters: Record<string, BattleFighter>;
+}
+
+/** Cómo terminó el combate, desde la perspectiva del jugador. */
+export type BattleOutcome = "WIN" | "LOSS" | "DRAW";
+
+/**
+ * Desenlace tal como lo presenta la pantalla de resultados.
+ *
+ * `ABANDON` no es un estado del backend: se deduce de que la batalla haya
+ * terminado con **los dos combatientes en pie**. `resolveAbandon` borra la
+ * sesión sin tocar el HP de quien se va, así que nadie a cero solo puede
+ * significar que el rival abandonó. Se separa de `WIN` porque paga lo mismo
+ * pero no se gana igual, y la pantalla no debería celebrarlo igual.
+ */
+export type ResultKind = "WIN" | "LOSS" | "DRAW" | "ABANDON";
+
+/** Lo que el combate le entrega a la pantalla de resultados. */
+export interface BattleResult {
+  kind: ResultKind;
+  /** Turnos que duró. */
+  turns: number;
+  rivalName: string;
+  /**
+   * Saldo del jugador **antes** de que el servidor pagara.
+   *
+   * Se toma al empezar el combate, que es el único momento sin ambigüedad: el
+   * servidor no manda las recompensas, así que la pantalla de resultados las
+   * deduce comparando este saldo con el de después.
+   */
+  before: { tf: number; cp: number };
+}
+
+/**
+ * Transporte de la batalla.
+ *
+ * Lo implementa `battleDriver` sobre `/app/battle/action` y
+ * `/topic/battle/{id}`. La interfaz existe para que ninguna vista del
+ * escenario conozca el transporte: cambiarlo es cambiar un archivo.
+ */
+export interface BattleDriver {
+  /**
+   * Se suscribe a la batalla. Llama a `onState` con cada estado íntegro que
+   * llega, empezando por el actual.
+   *
+   * No informa de la conectividad: eso lo sabe el transporte, que vive a nivel
+   * de app y no dentro de una batalla concreta.
+   */
+  connect(callbacks: {
+    onState: (state: BattleState) => void;
+    /** Texto plano del servidor: va a un toast, no a la lógica. */
+    onError: (message: string) => void;
+  }): { disconnect: () => void };
+
+  /** Envía una acción. El resultado llega por `onState`, no aquí. */
+  send(action: BattleAction): void;
+
+  /** Abandona: derrota inmediata para quien se va. */
+  surrender(): void;
 }
