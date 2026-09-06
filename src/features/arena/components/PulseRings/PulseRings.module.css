@@ -1,0 +1,27 @@
+.rings {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.ring {
+  position: absolute;
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 250, 232, .55);
+  opacity: 0;
+  animation: ringOut 1.8s ease-out infinite;
+}
+
+@keyframes ringOut {
+  0%   { opacity: .7; transform: scale(.62); }
+  70%  { opacity: .12;                       }
+  100% { opacity: 0;  transform: scale(1.5); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ring { animation: none; opacity: .18; transform: scale(1); }
+}

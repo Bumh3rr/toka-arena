@@ -1,0 +1,31 @@
+.backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center bottom;
+  opacity: 0;
+  transition: opacity .5s ease;
+}
+
+.bgActive {
+  opacity: 1;
+}
+
+/* Tinte del modo por encima del fondo, para unificar el escenario */
+.tint {
+  position: absolute;
+  inset: 0;
+  transition: background .5s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg,
+  .tint { transition: none; }
+}

@@ -1,0 +1,55 @@
+.section {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0 14px 18px;
+}
+
+/*
+ * El cielo del escenario. La pieza central se alinea al FONDO de esta zona,
+ * no a su centro: así la moneda queda apoyada justo donde el fondo dibuja el
+ * borde del ruedo, y el rótulo cuelga por encima entre los banderines.
+ */
+.sky {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 18px;
+}
+
+.center {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+}
+
+/* Lo que se dice y lo que se decide */
+.ground {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding-top: 14px;
+}
+
+/* Arena descubierta bajo la tarjeta. Solo la ocupa la cuenta atrás. */
+.floor {
+  flex: none;
+  height: 150px;
+  display: grid;
+  place-items: start center;
+  padding-top: 6px;
+}

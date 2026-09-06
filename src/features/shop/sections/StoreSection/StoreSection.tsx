@@ -9,8 +9,8 @@ import { getItemAvailability, isGroupVisible } from '../../lib/shopCatalog'
 import type { StoreFilter } from '../../types/shop.types'
 import type { StoreItemDTO } from '../../api/dto/shop.dto'
 import type { Tokagotchi } from '@/shared/domain/tokagotchi'
-import SectionDivider from '../../components/SectionDivider/SectionDivider'
-import AccessoriesHeader from '../../components/AccessoriesHeader/AccessoriesHeader'
+import SectionSign from '../../components/SectionSign/SectionSign'
+import { SECTION_SIGNS } from '../../constants/sections'
 import StoreItemCard from '../../components/StoreItemCard/StoreItemCard'
 import EggCard from '../../components/EggCard/EggCard'
 import SpecialCard from '../../components/SpecialCard/SpecialCard'
@@ -22,7 +22,7 @@ const CHIPS: { key: StoreFilter; label: string }[] = [
   { key: 'all', label: 'Todos' },
   { key: 'acc', label: 'Accesorios' },
   { key: 'eggs', label: 'Huevos' },
-  { key: 'specials', label: 'Especiales' },
+  { key: 'specials', label: 'Especiales' }
 ]
 
 export default function StoreSection() {
@@ -67,7 +67,7 @@ export default function StoreSection() {
 
       {isGroupVisible(filter, 'accessories') && groups.accessories.length > 0 && (
         <section>
-          <AccessoriesHeader />
+          <SectionSign {...SECTION_SIGNS.accessories} />
           <div className={styles.grid}>
             {groups.accessories.map((item) => (
               <StoreItemCard
@@ -83,7 +83,7 @@ export default function StoreSection() {
 
       {isGroupVisible(filter, 'eggs') && groups.eggs.length > 0 && (
         <section>
-          <SectionDivider>Huevos</SectionDivider>
+          <SectionSign {...SECTION_SIGNS.eggs} />
           <div className={styles.eggGrid}>
             {groups.eggs.map((item) => (
               <EggCard key={item.id} item={item} onBuy={setSelected} enableBuy={false} />
@@ -94,7 +94,7 @@ export default function StoreSection() {
 
       {isGroupVisible(filter, 'specials') && groups.specials.length > 0 && (
         <section>
-          <SectionDivider>Especiales</SectionDivider>
+          <SectionSign {...SECTION_SIGNS.specials} />
           <div className={styles.hscroll}>
             {groups.specials.map((item) => (
               <SpecialCard key={item.id} item={item} onBuy={setSelected} enableBuy={false} />
@@ -102,6 +102,13 @@ export default function StoreSection() {
           </div>
         </section>
       )}
+
+    
+        <section>
+          <SectionSign {...SECTION_SIGNS.potions} />
+          <div className={styles.hscroll}>
+          </div>
+        </section>
 
       {selected && (
         <BuyConfirmSheet

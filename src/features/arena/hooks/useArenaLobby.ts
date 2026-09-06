@@ -1,7 +1,7 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { usePlayer } from "@/shared/player/hooks/usePlayer";
 import type { Tokagotchi } from "@/shared/domain/tokagotchi";
-import { ARENA_MODES, DEFAULT_ARENA_MODE } from "../constants/modes";
+import { ARENA_MODES } from "../constants/modes";
 import { getArenaMock } from "../lib/arenaMock";
 import { STAMINA_PER_BATTLE } from "../types/arena.types";
 import type { ArenaLobbyData, ArenaMode, ArenaModeTheme } from "../types/arena.types";
@@ -30,8 +30,6 @@ export type ArenaLobbyState =
 
 interface UseArenaLobbyResult {
   state: ArenaLobbyState;
-  mode: ArenaMode;
-  setMode: (mode: ArenaMode) => void;
   reload: () => void;
 }
 
@@ -44,10 +42,13 @@ interface UseArenaLobbyResult {
  *
  * Cuando la API de batallas exista, este archivo es el único que cambia:
  * la forma de `ArenaLobbyData` ya es la del contrato final.
+ *
+ * El modo activo lo posee `ArenaPage`, no este hook: la sección de búsqueda
+ * necesita el mismo modo para pintar su escenario, y moría al desmontarse el
+ * lobby si vivía aquí.
  */
-export function useArenaLobby(): UseArenaLobbyResult {
+export function useArenaLobby(mode: ArenaMode): UseArenaLobbyResult {
   const { state: playerState, reload } = usePlayer();
-  const [mode, setMode] = useState<ArenaMode>(DEFAULT_ARENA_MODE);
 
   // TODO: sustituir por el endpoint de arena cuando el backend esté listo.
   // Se calcula una sola vez al montar: si se recalculara en cada render, el
@@ -64,7 +65,7 @@ export function useArenaLobby(): UseArenaLobbyResult {
     void reload();
   }, [reload]);
 
-  return { state, mode, setMode, reload: handleReload };
+  return { state, reload: handleReload };
 }
 
 function buildState(

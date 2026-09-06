@@ -1,12 +1,12 @@
 /*
- * Cabecera de accesorios: mostrador de tienda.
+ * Rótulo de sección.
  *
- * El rótulo se monta sobre el trío para que se lean como tokagotchis detrás
- * de un mostrador. Ambas piezas son ilustración; aquí solo se apilan y se
- * coloca el título, que va en HTML para poder traducirlo y reutilizar el
- * mismo rótulo en otras secciones.
+ * Solo apila dos ilustraciones y coloca el título; el arte lo aportan los
+ * assets. Las medidas de la ilustración llegan como variables porque cada una
+ * necesita su propio ancho y su propio solape: el trío es alto y estrecho, un
+ * nido es ancho y bajo.
  */
-.header {
+.sign {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -14,21 +14,21 @@
   margin-top: 4px;
 }
 
-/* ── Trío ─────────────────────────────────────────────────────────────────── */
+/* ── Ilustración ──────────────────────────────────────────────────────────── */
 
-.crew {
+.art {
   display: block;
-  width: 78%;
-  max-width: 300px;
+  width: var(--art-width);
+  max-width: var(--art-max);
   height: auto;
-  /* El rótulo tapará esta franja inferior */
-  margin-bottom: -5px;
+  /* Negativo: el rótulo se monta sobre esta franja */
+  margin-bottom: var(--art-overlap);
   filter: drop-shadow(0 4px 5px rgba(60, 25, 0, .4));
 }
 
 /* ── Rótulo ───────────────────────────────────────────────────────────────── */
 
-.sign {
+.plankWrap {
   position: relative;
   z-index: 1;
   width: 100%;
@@ -44,8 +44,8 @@
 }
 
 /*
- * El título se centra sobre la tabla. El padding lateral lo mantiene dentro
- * del tramo de madera, sin invadir las abrazaderas metálicas de los extremos.
+ * El título se centra sobre la tabla. Los márgenes laterales lo mantienen
+ * dentro del tramo de madera, sin invadir las abrazaderas de los extremos.
  */
 .title {
   position: absolute;
@@ -67,5 +67,4 @@
 
 @media (max-width: 359px) {
   .title { font-size: 20px; }
-  .crew  { margin-bottom: -28px; }
 }

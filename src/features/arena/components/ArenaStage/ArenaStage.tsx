@@ -1,7 +1,9 @@
+import { useCallback } from 'react'
 import type { CSSProperties } from 'react'
 import TokagotchiCanvas from '@/shared/canvas/TokagotchiCanvas'
 import TokaStatusPill from '@/shared/ui/Tokagotchi/TokaStatusPill/TokaStatusPill'
 import type { Tokagotchi } from '@/shared/domain/tokagotchi'
+import { portraitKey, setPortrait } from '../../lib/tokaPortrait'
 import type { ArenaModeTheme } from '../../types/arena.types'
 import styles from './ArenaStage.module.css'
 
@@ -24,8 +26,19 @@ const EMBERS = [8, 21, 34, 47, 58, 69, 82, 91]
  *
  * El fondo y el aura salen del tema, así que cambiar de modo repinta la arena
  * completa sin ninguna condición aquí dentro.
+ *
+ * De paso guarda una captura del personaje vestido: es el único sitio del
+ * módulo donde el canvas vive el tiempo suficiente para garantizarla, y la
+ * moneda del volado la necesita. Ver `lib/tokaPortrait`.
  */
 export default function ArenaStage({ theme, tokagotchi, paused, onOpenToka }: ArenaStageProps) {
+  const key = portraitKey(tokagotchi.species, tokagotchi.equipped)
+
+  const handlePortrait = useCallback(
+    (dataUrl: string) => setPortrait(key, dataUrl),
+    [key],
+  )
+
   const stageVars = {
     '--stage-glow': theme.aura.glow,
     '--stage-glow-soft': theme.aura.glowSoft,
@@ -57,6 +70,7 @@ export default function ArenaStage({ theme, tokagotchi, paused, onOpenToka }: Ar
           paused={paused}
           width={230}
           height={TOKA_HEIGHT}
+          onPortrait={handlePortrait}
         />
       </div>
 

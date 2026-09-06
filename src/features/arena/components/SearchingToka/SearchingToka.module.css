@@ -1,0 +1,50 @@
+/*
+ * La altura iguala la de la caja de la moneda (300px) a propósito: las dos
+ * piezas centrales se apoyan en la misma base y el rótulo de arriba no se
+ * mueve al pasar de "buscando" a "volado".
+ */
+.stage {
+  position: relative;
+  width: 100%;
+  max-width: 280px;
+  height: 300px;
+  margin-inline: auto;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  pointer-events: none;
+}
+
+/* Elipse difusa bajo las patas, con el color del modo. Igual que en el lobby. */
+.aura {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  width: min(88%, 250px);
+  height: 104px;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse at center,
+    var(--stage-glow) 0%,
+    var(--stage-glow-soft) 44%,
+    transparent 74%);
+  filter: blur(2px);
+  animation: auraBreathe 4.5s ease-in-out infinite;
+}
+
+.toka {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  /* Las patas se apoyan en el borde del ruedo, no flotan sobre él */
+  margin-bottom: -18px;
+}
+
+@keyframes auraBreathe {
+  0%, 100% { opacity: .85; transform: translateX(-50%) scale(1);     }
+  50%      { opacity: 1;   transform: translateX(-50%) scale(1.045); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aura { animation: none; }
+}

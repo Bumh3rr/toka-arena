@@ -18,13 +18,21 @@ import LobbyActionBar from '../../components/LobbyActionBar/LobbyActionBar'
 import ModePanel from '../../components/panels/ModePanel/ModePanel'
 import TokaPanel from '../../components/panels/TokaPanel/TokaPanel'
 import PanelPlaceholder from '../../components/panels/PanelPlaceholder/PanelPlaceholder'
+import ArenaBackdrop from '../../components/ArenaBackdrop/ArenaBackdrop'
 import { useArenaLobby } from '../../hooks/useArenaLobby'
 import { useArenaPanel } from '../../hooks/useArenaPanel'
-import { ARENA_MODES, ARENA_MODE_ORDER } from '../../constants/modes'
+import type { ArenaMode } from '../../types/arena.types'
 import styles from './LobbySection.module.css'
 
 /** Px de la parte superior que el cajón deja al descubierto. */
 const PANEL_TOP_OFFSET = 150
+
+interface LobbySectionProps {
+  mode: ArenaMode
+  onModeChange: (mode: ArenaMode) => void
+  /** Entrar a la cola: lo resuelve `ArenaPage` cambiando de fase. */
+  onSearchRival: () => void
+}
 
 /**
  * Lobby de arena.
@@ -33,8 +41,12 @@ const PANEL_TOP_OFFSET = 150
  * tokagotchi en el ruedo, revisa estamina e historial, elige modo y pociones,
  * y entra a combate.
  */
-export default function LobbySection() {
-  const { state, mode, setMode, reload } = useArenaLobby()
+export default function LobbySection({
+  mode,
+  onModeChange,
+  onSearchRival,
+}: LobbySectionProps) {
+  const { state, reload } = useArenaLobby(mode)
   const { panel, open, expanded, setExpanded } = useArenaPanel()
   const { toast, show } = useToast()
 
@@ -53,28 +65,11 @@ export default function LobbySection() {
   // donde estaba, ya con el tokagotchi nuevo (la caché 'player' se revalida).
   const handleChangeToka = () => setCollectionOpen(true)
 
-  // TODO: encadenar con la sección de búsqueda de rival cuando exista.
-  const handleBattle = () => show('Buscando rival — próximamente', { variant: 'info' })
-
   const handleRefill = () => show('Recarga de estamina — próximamente', { variant: 'info' })
 
   return (
     <section className={styles.section}>
-      {/*
-       * Los fondos de todos los modos se apilan y solo se cambia la opacidad:
-       * el cambio de arena se ve como un fundido en vez de un salto, y ambas
-       * imágenes quedan precargadas desde el primer render.
-       */}
-      <div className={styles.backdrop} aria-hidden="true">
-        {ARENA_MODE_ORDER.map((id) => (
-          <div
-            key={id}
-            className={`${styles.bg} ${id === mode ? styles.bgActive : ''}`}
-            style={{ backgroundImage: `url('${ARENA_MODES[id].background}')` }}
-          />
-        ))}
-        <div className={styles.tint} style={{ background: theme.aura.tint }} />
-      </div>
+      <ArenaBackdrop mode={mode} />
 
       {/* Perfil y saldo */}
       <header className={styles.topbar}>
@@ -122,7 +117,7 @@ export default function LobbySection() {
           canBattle={canBattle}
           onChangeToka={handleChangeToka}
           onOpenMode={() => open('mode')}
-          onBattle={handleBattle}
+          onBattle={onSearchRival}
         />
       </footer>
 
@@ -136,7 +131,7 @@ export default function LobbySection() {
           <TokaPanel tokagotchi={player.tokagotchi} onChangeToka={handleChangeToka} />
         )}
         {panel === 'mode' && (
-          <ModePanel selected={mode} onSelect={setMode} />
+          <ModePanel selected={mode} onSelect={onModeChange} />
         )}
         {panel === 'potions' && (
           <PanelPlaceholder

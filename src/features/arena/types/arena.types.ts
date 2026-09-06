@@ -1,4 +1,5 @@
 import type { ColorVariant } from "@/shared/ui/Kit";
+import type { Rarity, Species } from "@/shared/domain/tokagotchi";
 
 // ── Modos de juego ──────────────────────────────────────────────────────────
 
@@ -107,3 +108,76 @@ export interface ArenaLobbyData {
 
 /** Costo en estamina de entrar a un combate. */
 export const STAMINA_PER_BATTLE = 1;
+
+// ── Búsqueda de rival y volado de iniciativa ────────────────────────────────
+
+/**
+ * Fases de la sección de búsqueda.
+ *
+ * `FLIGHT` cubre el giro y la caída de la moneda: es un solo vuelo animado, y
+ * el rótulo cambia con la bandera `landing` del estado.
+ */
+export type MatchmakingPhase =
+  | "SEARCHING"
+  | "FOUND"
+  | "FLIGHT"
+  | "RESULT"
+  | "EMPTY"
+  | "ERROR";
+
+/**
+ * Un combatiente tal como se presenta antes de la batalla.
+ *
+ * `username` y `rarity` son opcionales a propósito: de nuestro lado salen de
+ * `usePlayer()`, pero del rival el backend solo manda `name` y `species` en
+ * `FighterStateResponse`. La tarjeta pinta las partes que existan.
+ */
+export interface MatchFighter {
+  /** Nombre del Tokagotchi. */
+  name: string;
+  species: Species;
+  /** Dueño del Tokagotchi. Del rival, hasta que el backend lo exponga. */
+  username?: string;
+  /** Del rival, hasta que el backend la exponga. */
+  rarity?: Rarity;
+}
+
+/** Emparejamiento resuelto: los dos combatientes y quién abre el combate. */
+export interface MatchFound {
+  battleId: string;
+  me: MatchFighter;
+  rival: MatchFighter;
+  /**
+   * true si el jugador ataca primero. Lo decide el servidor comparando SPD
+   * (volado real solo si empatan), y ya viene resuelto en `match-found`: la
+   * moneda de la UI presenta esa respuesta, no la sortea.
+   */
+  firstIsMe: boolean;
+}
+
+/** Desenlace de una búsqueda. Es lo que el driver le entrega al hook. */
+export type MatchmakingOutcome =
+  | { kind: "matched"; battleId: string; rival: MatchFighter; firstIsMe: boolean }
+  | { kind: "empty" }
+  | { kind: "error"; message: string };
+
+/** Búsqueda en curso, para poder abandonarla. */
+export interface SearchHandle {
+  cancel: () => void;
+}
+
+/**
+ * Fuente de emparejamientos.
+ *
+ * Hoy la implementa `matchmakingMock`; mañana la implementará el cliente STOMP
+ * (`POST /matchmaking/queue` + `/user/queue/match-found`). Es el único archivo
+ * que cambia: ninguna vista de la sección conoce el transporte.
+ */
+export interface MatchmakingDriver {
+  search(callbacks: {
+    /** Tamaño de la cola, para el contador de espera. */
+    onQueue: (playersInQueue: number) => void;
+    /** Se llama una sola vez por búsqueda. */
+    onOutcome: (outcome: MatchmakingOutcome) => void;
+  }): SearchHandle;
+}

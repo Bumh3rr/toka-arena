@@ -1,0 +1,48 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.card {
+  width: min(92%, 360px);
+  text-align: center;
+  animation: cardRise .38s cubic-bezier(.2, .9, .3, 1.1) both;
+}
+
+.title {
+  font-family: var(--font-title);
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.description {
+  margin-top: 4px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-2);
+  line-height: 1.35;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: min(76%, 280px);
+  animation: cardRise .38s cubic-bezier(.2, .9, .3, 1.1) .08s both;
+}
+
+@keyframes cardRise {
+  0%   { opacity: 0; transform: translateY(12px); }
+  100% { opacity: 1; transform: translateY(0);    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .actions { animation: none; }
+}
