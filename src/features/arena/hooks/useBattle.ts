@@ -141,7 +141,11 @@ export function useBattle({ driver, myPlayerId, online }: UseBattleOptions): Use
    */
   const [now, setNow] = useState(() => Date.now());
 
-  const deadline = state?.turnDeadlineMilli ?? 0;
+  const finished = state?.eventType === "FIN_DE_BATALLA";
+
+  // Con el combate cerrado ya no hay turno que contar: el último mensaje sigue
+  // trayendo un plazo, pero dejarlo correr solo gastaría renders.
+  const deadline = finished ? 0 : (state?.turnDeadlineMilli ?? 0);
 
   useEffect(() => {
     if (!deadline) return;
@@ -164,8 +168,6 @@ export function useBattle({ driver, myPlayerId, online }: UseBattleOptions): Use
       Object.values(state.fighters).find((f) => f.playerId !== myPlayerId) ?? null
     );
   }, [state, myPlayerId]);
-
-  const finished = state?.eventType === "FIN_DE_BATALLA";
 
   const outcome: BattleOutcome | null = useMemo(() => {
     if (!finished || !me || !rival) return null;

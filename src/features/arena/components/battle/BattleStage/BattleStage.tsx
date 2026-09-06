@@ -4,7 +4,10 @@ import type { AnimationTokagotchi, EquippedAccessory } from '@/shared/domain/tok
 import {
   FATIGUE_FROM_TURN,
   FATIGUE_HEAVY_FROM_TURN,
+  URGENT_SECONDS,
 } from '../../../constants/battle'
+import TurnUrgency from '../TurnUrgency/TurnUrgency'
+import BattleNarration from '../BattleNarration/BattleNarration'
 import type { BattleFighter } from '../../../types/arena.types'
 import type { HpFlash } from '../../../hooks/useBattle'
 import styles from './BattleStage.module.css'
@@ -23,6 +26,10 @@ interface BattleStageProps {
   isMyTurn: boolean
   /** Cambios de vida del último golpe, para los números flotantes. */
   flashes: HpFlash[]
+  /** Lo último que narró el servidor. Se muestra sobre el ruedo. */
+  narration: string
+  /** Segundos que quedan del turno. */
+  secondsLeft: number
 }
 
 /** Alto del canvas de cada lado. El rival va más chico: está más lejos. */
@@ -51,6 +58,8 @@ export default function BattleStage({
   turnLabel,
   isMyTurn,
   flashes,
+  narration,
+  secondsLeft,
 }: BattleStageProps) {
   const fatigue = currentTurn >= FATIGUE_FROM_TURN
   const heavyFatigue = currentTurn >= FATIGUE_HEAVY_FROM_TURN
@@ -79,6 +88,8 @@ export default function BattleStage({
         )}
       </div>
 
+      <BattleNarration text={narration} />
+
       {/* Rival — al fondo a la derecha */}
       <div className={`${styles.slot} ${styles.slotRival}`}>
         <Flashes flashes={flashes} playerId={rival.playerId} />
@@ -105,6 +116,13 @@ export default function BattleStage({
         />
       </div>
 
+        {/*
+         * Los últimos segundos del turno propio saltan al centro: el anillo del
+         * avatar está en el borde y el jugador mira aquí.
+         */}
+        {isMyTurn && secondsLeft > 0 && secondsLeft <= URGENT_SECONDS && (
+          <TurnUrgency secondsLeft={secondsLeft} />
+        )}
       </div>
 
       <div className={`${styles.turn} ${isMyTurn ? styles.turnMine : ''}`}>{turnLabel}</div>

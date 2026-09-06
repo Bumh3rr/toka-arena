@@ -11,7 +11,6 @@ import type { AnimationTokagotchi, Tokagotchi } from '@/shared/domain/tokagotchi
 import ArenaBackdrop from '../../components/ArenaBackdrop/ArenaBackdrop'
 import BattleStage from '../../components/battle/BattleStage/BattleStage'
 import FighterCard from '../../components/battle/FighterCard/FighterCard'
-import BattleLog from '../../components/battle/BattleLog/BattleLog'
 import SkillGrid from '../../components/battle/SkillGrid/SkillGrid'
 import BattleActionBar from '../../components/battle/BattleActionBar/BattleActionBar'
 import PotionSheet from '../../components/battle/PotionSheet/PotionSheet'
@@ -107,6 +106,9 @@ function Battle({
   const { subscribe, publish, online } = useArenaSocket()
   const { toast, show } = useToast()
 
+  // Se saca del objeto `match` para no arrastrarlo entero a las dependencias
+  const rivalName = match.rival.name
+
   /*
    * Una sola instancia por combate: recrearla volvería a suscribirse y a pedir
    * el estado sin necesidad. La conexión puede ir y venir por debajo sin que
@@ -129,47 +131,48 @@ function Battle({
   /*
    * Saldo de partida. El servidor no manda las recompensas —las aplica sobre
    * el perfil— así que la pantalla de resultados las deduce comparando, y la
-   * foto tiene que tomarse antes de que pague. Aquí es el único momento sin
-   * ambigüedad: la caché `'player'` no se toca durante el combate.
+   * foto tiene que tomarse antes de que pague.
+   *
+   * Va en estado con inicializador perezoso y no en un `useMemo`: se toma una
+   * sola vez, al montar. Con `useMemo` cambiaría en cuanto el perfil se
+   * revalidara —justo lo que pasa al cobrar— y dejaría de ser la foto de antes.
    */
-  const before = useMemo(
-    () => ({ tf: startingTf, cp: tokagotchi.cp }),
-    [startingTf, tokagotchi.cp],
-  )
+  const [before] = useState(() => ({ tf: startingTf, cp: tokagotchi.cp }))
 
   const [potionsOpen, setPotionsOpen] = useState(false)
   const [energyPreview, setEnergyPreview] = useState<number | undefined>(undefined)
 
+  const { error, clearError, outcome, byAbandon } = battle
+  const turnsPlayed = battle.state?.currentTurn ?? 1
+
   // Los errores del servidor llegan como texto plano: son para avisar, no para
   // ramificar lógica. Van a un toast y se limpian solos.
   useEffect(() => {
-    if (!battle.error) return
-    show(battle.error, { variant: 'danger' })
-    battle.clearError()
-  }, [battle, show])
+    if (!error) return
+    show(error, { variant: 'danger' })
+    clearError()
+  }, [error, clearError, show])
 
   /*
    * El desenlace pasa a la sección de resultados tras un respiro: el último
    * golpe necesita verse antes de que la pantalla cambie.
+   *
+   * Las dependencias son valores sueltos y no el objeto `battle`: ese objeto es
+   * nuevo en cada render, y como el reloj del turno provoca uno cada 500 ms, la
+   * espera se cancelaba y se rearmaba sin parar. El combate terminaba y la
+   * pantalla se quedaba quieta para siempre.
    */
   useEffect(() => {
-    const { outcome, byAbandon, state } = battle
     if (!outcome) return
 
     const kind: ResultKind = byAbandon && outcome === 'WIN' ? 'ABANDON' : outcome
 
     const id = window.setTimeout(
-      () =>
-        onFinish({
-          kind,
-          turns: state?.currentTurn ?? 1,
-          rivalName: match.rival.name,
-          before,
-        }),
+      () => onFinish({ kind, turns: turnsPlayed, rivalName, before }),
       1200,
     )
     return () => window.clearTimeout(id)
-  }, [battle, onFinish, match.rival.name, before])
+  }, [outcome, byAbandon, turnsPlayed, rivalName, before, onFinish])
 
   if (!me || !rival) return <Loading fullscreen text="Preparando el combate..." />
 
@@ -236,6 +239,8 @@ function Battle({
           turnLabel={isMyTurn ? 'Tu turno' : `Turno de ${rival.name}...`}
           isMyTurn={isMyTurn}
           flashes={flashes}
+          narration={battle.log.at(-1) ?? ''}
+          secondsLeft={battle.secondsLeft}
         />
 
         <FighterCard
@@ -248,8 +253,6 @@ function Battle({
           secondsLeft={battle.secondsLeft}
           energyPreview={energyPreview}
         />
-
-        <BattleLog lines={battle.log} />
 
         <SkillGrid
           skills={movesetOf(me.species)}

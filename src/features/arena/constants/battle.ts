@@ -32,8 +32,27 @@ export const REST_ENERGY = 50;
 /** Bajo este porcentaje de vida, la interfaz entra en alerta. */
 export const CRITICAL_HP_PCT = 25;
 
-/** Cuántas líneas del relato se conservan a la vista. */
+/**
+ * Segundos finales en que la cuenta atrás salta al centro del ruedo.
+ *
+ * Antes de eso basta con el anillo del avatar: avisar durante todo el turno
+ * sería ruido, y quien está decidiendo no necesita que le metan prisa desde el
+ * primer segundo.
+ */
+export const URGENT_SECONDS = 6;
+
+/**
+ * Cuántas frases del relato se conservan en memoria.
+ *
+ * En pantalla solo se enseña la última, sobre el ruedo. El buffer se queda
+ * corto a propósito: un combate largo acumularía decenas de frases que nadie
+ * va a leer, y el registro completo ya lo guarda el servidor
+ * (`GET /battles/{id}/history`).
+ */
 export const LOG_LINES = 2;
+
+/** Cuánto se queda en pantalla el relato de una acción antes de apagarse. */
+export const LOG_VISIBLE_MS = 2600;
 
 /**
  * Animaciones del combate.

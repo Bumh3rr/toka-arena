@@ -7,7 +7,7 @@ interface WelcomeBundleBannerProps {
 }
 
 /** Ilustración que ocupa el escenario completo de la oferta. */
-const HERO_SRC = '/assets/tokagotchis/ilustraciones/proffer.svg'
+const HERO_SRC = '/assets/tokagotchis/ilustraciones/proffer.png'
 
 /** Compone la lista de contenidos como frase: "a, b y c". */
 function joinItems(items: string[]): string {
