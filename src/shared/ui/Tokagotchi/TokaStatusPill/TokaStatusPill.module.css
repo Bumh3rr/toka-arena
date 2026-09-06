@@ -1,0 +1,159 @@
+.statusPill {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  width: fit-content;
+  max-width: min(92vw, 280px);
+  padding: 9px 12px 10px;
+  background: linear-gradient(180deg, #FFFBF1, var(--cream));
+  border: var(--ol) solid var(--ink);
+  border-radius: var(--r-lg);
+  box-shadow: inset 0 2px 0 #fff, 0 3px 0 var(--edge-cream);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: transform .1s ease, box-shadow .1s ease;
+  backdrop-filter: blur(4px);
+}
+
+.statusPill:active {
+  transform: translateY(3px);
+  box-shadow: inset 0 2px 0 #fff;
+}
+
+.statusTop {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* hug-content: el nombre toma su ancho natural; max-width recorta nombres largos */
+.statusNm {
+  max-width: 150px;
+  font-family: var(--font-title), system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -.3px;
+  text-align: left;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.statusChev {
+  width: 21px;
+  height: 21px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
+  background: var(--gold-soft);
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .7);
+}
+
+.statusChev svg {
+  width: 11px;
+  height: 11px;
+}
+
+.statusBottom {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.cpBar {
+  position: relative;
+  flex: 1;
+  min-width: 104px;
+  height: 10px;
+  border-radius: 99px;
+  /* groove cálido y hundido: se lee como "barra por llenar" aunque esté vacía */
+  background: linear-gradient(180deg, #E0C9A0, #EAD9BB);
+  border: 2px solid var(--ink);
+  overflow: hidden;
+  box-shadow: inset 0 2px 2px rgba(74, 40, 0, .28);
+}
+
+.cpFill {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #FFD700 0%, #E8A000 100%);
+  box-shadow:
+    inset 0 1.5px 0 rgba(255, 255, 255, .65),
+    inset 0 -2px 2px rgba(74, 40, 0, .25);
+  transition: width .5s cubic-bezier(.34, 1.4, .5, 1);
+}
+
+/* Con progreso (>0): nub mínimo visible + destello que recorre el relleno */
+.cpFillActive {
+  min-width: 10px;
+}
+
+.cpFillActive::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 45%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .55), transparent);
+  transform: translateX(-180%);
+  animation: cpSheen 2.4s ease-in-out infinite;
+}
+
+.cpVal {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-family: var(--font-title), system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+
+.cpNow {
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.icon {
+  display: block;
+  width: 22px;
+  height: 22px;
+  flex: none;
+}
+
+
+@keyframes cpSheen {
+  0% {
+    transform: translateX(-180%);
+  }
+
+  55%,
+  100% {
+    transform: translateX(360%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cpFillActive::after {
+    animation: none;
+  }
+}
+/* ── Variante compacta ─────────────────────────────────────────────────────
+ * Sin la barra de CP la píldora se vuelve una sola línea, así que apretamos
+ * el padding para que no quede aire de sobra alrededor del texto.
+ */
+.compact {
+  gap: 0;
+  padding: 7px 11px 8px;
+}

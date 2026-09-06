@@ -1,0 +1,104 @@
+.section {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── Fondo ────────────────────────────────────────────────────────────────── */
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center bottom;
+  opacity: 0;
+  transition: opacity .5s ease;
+}
+
+.bgActive {
+  opacity: 1;
+}
+
+/* Tinte del modo por encima del fondo, para unificar el escenario */
+.tint {
+  position: absolute;
+  inset: 0;
+  transition: background .5s ease;
+}
+
+/* ── Barra superior ───────────────────────────────────────────────────────── */
+
+.topbar {
+  position: relative;
+  z-index: 2;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 20px 16px 0;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+/* ── Estamina e historial ─────────────────────────────────────────────────── */
+
+/*
+ * Las dos píldoras se pegan a los bordes de la pantalla: la fila no lleva
+ * padding lateral y cada tarjeta se abre solo hacia dentro.
+ */
+.edgeRow {
+  position: relative;
+  z-index: 2;
+  flex: none;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+/* ── Controles inferiores ─────────────────────────────────────────────────── */
+
+.controls {
+  position: relative;
+  z-index: 2;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 14px 14px;
+  transition: opacity .28s ease, transform .28s ease;
+}
+
+/* Con el cajón abierto los controles se apartan en lugar de quedar debajo */
+.controlsHidden {
+  opacity: 0;
+  transform: translateY(14px);
+  pointer-events: none;
+}
+
+.trayRow {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg,
+  .tint,
+  .controls { transition: none; }
+}

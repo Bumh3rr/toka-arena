@@ -1,30 +1,80 @@
-.imgwrap {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 1.35;
-  border-radius: 12px;
-  background: #fff5e0;
-  border: 1.5px solid var(--ink);
+.card {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  margin-bottom: 8px;
+  gap: 5px;
+  width: 100%;
+  padding: 7px 6px 8px;
+  text-align: center;
+  background: linear-gradient(180deg, #FFFBF1, var(--cream-2));
+  border: 2.5px solid var(--ink);
+  border-radius: var(--r-sm);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, .75), 0 3px 0 var(--edge-cream);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: transform .1s ease, box-shadow .1s ease;
 }
 
-.img {
-  width: 78%;
-  height: 78%;
+.card:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, .75);
+}
+
+/* ── Nombre ───────────────────────────────────────────────────────────────── */
+
+/* Dos líneas reservadas: "Orejas Marcianas" no cabe en una a este ancho */
+.name {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  min-height: 26px;
+  font-family: var(--font-title);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.18;
+  color: var(--ink-2);
+}
+
+/* ── Ventana del arte ─────────────────────────────────────────────────────── */
+
+/*
+ * Fondo oscuro a propósito: es lo que hace saltar la ilustración. Con una
+ * caja crema sobre tarjeta crema el dibujo se diluía y la rejilla entera se
+ * leía apagada.
+ */
+.window {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 90% 70% at 50% 38%, #7A4A22 0%, #5A3216 62%, #3F2110 100%);
+  border: 2.5px solid var(--ink);
+  border-radius: 9px;
+  box-shadow:
+    inset 0 3px 6px rgba(0, 0, 0, .45),
+    inset 0 -2px 0 rgba(255, 214, 150, .18);
+}
+
+/* Grande: el accesorio es lo que se compra, así que manda en la ventana */
+.art {
+  width: 82%;
+  height: 82%;
   object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, .5));
 }
 
 .glyph {
-  width: 42px;
-  height: 42px;
-  color: var(--ink-3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
+  width: 42%;
+  height: 42%;
+  color: rgba(255, 226, 180, .65);
 }
 
 .glyph svg {
@@ -33,48 +83,52 @@
   display: block;
 }
 
-.slot {
-  position: absolute;
-  top: 6px;
-  left: 6px;
-}
-
 .soonBadge {
   position: absolute;
-  top: 6px;
-  right: 6px;
+  top: 4px;
+  right: 4px;
 }
 
-.name {
-  font-family: var(--font-title);
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--ink);
-  line-height: 1.15;
-  min-height: 30px;
-  display: flex;
-  align-items: center;
-  margin-bottom: 6px;
-}
+/* ── Precio ───────────────────────────────────────────────────────────────── */
 
+/*
+ * El dato más grande de la tarjeta. El contorno oscuro es lo que permite
+ * texto blanco sobre un fondo claro: sin él no se leería.
+ */
 .price {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 3px;
+  margin-top: 1px;
+}
+
+.coin {
+  width: 17px;
+  height: 17px;
+  display: block;
+  filter: drop-shadow(0 1px 1px rgba(74, 40, 0, .4));
+}
+
+.priceValue {
   font-family: var(--font-title);
-  font-size: 14px;
-  font-weight: 800;
-  color: var(--ink);
-  margin-bottom: 8px;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -.2px;
+  color: #fff;
+  -webkit-text-stroke: 3px var(--ink);
+  /* Dibuja el contorno POR DETRÁS del relleno; sin esto el trazo se come la letra */
+  paint-order: stroke fill;
 }
 
-.tfIcon {
-  width: 16px;
-  height: 16px;
-}
+/* ── Próximamente ─────────────────────────────────────────────────────────── */
 
-/* Estado "próximamente" */
 .soon {
-  opacity: .7;
+  opacity: .62;
   border-style: dashed;
+  cursor: not-allowed;
+}
+
+.soon .window {
+  filter: grayscale(.45);
 }

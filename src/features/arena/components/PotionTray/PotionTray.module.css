@@ -1,0 +1,83 @@
+.tray {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 9px;
+  background: linear-gradient(180deg, #FFFBF1, var(--cream));
+  border: var(--ol) solid var(--ink);
+  border-radius: var(--r-pill);
+  box-shadow: inset 0 2px 0 #fff, 0 3px 0 var(--edge-cream);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: transform .1s ease, box-shadow .1s ease;
+}
+
+.tray:active {
+  transform: translateY(3px);
+  box-shadow: inset 0 2px 0 #fff;
+}
+
+/* ── Ranura ───────────────────────────────────────────────────────────────── */
+
+.slot {
+  --slot-tint: var(--edge-cream);
+
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex: none;
+  border-radius: 50%;
+  border: 2.5px solid var(--ink);
+  /*
+   * Brillo blanco arriba y sombra cálida abajo sobre el tinte de la poción.
+   * Se resuelve con capas translúcidas (no con color-mix) para que funcione
+   * también en los WebView antiguos.
+   */
+  background:
+    radial-gradient(circle at 50% 32%, rgba(255, 255, 255, .55) 0%, rgba(255, 255, 255, 0) 58%),
+    linear-gradient(180deg, rgba(255, 255, 255, .12), rgba(74, 40, 0, .28)),
+    var(--slot-tint);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, .45),
+    inset 0 -3px 4px rgba(74, 40, 0, .25);
+}
+
+.potion {
+  display: block;
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 1px rgba(74, 40, 0, .35));
+}
+
+/* Ranura vacía: hueco excavado y sin tinte */
+.slotEmpty {
+  background: linear-gradient(180deg, #E8D6B4, #F3E6CC);
+  border-style: dashed;
+  border-color: rgba(74, 40, 0, .45);
+  box-shadow: inset 0 2px 4px rgba(74, 40, 0, .22);
+}
+
+/* ── Chevron ──────────────────────────────────────────────────────────────── */
+
+.chev {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  flex: none;
+  margin-left: 1px;
+  color: var(--ink);
+  background: var(--gold-soft);
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .7);
+}
+
+.chev svg {
+  width: 11px;
+  height: 11px;
+}

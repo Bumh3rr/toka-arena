@@ -1,0 +1,134 @@
+.bar {
+  display: grid;
+  /* El CTA se come todo el espacio libre; los laterales miden su contenido */
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: stretch;
+  gap: 9px;
+}
+
+/* ── Laterales: superficie crema compartida ───────────────────────────────── */
+
+.deck,
+.mode {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  width: 92px;
+  padding: 7px 8px 8px;
+  background: linear-gradient(180deg, #FFFBF1, var(--cream));
+  border: var(--ol) solid var(--ink);
+  border-radius: var(--r);
+  box-shadow: inset 0 2px 0 #fff, 0 4px 0 var(--edge-cream);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: transform .1s ease, box-shadow .1s ease;
+}
+
+.deck:active,
+.mode:active {
+  transform: translateY(4px);
+  box-shadow: inset 0 2px 0 #fff;
+}
+
+/* ── Cambiar tokagotchi ───────────────────────────────────────────────────── */
+
+.deckTag {
+  padding: 1px 9px;
+  font-family: var(--font-title), system-ui, sans-serif;
+  font-size: 10.5px;
+  font-weight: 800;
+  line-height: 1.4;
+  color: var(--ink);
+  background: var(--gold-soft);
+  border: 2px solid var(--ink);
+  border-radius: var(--r-pill);
+}
+
+.deckStack {
+  display: flex;
+  align-items: center;
+  /* Las tres caras se solapan como un mazo de cartas */
+  padding-left: 9px;
+}
+
+.deckAvatar {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  margin-left: -9px;
+  overflow: hidden;
+  background: var(--cream-2);
+  border: 2.5px solid var(--ink);
+  border-radius: 50%;
+}
+
+.deckAvatar img {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+}
+
+/* ── CTA de batalla ───────────────────────────────────────────────────────── */
+
+.cta {
+  height: 100%;
+  padding: 8px 14px;
+}
+
+.ctaInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  line-height: 1.05;
+}
+
+.ctaLabel {
+  font-size: 23px;
+  font-weight: 700;
+  letter-spacing: -.2px;
+}
+
+.ctaHint {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  opacity: .88;
+}
+
+.ctaLock {
+  display: grid;
+  place-items: center;
+  width: 12px;
+  height: 12px;
+}
+
+.ctaLock svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* ── Selector de modo ─────────────────────────────────────────────────────── */
+
+.modeCup {
+  display: block;
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 2px rgba(74, 40, 0, .28));
+}
+
+.modeLabel {
+  font-family: var(--font-title), system-ui, sans-serif;
+  font-size: 12.5px;
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--ink);
+}

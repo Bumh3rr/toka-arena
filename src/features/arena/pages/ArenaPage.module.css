@@ -1,22 +1,10 @@
-.container {
+/*
+ * Contenedor de la arena. Es el ancestro posicionado del que cuelgan las
+ * secciones y el SheetPanel de cada una.
+ */
+.page {
   position: relative;
-  width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
   overflow: hidden;
-}
-
-.background {
-  position: absolute;
-  inset: 0;
-  background-image: url('/assets/backgrounds/bg_arena.png');
-  background-size: cover;
-  background-position: center top;
-  z-index: 0;
-}
-
-.backgroundPvp {
-  background-image: url('/assets/backgrounds/batalla_pvp.png');
-  background-position: center center;
+  background: var(--color-arena);
 }

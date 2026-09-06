@@ -10,6 +10,7 @@ import type { StoreFilter } from '../../types/shop.types'
 import type { StoreItemDTO } from '../../api/dto/shop.dto'
 import type { Tokagotchi } from '@/shared/domain/tokagotchi'
 import SectionDivider from '../../components/SectionDivider/SectionDivider'
+import AccessoriesHeader from '../../components/AccessoriesHeader/AccessoriesHeader'
 import StoreItemCard from '../../components/StoreItemCard/StoreItemCard'
 import EggCard from '../../components/EggCard/EggCard'
 import SpecialCard from '../../components/SpecialCard/SpecialCard'
@@ -66,7 +67,7 @@ export default function StoreSection() {
 
       {isGroupVisible(filter, 'accessories') && groups.accessories.length > 0 && (
         <section>
-          <SectionDivider>Accesorios</SectionDivider>
+          <AccessoriesHeader />
           <div className={styles.grid}>
             {groups.accessories.map((item) => (
               <StoreItemCard

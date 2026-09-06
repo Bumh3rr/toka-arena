@@ -1,48 +1,225 @@
-.banner {
-  background: linear-gradient(180deg, #ffa64d, #ff8000);
-  border: 2.5px solid var(--ink);
-  border-radius: 16px;
-  padding: 14px 15px;
-  box-shadow: inset 0 2px 0 rgba(255, 255, 255, .35), 0 4px 0 #c96400;
-  color: #fff;
+/*
+ * Oferta de bienvenida — panel ilustrado.
+ *
+ * Estructura de tres bandas: escenario, barra de precio y listón. El
+ * escenario manda; todo lo demás es marco. Es el único bloque de la Wallet
+ * que rompe la retícula de tarjetas, y por eso se lee como oferta y no como
+ * un producto más del catálogo.
+ */
+.offer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.tag {
-  display: inline-flex;
-  margin-bottom: 8px;
+/* ── Marco dorado ─────────────────────────────────────────────────────────── */
+
+.frame {
+  width: 100%;
+  overflow: hidden;
+  background: linear-gradient(180deg, #FFDC94, #E2A63C);
+  border: 3px solid var(--ink);
+  border-radius: 20px;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, .55),
+    0 5px 0 #B27A1E;
+  /* El marco es el borde visible del dorado alrededor del escenario */
+  padding: 6px;
+}
+
+/* ── Escenario ────────────────────────────────────────────────────────────── */
+
+.stage {
+  position: relative;
+  /* Casi cuadrado, como la ilustración: así llena el escenario sin dejar
+     franjas muertas a los lados */
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border: 2.5px solid var(--ink);
+  border-radius: 14px;
+  /* Resplandor cálido saliendo de detrás del tokagotchi */
+  background:
+    radial-gradient(ellipse 78% 62% at 50% 46%,
+      #FFDCA6 0%,
+      #FCA945 44%,
+      #F0730F 100%);
+}
+
+/*
+ * Rayos de luz girando desde el centro. Es el recurso que da sensación de
+ * premio en este tipo de paneles; se mantiene tenue para no competir con
+ * los destellos que la ilustración ya trae dibujados.
+ */
+.rays {
+  position: absolute;
+  left: 50%;
+  top: 44%;
+  width: 190%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: .3;
+  background: repeating-conic-gradient(
+    from 0deg at 50% 50%,
+    rgba(255, 244, 214, .85) 0deg 7deg,
+    rgba(255, 244, 214, 0) 7deg 20deg
+  );
+  animation: raysSpin 44s linear infinite;
+}
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 76% 70% at 50% 48%,
+    transparent 55%,
+    rgba(120, 45, 5, .42) 100%);
+}
+
+.hero {
+  position: absolute;
+  left: 50%;
+  /* Se apoya justo encima del pie: si baja más, el degradado se come la
+     corona y la bolsa, que es exactamente el botín que anuncia la oferta */
+  bottom: 14%;
+  height: 86%;
+  transform: translateX(-50%);
+  object-fit: contain;
+  object-position: bottom;
+  pointer-events: none;
+  filter: drop-shadow(0 6px 8px rgba(110, 40, 0, .34));
+}
+
+/* ── Insignias ────────────────────────────────────────────────────────────── */
+
+.badges {
+  position: absolute;
+  top: 9px;
+  left: 9px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.discount {
+  font-family: var(--font-title);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.4;
+  color: #fff;
+  background: linear-gradient(180deg, #E8574F, #CF2F2F);
+  border: 2px solid var(--ink);
+  border-radius: 99px;
+  padding: 1px 8px;
+  text-shadow: 0 1px 0 rgba(74, 40, 0, .35);
+}
+
+/* ── Pie del escenario ────────────────────────────────────────────────────── */
+
+.caption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 30px 13px 11px;
+  /* Sólo oscurece la franja del texto; el degradado sube difuso para que no
+     se vea un corte contra la escena */
+  background: linear-gradient(180deg,
+    rgba(96, 34, 0, 0) 0%,
+    rgba(92, 32, 0, .40) 38%,
+    rgba(78, 26, 0, .90) 78%,
+    rgba(70, 23, 0, .95) 100%);
+  color: #fff;
 }
 
 .title {
   font-family: var(--font-title);
-  font-size: 19px;
+  font-size: 20px;
   font-weight: 700;
-  text-shadow: 0 1.5px 0 rgba(74, 40, 0, .3);
+  line-height: 1.1;
+  letter-spacing: -.3px;
+  text-shadow: 0 2px 0 rgba(74, 25, 0, .55);
 }
 
-.content {
+.items {
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: 12.5px;
   font-weight: 700;
-  margin-top: 4px;
-}
-
-.sub {
-  font-size: 12px;
-  opacity: .92;
+  line-height: 1.3;
   margin-top: 3px;
+  color: rgba(255, 246, 230, .95);
+  text-shadow: 0 1px 2px rgba(74, 25, 0, .5);
 }
 
-.row {
+/* ── Barra de precio ──────────────────────────────────────────────────────── */
+
+.priceBar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-top: 12px;
+  padding: 9px 4px 3px 8px;
+}
+
+.prices {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
 }
 
 .price {
   font-family: var(--font-title);
-  font-size: 22px;
+  font-size: 25px;
   font-weight: 700;
-  text-shadow: 0 1.5px 0 rgba(74, 40, 0, .3);
+  line-height: 1;
+  letter-spacing: -.5px;
+  color: var(--ink);
+  text-shadow: 0 1.5px 0 rgba(255, 255, 255, .45);
+}
+
+.was {
+  font-family: var(--font-title);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+  color: rgba(74, 40, 0, .5);
+  text-decoration-thickness: 2px;
+}
+
+/* ── Listón ───────────────────────────────────────────────────────────────── */
+
+/*
+ * Cuelga bajo el marco y se estrecha, como una cinta. Dice la condición real
+ * de la oferta: es única por cuenta, no una promoción con reloj.
+ */
+.ribbon {
+  margin-top: -3px;
+  padding: 5px 26px 6px;
+  font-family: var(--font-title);
+  font-size: 12px;
+  font-weight: 700;
+  color: #FFF6E4;
+  background: linear-gradient(180deg, #A9631F, #7E430F);
+  border: 2.5px solid var(--ink);
+  border-radius: 0 0 12px 12px;
+  border-top: none;
+  box-shadow: 0 3px 0 rgba(74, 40, 0, .35);
+  text-shadow: 0 1px 0 rgba(50, 20, 0, .5);
+}
+
+/* ── Movimiento ───────────────────────────────────────────────────────────── */
+
+@keyframes raysSpin {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rays { animation: none; }
+}
+
+@media (max-width: 359px) {
+  .title { font-size: 18px; }
+  .price { font-size: 22px; }
 }

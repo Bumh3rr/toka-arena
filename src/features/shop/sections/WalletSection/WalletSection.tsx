@@ -19,8 +19,8 @@ export default function WalletSection() {
 
       <SectionDivider>Carga TF con Toka Pay</SectionDivider>
       <div className={styles.packs}>
-        {TF_PACKS.map((p) => (
-          <TfPackCard key={p.id} pack={p} onBuy={notify} />
+        {TF_PACKS.map((p, i) => (
+          <TfPackCard key={p.id} pack={p} index={i} onBuy={notify} />
         ))}
       </div>
 
@@ -31,10 +31,6 @@ export default function WalletSection() {
         ))}
       </div>
 
-      {/** 
-      <p className={styles.legal}>Compras procesadas vía Toka Pay. TF no reembolsables.</p>
-      */}
-      
       {toast && <Toast {...toast} />}
     </>
   )

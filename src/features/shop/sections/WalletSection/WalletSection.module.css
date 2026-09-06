@@ -20,11 +20,3 @@
 .hscroll::-webkit-scrollbar {
   display: none;
 }
-
-.legal {
-  text-align: center;
-  font-size: 11px;
-  color: rgba(255, 248, 237, .6);
-  margin: 12px 8px 0;
-  line-height: 1.4;
-}

@@ -1,0 +1,92 @@
+.stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 4px;
+}
+
+/* ── Aura del ruedo ───────────────────────────────────────────────────────── */
+
+/*
+ * Elipse difusa justo bajo las patas. El color viene del tema del modo, así
+ * que la misma geometría sirve para el ruedo crema y para el volcánico.
+ */
+.aura {
+  position: absolute;
+  left: 50%;
+  bottom: 30px;
+  width: min(86%, 330px);
+  height: 132px;
+  transform: translateX(-50%);
+  pointer-events: none;
+  background: radial-gradient(ellipse at center,
+    var(--stage-glow) 0%,
+    var(--stage-glow-soft) 42%,
+    transparent 72%);
+  filter: blur(2px);
+  animation: auraBreathe 4.5s ease-in-out infinite;
+}
+
+/* ── Brasas (modo volcánico) ──────────────────────────────────────────────── */
+
+.embers {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ember {
+  position: absolute;
+  bottom: 60px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #FFB05A;
+  box-shadow: 0 0 6px 2px rgba(255, 140, 40, .65);
+  opacity: 0;
+  animation: emberRise 5.5s linear infinite;
+}
+
+/* ── Tokagotchi ───────────────────────────────────────────────────────────── */
+
+.toka {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  /* El personaje se apoya sobre la píldora de identidad */
+  margin-bottom: -22px;
+  pointer-events: none;
+}
+
+.identity {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+}
+
+/* ── Animaciones ──────────────────────────────────────────────────────────── */
+
+@keyframes auraBreathe {
+  0%, 100% { opacity: .85; transform: translateX(-50%) scale(1);     }
+  50%      { opacity: 1;   transform: translateX(-50%) scale(1.045); }
+}
+
+@keyframes emberRise {
+  0%   { opacity: 0;   transform: translateY(0)      scale(.6); }
+  12%  { opacity: .95;                                          }
+  70%  { opacity: .55;                                          }
+  100% { opacity: 0;   transform: translateY(-260px) scale(.3); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aura,
+  .ember { animation: none; }
+  .ember { opacity: .5; }
+}
