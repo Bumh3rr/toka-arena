@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import { getApiErrorMessage } from "@/shared/api/client";
+import { usePlayer } from "@/shared/player/hooks/usePlayer";
 import { arenaApi } from "../api/arena.api";
 import { POTIONS_META, POTION_SLOT_COUNT } from "../constants/potions";
 import type { PlayerPotionDTO } from "../api/dto/arena.dto";
@@ -15,14 +16,18 @@ export interface PotionStock {
   owned: number;
   /** Unidades reservadas para el próximo combate. */
   equipped: number;
-  /** Tope de esta poción por combate, del backend. */
+  /** Tope de esta poción por combate. Del backend si ya la tienes. */
   limitPerBattle: number;
+  /** Precio unitario en TF. */
+  price: number;
+  /** El saldo alcanza para comprar una unidad. */
+  affordable: boolean;
 }
 
 export type PotionLoadoutState =
   | { status: "loading" }
   | { status: "error"; error: string }
-  | { status: "ready"; stock: PotionStock[]; equippedTotal: number };
+  | { status: "ready"; stock: PotionStock[]; equippedTotal: number; tf: number };
 
 interface UsePotionLoadoutResult {
   state: PotionLoadoutState;
@@ -32,6 +37,9 @@ interface UsePotionLoadoutResult {
   saving: boolean;
   /** Ajusta una poción en +1 o −1 y guarda el loadout completo. */
   adjust: (potion: PotionId, delta: number) => Promise<void>;
+  /** Compra una unidad. Id de la poción en vuelo, o null. */
+  buying: PotionId | null;
+  buy: (potion: PotionId) => Promise<void>;
   reload: () => void;
 }
 
@@ -54,22 +62,38 @@ export function usePotionLoadout(): UsePotionLoadoutResult {
     () => arenaApi.getPotions(),
   );
 
+  const { mutate: globalMutate } = useSWRConfig();
+  const { state: playerState } = usePlayer();
+  const tf = playerState.status === "ready" ? playerState.data.tf : 0;
+
   const [saving, setSaving] = useState(false);
+  const [buying, setBuying] = useState<PotionId | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
 
+  /*
+   * La lista se arma desde el catálogo estático, no desde el inventario.
+   *
+   * `GET /potions/inventory` solo devuelve los tipos que el jugador ha tenido
+   * alguna vez, y no existe endpoint de catálogo. Si la lista saliera de ahí,
+   * un jugador nuevo vería la alacena vacía y no tendría desde dónde comprar.
+   * Las seis se pintan siempre y el inventario solo aporta las cantidades.
+   */
   const stock = useMemo<PotionStock[]>(() => {
-    if (!data) return [];
+    const owned = new Map((data ?? []).map((dto) => [dto.potionType, dto]));
 
-    return data
-      // Un tipo que el front no conozca se ignora en vez de pintarse sin nombre
-      .filter((dto) => dto.potionType in POTIONS_META)
-      .map((dto) => ({
-        potion: POTIONS_META[dto.potionType as PotionId],
-        owned: dto.quantity,
-        equipped: dto.equippedQuantity,
-        limitPerBattle: dto.limitPerBattle,
-      }));
-  }, [data]);
+    return Object.values(POTIONS_META).map((potion) => {
+      const dto = owned.get(potion.id);
+      return {
+        potion,
+        owned: dto?.quantity ?? 0,
+        equipped: dto?.equippedQuantity ?? 0,
+        // El precio y el tope del backend mandan sobre los del catálogo local
+        limitPerBattle: dto?.limitPerBattle ?? potion.limitPerBattle,
+        price: dto?.price ?? potion.price,
+        affordable: tf >= (dto?.price ?? potion.price),
+      };
+    });
+  }, [data, tf]);
 
   const equippedTotal = stock.reduce((sum, item) => sum + item.equipped, 0);
 
@@ -120,17 +144,47 @@ export function usePotionLoadout(): UsePotionLoadoutResult {
     [stock, equippedTotal, mutate],
   );
 
+  const buy = useCallback(
+    async (id: PotionId) => {
+      if (buying) return;
+
+      const current = stock.find((item) => item.potion.id === id);
+      if (!current || !current.affordable) return;
+
+      setBuying(id);
+      setSaveError(null);
+
+      try {
+        await arenaApi.buyPotion(id, 1);
+        /*
+         * El endpoint devuelve solo el registro de ese tipo, no el inventario
+         * completo, así que se revalida en vez de parchear la caché a mano.
+         * Y hay que refrescar 'player': el saldo TF acaba de bajar y lo pinta
+         * la barra superior del lobby.
+         */
+        await Promise.all([mutate(), globalMutate("player")]);
+      } catch (err) {
+        setSaveError(getApiErrorMessage(err, "No se pudo comprar la poción"));
+      } finally {
+        setBuying(null);
+      }
+    },
+    [buying, stock, mutate, globalMutate],
+  );
+
   const state: PotionLoadoutState = isLoading
     ? { status: "loading" }
     : error || saveError
       ? { status: "error", error: saveError ?? getApiErrorMessage(error) }
-      : { status: "ready", stock, equippedTotal };
+      : { status: "ready", stock, equippedTotal, tf };
 
   return {
     state,
     slots,
     saving,
     adjust,
+    buying,
+    buy,
     reload: () => void mutate(),
   };
 }

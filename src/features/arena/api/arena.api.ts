@@ -102,4 +102,15 @@ export const arenaApi = {
     const { data } = await api.post<PlayerPotionDTO[]>("/potions/equip", { items });
     return data;
   },
+
+  /**
+   * Compra unidades de una poción con TokaFeed. Se suman al inventario.
+   *
+   * Devuelve solo el registro de ESE tipo, no el inventario completo — al
+   * contrario que `equipPotions`. Es asimetría del backend, no un descuido.
+   */
+  async buyPotion(potionType: PotionId, quantity: number): Promise<PlayerPotionDTO> {
+    const { data } = await api.post<PlayerPotionDTO>("/potions/buy", { potionType, quantity });
+    return data;
+  },
 };

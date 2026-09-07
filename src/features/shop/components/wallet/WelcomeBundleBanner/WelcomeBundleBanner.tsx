@@ -1,13 +1,26 @@
+import { Suspense, lazy } from 'react'
 import { Button, Label } from '@/shared/ui/Kit'
 import { WELCOME_BUNDLE } from '@/features/shop/lib/walletPacks'
 import styles from './WelcomeBundleBanner.module.css'
+
+/**
+ * Rive entra en diferido a propósito: el runtime más el WASM pesan cerca de
+ * 2 MB y no deben estar en el bundle inicial de la app. Solo se descargan
+ * cuando el jugador abre la pestaña Wallet.
+ */
+const RiveAnimation = lazy(() => import('@/shared/ui/Rive/RiveAnimation'))
 
 interface WelcomeBundleBannerProps {
   onClaim: () => void
 }
 
-/** Ilustración que ocupa el escenario completo de la oferta. */
-const HERO_SRC = '/assets/tokagotchis/ilustraciones/proffer.png'
+/** Animación de Rive que ocupa el escenario completo de la oferta. */
+const HERO_RIV = '/assets/animations/proffer/proffer_welcome.riv'
+/**
+ * La ilustración estática hace de póster: se ve mientras el WASM carga, y se
+ * queda si el webview no lo permite. Nunca hay hueco vacío.
+ */
+const HERO_POSTER = '/assets/animations/proffer/proffer_welcome.png'
 
 /** Compone la lista de contenidos como frase: "a, b y c". */
 function joinItems(items: string[]): string {
@@ -21,7 +34,10 @@ function joinItems(items: string[]): string {
  * La ilustración no acompaña al texto: es la oferta. Ocupa el escenario
  * entero y el resto de la interfaz solo la enmarca — marco, barra de precio
  * y listón. El resplandor, los rayos y la viñeta van en CSS y no horneados
- * en el SVG, así que se pueden ajustar sin volver a pedir el arte.
+ * en el arte, así que se pueden ajustar sin volver a pedirlo.
+ *
+ * El escenario es una animación de Rive, con la ilustración estática de
+ * respaldo mientras carga o si el webview bloquea el WASM.
  */
 export default function WelcomeBundleBanner({ onClaim }: WelcomeBundleBannerProps) {
   const b = WELCOME_BUNDLE
@@ -35,7 +51,13 @@ export default function WelcomeBundleBanner({ onClaim }: WelcomeBundleBannerProp
           <div className={styles.rays} aria-hidden="true" />
           <div className={styles.vignette} aria-hidden="true" />
 
-          <img src={HERO_SRC} alt="" aria-hidden="true" className={styles.hero} />
+          <Suspense
+            fallback={
+              <img src={HERO_POSTER} alt="" aria-hidden="true" className={styles.hero} />
+            }
+          >
+            <RiveAnimation src={HERO_RIV} poster={HERO_POSTER} className={styles.hero} />
+          </Suspense>
 
           <div className={styles.badges}>
             <Label size="xs" variant="cream" look="solid">{b.tag}</Label>

@@ -1,29 +1,27 @@
-import type { CSSProperties } from 'react'
+import { Suspense, lazy, type CSSProperties } from 'react'
 import { Label } from '@/shared/ui/Kit'
 import { RARITY_META, SPARKLE_COUNT, SPARKLE_POS } from '@/shared/constants/rarity'
 import type { Rarity } from '@/shared/domain/tokagotchi'
 import type { StoreItemDTO } from '../../api/dto/shop.dto'
+import type { ItemAvailability } from '../../types/shop.types'
 import { formatTF } from '../../lib/formatTF'
+import { getEggArt, getEggPoster } from '../../lib/eggArt'
 import styles from './EggCard.module.css'
 
 /**
- * Ilustración por rareza. Cada huevo viene en su nido.
- *
- * LEGENDARY no se vende en la tienda (`ShopEggRarity` solo tiene COMMON, RARE
- * y EPIC); la entrada existe por defensa, para no romper si el backend lo
- * añadiera antes que el arte.
+ * Rive entra en diferido: el runtime más el WASM pesan cerca de 2 MB y no
+ * deben estar en el bundle inicial. Solo se descargan al abrir la Tienda.
  */
-const EGG_ART: Record<Rarity, string> = {
-  COMMON: '/assets/ui/egg/egg_common.svg',
-  RARE: '/assets/ui/egg/egg_rare.svg',
-  EPIC: '/assets/ui/egg/egg_epic.svg',
-  LEGENDARY: '/assets/ui/egg/egg_epic.svg',
-}
+const EggRiveArt = lazy(() => import('./EggRiveArt'))
 
 interface EggCardProps {
   item: StoreItemDTO
+  /**
+   * Sale de `getItemAvailability`, igual que en StoreItemCard. Antes había un
+   * `enableBuy` propio de esta tarjeta: dos mecanismos para el mismo concepto.
+   */
+  availability: ItemAvailability
   onBuy: (item: StoreItemDTO) => void
-  enableBuy?: boolean
 }
 
 /**
@@ -37,7 +35,8 @@ interface EggCardProps {
  * No hay cinta de rareza: el `displayName` del backend ya dice "Huevo Raro",
  * así que una etiqueta al lado repetiría la misma palabra.
  */
-export default function EggCard({ item, onBuy, enableBuy = true }: EggCardProps) {
+export default function EggCard({ item, availability, onBuy }: EggCardProps) {
+  const soon = availability === 'soon'
   const rarity = (item.eggRarity ?? 'COMMON') as Rarity
   const meta = RARITY_META[rarity]
   const sparkles = SPARKLE_POS.slice(0, SPARKLE_COUNT[rarity])
@@ -50,14 +49,14 @@ export default function EggCard({ item, onBuy, enableBuy = true }: EggCardProps)
   return (
     <button
       type="button"
-      className={`${styles.card} ${enableBuy ? '' : styles.soon}`}
+      className={`${styles.card} ${soon ? styles.soon : ''}`}
       style={rarityVars}
-      disabled={!enableBuy}
+      disabled={soon}
       onClick={() => onBuy(item)}
       aria-label={
-        enableBuy
-          ? `Comprar ${item.displayName} por ${formatTF(item.priceInTokaFeed)} TF`
-          : `${item.displayName} — próximamente`
+        soon
+          ? `${item.displayName} — próximamente`
+          : `Comprar ${item.displayName} por ${formatTF(item.priceInTokaFeed)} TF`
       }
     >
       <span className={styles.name}>{item.displayName}</span>
@@ -75,9 +74,19 @@ export default function EggCard({ item, onBuy, enableBuy = true }: EggCardProps)
           />
         ))}
 
-        <img src={EGG_ART[rarity]} alt="" aria-hidden="true" className={styles.art} />
+        {/*
+          * El SVG con nido hace de respaldo del respaldo: si el chunk de Rive
+          * aún no ha llegado, se ve el huevo de siempre en vez de un hueco.
+          */}
+        <Suspense
+          fallback={
+            <img src={getEggArt(rarity)} alt="" aria-hidden="true" className={styles.art} />
+          }
+        >
+          <EggRiveArt rarity={rarity} poster={getEggPoster(rarity)} className={styles.art} />
+        </Suspense>
 
-        {!enableBuy && (
+        {soon && (
           <span className={styles.soonBadge}>
             <Label size="xs" variant="warm" look="solid">Próx.</Label>
           </span>

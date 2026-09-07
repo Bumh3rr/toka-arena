@@ -35,14 +35,4 @@ export const SECTION_SIGNS = {
   },
 
 
-  potions: {
-    title: 'Pociones',
-    illustration: {
-      src: '/assets/ui/potion/ai_potions.svg',
-      width: '40%',
-      maxWidth: 300,
-      overlap: 30,
-      plankSrc: '/assets/ui/tables/table_potions.svg',
-    },
-  },
 } satisfies Record<string, SectionSignProps>

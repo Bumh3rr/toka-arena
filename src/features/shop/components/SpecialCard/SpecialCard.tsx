@@ -2,8 +2,8 @@ import type { CSSProperties } from 'react'
 import { Label } from '@/shared/ui/Kit'
 import type { StoreItemDTO } from '../../api/dto/shop.dto'
 import { formatTF } from '../../lib/formatTF'
-import ItemGlyph from '../ItemGlyph'
 import styles from './SpecialCard.module.css'
+import { IcImage } from '@/shared/ui/Icons/Icons'
 
 /**
  * Acento del medallón por tipo.
@@ -55,7 +55,7 @@ export default function SpecialCard({ item, onBuy, enableBuy = true }: SpecialCa
       <span className={styles.well}>
         <span className={styles.glow} aria-hidden="true" />
         <span className={styles.glyph} aria-hidden="true">
-          <ItemGlyph itemType={item.itemType} />
+          <IcImage />
         </span>
       </span>
 

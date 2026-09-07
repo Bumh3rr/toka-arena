@@ -4,13 +4,23 @@ import type { ItemAvailability, StoreFilter } from '../types/shop.types'
 /**
  * Determina si un ítem del catálogo se puede comprar.
  *
- * Único caso `'soon'`: accesorios NECK, que existen en el catálogo pero aún no
- * tienen `accessoryType` asignado en el backend (`SKIN` con `accessoryType === null`).
- * Todo lo demás (SKIN con tipo, EGG, BOOSTER, EVOLUTION_SHIELD) es comprable.
+ * Espeja exactamente lo que `StoreService.buyItem` del backend rechaza con
+ * `UnsupportedOperationException`, para no ofrecer un botón que va a fallar:
+ * - `SKIN` sin `accessoryType` — los accesorios NECK, que están en el catálogo
+ *   pero todavía no tienen tipo asignado.
+ * - `EGG` sin `eggRarity` — no ocurre hoy, pero el backend lo contempla.
+ * - `BOOSTER` y `EVOLUTION_SHIELD` — el backend no los implementa todavía
+ *   (caen en el `default` del switch).
  */
 export function getItemAvailability(item: StoreItemDTO): ItemAvailability {
-  if (item.itemType === 'SKIN' && item.accessoryType === null) return 'soon'
-  return 'buyable'
+  switch (item.itemType) {
+    case 'SKIN':
+      return item.accessoryType === null ? 'soon' : 'buyable'
+    case 'EGG':
+      return item.eggRarity === null ? 'soon' : 'buyable'
+    default:
+      return 'soon'
+  }
 }
 
 export interface StoreGroups {

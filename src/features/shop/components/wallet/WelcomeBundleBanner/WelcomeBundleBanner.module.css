@@ -78,12 +78,11 @@
 
 .hero {
   position: absolute;
+  height: 78%;
   left: 50%;
-  /* Se apoya justo encima del pie: si baja más, el degradado se come la
-     corona y la bolsa, que es exactamente el botín que anuncia la oferta */
-  bottom: 14%;
-  height: 86%;
-  transform: translateX(-50%);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 92%;
   object-fit: contain;
   object-position: bottom;
   pointer-events: none;

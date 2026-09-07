@@ -5,10 +5,11 @@ import { Button, Label, IconButton } from '@/shared/ui/Kit'
 import { IcDice } from '@/shared/ui/Icons/Icons'
 import TokagotchiCanvas from '@/shared/canvas/TokagotchiCanvas'
 import { getAccessoryImagePngSrc } from '@/shared/game/assets'
+import { getEggArt } from '../../lib/eggArt'
 import { getSlotLabel } from '@/shared/constants/accessory'
 import { getRenderBinding } from '@/shared/render/accessoryManifest'
 import type { AccessorySlot, EquippedAccessory } from '@/shared/domain/accessory'
-import type { Species } from '@/shared/domain/tokagotchi'
+import type { Rarity, Species } from '@/shared/domain/tokagotchi'
 import type { StoreItemDTO } from '../../api/dto/shop.dto'
 import { formatTF } from '../../lib/formatTF'
 import ItemGlyph from '../ItemGlyph'
@@ -33,7 +34,12 @@ export default function BuyConfirmSheet({ item, tf, buying, onConfirm, onClose }
 
   const enough = tf >= item.priceInTokaFeed
   const remaining = Math.max(0, tf - item.priceInTokaFeed)
-  const imgSrc = item.accessoryType ? getAccessoryImagePngSrc(item.accessoryType) : null
+  // Los huevos tienen su propia ilustración; sin esto caían al icono genérico
+  const imgSrc = item.eggRarity
+    ? getEggArt(item.eggRarity as Rarity)
+    : item.accessoryType
+      ? getAccessoryImagePngSrc(item.accessoryType)
+      : null
 
   // Accesorio para vestir al Tokagotchi de la vista previa (solo si es renderizable).
   const previewAcc = useMemo<EquippedAccessory[]>(() => {

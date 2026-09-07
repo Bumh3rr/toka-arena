@@ -8,7 +8,7 @@ import { useBuyItem } from '../../hooks/useBuyItem'
 import { getItemAvailability, isGroupVisible } from '../../lib/shopCatalog'
 import type { StoreFilter } from '../../types/shop.types'
 import type { StoreItemDTO } from '../../api/dto/shop.dto'
-import type { Tokagotchi } from '@/shared/domain/tokagotchi'
+import type { Rarity, Tokagotchi } from '@/shared/domain/tokagotchi'
 import SectionSign from '../../components/SectionSign/SectionSign'
 import { SECTION_SIGNS } from '../../constants/sections'
 import StoreItemCard from '../../components/StoreItemCard/StoreItemCard'
@@ -31,7 +31,8 @@ export default function StoreSection() {
 
   const [filter, setFilter] = useState<StoreFilter>('all')
   const [selected, setSelected] = useState<StoreItemDTO | null>(null)
-  const [revealToka, setRevealToka] = useState<Tokagotchi | null>(null)
+  /** Toka salido del huevo + la rareza que se compró, para el revelado. */
+  const [reveal, setReveal] = useState<{ toka: Tokagotchi; eggRarity: Rarity } | null>(null)
 
   if (isLoading) {
     return <Loading text="Cargando tienda..." />
@@ -45,7 +46,12 @@ export default function StoreSection() {
     if (!selected) return
     const res = await buy(selected)
     if (res.ok) {
-      if (selected.itemType === 'EGG' && res.newToka) setRevealToka(res.newToka)
+      if (selected.itemType === 'EGG' && res.newToka) {
+        setReveal({
+          toka: res.newToka,
+          eggRarity: (selected.eggRarity ?? 'COMMON') as Rarity,
+        })
+      }
       setSelected(null)
     }
   }
@@ -86,7 +92,12 @@ export default function StoreSection() {
           <SectionSign {...SECTION_SIGNS.eggs} />
           <div className={styles.eggGrid}>
             {groups.eggs.map((item) => (
-              <EggCard key={item.id} item={item} onBuy={setSelected} enableBuy={false} />
+              <EggCard
+                key={item.id}
+                item={item}
+                availability={getItemAvailability(item)}
+                onBuy={setSelected}
+              />
             ))}
           </div>
         </section>
@@ -103,13 +114,6 @@ export default function StoreSection() {
         </section>
       )}
 
-    
-        <section>
-          <SectionSign {...SECTION_SIGNS.potions} />
-          <div className={styles.specialList}>
-          </div>
-        </section>
-
       {selected && (
         <BuyConfirmSheet
           item={selected}
@@ -120,8 +124,12 @@ export default function StoreSection() {
         />
       )}
 
-      {revealToka && (
-        <EggRevealOverlay tokagotchi={revealToka} onClose={() => setRevealToka(null)} />
+      {reveal && (
+        <EggRevealOverlay
+          tokagotchi={reveal.toka}
+          eggRarity={reveal.eggRarity}
+          onClose={() => setReveal(null)}
+        />
       )}
 
       {toast && <Toast {...toast} />}
