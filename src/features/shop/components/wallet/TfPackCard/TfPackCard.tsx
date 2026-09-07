@@ -1,14 +1,15 @@
 import type { CSSProperties } from 'react'
 import { Button, Label } from '@/shared/ui/Kit'
-import { TF_PACK_ART, type TfPack, type TfPackFlair } from '../../../lib/walletPacks'
+import { TF_PACK_ART, type TfPackFlair } from '../../../lib/walletPacks'
+import type { TfPackView } from '../../../hooks/useTfPackages'
 import { formatTF } from '../../../lib/formatTF'
 import styles from './TfPackCard.module.css'
 
 interface TfPackCardProps {
-  pack: TfPack
+  pack: TfPackView
   /** Posición en la lista — desfasa la flotación para que no floten al unísono. */
   index: number
-  onBuy: (pack: TfPack) => void
+  onBuy: (pack: TfPackView) => void
 }
 
 /** Posiciones fijas de los destellos, en % del hueco de la ilustración. */

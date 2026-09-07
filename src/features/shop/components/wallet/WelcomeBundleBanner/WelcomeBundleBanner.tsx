@@ -1,6 +1,7 @@
 import { Suspense, lazy } from 'react'
 import { Button, Label } from '@/shared/ui/Kit'
-import { WELCOME_BUNDLE } from '@/features/shop/lib/walletPacks'
+import { WELCOME_BUNDLE_COPY } from '@/features/shop/lib/walletPacks'
+import type { WelcomeBundleOfferDTO } from '@/features/shop/api/dto/tokafeed.dto'
 import styles from './WelcomeBundleBanner.module.css'
 
 /**
@@ -11,7 +12,10 @@ import styles from './WelcomeBundleBanner.module.css'
 const RiveAnimation = lazy(() => import('@/shared/ui/Rive/RiveAnimation'))
 
 interface WelcomeBundleBannerProps {
+  offer: WelcomeBundleOfferDTO
   onClaim: () => void
+  /** Hay otra compra en curso: no se puede iniciar esta. */
+  disabled?: boolean
 }
 
 /** Animación de Rive que ocupa el escenario completo de la oferta. */
@@ -21,12 +25,6 @@ const HERO_RIV = '/assets/animations/proffer/proffer_welcome.riv'
  * queda si el webview no lo permite. Nunca hay hueco vacío.
  */
 const HERO_POSTER = '/assets/animations/proffer/proffer_welcome.png'
-
-/** Compone la lista de contenidos como frase: "a, b y c". */
-function joinItems(items: string[]): string {
-  if (items.length <= 1) return items[0] ?? ''
-  return `${items.slice(0, -1).join(', ')} y ${items[items.length - 1]}`
-}
 
 /**
  * Oferta de bienvenida.
@@ -39,12 +37,13 @@ function joinItems(items: string[]): string {
  * El escenario es una animación de Rive, con la ilustración estática de
  * respaldo mientras carga o si el webview bloquea el WASM.
  */
-export default function WelcomeBundleBanner({ onClaim }: WelcomeBundleBannerProps) {
-  const b = WELCOME_BUNDLE
-  const discount = Math.round((1 - b.mxn / b.originalMxn) * 100)
+export default function WelcomeBundleBanner({ offer, onClaim, disabled = false }: WelcomeBundleBannerProps) {
+  const mxn = offer.priceMxnCents / 100
+  const originalMxn = offer.originalValueMxnCents / 100
+  const discount = Math.round((1 - mxn / originalMxn) * 100)
 
   return (
-    <section className={styles.offer} aria-label={b.title}>
+    <section className={styles.offer} aria-label={WELCOME_BUNDLE_COPY.title}>
       <div className={styles.frame}>
         {/* Escenario: fondo generado + ilustración */}
         <div className={styles.stage}>
@@ -60,30 +59,30 @@ export default function WelcomeBundleBanner({ onClaim }: WelcomeBundleBannerProp
           </Suspense>
 
           <div className={styles.badges}>
-            <Label size="xs" variant="cream" look="solid">{b.tag}</Label>
+            <Label size="xs" variant="cream" look="solid">{WELCOME_BUNDLE_COPY.tag}</Label>
             <span className={styles.discount}>-{discount}%</span>
           </div>
 
           {/* El pie oscurece la base de la escena para que el texto se lea */}
           <div className={styles.caption}>
-            <h3 className={styles.title}>{b.title}</h3>
-            <p className={styles.items}>{joinItems(b.items)}</p>
+            <h3 className={styles.title}>{WELCOME_BUNDLE_COPY.title}</h3>
+            <p className={styles.items}>{offer.description}</p>
           </div>
         </div>
 
         {/* Barra de precio, separada del arte como en la referencia */}
         <div className={styles.priceBar}>
           <div className={styles.prices}>
-            <span className={styles.price}>${b.mxn} MXN</span>
-            <s className={styles.was}>${b.originalMxn}</s>
+            <span className={styles.price}>${mxn} MXN</span>
+            <s className={styles.was}>${originalMxn}</s>
           </div>
-          <Button variant="legend" size="md" radius="lg" onClick={onClaim}>
+          <Button variant="legend" size="md" radius="lg" disabled={disabled} onClick={onClaim}>
             Reclamar
           </Button>
         </div>
       </div>
 
-      <div className={styles.ribbon}>{b.ribbon}</div>
+      <div className={styles.ribbon}>{WELCOME_BUNDLE_COPY.ribbon}</div>
     </section>
   )
 }

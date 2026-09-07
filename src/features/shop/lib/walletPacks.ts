@@ -1,9 +1,10 @@
 /**
- * Configuración estática de la Wallet (compra de TF con dinero real).
+ * Configuración **visual** de la Wallet.
  *
- * No existe endpoint de paquetes ni webhook de Tokapay todavía, así que estos
- * datos viven aquí como fuente única. Cuando el backend exista, se reemplaza
- * este módulo por un hook SWR sin tocar los componentes de UI.
+ * Los precios, el TF y el bonus vienen del backend (`GET /store/tokafeed/packages`
+ * y `GET /store/tokafeed/welcome-bundle`): duplicarlos aquí, con dinero real de
+ * por medio, sería una forma de enseñar una cifra y cobrar otra. Lo que queda en
+ * este módulo es solo lo que la API no sabe — ilustración, adorno y copy fijo.
  */
 
 /**
@@ -32,30 +33,33 @@ export const TF_PACK_ART: Record<TfPackArt, string> = {
  */
 export type TfPackFlair = 'plain' | 'spark' | 'halo' | 'legend'
 
-/** Paquete de TF comprable con pesos mexicanos (MXN). */
-export interface TfPack {
-  id: string
-  name: string
-  /** TF total acreditado (base + bonus). */
-  tf: number
-  /** TF extra de bonus (0 si no aplica). */
-  bonus: number
-  /** Precio en pesos mexicanos. */
-  mxn: number
-  /** Ilustración del medallón. */
+/** Parte visual de un paquete: lo único que no viene del backend. */
+export interface TfPackArtSpec {
   art: TfPackArt
-  /**
-   * Lado de la ilustración en px.
-   *
-   * Crece con el paquete: es la señal de nivel. Se apoya en el dibujo en vez
-   * de en un adorno detrás porque el arte lo tapaba y no se veía. De paso
-   * distingue a Bolsita de Premium, que comparten la misma bolsa.
-   */
   artSize: number
-  /** Cuánto adorno lleva la tarjeta. */
   flair: TfPackFlair
-  /** Destacado como "más popular". */
   popular?: boolean
+}
+
+/**
+ * Arte por paquete, indexado por el `displayName` del backend.
+ *
+ * Si el backend añade un paquete que no está aquí, cae al default en vez de
+ * romper la Wallet: la tienda no debe depender de que este mapa esté al día.
+ */
+export const TF_PACK_ART_SPEC: Record<string, TfPackArtSpec> = {
+  Bolsita:  { art: 'bag',   artSize: 56, flair: 'plain' },
+  Moderado: { art: 'stack', artSize: 64, flair: 'plain' },
+  Grande:   { art: 'stack', artSize: 70, flair: 'spark' },
+  Premium:  { art: 'bag',   artSize: 78, flair: 'halo', popular: true },
+  Leyenda:  { art: 'box',   artSize: 82, flair: 'legend' },
+}
+
+/** Aspecto sobrio para un paquete que la UI todavía no conoce. */
+export const DEFAULT_TF_PACK_ART_SPEC: TfPackArtSpec = {
+  art: 'coin',
+  artSize: 56,
+  flair: 'plain',
 }
 
 /** Bundle especial con contenido mixto (TF + ítems). */
@@ -67,39 +71,12 @@ export interface SpecialPack {
   tone: 'legend' | 'purple' | 'blue'
 }
 
-/** Oferta de bienvenida, única por cuenta. */
-export interface WelcomeBundle {
-  tag: string
-  title: string
-  /**
-   * Lo que trae, pieza por pieza. La ilustración ya enseña QUÉ entra
-   * (moneda, corona, huevo); esta lista aporta las cantidades y se compone
-   * como una frase, no como una tira de chips que repita el dibujo.
-   */
-  items: string[]
-  /** Texto del listón inferior. */
-  ribbon: string
-  mxn: number
-  /** Precio sin descuento, para el tachado. */
-  originalMxn: number
-}
-
-export const WELCOME_BUNDLE: WelcomeBundle = {
+/** Copy fijo de la oferta de bienvenida. Precio y contenidos vienen de la API. */
+export const WELCOME_BUNDLE_COPY = {
   tag: 'Oferta única',
   title: 'Bienvenido a Toka Arena',
-  items: ['250 TF', 'un huevo raro', 'un accesorio'],
   ribbon: 'Solo una vez por cuenta',
-  mxn: 49,
-  originalMxn: 85,
-}
-
-export const TF_PACKS: TfPack[] = [
-  { id: 'p1', name: 'Bolsita',  tf: 50,   bonus: 0,    mxn: 29,  art: 'bag',   artSize: 56, flair: 'plain'  },
-  { id: 'p2', name: 'Moderado', tf: 275,  bonus: 25,   mxn: 99,  art: 'stack', artSize: 64, flair: 'plain'  },
-  { id: 'p3', name: 'Grande',   tf: 690,  bonus: 90,   mxn: 199, art: 'stack', artSize: 70, flair: 'spark'  },
-  { id: 'p4', name: 'Premium',  tf: 1800, bonus: 300,  mxn: 399, art: 'bag',   artSize: 78, flair: 'halo',   popular: true },
-  { id: 'p5', name: 'Leyenda',  tf: 5200, bonus: 1200, mxn: 899, art: 'box',   artSize: 82, flair: 'legend' },
-]
+} as const
 
 export const SPECIAL_PACKS: SpecialPack[] = [
   { id: 'sp1', name: 'Evolution Support', desc: '500 TF + 1 Evolution Shield', mxn: 129, tone: 'legend' },
