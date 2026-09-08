@@ -78,11 +78,10 @@
 
 .hero {
   position: absolute;
-  height: 78%;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  height: 88%;
   width: 92%;
+  inset: 0;
+  margin: auto;
   object-fit: contain;
   object-position: bottom;
   pointer-events: none;
