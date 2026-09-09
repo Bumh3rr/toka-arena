@@ -1,0 +1,58 @@
+.bar {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.potions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 10px 12px;
+  border-radius: var(--r);
+  border: var(--ol-thin) solid var(--ink);
+  background: linear-gradient(180deg, #FFFDF6, var(--cream));
+  font-family: var(--font-title);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, .7),
+    0 3px 0 var(--edge-cream);
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+
+.potions:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, .7), 0 0 0 var(--edge-cream);
+}
+
+.off {
+  opacity: .45;
+  box-shadow: none;
+}
+
+.flask {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+}
+
+.label {
+  white-space: nowrap;
+}
+
+.rest {
+  height: 100%;
+}
+
+.restInner {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .potions { transition: none; }
+}

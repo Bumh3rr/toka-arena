@@ -1,0 +1,70 @@
+/*
+ * Rótulo de sección.
+ *
+ * Solo apila dos ilustraciones y coloca el título; el arte lo aportan los
+ * assets. Las medidas de la ilustración llegan como variables porque cada una
+ * necesita su propio ancho y su propio solape: el trío es alto y estrecho, un
+ * nido es ancho y bajo.
+ */
+.sign {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 4px;
+}
+
+/* ── Ilustración ──────────────────────────────────────────────────────────── */
+
+.art {
+  display: block;
+  width: var(--art-width);
+  max-width: var(--art-max);
+  height: auto;
+  /* Negativo: el rótulo se monta sobre esta franja */
+  margin-bottom: var(--art-overlap);
+  filter: drop-shadow(0 4px 5px rgba(60, 25, 0, .4));
+}
+
+/* ── Rótulo ───────────────────────────────────────────────────────────────── */
+
+.plankWrap {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.plank {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 4px 4px rgba(50, 22, 0, .35));
+}
+
+/*
+ * El título se centra sobre la tabla. Los márgenes laterales lo mantienen
+ * dentro del tramo de madera, sin invadir las abrazaderas de los extremos.
+ */
+.title {
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  font-family: var(--font-title);
+  font-size: 23px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -.2px;
+  text-align: center;
+  color: #FFF3DC;
+  /* Grabado en la madera: sombra arriba, luz abajo */
+  text-shadow:
+    0 -1.5px 0 rgba(70, 33, 5, .85),
+    0 2px 0 rgba(255, 225, 180, .3),
+    0 3px 5px rgba(50, 22, 0, .45);
+}
+
+@media (max-width: 359px) {
+  .title { font-size: 20px; }
+}

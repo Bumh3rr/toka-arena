@@ -10,6 +10,11 @@ export const mapPlayerProfileDTO = (d: PlayerProfileDTO): PlayerProfile => ({
   tf: d.tokafeed,
   genesisClaimed: d.genesisClaimed,
   mainTokagotchi: d.mainTokagotchi ? mapTokagotchiDTO(d.mainTokagotchi) : null,
+  stamina: {
+    current: d.currentStamina,
+    refillsToday: d.dailyStaminaRefillsCount,
+    lastUpdate: new Date(d.lastStaminaUpdate).getTime(),
+  },
   createdAt: Date.now(),
 });
 

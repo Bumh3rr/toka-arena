@@ -1,0 +1,46 @@
+.banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 12px 12px 15px;
+  animation: bannerIn .3s cubic-bezier(.34, 1.4, .5, 1);
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.title {
+  font-family: var(--font-title), system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--ink);
+}
+
+.hint {
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--ink-2);
+}
+
+.coin {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+@keyframes bannerIn {
+  from { transform: translateY(10px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .banner { animation: none; }
+}

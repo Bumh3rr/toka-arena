@@ -1,71 +1,180 @@
+/*
+ * Tarjeta de huevo.
+ *
+ * Copia deliberada de StoreItemCard: mismo marco, mismo pozo oscuro y mismo
+ * precio de display, para que las dos rejillas de la tienda se lean como una.
+ * Lo propio de aquí es la rareza — tiñe el resplandor y los destellos.
+ */
 .card {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 5px;
+  width: 100%;
+  padding: 7px 6px 8px;
   text-align: center;
+  background: linear-gradient(180deg, #FFFBF1, var(--cream-2));
+  border: 2.5px solid var(--ink);
+  border-radius: var(--r-sm);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, .75), 0 3px 0 var(--edge-cream);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: transform .1s ease, box-shadow .1s ease;
+}
+
+.card:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, .75);
+}
+
+/* ── Nombre ───────────────────────────────────────────────────────────────── */
+
+/* Dos líneas reservadas para alinear con la rejilla de accesorios */
+.name {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  min-height: 26px;
+  font-family: var(--font-title);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.18;
+  color: var(--ink-2);
+}
+
+/* ── Ventana del arte ─────────────────────────────────────────────────────── */
+
+.window {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 90% 70% at 50% 38%, #7A4A22 0%, #5A3216 62%, #3F2110 100%);
+  border: 2.5px solid var(--ink);
+  border-radius: 9px;
+  box-shadow:
+    inset 0 3px 6px rgba(0, 0, 0, .45),
+    inset 0 -2px 0 rgba(255, 214, 150, .18);
+}
+
+/*
+ * Resplandor de rareza. Es la señal de nivel de la tarjeta, y solo funciona
+ * porque el pozo es oscuro: sobre el crema de antes era invisible.
+ */
+.glow {
+  position: absolute;
+  width: 86%;
+  height: 86%;
+  border-radius: 50%;
+  /* Se construye desde el color pleno de la rareza, no desde `soft`: ese ya
+     viene con alfa baja y sobre el pozo oscuro casi no se veía */
+  background: radial-gradient(circle, var(--egg-ring) 0%, transparent 62%);
+  opacity: .4;
+  filter: blur(4px);
 }
 
 .art {
   position: relative;
-  width: 100%;
-  aspect-ratio: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 4px;
-}
-
-/* Halo tintado por rareza detrás del huevo */
-.glow {
-  position: absolute;
-  width: 78%;
-  height: 78%;
-  border-radius: 50%;
-  background: radial-gradient(circle, var(--egg-glow, rgba(160, 160, 160, .3)) 0%, transparent 68%);
-  filter: blur(2px);
-}
-
-.egg {
-  position: relative;
   z-index: 1;
-  width: 64%;
-  height: 64%;
+  /* El nido es apaisado: llenar por ancho lo deja centrado sin recortes */
+  width: 92%;
+  height: 92%;
   object-fit: contain;
-  filter: drop-shadow(0 3px 4px rgba(74, 40, 0, .22));
+  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, .5));
 }
 
-.ribbon {
-  margin-bottom: 5px;
+/* ── Destellos ────────────────────────────────────────────────────────────── */
+
+/* Cuantos más, más raro. La cuenta sale de SPARKLE_COUNT, compartido. */
+.spark {
+  position: absolute;
+  z-index: 2;
+  width: 12px;
+  height: 12px;
+  background: var(--egg-ring);
+  filter: drop-shadow(0 0 3px var(--egg-ring));
+  clip-path: polygon(
+    50% 0%, 61% 39%, 100% 50%, 61% 61%,
+    50% 100%, 39% 61%, 0% 50%, 39% 39%
+  );
+  opacity: .55;
+  animation: eggSparkle 2.6s ease-in-out infinite;
 }
 
-.name {
-  font-family: var(--font-title);
-  font-size: 12.5px;
-  font-weight: 700;
-  color: var(--ink);
-  line-height: 1.15;
+.soonBadge {
+  position: absolute;
+  z-index: 3;
+  top: 4px;
+  right: 4px;
 }
 
-.sub {
-  font-size: 10px;
-  color: var(--ink-3);
-  line-height: 1.15;
-  margin-bottom: 6px;
-}
+/* ── Precio ───────────────────────────────────────────────────────────────── */
 
 .price {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 4px;
-  font-family: var(--font-title);
-  font-size: 13px;
-  font-weight: 800;
-  color: var(--ink);
-  margin-bottom: 8px;
+  gap: 3px;
+  margin-top: 1px;
 }
 
-.tfIcon {
-  width: 14px;
-  height: 14px;
+.coin {
+  width: 17px;
+  height: 17px;
+  display: block;
+  filter: drop-shadow(0 1px 1px rgba(74, 40, 0, .4));
+}
+
+.priceValue {
+  font-family: var(--font-title);
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -.2px;
+  color: #fff;
+  -webkit-text-stroke: 3px var(--ink);
+  /* Contorno POR DETRÁS del relleno; sin esto el trazo se come la letra */
+  paint-order: stroke fill;
+}
+
+/* ── Próximamente ─────────────────────────────────────────────────────────── */
+
+/*
+ * La compra de huevos no está en el backend todavía.
+ *
+ * Sin `opacity`: bajaría también el fondo de la tarjeta y se vería el
+ * escenario de la tienda a través de ella. Como aquí los tres huevos están
+ * deshabilitados, eso dejaba la rejilla entera fantasma. Se atenúa el
+ * contenido, no la tarjeta.
+ */
+.soon {
+  border-style: dashed;
+  border-color: rgba(74, 40, 0, .55);
+  cursor: not-allowed;
+}
+
+/*
+ * Aquí NO se desatura el arte, al revés que en la tarjeta de accesorio: allí
+ * conviven ítems disponibles y no disponibles, y el contraste informa. Aquí
+ * los tres huevos están deshabilitados a la vez, así que apagarlos solo
+ * escondía las ilustraciones sin decir nada. El borde discontinuo, la insignia
+ * y el nombre atenuado ya son tres señales.
+ */
+
+.soon .name {
+  color: var(--ink-3);
+}
+
+@keyframes eggSparkle {
+  0%, 100% { opacity: .5; transform: scale(.65) rotate(0deg);  }
+  50%      { opacity: 1;  transform: scale(1)   rotate(45deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spark { animation: none; opacity: .7; }
 }

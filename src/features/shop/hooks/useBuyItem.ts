@@ -26,10 +26,25 @@ interface UseBuyItemResult {
   toast: ReturnType<typeof useToast>['toast']
 }
 
-/** Trae el Tokagotchi más reciente del jugador (el recién creado por el huevo). Best-effort. */
+/**
+ * Trae el Tokagotchi recién creado por el huevo. Best-effort.
+ *
+ * Se ordena por `id` descendente porque el backend genera los ids con
+ * `UlidCreator.getMonotonicUlid()`, y un ULID ordena lexicográficamente por
+ * tiempo de creación. No se puede ordenar por fecha: la entidad `Tokagotchi`
+ * no tiene campo de creación.
+ *
+ * Sin el `sort` explícito el endpoint no aplica ninguno (recibe un `Pageable`
+ * pelado), así que devolvía el primer registro que diera la base de datos —
+ * casi nunca el nuevo.
+ *
+ * TODO: el backend ya tiene el Tokagotchi a mano — `AdoptionService.hatchEgg()`
+ * lo devuelve y `StoreService.buyItem()` lo descarta. Si lo incluye en
+ * `StoreItemResponse`, esta llamada extra y su heurística desaparecen.
+ */
 async function fetchNewestToka(): Promise<Tokagotchi | undefined> {
   try {
-    const page = await playerApi.getMyTokagotchis(0, 1)
+    const page = await playerApi.getMyTokagotchis(0, 1, { sort: 'id,desc' })
     const dto = page.content[0]
     return dto ? mapTokagotchiDTO(dto) : undefined
   } catch {
