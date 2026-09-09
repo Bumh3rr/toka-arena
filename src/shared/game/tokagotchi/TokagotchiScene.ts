@@ -17,6 +17,13 @@ export interface ITokagotchiScene {
    * haya corrido, el flag se almacena en el closure y se aplica al final de `create()`.
    */
   setPaused(paused: boolean): void
+  /**
+   * `true` cuando el armature ya está en escena.
+   *
+   * Lo necesita quien vaya a capturar el canvas: antes de que `create()` corra,
+   * una captura devolvería un PNG transparente.
+   */
+  isReady(): boolean
 }
 
 /**
@@ -92,6 +99,10 @@ export function createTokagotchiScene(cfg: TokagotchiConfig): ITokagotchiScene {
       // Si se llama antes del boot, el flag se aplica al final de create() arriba.
       if (!armature) return
       armature.animation.timeScale = p ? 0 : 1
+    }
+
+    isReady() {
+      return armature !== null
     }
 
   }

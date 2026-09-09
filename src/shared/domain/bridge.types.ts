@@ -47,16 +47,25 @@ export type AuthCodeScopeMap = {
 };
 
 /**
+ * Forma común a toda respuesta del bridge nativo: un código de resultado y su
+ * mensaje. Cada JSAPI añade sus propios campos encima (ver
+ * `BridgeAuthCodeResponse`). El bridge puede entregar el objeto incompleto si
+ * falla antes de terminar, por eso los consumidores lo reciben como `Partial`.
+ */
+export interface BridgeResponse {
+  /** Código de resultado del bridge. El valor de éxito depende de la JSAPI. */
+  resultCode: number;
+  /** Mensaje legible que explica el resultado o el motivo del error. */
+  resultMsg: string;
+}
+
+/**
  * Respuesta del bridge al solicitar un auth code.
  *
  * `resultCode === 10000` indica éxito. En ese caso `result` contiene el auth
  * code que se enviará al backend.
  */
-export interface BridgeAuthCodeResponse {
+export interface BridgeAuthCodeResponse extends BridgeResponse {
   /** Auth code emitido por la super app cuando la solicitud fue exitosa. */
   result: string;
-  /** Código de resultado del bridge; 10000 significa éxito. */
-  resultCode: number;
-  /** Mensaje legible que explica el resultado o el motivo del error. */
-  resultMsg: string;
 }

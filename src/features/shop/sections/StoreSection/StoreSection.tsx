@@ -8,8 +8,9 @@ import { useBuyItem } from '../../hooks/useBuyItem'
 import { getItemAvailability, isGroupVisible } from '../../lib/shopCatalog'
 import type { StoreFilter } from '../../types/shop.types'
 import type { StoreItemDTO } from '../../api/dto/shop.dto'
-import type { Tokagotchi } from '@/shared/domain/tokagotchi'
-import SectionDivider from '../../components/SectionDivider/SectionDivider'
+import type { Rarity, Tokagotchi } from '@/shared/domain/tokagotchi'
+import SectionSign from '../../components/SectionSign/SectionSign'
+import { SECTION_SIGNS } from '../../constants/sections'
 import StoreItemCard from '../../components/StoreItemCard/StoreItemCard'
 import EggCard from '../../components/EggCard/EggCard'
 import SpecialCard from '../../components/SpecialCard/SpecialCard'
@@ -21,7 +22,7 @@ const CHIPS: { key: StoreFilter; label: string }[] = [
   { key: 'all', label: 'Todos' },
   { key: 'acc', label: 'Accesorios' },
   { key: 'eggs', label: 'Huevos' },
-  { key: 'specials', label: 'Especiales' },
+  { key: 'specials', label: 'Especiales' }
 ]
 
 export default function StoreSection() {
@@ -30,7 +31,8 @@ export default function StoreSection() {
 
   const [filter, setFilter] = useState<StoreFilter>('all')
   const [selected, setSelected] = useState<StoreItemDTO | null>(null)
-  const [revealToka, setRevealToka] = useState<Tokagotchi | null>(null)
+  /** Toka salido del huevo + la rareza que se compró, para el revelado. */
+  const [reveal, setReveal] = useState<{ toka: Tokagotchi; eggRarity: Rarity } | null>(null)
 
   if (isLoading) {
     return <Loading text="Cargando tienda..." />
@@ -44,7 +46,12 @@ export default function StoreSection() {
     if (!selected) return
     const res = await buy(selected)
     if (res.ok) {
-      if (selected.itemType === 'EGG' && res.newToka) setRevealToka(res.newToka)
+      if (selected.itemType === 'EGG' && res.newToka) {
+        setReveal({
+          toka: res.newToka,
+          eggRarity: (selected.eggRarity ?? 'COMMON') as Rarity,
+        })
+      }
       setSelected(null)
     }
   }
@@ -66,7 +73,7 @@ export default function StoreSection() {
 
       {isGroupVisible(filter, 'accessories') && groups.accessories.length > 0 && (
         <section>
-          <SectionDivider>Accesorios</SectionDivider>
+          <SectionSign {...SECTION_SIGNS.accessories} />
           <div className={styles.grid}>
             {groups.accessories.map((item) => (
               <StoreItemCard
@@ -82,10 +89,15 @@ export default function StoreSection() {
 
       {isGroupVisible(filter, 'eggs') && groups.eggs.length > 0 && (
         <section>
-          <SectionDivider>Huevos</SectionDivider>
+          <SectionSign {...SECTION_SIGNS.eggs} />
           <div className={styles.eggGrid}>
             {groups.eggs.map((item) => (
-              <EggCard key={item.id} item={item} onBuy={setSelected} enableBuy={false} />
+              <EggCard
+                key={item.id}
+                item={item}
+                availability={getItemAvailability(item)}
+                onBuy={setSelected}
+              />
             ))}
           </div>
         </section>
@@ -93,8 +105,8 @@ export default function StoreSection() {
 
       {isGroupVisible(filter, 'specials') && groups.specials.length > 0 && (
         <section>
-          <SectionDivider>Especiales</SectionDivider>
-          <div className={styles.hscroll}>
+          <SectionSign {...SECTION_SIGNS.specials} />
+          <div className={styles.specialList}>
             {groups.specials.map((item) => (
               <SpecialCard key={item.id} item={item} onBuy={setSelected} enableBuy={false} />
             ))}
@@ -112,8 +124,12 @@ export default function StoreSection() {
         />
       )}
 
-      {revealToka && (
-        <EggRevealOverlay tokagotchi={revealToka} onClose={() => setRevealToka(null)} />
+      {reveal && (
+        <EggRevealOverlay
+          tokagotchi={reveal.toka}
+          eggRarity={reveal.eggRarity}
+          onClose={() => setReveal(null)}
+        />
       )}
 
       {toast && <Toast {...toast} />}
