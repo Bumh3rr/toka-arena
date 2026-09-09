@@ -10,12 +10,12 @@ function formatPrice(n: number): string {
   return n.toLocaleString("es-MX").replace(/,/g, " ");
 }
 
-
 export default function UnlockPremiumBar({
   price,
   summary,
   onClick,
 }: UnlockPremiumBarProps) {
+  console.log("UnlockPremiumBar: price", formatPrice(price), "summary", summary, "onClick", onClick);
   return (
     <button className={styles.bar} onClick={onClick} type="button">
       <span className={styles.texts}>
@@ -24,12 +24,14 @@ export default function UnlockPremiumBar({
       </span>
 
       <span className={styles.pricePill}>
+      {/*
         <img
           className={styles.coin}
           src="/assets/ui/tf/moneda_tf.png"
           alt="TF"
         />
         <span className={styles.priceValue}>{formatPrice(price)}</span>
+        */}
       </span>
     </button>
   );
