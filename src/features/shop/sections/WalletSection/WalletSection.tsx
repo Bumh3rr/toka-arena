@@ -6,7 +6,7 @@ import { getApiErrorMessage } from '@/shared/api/client'
 import { SPECIAL_PACKS } from '../../lib/walletPacks'
 import { useTfPackages } from '../../hooks/useTfPackages'
 import { useWelcomeBundle } from '../../hooks/useWelcomeBundle'
-import { useTokaPayPurchase } from '../../hooks/useTokaPayPurchase'
+import { useWalletPayment } from '../../hooks/useWalletPayment'
 import SectionDivider from '../../components/SectionDivider/SectionDivider'
 import WelcomeBundleBanner from '../../components/wallet/WelcomeBundleBanner/WelcomeBundleBanner'
 import TfPackCard from '../../components/wallet/TfPackCard/TfPackCard'
@@ -16,20 +16,16 @@ import PayStatusSheet from '../../components/wallet/PayStatusSheet/PayStatusShee
 import styles from './WalletSection.module.css'
 
 export default function WalletSection() {
-  const { show, toast: sectionToast } = useToast()
+  const { show, toast } = useToast()
   const { packs, isLoading, error, reload } = useTfPackages()
   const { offer } = useWelcomeBundle()
-  const { phase, busy, start, confirm, retry, refresh, close, toast: payToast } = useTokaPayPurchase()
+  const payment = useWalletPayment()
+
+  /** Un solo pago a la vez: mientras haya uno abierto, no se empieza otro. */
+  const busy = payment.step !== 'idle'
 
   // Los packs especiales no tienen catálogo en el backend todavía.
   const notifySpecial = () => show('Pronto podrás comprar packs especiales', { variant: 'info' })
-
-  // La confirmación cubre dos fases: elegir (`confirm`) y esperar a que la orden
-  // se cree (`creating`), que es cuando el botón pasa a "Abriendo pago...".
-  const confirming =
-    phase.status === 'confirm' || phase.status === 'creating'
-      ? { target: phase.target, busy: phase.status === 'creating' }
-      : null
 
   if (isLoading) return <Loading text="Cargando paquetes..." compact />
   if (error) {
@@ -47,7 +43,7 @@ export default function WalletSection() {
         <WelcomeBundleBanner
           offer={offer}
           disabled={busy}
-          onClaim={() => start({ kind: 'welcomeBundle', offer })}
+          onClaim={() => payment.chooseBundle(offer)}
         />
       )}
 
@@ -58,7 +54,7 @@ export default function WalletSection() {
             key={pack.id}
             pack={pack}
             index={i}
-            onBuy={() => !busy && start({ kind: 'package', pack })}
+            onBuy={() => !busy && payment.choosePack(pack)}
           />
         ))}
       </div>
@@ -71,38 +67,33 @@ export default function WalletSection() {
       </div>
 
       {/*
-        El sheet sigue montado durante `creating` (con `busy`): si se desmontara
-        al confirmar, la pantalla se quedaría muda hasta que abra la caja de pago.
+        La hoja de confirmación sigue abierta durante `paying`, con el botón en
+        "Abriendo pago...": si se cerrara al confirmar, la pantalla se quedaría
+        muda mientras se crea la orden.
       */}
-      {confirming && confirming.target.kind === 'package' && (
+      {payment.purchase && (payment.step === 'confirm' || payment.step === 'paying') && (
         <PayConfirmSheet
-          name={confirming.target.pack.name}
-          tf={confirming.target.pack.tf}
-          bonus={confirming.target.pack.bonus}
-          mxn={confirming.target.pack.mxn}
-          busy={confirming.busy}
-          onConfirm={confirm}
-          onClose={close}
+          name={payment.purchase.name}
+          tf={payment.purchase.tf}
+          bonus={payment.purchase.bonus}
+          mxn={payment.purchase.mxn}
+          extras={payment.purchase.extras}
+          busy={payment.step === 'paying'}
+          onConfirm={payment.pay}
+          onClose={payment.close}
         />
       )}
 
-      {confirming && confirming.target.kind === 'welcomeBundle' && (
-        <PayConfirmSheet
-          name="Bienvenido a Toka Arena"
-          tf={confirming.target.offer.tfAmount}
-          bonus={0}
-          mxn={confirming.target.offer.priceMxnCents / 100}
-          extras={confirming.target.offer.description}
-          busy={confirming.busy}
-          onConfirm={confirm}
-          onClose={close}
-        />
-      )}
+      <PayStatusSheet
+        step={payment.step}
+        tf={payment.purchase?.tf ?? 0}
+        error={payment.error}
+        onRetry={payment.pay}
+        onCheck={payment.check}
+        onClose={payment.close}
+      />
 
-      <PayStatusSheet phase={phase} onRetry={retry} onRefresh={refresh} onClose={close} />
-
-      {payToast && <Toast {...payToast} />}
-      {sectionToast && <Toast {...sectionToast} />}
+      {toast && <Toast {...toast} />}
     </>
   )
 }

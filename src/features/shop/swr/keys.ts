@@ -7,12 +7,11 @@ export const shopKeys = {
 /**
  * Claves de la Wallet (compra con dinero real).
  *
- * `purchase` es solo para la consulta suelta del botón "Actualizar": el polling
- * en curso no pasa por SWR porque necesita arranque y parada explícitos (ver
- * `useTokaPayPurchase`).
+ * No hay clave para el estado de un pago: el polling de `useWalletPayment` es un
+ * `setInterval` dentro de un `useEffect`, no SWR, porque tiene que arrancar y
+ * pararse con el paso del flujo.
  */
 export const walletKeys = {
   packages: () => ['wallet.packages'] as const,
   welcomeBundle: () => ['wallet.welcomeBundle'] as const,
-  purchase: (paymentId: string) => ['wallet.purchase', paymentId] as const,
 }
