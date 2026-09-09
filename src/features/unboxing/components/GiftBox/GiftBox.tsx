@@ -21,12 +21,25 @@ export default function GiftBox({ fase, onClick }: GiftBoxProps) {
         </>
       )}
 
-      <img
-        src="/assets/ui/huevo.png"
-        alt="Regalo"
-        className={styles.gift}
-        draggable={false}
-      />
+      {/* Destellos alrededor del regalo */}
+      {fase === 'shaking' && (
+        <img
+          src="/assets/ui/egg/also_egg.svg"
+          alt="Regalo"
+          className={styles.gift}
+          draggable={false}
+        />
+      )}
+
+      {/* Destellos alrededor del regalo */}
+      {fase === 'idle' && (
+        <img
+          src="/assets/ui/egg/egg_common.svg"
+          alt="Regalo"
+          className={styles.gift}
+          draggable={false}
+        />
+      )}
 
       {/* Flash blanco al explotar */}
       {fase === 'exploding' && (

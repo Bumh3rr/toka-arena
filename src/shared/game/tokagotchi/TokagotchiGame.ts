@@ -5,6 +5,9 @@ import {
 import type { TokagotchiConfig } from "./types";
 import type { EquippedAccessory } from "@/shared/domain/accessory";
 
+/** Margen para que la captura se resuelva antes de darla por perdida. */
+const SNAPSHOT_TIMEOUT_MS = 1500;
+
 /**
  * Wrapper delgado sobre `Phaser.Game` que gestiona el ciclo de vida del juego
  * y expone únicamente los métodos necesarios para controlar el personaje desde React.
@@ -85,6 +88,50 @@ export class TokagotchiGame {
    */
   setPaused(paused: boolean) {
     this.scene.setPaused(paused);
+  }
+
+  /**
+   * Captura el canvas como PNG con alfa: el Tokagotchi recortado, con sus
+   * accesorios ya montados por DragonBones.
+   *
+   * Existe para poder reutilizar el personaje vestido FUERA de Phaser (la
+   * moneda del volado), sin rehacer a mano el rigging de los accesorios ni
+   * montar una segunda instancia del juego.
+   *
+   * Devuelve `null` —nunca lanza— si el armature todavía no está en escena, si
+   * el renderer no soporta la captura o si no llega a resolverse. El caller
+   * debe tener siempre una imagen de reserva.
+   */
+  snapshot(): Promise<string | null> {
+    return new Promise((resolve) => {
+      const renderer = this.game?.renderer;
+
+      if (!renderer?.snapshot || !this.scene.isReady()) {
+        resolve(null);
+        return;
+      }
+
+      // La captura se resuelve en el siguiente pase de render. Si el juego no
+      // está pintando (pestaña oculta, contexto perdido), nunca llegaría.
+      let settled = false;
+      const finish = (value: string | null) => {
+        if (settled) return;
+        settled = true;
+        resolve(value);
+      };
+
+      const timeout = window.setTimeout(() => finish(null), SNAPSHOT_TIMEOUT_MS);
+
+      try {
+        renderer.snapshot((image: HTMLImageElement) => {
+          window.clearTimeout(timeout);
+          finish(image?.src ?? null);
+        });
+      } catch {
+        window.clearTimeout(timeout);
+        finish(null);
+      }
+    });
   }
 
   /**

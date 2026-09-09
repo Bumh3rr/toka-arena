@@ -1,0 +1,118 @@
+.section {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+/*
+ * El fondo del modo se apaga: aquí lo que importa son el veredicto y las
+ * cifras, y un escenario a plena luz les quitaría contraste.
+ */
+.scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(180deg, rgba(28, 12, 4, .74), rgba(18, 8, 2, .92));
+  pointer-events: none;
+}
+
+/* ── Celebración ──────────────────────────────────────────────────────────── */
+
+/*
+ * Rayos cónicos girando detrás del Tokagotchi. Se dibujan con un degradado
+ * repetido en vez de con elementos: un solo nodo compuesto por GPU en lugar de
+ * doce que animar.
+ */
+.rays {
+  position: absolute;
+  top: 34%;
+  left: 50%;
+  z-index: 0;
+  width: 620px;
+  height: 620px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  background: repeating-conic-gradient(
+    from 0deg,
+    var(--rays-glow) 0deg 7deg,
+    transparent 7deg 20deg
+  );
+  opacity: .34;
+  mask-image: radial-gradient(circle, #000 10%, transparent 58%);
+  animation: spin 22s linear infinite;
+}
+
+.confetti {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.fleck {
+  position: absolute;
+  top: -14px;
+  width: 8px;
+  height: 12px;
+  border-radius: 2px;
+  background: var(--legend);
+  opacity: 0;
+  animation: fall 3.4s linear infinite;
+}
+
+.fleck:nth-child(3n)   { background: var(--blue);   width: 7px; height: 7px; border-radius: 50%; }
+.fleck:nth-child(3n+1) { background: var(--green);  }
+.fleck:nth-child(4n)   { background: var(--purple); }
+
+/* ── Contenido ────────────────────────────────────────────────────────────── */
+
+/*
+ * El escenario del Tokagotchi es lo único elástico: en una pantalla corta se
+ * encoge él y el veredicto, las cifras y el botón se quedan enteros.
+ */
+.content {
+  position: relative;
+  z-index: 3;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 26px 16px 20px;
+}
+
+.stage {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.summary {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  max-width: 380px;
+}
+
+@keyframes spin {
+  0%   { transform: translate(-50%, -50%) rotate(0deg);   }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes fall {
+  0%   { opacity: 0;   transform: translateY(0)     rotate(0deg);   }
+  8%   { opacity: .95;                                              }
+  100% { opacity: 0;   transform: translateY(105vh) rotate(520deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rays  { animation: none; }
+  .fleck { animation: none; display: none; }
+}

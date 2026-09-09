@@ -1,4 +1,4 @@
-import type { BridgeAuthCodeResponse } from './bridge.types'
+import type { BridgeResponse } from './bridge.types'
 
 export {}
 
@@ -10,21 +10,21 @@ export {}
  *
  * La super app inyecta este objeto antes de disparar el evento
  * `AlipayJSBridgeReady`; nunca debe accederse antes de que ese evento ocurra
- * (ver `waitForBridge` en `bridge.ts`).
+ * (ver `waitForBridge` en `@/shared/toka/bridge`).
  */
 interface AlipayJSBridge {
   /**
    * Invoca un método nativo del bridge.
    *
-   * @param method    Nombre del método nativo a llamar (ej. `"getUserDigitalIdentityAuthCode"`).
+   * @param method    Nombre del método nativo a llamar (ej. `"getUserDigitalIdentityAuthCode"`, `"pay"`).
    * @param params    Parámetros que recibe el método nativo.
    * @param callback  Función que recibe la respuesta asíncrona del bridge.
    *                  El objeto puede ser parcial si el método falla antes de completarse.
    */
-  call(
+  call<T extends BridgeResponse = BridgeResponse>(
     method: string,
     params: Record<string, unknown>,
-    callback?: (res: Partial<BridgeAuthCodeResponse>) => void
+    callback?: (res: Partial<T>) => void
   ): void
 }
 

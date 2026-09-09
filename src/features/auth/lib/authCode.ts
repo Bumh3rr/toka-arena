@@ -1,4 +1,5 @@
-import { waitForBridge, getAuthCode } from '@/features/auth/lib/bridge'
+import { waitForBridge } from '@/shared/toka/bridge'
+import { getAuthCode } from '@/features/auth/lib/bridge'
 import type { DigitalIdentityScope } from '@/shared/domain/bridge.types'
 
 // Scopes solocitados para autenticarse

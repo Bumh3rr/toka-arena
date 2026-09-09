@@ -1,0 +1,38 @@
+/*
+ * El póster y el lienzo se superponen y se cruzan en opacidad.
+ *
+ * El póster no se desmonta nunca: si el webview bloquea el WASM, se queda él y
+ * la tarjeta sigue enseñando el huevo en vez de un hueco.
+ */
+.stage {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.poster,
+.canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transition: opacity .4s ease;
+}
+
+.poster {
+  object-fit: contain;
+  opacity: 1;
+}
+
+.canvas {
+  opacity: 0;
+}
+
+.hidden { opacity: 0; }
+.shown  { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .poster,
+  .canvas { transition: none; }
+}
