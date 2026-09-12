@@ -1,6 +1,7 @@
 import manifestJson from "@/assets/dragonbones/accessories.manifest.json";
 
 interface RenderBinding {
+  nameSlot: string;
   displayIndex: number;
 }
 

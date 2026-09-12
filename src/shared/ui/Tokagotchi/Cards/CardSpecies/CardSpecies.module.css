@@ -1,0 +1,30 @@
+/* ── Card de CP ─────────────────────────────────────────────────────────────── */
+.cardSpecies {
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 15px 3px 10px;
+}
+
+.cardSpecies {
+  gap: 0;
+  padding: 3px 2px 3px 10px;
+}
+
+.cardSpecies svg {
+  color: var(--ink-2);
+}
+
+.cardSpecies svg{
+  width: 20px;
+  height: 20px;
+}
+
+.labelSpecies {
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 3px 12px 3px 3px;
+}

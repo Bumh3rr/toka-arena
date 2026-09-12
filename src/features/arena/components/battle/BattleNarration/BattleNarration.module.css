@@ -1,0 +1,50 @@
+/*
+ * Cuelga de la parte alta del ruedo, por debajo del contador de turno y por
+ * encima de los combatientes: se lee sin tapar a quien está peleando.
+ */
+.banner {
+  position: absolute;
+  top: 42px;
+  left: 50%;
+  z-index: 3;
+  width: max-content;
+  max-width: 88%;
+  padding: 6px 13px;
+  border-radius: var(--r);
+  border: var(--ol-thin) solid var(--ink);
+  background: rgba(38, 18, 4, .86);
+  color: var(--cream);
+  font-family: var(--font-body);
+  font-size: 11.5px;
+  font-weight: 700;
+  line-height: 1.3;
+  text-align: center;
+  text-wrap: balance;
+  box-shadow: 0 3px 10px rgba(20, 8, 0, .4);
+  pointer-events: none;
+  animation: narrate var(--narration-life) ease both;
+}
+
+/* Entra desde arriba, se queda a leer y se retira por donde vino */
+@keyframes narrate {
+  0%   { opacity: 0; transform: translate(-50%, -8px); }
+  8%   { opacity: 1; transform: translate(-50%, 0);    }
+  82%  { opacity: 1; transform: translate(-50%, 0);    }
+  100% { opacity: 0; transform: translate(-50%, -8px); }
+}
+
+/*
+ * Sin movimiento la frase no se anima, pero tampoco se queda para siempre: se
+ * mantiene visible y se apaga al final, que es la información que importa.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .banner {
+    transform: translateX(-50%);
+    animation: narrateStill var(--narration-life) step-end both;
+  }
+}
+
+@keyframes narrateStill {
+  0%   { opacity: 1; }
+  100% { opacity: 0; }
+}

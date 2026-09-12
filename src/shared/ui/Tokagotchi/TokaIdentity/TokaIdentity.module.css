@@ -1,0 +1,55 @@
+/* ── Root ───────────────────────────────────────────────────────────────────── */
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+/* ── Nombre + botón ─────────────────────────────────────────────────────────── */
+.nameRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.name {
+  font-family: var(--font-title);  
+  font-size: 25px;
+  font-weight: 900;
+  line-height: .95;
+  letter-spacing: -.5px;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+/* ── Fila de meta — una sola línea horizontal ────────────────────────────────── */
+.metaRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  padding-top: 10px;
+  padding-bottom: 3%;
+}
+
+/* Divisor vertical fino */
+.sep {
+  flex: none;
+  width: 1.5px;
+  height: 14px;
+  border-radius: 2px;
+  background: rgba(74, 40, 0, .22);
+}
+
+/* Especie — mismo peso visual que el resto */
+.species {
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 3px 12px 3px 3px;
+}

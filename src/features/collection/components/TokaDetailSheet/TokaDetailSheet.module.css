@@ -1,0 +1,298 @@
+/* ── overlay shell ─────────────────────────────────────────────────────────── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999999;
+  overflow: hidden;
+  animation: enterUp .28s cubic-bezier(.2, .8, .3, 1) both;
+}
+
+.exiting {
+  animation: exitDown .28s ease forwards;
+}
+
+/* ── background ────────────────────────────────────────────────────────────── */
+.bg {
+  position: absolute;
+  inset: -6px;
+  background-image: url('/assets/backgrounds/bg_coleccion.png');
+  background-size: cover;
+  background-position: center top;
+  filter: brightness(0.65) blur(3px);
+}
+
+.bgGradient {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(125% 70% at 50% 30%, rgba(42, 24, 8, .52) 0%, rgba(20, 10, 4, .86) 78%);
+}
+
+/* ── topbar (solo ★ fav) ───────────────────────────────────────────────────── */
+.topbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 48px 16px 0;
+}
+
+.btn {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border-radius: 14px;
+  border: 2.5px solid rgba(255, 248, 237, .3);
+  background: rgba(255, 248, 237, .1);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: #FFF8ED;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform .1s ease, background .15s ease;
+}
+.btn:active { transform: translateY(1px); background: rgba(255, 248, 237, .2); }
+.btn svg    { width: 20px; height: 20px; }
+.favOn      { color: #F7B92C; }
+
+/* ── hero area (canvas + glow + sparkles) ──────────────────────────────────── */
+.heroArea {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 230px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+/* ── Carrusel de grupo ─────────────────────────────────────────────────────── */
+.carousel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  pointer-events: auto;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+.carousel:active { cursor: grabbing; }
+
+/* Cada ítem: posición absoluta, centrado, escalado por JS */
+.carouselItem {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: center center;
+  filter: drop-shadow(0 10px 14px rgba(20, 10, 0, .45));
+}
+
+/* Dots — pastilla dinámica */
+.carouselDots {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  pointer-events: auto;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, .35);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: width .3s cubic-bezier(.4, 0, .2, 1), background .3s ease;
+  flex-shrink: 0;
+}
+
+.dotActive {
+  width: 22px;
+  background: rgba(255, 255, 255, .92);
+}
+
+/* Counter "1 / 6" */
+.carouselCounter {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  font-family: var(--font-title), system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, .75);
+  letter-spacing: .4px;
+  pointer-events: none;
+}
+
+.glow {
+  position: absolute;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--glow-soft, rgba(255, 255, 255, .12)) 10%, transparent 72%);
+  filter: blur(14px);
+}
+
+.sparkles { position: absolute; inset: 0; }
+
+.sparkle {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 6px rgba(255, 255, 255, .85);
+  opacity: 0;
+  animation: sparkle 2.4s ease-in-out infinite;
+}
+
+/* Wrapper aislado: permite escalar sin interferir con la animación floaty */
+.tokaWrap {
+  position: relative;
+  z-index: 2;
+}
+
+.toka {
+  display: block;
+  filter: drop-shadow(0 10px 14px rgba(20, 10, 0, .45));
+}
+
+/* ── sheet content ─────────────────────────────────────────────────────────── */
+.identity {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.nameRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.name {
+  font-family: var(--font-title);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -.3px;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.badgeRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cpLine {
+  font-family: var(--font-title);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink-2);
+}
+
+.secHeader {
+  font-family: var(--font-title);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink-2);
+  text-transform: uppercase;
+  letter-spacing: .6px;
+  padding-bottom: 5px;
+  border-bottom: 2px solid rgba(74, 40, 0, .1);
+}
+
+.evo {
+  background: var(--cream);
+  border: 2.5px solid var(--ink);
+  border-radius: 16px;
+  padding: 12px;
+  box-shadow: inset 0 2px 0 #fff, 0 3px 0 var(--edge-cream);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.evoTitle  { font-family: var(--font-title); font-size: 14px; font-weight: 700; color: var(--ink); }
+.evoBarTop { display: flex; justify-content: space-between; font-size: 11px; font-weight: 600; color: var(--ink-2); margin-bottom: 5px; }
+.evoBarTop b { font-family: var(--font-title); font-size: 13px; color: var(--ink); }
+.evoCost   { font-size: 12px; font-weight: 700; color: var(--ink-2); }
+
+.slots {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  overflow-x: auto;
+  /* overflow-x: auto forces overflow-y: hidden per CSS spec; min-height
+     prevents the container from collapsing and clipping slot content */
+  min-height: 100px;
+  padding-bottom: 6px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.slots::-webkit-scrollbar {
+  display: none;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 6px;
+}
+
+.activeBadge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-title);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--green-edge);
+  padding: 12px 0;
+}
+.activeBadge svg { width: 18px; height: 18px; }
+
+/* ── keyframes ─────────────────────────────────────────────────────────────── */
+@keyframes enterUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes exitDown {
+  to { opacity: 0; transform: translateY(32px); }
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: scale(.4); }
+  50%       { opacity: 1; transform: scale(1); }
+}
+
+/* ── accesibilidad ─────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .overlay, .exiting { animation: none; }
+  .toka              { animation: none; }
+  .sparkle           { animation: none; opacity: 0; }
+}

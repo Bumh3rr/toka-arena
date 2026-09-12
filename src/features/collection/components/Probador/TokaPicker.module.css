@@ -1,0 +1,100 @@
+.strip {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 12px 4px 12px;
+  scrollbar-width: none;
+}
+.strip::-webkit-scrollbar { display: none; }
+
+/* ── Avatar compacto (no seleccionado) ─────────────────────────────── */
+.avatar {
+  flex: none;
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  width: 68px;
+  background: none; border: none; cursor: pointer; font: inherit; padding: 4px 0 0;
+}
+.thumbWrap {
+  position: relative;
+  width: 60px; height: 60px;
+  border-radius: 16px;
+  background: var(--cream-2);
+  border: 2.5px solid var(--ink);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform .1s ease;
+}
+.avatar:active .thumbWrap { transform: translateY(2px); }
+.thumb { width: 48px; height: 44px; object-fit: contain; }
+
+.badges { position: absolute; top: -4px; right: -4px; display: flex; }
+.badge {
+  width: 20px; height: 20px; margin-left: -8px;
+  border-radius: 50%; background: var(--cream); border: 2px solid var(--ink);
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+}
+.badgeImg { width: 14px; height: 14px; object-fit: contain; }
+.badgeFallback { font-size: 9px; font-weight: 800; color: var(--ink); }
+
+.activeDot {
+  position: absolute; bottom: -4px; left: -4px;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--green); border: 2px solid var(--ink);
+  display: flex; align-items: center; justify-content: center; color: #fff;
+}
+.activeDot svg { width: 12px; height: 12px; }
+
+/* nombre sobre el fondo oscuro → claro + sombra para legibilidad */
+.name {
+  font-family: var(--font-title); font-size: 11px; font-weight: 700;
+  color: #FFF8ED; text-shadow: 0 1px 2px rgba(0,0,0,.65);
+  max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* ── Tarjeta destacada (seleccionado) ──────────────────────────────── */
+.featured {
+  flex: none;
+  position: relative;
+  display: flex; align-items: center; gap: 10px;
+  min-width: 172px;
+  margin-top: 2px;
+  padding: 12px 14px 12px 12px;
+  background: var(--cream);
+  border: 2.5px solid var(--ring, var(--gold));
+  border-radius: 18px;
+  box-shadow: 0 0 0 3px var(--ring-soft), 0 6px 16px rgba(20,10,4,.32);
+  cursor: pointer; font: inherit;
+}
+.wearing {
+  position: absolute; top: -10px; left: 14px;
+  background: var(--gold); color: var(--ink);
+  border: 2px solid var(--ink); border-radius: 99px;
+  font-size: 9px; font-weight: 800; padding: 1px 8px;
+  text-transform: uppercase; letter-spacing: .4px;
+}
+.featuredThumb {
+  position: relative; flex: none;
+  width: 56px; height: 56px; border-radius: 14px;
+  background: var(--cream-2); border: 2px solid var(--ink);
+  display: flex; align-items: center; justify-content: center;
+}
+.featuredImg { width: 46px; height: 42px; object-fit: contain; }
+.featuredInfo { display: flex; flex-direction: column; gap: 2px; text-align: left; min-width: 0; }
+.featuredName {
+  font-family: var(--font-title); font-size: 14px; font-weight: 800; color: var(--ink);
+  max-width: 110px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.featuredMeta { margin-top: 4px; font-size: 11px; font-weight: 700; color: var(--ink-2); }
+.tail {
+  position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%);
+  width: 0; height: 0;
+  border-left: 9px solid transparent; border-right: 9px solid transparent;
+  border-top: 10px solid var(--ring, var(--gold));
+}
+
+.featuredCpIcon {
+  width: 20px; height: 20px;
+  vertical-align: text-bottom;
+}
+
+.featuredMeta svg { width: 16px; height: 16px; vertical-align: text-bottom; }

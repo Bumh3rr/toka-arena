@@ -21,9 +21,9 @@
 
 .btn:not(.cool):active { transform: translateY(4px); }
 
-.badge {
+.containerCp {
   position: absolute;
-  top: -9px;
+  top: -30px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 3;
@@ -32,24 +32,10 @@
   font-size: 11px;
   font-weight: 700;
   color: #fff;
-  border: 2px solid var(--ink);
-  border-radius: var(--r-pill);
-  padding: 2px 9px;
-  box-shadow: 0 2px 0 rgba(74, 40, 0, .25);
-  background: linear-gradient(180deg, #8FD96A, var(--green));
-  text-shadow: 0 1px 0 rgba(74, 40, 0, .3);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, .3);
   display: flex;
   align-items: center;
   gap: 3px;
-}
-
-.dot {
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #EAFFD8;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, .35);
 }
 
 .face {

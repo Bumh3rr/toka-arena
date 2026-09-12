@@ -1,0 +1,183 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 4px;
+}
+
+/* ── Stage de vista previa (Tokagotchi vistiendo el accesorio) ──────────────── */
+.stage {
+  position: relative;
+  width: 100%;
+  height: 190px;
+  margin-top: 2px;
+  border-radius: 18px;
+  border: 2px solid var(--ink);
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 42%, #fff7e6 0%, #f3e4c4 100%);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, .6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.previewTag {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 2;
+}
+
+.shuffle {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+}
+
+.spotlight {
+  position: absolute;
+  left: 50%;
+  top: 44%;
+  transform: translate(-50%, -50%);
+  width: 155px;
+  height: 155px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 214, 120, .5) 0%, transparent 66%);
+  filter: blur(2px);
+  z-index: 0;
+}
+
+.canvasWrap {
+  position: relative;
+  z-index: 1;
+}
+
+.pedestal {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 118px;
+  height: 30px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(74, 40, 0, .22) 5%, transparent 75%);
+  z-index: 0;
+}
+
+/* ── Thumbnail de respaldo (ítem no renderizable) ──────────────────────────── */
+.thumb {
+  width: 84px;
+  height: 84px;
+  border-radius: 18px;
+  background: #fff5e0;
+  border: 2px solid var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+.thumbImg {
+  width: 72%;
+  height: 72%;
+  object-fit: contain;
+}
+
+.thumbGlyph {
+  width: 48px;
+  height: 48px;
+  color: var(--ink-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.thumbGlyph svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ── Info ──────────────────────────────────────────────────────────────────── */
+.name {
+  font-family: var(--font-title);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+  text-align: center;
+  margin-top: 2px;
+}
+
+.price {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-title);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 4px 0 2px;
+}
+
+.tfIcon {
+  width: 20px;
+  height: 20px;
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(247, 185, 44, .4);
+  margin: 8px 0 4px;
+}
+
+.row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.rowVal {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 800;
+}
+
+.rowValOk {
+  color: var(--green-edge);
+}
+
+.rowValNeg {
+  color: var(--danger, #e85454);
+}
+
+.tfIconSm {
+  width: 14px;
+  height: 14px;
+}
+
+.err {
+  width: 100%;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--danger, #e85454);
+  background: rgba(232, 84, 84, .1);
+  border: 2px solid rgba(232, 84, 84, .35);
+  border-radius: 10px;
+  padding: 6px;
+  margin: 4px 0;
+}
+
+/* Espacio entre CTA y cancelar */
+.body > button + button {
+  margin-top: 8px;
+}

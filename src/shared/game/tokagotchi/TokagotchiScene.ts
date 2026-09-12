@@ -1,6 +1,6 @@
 import { applyAccessories } from '@/shared/render/applyAccessories'
 import type { TokagotchiConfig } from './types'
-import type { EquippedAccessory } from '@/shared/types/accessory'
+import type { EquippedAccessory } from '@/shared/domain/accessory'
 
 /** API pública expuesta por la escena de Phaser al wrapper `TokagotchiGame` y al componente React. */
 export interface ITokagotchiScene {
@@ -17,6 +17,13 @@ export interface ITokagotchiScene {
    * haya corrido, el flag se almacena en el closure y se aplica al final de `create()`.
    */
   setPaused(paused: boolean): void
+  /**
+   * `true` cuando el armature ya está en escena.
+   *
+   * Lo necesita quien vaya a capturar el canvas: antes de que `create()` corra,
+   * una captura devolvería un PNG transparente.
+   */
+  isReady(): boolean
 }
 
 /**
@@ -93,6 +100,11 @@ export function createTokagotchiScene(cfg: TokagotchiConfig): ITokagotchiScene {
       if (!armature) return
       armature.animation.timeScale = p ? 0 : 1
     }
+
+    isReady() {
+      return armature !== null
+    }
+
   }
 
   return new Scene() as unknown as ITokagotchiScene

@@ -1,9 +1,19 @@
 import { useEffect, useRef } from 'react'
 import { TokagotchiGame } from '../game/tokagotchi/TokagotchiGame'
 import type { TokagotchiConfig } from '../game/tokagotchi/types'
-import type { Species, Assets, AnimationTokagotchi } from '../types/tokagotchi'
-import { getAssetsBySpecies } from '../libs/tokagotchi' 
-import type { EquippedAccessory } from '../types/accessory'
+import type { Species, Assets, AnimationTokagotchi } from '../domain/tokagotchi'
+import { getSpeciesAssets } from '../game/assets'
+import type { EquippedAccessory } from '../domain/accessory'
+
+/**
+ * Cadencia de los reintentos de captura.
+ *
+ * No hay techo de intentos a propósito: acotarlo por número de intentos hacía
+ * que el bucle se rindiera antes de que Phaser terminara de arrancar en cuanto
+ * el reloj corría más rápido que los fotogramas. Se reintenta mientras el
+ * canvas viva, y cada intento cuesta leer un booleano.
+ */
+const PORTRAIT_RETRY_MS = 150
 
 /**
  * Props de {@link TokagotchiCanvas}.
@@ -30,6 +40,16 @@ interface TokagotchiCanvasProps {
   assets?: Assets
   /** Espeja el personaje horizontalmente. Útil para el rival en la pantalla de arena. */
   reverse?: boolean
+  /**
+   * Se llama UNA vez con el canvas capturado como PNG (data URL, con alfa) en
+   * cuanto el personaje está en pie.
+   *
+   * Sirve para reutilizar el Tokagotchi vestido fuera de Phaser. El callback
+   * debe ser estable (`useState` setter o `useCallback`): si cambia de
+   * identidad en cada render, la captura se reintenta sin parar. Si no se
+   * pasa, no se hace ningún trabajo extra.
+   */
+  onPortrait?: (dataUrl: string) => void
   /**
    * Pausa el loop de animación DragonBones (`timeScale = 0`) para ahorrar CPU/batería.
    *
@@ -63,6 +83,7 @@ export default function TokagotchiCanvas({
   assets,
   reverse = false,
   paused = false,
+  onPortrait,
 }: TokagotchiCanvasProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const gameRef = useRef<TokagotchiGame | null>(null)
@@ -71,7 +92,7 @@ export default function TokagotchiCanvas({
   const pausedRef = useRef(paused)
 
   if (!assets) {
-    assets = getAssetsBySpecies(species)
+    assets = getSpeciesAssets(species)
   }
 
   // ── Crear / destruir (una sola vez al montar/desmontar) ───────────────────
@@ -80,7 +101,7 @@ export default function TokagotchiCanvas({
     if (!(window as any).Phaser || !(window as any).dragonBones) return
 
     const cfg: TokagotchiConfig = {
-      width, height, assets, animacionActual,accessories, reverse,
+      width, height, assets, animacionActual,accessories, reverse
     }
 
     gameRef.current = new TokagotchiGame(containerRef.current, cfg)
@@ -108,5 +129,41 @@ export default function TokagotchiCanvas({
     gameRef.current?.setPaused(paused || document.hidden)
   }, [paused])
 
-  return <div ref={containerRef} style={{ width, height }} aria-hidden="true" />
+  // ── Captura del personaje ────────────────────────────────────────────────
+
+  /*
+   * La escena no avisa cuando el armature entra, así que se reintenta a
+   * intervalos cortos hasta que la captura sale. En cuanto hay imagen el bucle
+   * se detiene para siempre; si el canvas se desmonta antes, el cleanup lo
+   * corta y nadie recibe nada.
+   */
+  useEffect(() => {
+    if (!onPortrait) return
+
+    let cancelled = false
+    let timer = 0
+
+    const attempt = async () => {
+      if (cancelled) return
+
+      const src = await gameRef.current?.snapshot()
+      if (cancelled) return
+
+      if (src) {
+        onPortrait(src)
+        return
+      }
+
+      timer = window.setTimeout(attempt, PORTRAIT_RETRY_MS)
+    }
+
+    timer = window.setTimeout(attempt, PORTRAIT_RETRY_MS)
+
+    return () => {
+      cancelled = true
+      window.clearTimeout(timer)
+    }
+  }, [onPortrait])
+
+  return <div ref={containerRef} style={{ width, height, pointerEvents: 'none' }} aria-hidden="true" />
 }

@@ -6,12 +6,12 @@ import { IcGrid, IcPase, IcShop, IcArena, IcPaw } from '../../../shared/ui/Icons
 import { useNavBar } from '../../../shared/hooks/useNavBar'
 
 const LEFT_ITEMS = [
-  { label: 'Tienda', path: '/tienda', icon: <IcShop /> },
-  { label: 'Colección', path: '/coleccion', icon: <IcGrid /> },
+  { label: 'Tienda', path: '/shop', icon: <IcShop /> },
+  { label: 'Colección', path: '/collection', icon: <IcGrid /> },
 ]
 const RIGHT_ITEMS = [
   { label: 'Arena', path: '/arena', icon: <IcArena /> },
-  { label: 'Pase', path: '/ui-kit', icon: <IcPase /> },
+  { label: 'Pase', path: '/pass', icon: <IcPase /> },
 ]
 
 type NavItem = { label: string; path: string; icon: React.ReactNode }

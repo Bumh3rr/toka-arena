@@ -1,4 +1,4 @@
-import BottomSheet from '@/shared/ui/BottomSheet/BottomSheet'
+import BottomSheet from '@/shared/ui/Sheet/BottomSheet/BottomSheet'
 import { IcCheck } from '@/shared/ui/Icons/Icons'
 import styles from './MissionsModal.module.css'
 
